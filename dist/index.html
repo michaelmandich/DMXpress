@@ -8,6 +8,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <link rel="icon" type="image/png" href="images/logo.png">
   <link rel="stylesheet" href="styles.css">
 </head>
 <body>
@@ -16,15 +17,14 @@
   <header class="nav">
     <div class="container nav-inner">
       <a href="#" class="brand">
-        <span class="brand-dot"></span>
-        DMX<span class="brand-accent">express</span>
+        <img src="images/logo.png" alt="DMXexpress" class="logo-nav">
       </a>
       <nav class="nav-links">
         <a href="#features">Features</a>
         <a href="#practice">Practice at Home</a>
         <a href="#sample-rigs">Sample Rigs</a>
         <a href="#workflow">Workflow</a>
-        <a href="#get-started">Get Started</a>
+        <a href="guide.html">Guide</a>
         <a href="https://github.com/michaelmandich/dmxexpress" class="btn btn-ghost" target="_blank" rel="noopener">GitHub</a>
       </nav>
     </div>
@@ -33,6 +33,7 @@
   <!-- ===================== HERO ===================== -->
   <section class="hero">
     <div class="container">
+      <img src="images/logo.png" alt="DMXexpress" class="logo-hero">
       <p class="hero-eyebrow">Native &middot; Built in Rust &middot; Open Source</p>
       <h1>Design, program, and run<br>light shows — <span class="accent">all in one place.</span></h1>
       <p class="hero-sub">
@@ -41,7 +42,8 @@
         happen in a real-time 3D stage — no professional console required.
       </p>
       <div class="hero-actions">
-        <a href="#get-started" class="btn btn-primary">Get Started</a>
+        <a href="guide.html" class="btn btn-primary">Read the Guide</a>
+        <a href="#get-started" class="btn btn-outline">Get Started</a>
         <a href="https://github.com/michaelmandich/dmxexpress" class="btn btn-outline" target="_blank" rel="noopener">View on GitHub</a>
       </div>
       <div class="hero-shot">
@@ -114,17 +116,17 @@
       </div>
       <div class="cards cards-3">
         <div class="card">
-          <div class="card-icon">&#9670;</div>
+          <div class="card-icon">SH</div>
           <h3>Ready-made shows</h3>
           <p>Complete show configurations live under <code>configs/</code> — load one and everything comes with it: patch, groups, palettes, phasers, and cue stacks.</p>
         </div>
         <div class="card">
-          <div class="card-icon">&#9648;</div>
+          <div class="card-icon">ST</div>
           <h3>Reusable stage setups</h3>
           <p>Stage arrangements under <code>setups/</code> give you fixture layouts like full rigs and back towers you can drop into any show.</p>
         </div>
         <div class="card">
-          <div class="card-icon">&#123;&#125;</div>
+          <div class="card-icon">JS</div>
           <h3>Human-readable JSON</h3>
           <p>All show data is plain JSON in the working directory. Read it, tweak it, version-control it — nothing is locked in a binary format.</p>
         </div>
@@ -148,62 +150,135 @@
         <p class="eyebrow">The full console, explained</p>
         <h2>Everything you need, nothing you have to guess at.</h2>
         <p class="section-sub">
-          Each part of DMXexpress maps to a familiar lighting-console concept —
-          here's what each one does and why you'd use it.
+          Each part of DMXexpress maps to a familiar lighting-console concept.
+          Pick any card to jump straight to its how-to in the guide.
         </p>
       </div>
       <div class="cards cards-3">
-        <div class="card">
-          <div class="card-icon">&#9998;</div>
+        <a class="card" href="guide.html#program/channels">
+          <div class="card-icon">PR</div>
           <h3>Programmer</h3>
           <p>Your scratchpad. Select fixtures and set dimmer, color, position, and beam values directly. Changes are temporary until you store them somewhere reusable.</p>
-        </div>
-        <div class="card">
-          <div class="card-icon">&#9635;</div>
+          <span class="card-more">How to use it</span>
+        </a>
+        <a class="card" href="guide.html#program/groups">
+          <div class="card-icon">GR</div>
           <h3>Groups</h3>
-          <p>Save any fixture selection — “all spots”, “back towers”, “front wash” — and recall it with one tap instead of re-selecting every time.</p>
-        </div>
-        <div class="card">
-          <div class="card-icon">&#9673;</div>
+          <p>Save any fixture selection &mdash; all spots, back towers, front wash &mdash; and recall it with one tap. Chain groups together, or fold one into a single super-fixture that effects treat as one light.</p>
+          <span class="card-more">How to use it</span>
+        </a>
+        <a class="card" href="guide.html#program/orders">
+          <div class="card-icon">OR</div>
+          <h3>Orders</h3>
+          <p>Effects normally fan out in fixture number order. Build your own route instead: shift-click groups to chain them, then store that chain as the path every spread, phaser, and palette cycle travels.</p>
+          <span class="card-more">How to use it</span>
+        </a>
+        <a class="card" href="guide.html#program/palettes">
+          <div class="card-icon">PA</div>
           <h3>Palettes</h3>
           <p>Reusable building blocks for color, position, dimmer, beam, focus, and control values. Update the palette once and every look that uses it follows.</p>
-        </div>
-        <div class="card">
-          <div class="card-icon">&#8767;</div>
+          <span class="card-more">How to use it</span>
+        </a>
+        <a class="card" href="guide.html#fx/phasers">
+          <div class="card-icon">PH</div>
           <h3>Phasers &amp; Sequences</h3>
           <p>Living effects: movement sweeps, intensity pulses, chases, and color waves. Edit the phaser beside the live 3D result and tune it in real time.</p>
-        </div>
-        <div class="card">
-          <div class="card-icon">&#9636;</div>
+          <span class="card-more">How to use it</span>
+        </a>
+        <a class="card" href="guide.html#program/presets">
+          <div class="card-icon">PS</div>
           <h3>Presets</h3>
-          <p>Snapshots of the programmer you can bring back instantly — perfect for starting positions and go-to looks you reach for constantly.</p>
-        </div>
-        <div class="card">
-          <div class="card-icon">&#9654;</div>
+          <p>Snapshots of the programmer you can bring back instantly &mdash; perfect for starting positions and go-to looks you reach for constantly.</p>
+          <span class="card-more">How to use it</span>
+        </a>
+        <a class="card" href="guide.html#play/stacks">
+          <div class="card-icon">CU</div>
           <h3>Cue Stacks</h3>
-          <p>Record looks as cues with tracking and fade timing, then step through your show one “go” at a time — theatre-style playback.</p>
-        </div>
-        <div class="card">
-          <div class="card-icon">&#9646;&#9646;</div>
+          <p>Record looks as cues with tracking and fade timing, then step through your show one go at a time &mdash; theatre-style playback.</p>
+          <span class="card-more">How to use it</span>
+        </a>
+        <a class="card" href="guide.html#play/decks">
+          <div class="card-icon">DK</div>
           <h3>Playback Decks</h3>
           <p>Hands-on faders for live control, with a Grand Master over everything. Assign stacks and effects, then busk the show in the moment.</p>
-        </div>
-        <div class="card">
-          <div class="card-icon">&#9938;</div>
+          <span class="card-more">How to use it</span>
+        </a>
+        <a class="card" href="guide.html#rig/stage">
+          <div class="card-icon">3D</div>
           <h3>3D Stage Visualizer</h3>
           <p>Place fixtures, select them on stage, and see volumetric beams respond live. It's both your pre-viz tool and your programming feedback loop.</p>
-        </div>
-        <div class="card">
-          <div class="card-icon">&#8644;</div>
+          <span class="card-more">How to use it</span>
+        </a>
+        <a class="card" href="guide.html#out/artnet">
+          <div class="card-icon">AN</div>
           <h3>Art-Net Output</h3>
           <p>Sends two contiguous DMX universes at ~40 fps with automatic node discovery. Optional ShowBuddy fixture-patch import on macOS.</p>
-        </div>
+          <span class="card-more">How to use it</span>
+        </a>
+        <a class="card" href="guide.html#fx/chases">
+          <div class="card-icon">CH</div>
+          <h3>Chases</h3>
+          <p>Spatial movement across the rig &mdash; expanding spheres, linear sweeps, boomerangs, stripes, glitter, and pulses that travel through your stage in three dimensions.</p>
+          <span class="card-more">How to use it</span>
+        </a>
+        <a class="card" href="guide.html#fx/beat">
+          <div class="card-icon">BT</div>
+          <h3>Beat &amp; Time Machine</h3>
+          <p>Tap along with the band and every effect locks to the song. Then bend time itself: run the show backwards, at half or quadruple rate, nudge by a quarter beat, or set it swinging on a pendulum.</p>
+          <span class="card-more">How to use it</span>
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===================== GUIDE PROMO ===================== -->
+  <section id="learn" class="section section-alt">
+    <div class="container">
+      <div class="section-head">
+        <p class="eyebrow">Learn it properly</p>
+        <h2>A how-to for every tab in the app.</h2>
+        <p class="section-sub">
+          The guide is split into categories, then a page per window &mdash; so you read the
+          three paragraphs you actually need instead of scrolling one giant manual.
+        </p>
+      </div>
+      <div class="cards cards-3">
+        <a class="card" href="guide.html#start/overview">
+          <h3>Getting Started</h3>
+          <p>What DMXexpress is, installing it, the screen layout, the Programmer, and a first show you can build in one sitting.</p>
+          <span class="card-more">5 topics</span>
+        </a>
+        <a class="card" href="guide.html#rig/patch">
+          <h3>Rig &amp; Stage</h3>
+          <p>Patching fixtures, the fixtures panel, the 3D stage view and gizmos, the inspector, settings, and saving whole configurations.</p>
+          <span class="card-more">6 topics</span>
+        </a>
+        <a class="card" href="guide.html#program/channels">
+          <h3>Programming</h3>
+          <p>Channel control, groups, custom effect orders, palettes and why they are referenced, presets, and transition timing.</p>
+          <span class="card-more">6 topics</span>
+        </a>
+        <a class="card" href="guide.html#fx/phasers">
+          <h3>Effects &amp; Motion</h3>
+          <p>Phasers and their component builder, the oscillator and custom waveforms, chases, palette sequences, and beat sync with the time machine.</p>
+          <span class="card-more">5 topics</span>
+        </a>
+        <a class="card" href="guide.html#play/stacks">
+          <h3>Playback</h3>
+          <p>Cue stacks and tracking, the decks executor bar, the full command-line vocabulary, and saved views.</p>
+          <span class="card-more">4 topics</span>
+        </a>
+        <a class="card" href="guide.html#out/artnet">
+          <h3>Output &amp; Fixes</h3>
+          <p>Art-Net targets, the DMX monitor, freeze versus blackout, the log, files on disk, and a troubleshooting page.</p>
+          <span class="card-more">6 topics</span>
+        </a>
       </div>
     </div>
   </section>
 
   <!-- ===================== WORKFLOW ===================== -->
-  <section id="workflow" class="section section-alt">
+  <section id="workflow" class="section">
     <div class="container">
       <div class="section-head">
         <p class="eyebrow">How it fits together</p>
@@ -223,7 +298,7 @@
   </section>
 
   <!-- ===================== GET STARTED ===================== -->
-  <section id="get-started" class="section">
+  <section id="get-started" class="section section-alt">
     <div class="container split">
       <div class="split-text">
         <p class="eyebrow">Get started</p>
@@ -269,13 +344,14 @@ cargo test</code></pre>
   <footer class="footer">
     <div class="container footer-inner">
       <div>
-        <span class="brand"><span class="brand-dot"></span>DMX<span class="brand-accent">express</span></span>
+        <img src="images/logo.png" alt="DMXexpress" class="logo-footer">
         <p class="fine">A native, all-in-one DMX fixture visualizer and live lighting controller built in Rust.</p>
       </div>
       <div class="footer-links">
         <a href="#features">Features</a>
         <a href="#practice">Practice at Home</a>
         <a href="#sample-rigs">Sample Rigs</a>
+        <a href="guide.html">Guide</a>
         <a href="https://github.com/michaelmandich/dmxexpress" target="_blank" rel="noopener">GitHub</a>
       </div>
     </div>
