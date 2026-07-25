@@ -2,6 +2,7 @@
 //! and per-channel definitions from the referenced .dmx library files.
 
 use anyhow::{Context, Result};
+use serde::{Deserialize, Serialize};
 use std::path::{Path, PathBuf};
 
 pub const DEFAULT_CONFIG: &str =
@@ -9,6 +10,12 @@ pub const DEFAULT_CONFIG: &str =
 
 pub const PRESETS_DIR: &str =
     "/Library/Application Support/db audioware/Show Buddy Active/Presets";
+
+/// Local copy of the last ShowBuddy patch DMXpress managed to read. ShowBuddy
+/// lives at a fixed absolute macOS path outside this repository, so without a
+/// cache a show built on top of it collapses to just the DMXpress-patched
+/// fixtures on any other machine (a fresh clone, Windows, a different Mac).
+pub const CACHE_FILE: &str = "showbuddy_cache.json";
 
 /// What a channel most likely controls, inferred from its name/type.
 #[derive(Debug, Clone, Copy, PartialEq, Eq, Hash)]
@@ -54,7 +61,7 @@ impl Role {
 }
 
 /// One value range within a channel, e.g. `S,20,39,Red`.
-#[derive(Debug, Clone)]
+#[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct Band {
     /// D = dimmer, V = continuous value, S = switched/stepped range.
     pub kind: char,
@@ -63,7 +70,7 @@ pub struct Band {
     pub label: String,
 }
 
-#[derive(Debug, Clone)]
+#[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct Channel {
     pub name: String,
     pub bands: Vec<Band>,
@@ -144,7 +151,7 @@ impl Channel {
     }
 }
 
-#[derive(Debug, Clone)]
+#[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct Fixture {
     pub display: String,
     pub file: PathBuf,
@@ -175,6 +182,25 @@ pub struct Patch {
 
 pub fn load_default() -> Result<Patch> {
     load(Path::new(DEFAULT_CONFIG))
+}
+
+/// Fixtures from the last successful ShowBuddy import, if one was cached.
+pub fn load_cache() -> Vec<Fixture> {
+    std::fs::read_to_string(CACHE_FILE)
+        .ok()
+        .and_then(|text| serde_json::from_str::<Vec<Fixture>>(&text).ok())
+        .unwrap_or_default()
+}
+
+/// Remember the ShowBuddy fixtures so the rig survives on a machine that
+/// cannot reach ShowBuddy itself.
+pub fn save_cache(fixtures: &[Fixture]) {
+    if fixtures.is_empty() {
+        return;
+    }
+    if let Ok(json) = serde_json::to_string_pretty(fixtures) {
+        let _ = std::fs::write(CACHE_FILE, json);
+    }
 }
 
 pub fn load(config: &Path) -> Result<Patch> {

@@ -233,6 +233,10 @@ pub(crate) struct App {
     pub user_fixtures: Vec<UserFixture>,
     /// Merge the ShowBuddy patch in at all (off = DMXpress fixtures only).
     pub include_showbuddy: bool,
+    /// Last known ShowBuddy fixtures, from a live import, the local cache, or
+    /// a loaded configuration. Used whenever ShowBuddy cannot be reached so a
+    /// show keeps its rig on machines without it.
+    pub showbuddy_patch: Vec<showbuddy::Fixture>,
     /// Individual ShowBuddy fixtures hidden from the rig (`display@from` keys).
     pub excluded_fixtures: Vec<String>,
     /// Patch window visible.
@@ -297,25 +301,52 @@ impl Default for PanelZoom {
     }
 }
 
+/// Read the ShowBuddy patch, falling back to `cache` when ShowBuddy itself is
+/// unreachable — it lives at a fixed absolute macOS path that does not exist on
+/// a cloned checkout or a machine without it installed. Returns the patch plus
+/// the fixture list to remember as the new cache.
+fn load_showbuddy(
+    cache: &[showbuddy::Fixture],
+    log: &mut Vec<String>,
+) -> (Patch, Vec<showbuddy::Fixture>) {
+    match showbuddy::load_default() {
+        Ok(p) => {
+            log.push(format!(
+                "Loaded ShowBuddy patch: {} fixtures",
+                p.fixtures.len()
+            ));
+            showbuddy::save_cache(&p.fixtures);
+            let fixtures = p.fixtures.clone();
+            (p, fixtures)
+        }
+        Err(e) if !cache.is_empty() => {
+            log.push(format!(
+                "ShowBuddy unavailable ({e:#}) — restored {} fixture(s) saved with this show",
+                cache.len()
+            ));
+            let patch = Patch {
+                fixtures: cache.to_vec(),
+                warnings: Vec::new(),
+            };
+            (patch, cache.to_vec())
+        }
+        Err(e) => {
+            log.push(format!("ShowBuddy patch load failed: {e:#}"));
+            (Patch::default(), Vec::new())
+        }
+    }
+}
+
 impl App {
     pub fn new() -> Self {
         let net = net::spawn().expect("failed to start net thread");
         let mut log = Vec::new();
         let user_patch = profiles::load_user_patch();
+        let mut showbuddy_patch = showbuddy::load_cache();
         let mut patch = if user_patch.include_showbuddy {
-            match showbuddy::load_default() {
-                Ok(p) => {
-                    log.push(format!(
-                        "Loaded ShowBuddy patch: {} fixtures",
-                        p.fixtures.len()
-                    ));
-                    p
-                }
-                Err(e) => {
-                    log.push(format!("ShowBuddy patch load failed: {e:#}"));
-                    Patch::default()
-                }
-            }
+            let (p, fx) = load_showbuddy(&showbuddy_patch, &mut log);
+            showbuddy_patch = fx;
+            p
         } else {
             log.push("ShowBuddy patch disabled — DMXpress fixtures only".into());
             Patch::default()
@@ -458,6 +489,7 @@ impl App {
             setup_name: String::new(),
             user_fixtures: user_patch.fixtures,
             include_showbuddy: user_patch.include_showbuddy,
+            showbuddy_patch,
             excluded_fixtures: user_patch.excluded,
             show_patch: false,
             patch_profile: 0,
@@ -480,15 +512,14 @@ impl App {
     /// re-sync the stage. Used at startup, after patch edits, and when a
     /// configuration is loaded.
     pub fn rebuild_patch(&mut self) {
+        let cache = std::mem::take(&mut self.showbuddy_patch);
         let mut patch = if self.include_showbuddy {
-            match showbuddy::load_default() {
-                Ok(p) => p,
-                Err(e) => {
-                    self.log.push(format!("ShowBuddy patch load failed: {e:#}"));
-                    Patch::default()
-                }
-            }
+            let (p, fixtures) = load_showbuddy(&cache, &mut self.log);
+            self.showbuddy_patch = fixtures;
+            p
         } else {
+            // Keep the snapshot so re-enabling ShowBuddy restores the rig.
+            self.showbuddy_patch = cache;
             Patch::default()
         };
         profiles::extend_patch(&mut patch, &self.current_user_patch());
@@ -591,6 +622,8 @@ impl App {
             layout: self.stage.export_layout(&self.patch),
             user_fixtures: self.user_fixtures.clone(),
             include_showbuddy: self.include_showbuddy,
+            showbuddy_patch: (!self.showbuddy_patch.is_empty())
+                .then(|| self.showbuddy_patch.clone()),
             excluded_fixtures: self.excluded_fixtures.clone(),
             groups: self.groups.clone(),
             palettes: self.palettes.clone(),
@@ -612,9 +645,32 @@ impl App {
         let _ = self.settings.save();
         self.user_fixtures = cfg.user_fixtures;
         self.include_showbuddy = cfg.include_showbuddy;
+        // Configurations written before shows carried their own patch have no
+        // snapshot; keep whatever is already known rather than wiping it.
+        if let Some(fixtures) = cfg.showbuddy_patch {
+            showbuddy::save_cache(&fixtures);
+            self.showbuddy_patch = fixtures;
+        }
         self.excluded_fixtures = cfg.excluded_fixtures;
         self.save_user_patch();
         self.rebuild_patch();
+        let patched: std::collections::HashSet<String> = self
+            .patch
+            .fixtures
+            .iter()
+            .map(|f| profiles::fixture_key(&f.display, f.from))
+            .collect();
+        let orphans = cfg
+            .layout
+            .instances
+            .iter()
+            .filter(|i| !patched.contains(&i.key))
+            .count();
+        if orphans > 0 {
+            self.log.push(format!(
+                "{orphans} saved light position(s) have no matching fixture in the patch and were dropped"
+            ));
+        }
         self.stage
             .import_layout(&self.patch, &self.settings, cfg.layout);
         self.groups = cfg.groups;

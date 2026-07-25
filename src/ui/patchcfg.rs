@@ -35,6 +35,28 @@ impl App {
                     self.save_user_patch();
                     self.rebuild_patch();
                 }
+                // ShowBuddy lives at a fixed absolute macOS path, so a show
+                // built on top of it silently loses its rig elsewhere unless a
+                // snapshot travels with it. Say so rather than leaving it to
+                // the log.
+                if self.include_showbuddy
+                    && !std::path::Path::new(crate::showbuddy::DEFAULT_CONFIG).exists()
+                {
+                    let warn = ui.visuals().warn_fg_color;
+                    let text = if self.showbuddy_patch.is_empty() {
+                        "ShowBuddy is not reachable on this machine and no saved copy \
+                         of its fixtures is available, so only DMXpress-patched \
+                         fixtures are in the rig."
+                            .to_string()
+                    } else {
+                        format!(
+                            "ShowBuddy is not reachable on this machine; using the {} \
+                             fixture(s) saved with this show.",
+                            self.showbuddy_patch.len()
+                        )
+                    };
+                    ui.colored_label(warn, egui::RichText::new(text).small());
+                }
                 ui.add_space(4.0);
 
                 self.patch_profile = self.patch_profile.min(PROFILES.len() - 1);

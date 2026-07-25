@@ -13,6 +13,7 @@ use crate::palette::Palette;
 use crate::phaser::Phaser;
 use crate::preset::UserPreset;
 use crate::profiles::UserFixture;
+use crate::showbuddy::Fixture;
 use crate::stack::Stack;
 use crate::stage::{LayoutFile, Settings};
 use crate::view::View;
@@ -31,6 +32,15 @@ pub struct Configuration {
     /// Whether the ShowBuddy patch is merged in at all.
     #[serde(default = "yes")]
     pub include_showbuddy: bool,
+    /// The ShowBuddy-derived fixtures as they stood when this show was saved.
+    ///
+    /// The layout only stores `display@address` keys, and ShowBuddy itself
+    /// lives at a fixed absolute macOS path outside this repository, so
+    /// without this snapshot a cloned show loses every ShowBuddy light and
+    /// keeps only the DMXpress-patched ones. Absent in configurations written
+    /// before this field existed.
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub showbuddy_patch: Option<Vec<Fixture>>,
     /// Individual ShowBuddy fixtures hidden from the rig.
     #[serde(default)]
     pub excluded_fixtures: Vec<String>,
