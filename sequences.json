@@ -1,0 +1,5557 @@
+{
+  "folders": [
+    "Blue + Cyan",
+    "Blue + Cyan + Green",
+    "Blue + Cyan + Magenta",
+    "Blue + Cyan + Red",
+    "Blue + Cyan + White",
+    "Blue + Cyan + Yellow",
+    "Blue + Green",
+    "Blue + Green + Magenta",
+    "Blue + Green + Red",
+    "Blue + Green + White",
+    "Blue + Green + Yellow",
+    "Blue + Magenta",
+    "Blue + Magenta + Red",
+    "Blue + Magenta + White",
+    "Blue + Magenta + Yellow",
+    "Blue + Red",
+    "Blue + Red + White",
+    "Blue + Red + Yellow",
+    "Blue + White",
+    "Blue + White + Yellow",
+    "Blue + Yellow",
+    "Blue Red",
+    "Cyan + Green",
+    "Cyan + Green + Magenta",
+    "Cyan + Green + Red",
+    "Cyan + Green + White",
+    "Cyan + Green + Yellow",
+    "Cyan + Magenta",
+    "Cyan + Magenta + Red",
+    "Cyan + Magenta + White",
+    "Cyan + Magenta + Yellow",
+    "Cyan + Red",
+    "Cyan + Red + White",
+    "Cyan + Red + Yellow",
+    "Cyan + White",
+    "Cyan + White + Yellow",
+    "Cyan + Yellow",
+    "Green",
+    "Green + Magenta",
+    "Green + Magenta + Red",
+    "Green + Magenta + White",
+    "Green + Magenta + Yellow",
+    "Green + Red + White",
+    "Green + Red + Yellow",
+    "Green + White",
+    "Green + White + Yellow",
+    "Green + Yellow",
+    "Magenta + Red",
+    "Magenta + Red + White",
+    "Magenta + Red + Yellow",
+    "Magenta + White",
+    "Magenta + White + Yellow",
+    "Magenta + Yellow",
+    "Red + green",
+    "Red + White",
+    "Red + White + Yellow",
+    "Red + Yellow",
+    "Themes",
+    "White + Yellow",
+    "Yellow white"
+  ],
+  "seqs": [
+    {
+      "name": "Back + forth",
+      "folder": "Blue + Cyan",
+      "ids": [
+        1,
+        5
+      ],
+      "beats_per": 1.0,
+      "master_beat": true,
+      "spread": 0.0,
+      "pattern": "Wave",
+      "shape": 1.0
+    },
+    {
+      "name": "fade",
+      "folder": "Blue + Cyan",
+      "ids": [
+        1,
+        5
+      ],
+      "beats_per": 2.0,
+      "master_beat": true,
+      "spread": 0.84,
+      "pattern": "Random",
+      "shape": 0.0
+    },
+    {
+      "name": "Fast flash",
+      "folder": "Blue + Cyan",
+      "ids": [
+        5,
+        1
+      ],
+      "beats_per": 0.5,
+      "master_beat": true,
+      "spread": 0.84,
+      "pattern": "Random",
+      "shape": 1.0
+    },
+    {
+      "name": "flash",
+      "folder": "Blue + Cyan",
+      "ids": [
+        1,
+        5
+      ],
+      "beats_per": 2.0,
+      "master_beat": true,
+      "spread": 0.84,
+      "pattern": "Random",
+      "shape": 1.0
+    },
+    {
+      "name": "Long wave",
+      "folder": "Blue + Cyan",
+      "ids": [
+        1,
+        5
+      ],
+      "beats_per": 8.0,
+      "master_beat": true,
+      "spread": 0.4,
+      "pattern": "Wave",
+      "shape": 1.0
+    },
+    {
+      "name": "Slow fade",
+      "folder": "Blue + Cyan",
+      "ids": [
+        1,
+        5
+      ],
+      "beats_per": 4.0,
+      "master_beat": true,
+      "spread": 0.55,
+      "pattern": "Random",
+      "shape": 0.0
+    },
+    {
+      "name": "Wave",
+      "folder": "Blue + Cyan",
+      "ids": [
+        1,
+        5
+      ],
+      "beats_per": 2.0,
+      "master_beat": true,
+      "spread": 0.84,
+      "pattern": "Wave",
+      "shape": 1.0
+    },
+    {
+      "name": "Back + forth",
+      "folder": "Blue + Cyan + Green",
+      "ids": [
+        1,
+        5,
+        6
+      ],
+      "beats_per": 1.0,
+      "master_beat": true,
+      "spread": 0.0,
+      "pattern": "Wave",
+      "shape": 1.0
+    },
+    {
+      "name": "fade",
+      "folder": "Blue + Cyan + Green",
+      "ids": [
+        1,
+        5,
+        6
+      ],
+      "beats_per": 2.0,
+      "master_beat": true,
+      "spread": 0.84,
+      "pattern": "Random",
+      "shape": 0.0
+    },
+    {
+      "name": "Fast flash",
+      "folder": "Blue + Cyan + Green",
+      "ids": [
+        6,
+        5,
+        1
+      ],
+      "beats_per": 0.5,
+      "master_beat": true,
+      "spread": 0.84,
+      "pattern": "Random",
+      "shape": 1.0
+    },
+    {
+      "name": "flash",
+      "folder": "Blue + Cyan + Green",
+      "ids": [
+        1,
+        5,
+        6
+      ],
+      "beats_per": 2.0,
+      "master_beat": true,
+      "spread": 0.84,
+      "pattern": "Random",
+      "shape": 1.0
+    },
+    {
+      "name": "Long wave",
+      "folder": "Blue + Cyan + Green",
+      "ids": [
+        1,
+        5,
+        6
+      ],
+      "beats_per": 8.0,
+      "master_beat": true,
+      "spread": 0.4,
+      "pattern": "Wave",
+      "shape": 1.0
+    },
+    {
+      "name": "Slow fade",
+      "folder": "Blue + Cyan + Green",
+      "ids": [
+        1,
+        5,
+        6
+      ],
+      "beats_per": 4.0,
+      "master_beat": true,
+      "spread": 0.55,
+      "pattern": "Random",
+      "shape": 0.0
+    },
+    {
+      "name": "Wave",
+      "folder": "Blue + Cyan + Green",
+      "ids": [
+        1,
+        5,
+        6
+      ],
+      "beats_per": 2.0,
+      "master_beat": true,
+      "spread": 0.84,
+      "pattern": "Wave",
+      "shape": 1.0
+    },
+    {
+      "name": "Back + forth",
+      "folder": "Blue + Cyan + Magenta",
+      "ids": [
+        1,
+        5,
+        7
+      ],
+      "beats_per": 1.0,
+      "master_beat": true,
+      "spread": 0.0,
+      "pattern": "Wave",
+      "shape": 1.0
+    },
+    {
+      "name": "fade",
+      "folder": "Blue + Cyan + Magenta",
+      "ids": [
+        1,
+        5,
+        7
+      ],
+      "beats_per": 2.0,
+      "master_beat": true,
+      "spread": 0.84,
+      "pattern": "Random",
+      "shape": 0.0
+    },
+    {
+      "name": "Fast flash",
+      "folder": "Blue + Cyan + Magenta",
+      "ids": [
+        7,
+        5,
+        1
+      ],
+      "beats_per": 0.5,
+      "master_beat": true,
+      "spread": 0.84,
+      "pattern": "Random",
+      "shape": 1.0
+    },
+    {
+      "name": "flash",
+      "folder": "Blue + Cyan + Magenta",
+      "ids": [
+        1,
+        5,
+        7
+      ],
+      "beats_per": 2.0,
+      "master_beat": true,
+      "spread": 0.84,
+      "pattern": "Random",
+      "shape": 1.0
+    },
+    {
+      "name": "Long wave",
+      "folder": "Blue + Cyan + Magenta",
+      "ids": [
+        1,
+        5,
+        7
+      ],
+      "beats_per": 8.0,
+      "master_beat": true,
+      "spread": 0.4,
+      "pattern": "Wave",
+      "shape": 1.0
+    },
+    {
+      "name": "Slow fade",
+      "folder": "Blue + Cyan + Magenta",
+      "ids": [
+        1,
+        5,
+        7
+      ],
+      "beats_per": 4.0,
+      "master_beat": true,
+      "spread": 0.55,
+      "pattern": "Random",
+      "shape": 0.0
+    },
+    {
+      "name": "Wave",
+      "folder": "Blue + Cyan + Magenta",
+      "ids": [
+        1,
+        5,
+        7
+      ],
+      "beats_per": 2.0,
+      "master_beat": true,
+      "spread": 0.84,
+      "pattern": "Wave",
+      "shape": 1.0
+    },
+    {
+      "name": "Back + forth",
+      "folder": "Blue + Cyan + Red",
+      "ids": [
+        1,
+        5,
+        2
+      ],
+      "beats_per": 1.0,
+      "master_beat": true,
+      "spread": 0.0,
+      "pattern": "Wave",
+      "shape": 1.0
+    },
+    {
+      "name": "fade",
+      "folder": "Blue + Cyan + Red",
+      "ids": [
+        1,
+        5,
+        2
+      ],
+      "beats_per": 2.0,
+      "master_beat": true,
+      "spread": 0.84,
+      "pattern": "Random",
+      "shape": 0.0
+    },
+    {
+      "name": "Fast flash",
+      "folder": "Blue + Cyan + Red",
+      "ids": [
+        2,
+        5,
+        1
+      ],
+      "beats_per": 0.5,
+      "master_beat": true,
+      "spread": 0.84,
+      "pattern": "Random",
+      "shape": 1.0
+    },
+    {
+      "name": "flash",
+      "folder": "Blue + Cyan + Red",
+      "ids": [
+        1,
+        5,
+        2
+      ],
+      "beats_per": 2.0,
+      "master_beat": true,
+      "spread": 0.84,
+      "pattern": "Random",
+      "shape": 1.0
+    },
+    {
+      "name": "Long wave",
+      "folder": "Blue + Cyan + Red",
+      "ids": [
+        1,
+        5,
+        2
+      ],
+      "beats_per": 8.0,
+      "master_beat": true,
+      "spread": 0.4,
+      "pattern": "Wave",
+      "shape": 1.0
+    },
+    {
+      "name": "Slow fade",
+      "folder": "Blue + Cyan + Red",
+      "ids": [
+        1,
+        5,
+        2
+      ],
+      "beats_per": 4.0,
+      "master_beat": true,
+      "spread": 0.55,
+      "pattern": "Random",
+      "shape": 0.0
+    },
+    {
+      "name": "Wave",
+      "folder": "Blue + Cyan + Red",
+      "ids": [
+        1,
+        5,
+        2
+      ],
+      "beats_per": 2.0,
+      "master_beat": true,
+      "spread": 0.84,
+      "pattern": "Wave",
+      "shape": 1.0
+    },
+    {
+      "name": "Back + forth",
+      "folder": "Blue + Cyan + White",
+      "ids": [
+        1,
+        5,
+        4
+      ],
+      "beats_per": 1.0,
+      "master_beat": true,
+      "spread": 0.0,
+      "pattern": "Wave",
+      "shape": 1.0
+    },
+    {
+      "name": "fade",
+      "folder": "Blue + Cyan + White",
+      "ids": [
+        1,
+        5,
+        4
+      ],
+      "beats_per": 2.0,
+      "master_beat": true,
+      "spread": 0.84,
+      "pattern": "Random",
+      "shape": 0.0
+    },
+    {
+      "name": "Fast flash",
+      "folder": "Blue + Cyan + White",
+      "ids": [
+        4,
+        5,
+        1
+      ],
+      "beats_per": 0.5,
+      "master_beat": true,
+      "spread": 0.84,
+      "pattern": "Random",
+      "shape": 1.0
+    },
+    {
+      "name": "flash",
+      "folder": "Blue + Cyan + White",
+      "ids": [
+        1,
+        5,
+        4
+      ],
+      "beats_per": 2.0,
+      "master_beat": true,
+      "spread": 0.84,
+      "pattern": "Random",
+      "shape": 1.0
+    },
+    {
+      "name": "Long wave",
+      "folder": "Blue + Cyan + White",
+      "ids": [
+        1,
+        5,
+        4
+      ],
+      "beats_per": 8.0,
+      "master_beat": true,
+      "spread": 0.4,
+      "pattern": "Wave",
+      "shape": 1.0
+    },
+    {
+      "name": "Slow fade",
+      "folder": "Blue + Cyan + White",
+      "ids": [
+        1,
+        5,
+        4
+      ],
+      "beats_per": 4.0,
+      "master_beat": true,
+      "spread": 0.55,
+      "pattern": "Random",
+      "shape": 0.0
+    },
+    {
+      "name": "Wave",
+      "folder": "Blue + Cyan + White",
+      "ids": [
+        1,
+        5,
+        4
+      ],
+      "beats_per": 2.0,
+      "master_beat": true,
+      "spread": 0.84,
+      "pattern": "Wave",
+      "shape": 1.0
+    },
+    {
+      "name": "Back + forth",
+      "folder": "Blue + Cyan + Yellow",
+      "ids": [
+        1,
+        5,
+        3
+      ],
+      "beats_per": 1.0,
+      "master_beat": true,
+      "spread": 0.0,
+      "pattern": "Wave",
+      "shape": 1.0
+    },
+    {
+      "name": "fade",
+      "folder": "Blue + Cyan + Yellow",
+      "ids": [
+        1,
+        5,
+        3
+      ],
+      "beats_per": 2.0,
+      "master_beat": true,
+      "spread": 0.84,
+      "pattern": "Random",
+      "shape": 0.0
+    },
+    {
+      "name": "Fast flash",
+      "folder": "Blue + Cyan + Yellow",
+      "ids": [
+        3,
+        5,
+        1
+      ],
+      "beats_per": 0.5,
+      "master_beat": true,
+      "spread": 0.84,
+      "pattern": "Random",
+      "shape": 1.0
+    },
+    {
+      "name": "flash",
+      "folder": "Blue + Cyan + Yellow",
+      "ids": [
+        1,
+        5,
+        3
+      ],
+      "beats_per": 2.0,
+      "master_beat": true,
+      "spread": 0.84,
+      "pattern": "Random",
+      "shape": 1.0
+    },
+    {
+      "name": "Long wave",
+      "folder": "Blue + Cyan + Yellow",
+      "ids": [
+        1,
+        5,
+        3
+      ],
+      "beats_per": 8.0,
+      "master_beat": true,
+      "spread": 0.4,
+      "pattern": "Wave",
+      "shape": 1.0
+    },
+    {
+      "name": "Slow fade",
+      "folder": "Blue + Cyan + Yellow",
+      "ids": [
+        1,
+        5,
+        3
+      ],
+      "beats_per": 4.0,
+      "master_beat": true,
+      "spread": 0.55,
+      "pattern": "Random",
+      "shape": 0.0
+    },
+    {
+      "name": "Wave",
+      "folder": "Blue + Cyan + Yellow",
+      "ids": [
+        1,
+        5,
+        3
+      ],
+      "beats_per": 2.0,
+      "master_beat": true,
+      "spread": 0.84,
+      "pattern": "Wave",
+      "shape": 1.0
+    },
+    {
+      "name": "Back + forth",
+      "folder": "Blue + Green",
+      "ids": [
+        1,
+        6
+      ],
+      "beats_per": 1.0,
+      "master_beat": true,
+      "spread": 0.0,
+      "pattern": "Wave",
+      "shape": 1.0
+    },
+    {
+      "name": "fade",
+      "folder": "Blue + Green",
+      "ids": [
+        1,
+        6
+      ],
+      "beats_per": 2.0,
+      "master_beat": true,
+      "spread": 0.84,
+      "pattern": "Random",
+      "shape": 0.0
+    },
+    {
+      "name": "Fast flash",
+      "folder": "Blue + Green",
+      "ids": [
+        6,
+        1
+      ],
+      "beats_per": 0.5,
+      "master_beat": true,
+      "spread": 0.84,
+      "pattern": "Random",
+      "shape": 1.0
+    },
+    {
+      "name": "flash",
+      "folder": "Blue + Green",
+      "ids": [
+        1,
+        6
+      ],
+      "beats_per": 2.0,
+      "master_beat": true,
+      "spread": 0.84,
+      "pattern": "Random",
+      "shape": 1.0
+    },
+    {
+      "name": "Long wave",
+      "folder": "Blue + Green",
+      "ids": [
+        1,
+        6
+      ],
+      "beats_per": 8.0,
+      "master_beat": true,
+      "spread": 0.4,
+      "pattern": "Wave",
+      "shape": 1.0
+    },
+    {
+      "name": "Slow fade",
+      "folder": "Blue + Green",
+      "ids": [
+        1,
+        6
+      ],
+      "beats_per": 4.0,
+      "master_beat": true,
+      "spread": 0.55,
+      "pattern": "Random",
+      "shape": 0.0
+    },
+    {
+      "name": "Wave",
+      "folder": "Blue + Green",
+      "ids": [
+        1,
+        6
+      ],
+      "beats_per": 2.0,
+      "master_beat": true,
+      "spread": 0.84,
+      "pattern": "Wave",
+      "shape": 1.0
+    },
+    {
+      "name": "Back + forth",
+      "folder": "Blue + Green + Magenta",
+      "ids": [
+        1,
+        6,
+        7
+      ],
+      "beats_per": 1.0,
+      "master_beat": true,
+      "spread": 0.0,
+      "pattern": "Wave",
+      "shape": 1.0
+    },
+    {
+      "name": "fade",
+      "folder": "Blue + Green + Magenta",
+      "ids": [
+        1,
+        6,
+        7
+      ],
+      "beats_per": 2.0,
+      "master_beat": true,
+      "spread": 0.84,
+      "pattern": "Random",
+      "shape": 0.0
+    },
+    {
+      "name": "Fast flash",
+      "folder": "Blue + Green + Magenta",
+      "ids": [
+        7,
+        6,
+        1
+      ],
+      "beats_per": 0.5,
+      "master_beat": true,
+      "spread": 0.84,
+      "pattern": "Random",
+      "shape": 1.0
+    },
+    {
+      "name": "flash",
+      "folder": "Blue + Green + Magenta",
+      "ids": [
+        1,
+        6,
+        7
+      ],
+      "beats_per": 2.0,
+      "master_beat": true,
+      "spread": 0.84,
+      "pattern": "Random",
+      "shape": 1.0
+    },
+    {
+      "name": "Long wave",
+      "folder": "Blue + Green + Magenta",
+      "ids": [
+        1,
+        6,
+        7
+      ],
+      "beats_per": 8.0,
+      "master_beat": true,
+      "spread": 0.4,
+      "pattern": "Wave",
+      "shape": 1.0
+    },
+    {
+      "name": "Slow fade",
+      "folder": "Blue + Green + Magenta",
+      "ids": [
+        1,
+        6,
+        7
+      ],
+      "beats_per": 4.0,
+      "master_beat": true,
+      "spread": 0.55,
+      "pattern": "Random",
+      "shape": 0.0
+    },
+    {
+      "name": "Wave",
+      "folder": "Blue + Green + Magenta",
+      "ids": [
+        1,
+        6,
+        7
+      ],
+      "beats_per": 2.0,
+      "master_beat": true,
+      "spread": 0.84,
+      "pattern": "Wave",
+      "shape": 1.0
+    },
+    {
+      "name": "Back + forth",
+      "folder": "Blue + Green + Red",
+      "ids": [
+        1,
+        6,
+        2
+      ],
+      "beats_per": 1.0,
+      "master_beat": true,
+      "spread": 0.0,
+      "pattern": "Wave",
+      "shape": 1.0
+    },
+    {
+      "name": "fade",
+      "folder": "Blue + Green + Red",
+      "ids": [
+        1,
+        6,
+        2
+      ],
+      "beats_per": 2.0,
+      "master_beat": true,
+      "spread": 0.84,
+      "pattern": "Random",
+      "shape": 0.0
+    },
+    {
+      "name": "Fast flash",
+      "folder": "Blue + Green + Red",
+      "ids": [
+        2,
+        6,
+        1
+      ],
+      "beats_per": 0.5,
+      "master_beat": true,
+      "spread": 0.84,
+      "pattern": "Random",
+      "shape": 1.0
+    },
+    {
+      "name": "flash",
+      "folder": "Blue + Green + Red",
+      "ids": [
+        1,
+        6,
+        2
+      ],
+      "beats_per": 2.0,
+      "master_beat": true,
+      "spread": 0.84,
+      "pattern": "Random",
+      "shape": 1.0
+    },
+    {
+      "name": "Long wave",
+      "folder": "Blue + Green + Red",
+      "ids": [
+        1,
+        6,
+        2
+      ],
+      "beats_per": 8.0,
+      "master_beat": true,
+      "spread": 0.4,
+      "pattern": "Wave",
+      "shape": 1.0
+    },
+    {
+      "name": "Slow fade",
+      "folder": "Blue + Green + Red",
+      "ids": [
+        1,
+        6,
+        2
+      ],
+      "beats_per": 4.0,
+      "master_beat": true,
+      "spread": 0.55,
+      "pattern": "Random",
+      "shape": 0.0
+    },
+    {
+      "name": "Wave",
+      "folder": "Blue + Green + Red",
+      "ids": [
+        1,
+        6,
+        2
+      ],
+      "beats_per": 2.0,
+      "master_beat": true,
+      "spread": 0.84,
+      "pattern": "Wave",
+      "shape": 1.0
+    },
+    {
+      "name": "Back + forth",
+      "folder": "Blue + Green + White",
+      "ids": [
+        1,
+        6,
+        4
+      ],
+      "beats_per": 1.0,
+      "master_beat": true,
+      "spread": 0.0,
+      "pattern": "Wave",
+      "shape": 1.0
+    },
+    {
+      "name": "fade",
+      "folder": "Blue + Green + White",
+      "ids": [
+        1,
+        6,
+        4
+      ],
+      "beats_per": 2.0,
+      "master_beat": true,
+      "spread": 0.84,
+      "pattern": "Random",
+      "shape": 0.0
+    },
+    {
+      "name": "Fast flash",
+      "folder": "Blue + Green + White",
+      "ids": [
+        4,
+        6,
+        1
+      ],
+      "beats_per": 0.5,
+      "master_beat": true,
+      "spread": 0.84,
+      "pattern": "Random",
+      "shape": 1.0
+    },
+    {
+      "name": "flash",
+      "folder": "Blue + Green + White",
+      "ids": [
+        1,
+        6,
+        4
+      ],
+      "beats_per": 2.0,
+      "master_beat": true,
+      "spread": 0.84,
+      "pattern": "Random",
+      "shape": 1.0
+    },
+    {
+      "name": "Long wave",
+      "folder": "Blue + Green + White",
+      "ids": [
+        1,
+        6,
+        4
+      ],
+      "beats_per": 8.0,
+      "master_beat": true,
+      "spread": 0.4,
+      "pattern": "Wave",
+      "shape": 1.0
+    },
+    {
+      "name": "Slow fade",
+      "folder": "Blue + Green + White",
+      "ids": [
+        1,
+        6,
+        4
+      ],
+      "beats_per": 4.0,
+      "master_beat": true,
+      "spread": 0.55,
+      "pattern": "Random",
+      "shape": 0.0
+    },
+    {
+      "name": "Wave",
+      "folder": "Blue + Green + White",
+      "ids": [
+        1,
+        6,
+        4
+      ],
+      "beats_per": 2.0,
+      "master_beat": true,
+      "spread": 0.84,
+      "pattern": "Wave",
+      "shape": 1.0
+    },
+    {
+      "name": "Back + forth",
+      "folder": "Blue + Green + Yellow",
+      "ids": [
+        1,
+        6,
+        3
+      ],
+      "beats_per": 1.0,
+      "master_beat": true,
+      "spread": 0.0,
+      "pattern": "Wave",
+      "shape": 1.0
+    },
+    {
+      "name": "fade",
+      "folder": "Blue + Green + Yellow",
+      "ids": [
+        1,
+        6,
+        3
+      ],
+      "beats_per": 2.0,
+      "master_beat": true,
+      "spread": 0.84,
+      "pattern": "Random",
+      "shape": 0.0
+    },
+    {
+      "name": "Fast flash",
+      "folder": "Blue + Green + Yellow",
+      "ids": [
+        3,
+        6,
+        1
+      ],
+      "beats_per": 0.5,
+      "master_beat": true,
+      "spread": 0.84,
+      "pattern": "Random",
+      "shape": 1.0
+    },
+    {
+      "name": "flash",
+      "folder": "Blue + Green + Yellow",
+      "ids": [
+        1,
+        6,
+        3
+      ],
+      "beats_per": 2.0,
+      "master_beat": true,
+      "spread": 0.84,
+      "pattern": "Random",
+      "shape": 1.0
+    },
+    {
+      "name": "Long wave",
+      "folder": "Blue + Green + Yellow",
+      "ids": [
+        1,
+        6,
+        3
+      ],
+      "beats_per": 8.0,
+      "master_beat": true,
+      "spread": 0.4,
+      "pattern": "Wave",
+      "shape": 1.0
+    },
+    {
+      "name": "Slow fade",
+      "folder": "Blue + Green + Yellow",
+      "ids": [
+        1,
+        6,
+        3
+      ],
+      "beats_per": 4.0,
+      "master_beat": true,
+      "spread": 0.55,
+      "pattern": "Random",
+      "shape": 0.0
+    },
+    {
+      "name": "Wave",
+      "folder": "Blue + Green + Yellow",
+      "ids": [
+        1,
+        6,
+        3
+      ],
+      "beats_per": 2.0,
+      "master_beat": true,
+      "spread": 0.84,
+      "pattern": "Wave",
+      "shape": 1.0
+    },
+    {
+      "name": "Back + forth",
+      "folder": "Blue + Magenta",
+      "ids": [
+        1,
+        7
+      ],
+      "beats_per": 1.0,
+      "master_beat": true,
+      "spread": 0.0,
+      "pattern": "Wave",
+      "shape": 1.0
+    },
+    {
+      "name": "fade",
+      "folder": "Blue + Magenta",
+      "ids": [
+        1,
+        7
+      ],
+      "beats_per": 2.0,
+      "master_beat": true,
+      "spread": 0.84,
+      "pattern": "Random",
+      "shape": 0.0
+    },
+    {
+      "name": "Fast flash",
+      "folder": "Blue + Magenta",
+      "ids": [
+        7,
+        1
+      ],
+      "beats_per": 0.5,
+      "master_beat": true,
+      "spread": 0.84,
+      "pattern": "Random",
+      "shape": 1.0
+    },
+    {
+      "name": "flash",
+      "folder": "Blue + Magenta",
+      "ids": [
+        1,
+        7
+      ],
+      "beats_per": 2.0,
+      "master_beat": true,
+      "spread": 0.84,
+      "pattern": "Random",
+      "shape": 1.0
+    },
+    {
+      "name": "Long wave",
+      "folder": "Blue + Magenta",
+      "ids": [
+        1,
+        7
+      ],
+      "beats_per": 8.0,
+      "master_beat": true,
+      "spread": 0.4,
+      "pattern": "Wave",
+      "shape": 1.0
+    },
+    {
+      "name": "Slow fade",
+      "folder": "Blue + Magenta",
+      "ids": [
+        1,
+        7
+      ],
+      "beats_per": 4.0,
+      "master_beat": true,
+      "spread": 0.55,
+      "pattern": "Random",
+      "shape": 0.0
+    },
+    {
+      "name": "Wave",
+      "folder": "Blue + Magenta",
+      "ids": [
+        1,
+        7
+      ],
+      "beats_per": 2.0,
+      "master_beat": true,
+      "spread": 0.84,
+      "pattern": "Wave",
+      "shape": 1.0
+    },
+    {
+      "name": "Back + forth",
+      "folder": "Blue + Magenta + Red",
+      "ids": [
+        1,
+        7,
+        2
+      ],
+      "beats_per": 1.0,
+      "master_beat": true,
+      "spread": 0.0,
+      "pattern": "Wave",
+      "shape": 1.0
+    },
+    {
+      "name": "fade",
+      "folder": "Blue + Magenta + Red",
+      "ids": [
+        1,
+        7,
+        2
+      ],
+      "beats_per": 2.0,
+      "master_beat": true,
+      "spread": 0.84,
+      "pattern": "Random",
+      "shape": 0.0
+    },
+    {
+      "name": "Fast flash",
+      "folder": "Blue + Magenta + Red",
+      "ids": [
+        2,
+        7,
+        1
+      ],
+      "beats_per": 0.5,
+      "master_beat": true,
+      "spread": 0.84,
+      "pattern": "Random",
+      "shape": 1.0
+    },
+    {
+      "name": "flash",
+      "folder": "Blue + Magenta + Red",
+      "ids": [
+        1,
+        7,
+        2
+      ],
+      "beats_per": 2.0,
+      "master_beat": true,
+      "spread": 0.84,
+      "pattern": "Random",
+      "shape": 1.0
+    },
+    {
+      "name": "Long wave",
+      "folder": "Blue + Magenta + Red",
+      "ids": [
+        1,
+        7,
+        2
+      ],
+      "beats_per": 8.0,
+      "master_beat": true,
+      "spread": 0.4,
+      "pattern": "Wave",
+      "shape": 1.0
+    },
+    {
+      "name": "Slow fade",
+      "folder": "Blue + Magenta + Red",
+      "ids": [
+        1,
+        7,
+        2
+      ],
+      "beats_per": 4.0,
+      "master_beat": true,
+      "spread": 0.55,
+      "pattern": "Random",
+      "shape": 0.0
+    },
+    {
+      "name": "Wave",
+      "folder": "Blue + Magenta + Red",
+      "ids": [
+        1,
+        7,
+        2
+      ],
+      "beats_per": 2.0,
+      "master_beat": true,
+      "spread": 0.84,
+      "pattern": "Wave",
+      "shape": 1.0
+    },
+    {
+      "name": "Back + forth",
+      "folder": "Blue + Magenta + White",
+      "ids": [
+        1,
+        7,
+        4
+      ],
+      "beats_per": 1.0,
+      "master_beat": true,
+      "spread": 0.0,
+      "pattern": "Wave",
+      "shape": 1.0
+    },
+    {
+      "name": "fade",
+      "folder": "Blue + Magenta + White",
+      "ids": [
+        1,
+        7,
+        4
+      ],
+      "beats_per": 2.0,
+      "master_beat": true,
+      "spread": 0.84,
+      "pattern": "Random",
+      "shape": 0.0
+    },
+    {
+      "name": "Fast flash",
+      "folder": "Blue + Magenta + White",
+      "ids": [
+        4,
+        7,
+        1
+      ],
+      "beats_per": 0.5,
+      "master_beat": true,
+      "spread": 0.84,
+      "pattern": "Random",
+      "shape": 1.0
+    },
+    {
+      "name": "flash",
+      "folder": "Blue + Magenta + White",
+      "ids": [
+        1,
+        7,
+        4
+      ],
+      "beats_per": 2.0,
+      "master_beat": true,
+      "spread": 0.84,
+      "pattern": "Random",
+      "shape": 1.0
+    },
+    {
+      "name": "Long wave",
+      "folder": "Blue + Magenta + White",
+      "ids": [
+        1,
+        7,
+        4
+      ],
+      "beats_per": 8.0,
+      "master_beat": true,
+      "spread": 0.4,
+      "pattern": "Wave",
+      "shape": 1.0
+    },
+    {
+      "name": "Slow fade",
+      "folder": "Blue + Magenta + White",
+      "ids": [
+        1,
+        7,
+        4
+      ],
+      "beats_per": 4.0,
+      "master_beat": true,
+      "spread": 0.55,
+      "pattern": "Random",
+      "shape": 0.0
+    },
+    {
+      "name": "Wave",
+      "folder": "Blue + Magenta + White",
+      "ids": [
+        1,
+        7,
+        4
+      ],
+      "beats_per": 2.0,
+      "master_beat": true,
+      "spread": 0.84,
+      "pattern": "Wave",
+      "shape": 1.0
+    },
+    {
+      "name": "Back + forth",
+      "folder": "Blue + Magenta + Yellow",
+      "ids": [
+        1,
+        7,
+        3
+      ],
+      "beats_per": 1.0,
+      "master_beat": true,
+      "spread": 0.0,
+      "pattern": "Wave",
+      "shape": 1.0
+    },
+    {
+      "name": "fade",
+      "folder": "Blue + Magenta + Yellow",
+      "ids": [
+        1,
+        7,
+        3
+      ],
+      "beats_per": 2.0,
+      "master_beat": true,
+      "spread": 0.84,
+      "pattern": "Random",
+      "shape": 0.0
+    },
+    {
+      "name": "Fast flash",
+      "folder": "Blue + Magenta + Yellow",
+      "ids": [
+        3,
+        7,
+        1
+      ],
+      "beats_per": 0.5,
+      "master_beat": true,
+      "spread": 0.84,
+      "pattern": "Random",
+      "shape": 1.0
+    },
+    {
+      "name": "flash",
+      "folder": "Blue + Magenta + Yellow",
+      "ids": [
+        1,
+        7,
+        3
+      ],
+      "beats_per": 2.0,
+      "master_beat": true,
+      "spread": 0.84,
+      "pattern": "Random",
+      "shape": 1.0
+    },
+    {
+      "name": "Long wave",
+      "folder": "Blue + Magenta + Yellow",
+      "ids": [
+        1,
+        7,
+        3
+      ],
+      "beats_per": 8.0,
+      "master_beat": true,
+      "spread": 0.4,
+      "pattern": "Wave",
+      "shape": 1.0
+    },
+    {
+      "name": "Slow fade",
+      "folder": "Blue + Magenta + Yellow",
+      "ids": [
+        1,
+        7,
+        3
+      ],
+      "beats_per": 4.0,
+      "master_beat": true,
+      "spread": 0.55,
+      "pattern": "Random",
+      "shape": 0.0
+    },
+    {
+      "name": "Wave",
+      "folder": "Blue + Magenta + Yellow",
+      "ids": [
+        1,
+        7,
+        3
+      ],
+      "beats_per": 2.0,
+      "master_beat": true,
+      "spread": 0.84,
+      "pattern": "Wave",
+      "shape": 1.0
+    },
+    {
+      "name": "Back + forth",
+      "folder": "Blue + Red",
+      "ids": [
+        1,
+        2
+      ],
+      "beats_per": 1.0,
+      "master_beat": true,
+      "spread": 0.0,
+      "pattern": "Wave",
+      "shape": 1.0
+    },
+    {
+      "name": "fade",
+      "folder": "Blue + Red",
+      "ids": [
+        1,
+        2
+      ],
+      "beats_per": 2.0,
+      "master_beat": true,
+      "spread": 0.84,
+      "pattern": "Random",
+      "shape": 0.0
+    },
+    {
+      "name": "Fast flash",
+      "folder": "Blue + Red",
+      "ids": [
+        2,
+        1
+      ],
+      "beats_per": 0.5,
+      "master_beat": true,
+      "spread": 0.84,
+      "pattern": "Random",
+      "shape": 1.0
+    },
+    {
+      "name": "flash",
+      "folder": "Blue + Red",
+      "ids": [
+        1,
+        2
+      ],
+      "beats_per": 2.0,
+      "master_beat": true,
+      "spread": 0.84,
+      "pattern": "Random",
+      "shape": 1.0
+    },
+    {
+      "name": "Long wave",
+      "folder": "Blue + Red",
+      "ids": [
+        1,
+        2
+      ],
+      "beats_per": 8.0,
+      "master_beat": true,
+      "spread": 0.4,
+      "pattern": "Wave",
+      "shape": 1.0
+    },
+    {
+      "name": "Slow fade",
+      "folder": "Blue + Red",
+      "ids": [
+        1,
+        2
+      ],
+      "beats_per": 4.0,
+      "master_beat": true,
+      "spread": 0.55,
+      "pattern": "Random",
+      "shape": 0.0
+    },
+    {
+      "name": "Wave",
+      "folder": "Blue + Red",
+      "ids": [
+        1,
+        2
+      ],
+      "beats_per": 2.0,
+      "master_beat": true,
+      "spread": 0.84,
+      "pattern": "Wave",
+      "shape": 1.0
+    },
+    {
+      "name": "Back + forth",
+      "folder": "Blue + Red + White",
+      "ids": [
+        1,
+        2,
+        4
+      ],
+      "beats_per": 1.0,
+      "master_beat": true,
+      "spread": 0.0,
+      "pattern": "Wave",
+      "shape": 1.0
+    },
+    {
+      "name": "fade",
+      "folder": "Blue + Red + White",
+      "ids": [
+        1,
+        2,
+        4
+      ],
+      "beats_per": 2.0,
+      "master_beat": true,
+      "spread": 0.84,
+      "pattern": "Random",
+      "shape": 0.0
+    },
+    {
+      "name": "Fast flash",
+      "folder": "Blue + Red + White",
+      "ids": [
+        4,
+        2,
+        1
+      ],
+      "beats_per": 0.5,
+      "master_beat": true,
+      "spread": 0.84,
+      "pattern": "Random",
+      "shape": 1.0
+    },
+    {
+      "name": "flash",
+      "folder": "Blue + Red + White",
+      "ids": [
+        1,
+        2,
+        4
+      ],
+      "beats_per": 2.0,
+      "master_beat": true,
+      "spread": 0.84,
+      "pattern": "Random",
+      "shape": 1.0
+    },
+    {
+      "name": "Long wave",
+      "folder": "Blue + Red + White",
+      "ids": [
+        1,
+        2,
+        4
+      ],
+      "beats_per": 8.0,
+      "master_beat": true,
+      "spread": 0.4,
+      "pattern": "Wave",
+      "shape": 1.0
+    },
+    {
+      "name": "Slow fade",
+      "folder": "Blue + Red + White",
+      "ids": [
+        1,
+        2,
+        4
+      ],
+      "beats_per": 4.0,
+      "master_beat": true,
+      "spread": 0.55,
+      "pattern": "Random",
+      "shape": 0.0
+    },
+    {
+      "name": "Wave",
+      "folder": "Blue + Red + White",
+      "ids": [
+        1,
+        2,
+        4
+      ],
+      "beats_per": 2.0,
+      "master_beat": true,
+      "spread": 0.84,
+      "pattern": "Wave",
+      "shape": 1.0
+    },
+    {
+      "name": "Back + forth",
+      "folder": "Blue + Red + Yellow",
+      "ids": [
+        1,
+        2,
+        3
+      ],
+      "beats_per": 1.0,
+      "master_beat": true,
+      "spread": 0.0,
+      "pattern": "Wave",
+      "shape": 1.0
+    },
+    {
+      "name": "fade",
+      "folder": "Blue + Red + Yellow",
+      "ids": [
+        1,
+        2,
+        3
+      ],
+      "beats_per": 2.0,
+      "master_beat": true,
+      "spread": 0.84,
+      "pattern": "Random",
+      "shape": 0.0
+    },
+    {
+      "name": "Fast flash",
+      "folder": "Blue + Red + Yellow",
+      "ids": [
+        3,
+        2,
+        1
+      ],
+      "beats_per": 0.5,
+      "master_beat": true,
+      "spread": 0.84,
+      "pattern": "Random",
+      "shape": 1.0
+    },
+    {
+      "name": "flash",
+      "folder": "Blue + Red + Yellow",
+      "ids": [
+        1,
+        2,
+        3
+      ],
+      "beats_per": 2.0,
+      "master_beat": true,
+      "spread": 0.84,
+      "pattern": "Random",
+      "shape": 1.0
+    },
+    {
+      "name": "Long wave",
+      "folder": "Blue + Red + Yellow",
+      "ids": [
+        1,
+        2,
+        3
+      ],
+      "beats_per": 8.0,
+      "master_beat": true,
+      "spread": 0.4,
+      "pattern": "Wave",
+      "shape": 1.0
+    },
+    {
+      "name": "Slow fade",
+      "folder": "Blue + Red + Yellow",
+      "ids": [
+        1,
+        2,
+        3
+      ],
+      "beats_per": 4.0,
+      "master_beat": true,
+      "spread": 0.55,
+      "pattern": "Random",
+      "shape": 0.0
+    },
+    {
+      "name": "Wave",
+      "folder": "Blue + Red + Yellow",
+      "ids": [
+        1,
+        2,
+        3
+      ],
+      "beats_per": 2.0,
+      "master_beat": true,
+      "spread": 0.84,
+      "pattern": "Wave",
+      "shape": 1.0
+    },
+    {
+      "name": "Back + forth",
+      "folder": "Blue + White",
+      "ids": [
+        1,
+        4
+      ],
+      "beats_per": 1.0,
+      "master_beat": true,
+      "spread": 0.0,
+      "pattern": "Wave",
+      "shape": 1.0
+    },
+    {
+      "name": "fade",
+      "folder": "Blue + White",
+      "ids": [
+        1,
+        4
+      ],
+      "beats_per": 2.0,
+      "master_beat": true,
+      "spread": 0.84,
+      "pattern": "Random",
+      "shape": 0.0
+    },
+    {
+      "name": "Fast flash",
+      "folder": "Blue + White",
+      "ids": [
+        4,
+        1
+      ],
+      "beats_per": 0.5,
+      "master_beat": true,
+      "spread": 0.84,
+      "pattern": "Random",
+      "shape": 1.0
+    },
+    {
+      "name": "flash",
+      "folder": "Blue + White",
+      "ids": [
+        1,
+        4
+      ],
+      "beats_per": 2.0,
+      "master_beat": true,
+      "spread": 0.84,
+      "pattern": "Random",
+      "shape": 1.0
+    },
+    {
+      "name": "Long wave",
+      "folder": "Blue + White",
+      "ids": [
+        1,
+        4
+      ],
+      "beats_per": 8.0,
+      "master_beat": true,
+      "spread": 0.4,
+      "pattern": "Wave",
+      "shape": 1.0
+    },
+    {
+      "name": "Slow fade",
+      "folder": "Blue + White",
+      "ids": [
+        1,
+        4
+      ],
+      "beats_per": 4.0,
+      "master_beat": true,
+      "spread": 0.55,
+      "pattern": "Random",
+      "shape": 0.0
+    },
+    {
+      "name": "Wave",
+      "folder": "Blue + White",
+      "ids": [
+        1,
+        4
+      ],
+      "beats_per": 2.0,
+      "master_beat": true,
+      "spread": 0.84,
+      "pattern": "Wave",
+      "shape": 1.0
+    },
+    {
+      "name": "Back + forth",
+      "folder": "Blue + White + Yellow",
+      "ids": [
+        1,
+        4,
+        3
+      ],
+      "beats_per": 1.0,
+      "master_beat": true,
+      "spread": 0.0,
+      "pattern": "Wave",
+      "shape": 1.0
+    },
+    {
+      "name": "fade",
+      "folder": "Blue + White + Yellow",
+      "ids": [
+        1,
+        4,
+        3
+      ],
+      "beats_per": 2.0,
+      "master_beat": true,
+      "spread": 0.84,
+      "pattern": "Random",
+      "shape": 0.0
+    },
+    {
+      "name": "Fast flash",
+      "folder": "Blue + White + Yellow",
+      "ids": [
+        3,
+        4,
+        1
+      ],
+      "beats_per": 0.5,
+      "master_beat": true,
+      "spread": 0.84,
+      "pattern": "Random",
+      "shape": 1.0
+    },
+    {
+      "name": "flash",
+      "folder": "Blue + White + Yellow",
+      "ids": [
+        1,
+        4,
+        3
+      ],
+      "beats_per": 2.0,
+      "master_beat": true,
+      "spread": 0.84,
+      "pattern": "Random",
+      "shape": 1.0
+    },
+    {
+      "name": "Long wave",
+      "folder": "Blue + White + Yellow",
+      "ids": [
+        1,
+        4,
+        3
+      ],
+      "beats_per": 8.0,
+      "master_beat": true,
+      "spread": 0.4,
+      "pattern": "Wave",
+      "shape": 1.0
+    },
+    {
+      "name": "Slow fade",
+      "folder": "Blue + White + Yellow",
+      "ids": [
+        1,
+        4,
+        3
+      ],
+      "beats_per": 4.0,
+      "master_beat": true,
+      "spread": 0.55,
+      "pattern": "Random",
+      "shape": 0.0
+    },
+    {
+      "name": "Wave",
+      "folder": "Blue + White + Yellow",
+      "ids": [
+        1,
+        4,
+        3
+      ],
+      "beats_per": 2.0,
+      "master_beat": true,
+      "spread": 0.84,
+      "pattern": "Wave",
+      "shape": 1.0
+    },
+    {
+      "name": "Back + forth",
+      "folder": "Blue + Yellow",
+      "ids": [
+        1,
+        3
+      ],
+      "beats_per": 1.0,
+      "master_beat": true,
+      "spread": 0.0,
+      "pattern": "Wave",
+      "shape": 1.0
+    },
+    {
+      "name": "fade",
+      "folder": "Blue + Yellow",
+      "ids": [
+        1,
+        3
+      ],
+      "beats_per": 2.0,
+      "master_beat": true,
+      "spread": 0.84,
+      "pattern": "Random",
+      "shape": 0.0
+    },
+    {
+      "name": "Fast flash",
+      "folder": "Blue + Yellow",
+      "ids": [
+        3,
+        1
+      ],
+      "beats_per": 0.5,
+      "master_beat": true,
+      "spread": 0.84,
+      "pattern": "Random",
+      "shape": 1.0
+    },
+    {
+      "name": "flash",
+      "folder": "Blue + Yellow",
+      "ids": [
+        1,
+        3
+      ],
+      "beats_per": 2.0,
+      "master_beat": true,
+      "spread": 0.84,
+      "pattern": "Random",
+      "shape": 1.0
+    },
+    {
+      "name": "Long wave",
+      "folder": "Blue + Yellow",
+      "ids": [
+        1,
+        3
+      ],
+      "beats_per": 8.0,
+      "master_beat": true,
+      "spread": 0.4,
+      "pattern": "Wave",
+      "shape": 1.0
+    },
+    {
+      "name": "Slow fade",
+      "folder": "Blue + Yellow",
+      "ids": [
+        1,
+        3
+      ],
+      "beats_per": 4.0,
+      "master_beat": true,
+      "spread": 0.55,
+      "pattern": "Random",
+      "shape": 0.0
+    },
+    {
+      "name": "Wave",
+      "folder": "Blue + Yellow",
+      "ids": [
+        1,
+        3
+      ],
+      "beats_per": 2.0,
+      "master_beat": true,
+      "spread": 0.84,
+      "pattern": "Wave",
+      "shape": 1.0
+    },
+    {
+      "name": "Blue + Red",
+      "folder": "Blue Red",
+      "ids": [
+        2,
+        1
+      ],
+      "beats_per": 2.0,
+      "master_beat": true,
+      "spread": 0.84,
+      "pattern": "Random",
+      "shape": 0.0
+    },
+    {
+      "name": "Crazy",
+      "folder": "Blue Red",
+      "ids": [
+        2,
+        1
+      ],
+      "beats_per": 0.5,
+      "master_beat": true,
+      "spread": 0.63,
+      "pattern": "Random",
+      "shape": 1.0
+    },
+    {
+      "name": "waves",
+      "folder": "Blue Red",
+      "ids": [
+        2,
+        1
+      ],
+      "beats_per": 1.0,
+      "master_beat": true,
+      "spread": 0.63,
+      "pattern": "Random",
+      "shape": 0.0
+    },
+    {
+      "name": "Back + forth",
+      "folder": "Cyan + Green",
+      "ids": [
+        5,
+        6
+      ],
+      "beats_per": 1.0,
+      "master_beat": true,
+      "spread": 0.0,
+      "pattern": "Wave",
+      "shape": 1.0
+    },
+    {
+      "name": "fade",
+      "folder": "Cyan + Green",
+      "ids": [
+        5,
+        6
+      ],
+      "beats_per": 2.0,
+      "master_beat": true,
+      "spread": 0.84,
+      "pattern": "Random",
+      "shape": 0.0
+    },
+    {
+      "name": "Fast flash",
+      "folder": "Cyan + Green",
+      "ids": [
+        6,
+        5
+      ],
+      "beats_per": 0.5,
+      "master_beat": true,
+      "spread": 0.84,
+      "pattern": "Random",
+      "shape": 1.0
+    },
+    {
+      "name": "flash",
+      "folder": "Cyan + Green",
+      "ids": [
+        5,
+        6
+      ],
+      "beats_per": 2.0,
+      "master_beat": true,
+      "spread": 0.84,
+      "pattern": "Random",
+      "shape": 1.0
+    },
+    {
+      "name": "Long wave",
+      "folder": "Cyan + Green",
+      "ids": [
+        5,
+        6
+      ],
+      "beats_per": 8.0,
+      "master_beat": true,
+      "spread": 0.4,
+      "pattern": "Wave",
+      "shape": 1.0
+    },
+    {
+      "name": "Slow fade",
+      "folder": "Cyan + Green",
+      "ids": [
+        5,
+        6
+      ],
+      "beats_per": 4.0,
+      "master_beat": true,
+      "spread": 0.55,
+      "pattern": "Random",
+      "shape": 0.0
+    },
+    {
+      "name": "Wave",
+      "folder": "Cyan + Green",
+      "ids": [
+        5,
+        6
+      ],
+      "beats_per": 2.0,
+      "master_beat": true,
+      "spread": 0.84,
+      "pattern": "Wave",
+      "shape": 1.0
+    },
+    {
+      "name": "Back + forth",
+      "folder": "Cyan + Green + Magenta",
+      "ids": [
+        5,
+        6,
+        7
+      ],
+      "beats_per": 1.0,
+      "master_beat": true,
+      "spread": 0.0,
+      "pattern": "Wave",
+      "shape": 1.0
+    },
+    {
+      "name": "fade",
+      "folder": "Cyan + Green + Magenta",
+      "ids": [
+        5,
+        6,
+        7
+      ],
+      "beats_per": 2.0,
+      "master_beat": true,
+      "spread": 0.84,
+      "pattern": "Random",
+      "shape": 0.0
+    },
+    {
+      "name": "Fast flash",
+      "folder": "Cyan + Green + Magenta",
+      "ids": [
+        7,
+        6,
+        5
+      ],
+      "beats_per": 0.5,
+      "master_beat": true,
+      "spread": 0.84,
+      "pattern": "Random",
+      "shape": 1.0
+    },
+    {
+      "name": "flash",
+      "folder": "Cyan + Green + Magenta",
+      "ids": [
+        5,
+        6,
+        7
+      ],
+      "beats_per": 2.0,
+      "master_beat": true,
+      "spread": 0.84,
+      "pattern": "Random",
+      "shape": 1.0
+    },
+    {
+      "name": "Long wave",
+      "folder": "Cyan + Green + Magenta",
+      "ids": [
+        5,
+        6,
+        7
+      ],
+      "beats_per": 8.0,
+      "master_beat": true,
+      "spread": 0.4,
+      "pattern": "Wave",
+      "shape": 1.0
+    },
+    {
+      "name": "Slow fade",
+      "folder": "Cyan + Green + Magenta",
+      "ids": [
+        5,
+        6,
+        7
+      ],
+      "beats_per": 4.0,
+      "master_beat": true,
+      "spread": 0.55,
+      "pattern": "Random",
+      "shape": 0.0
+    },
+    {
+      "name": "Wave",
+      "folder": "Cyan + Green + Magenta",
+      "ids": [
+        5,
+        6,
+        7
+      ],
+      "beats_per": 2.0,
+      "master_beat": true,
+      "spread": 0.84,
+      "pattern": "Wave",
+      "shape": 1.0
+    },
+    {
+      "name": "Back + forth",
+      "folder": "Cyan + Green + Red",
+      "ids": [
+        5,
+        6,
+        2
+      ],
+      "beats_per": 1.0,
+      "master_beat": true,
+      "spread": 0.0,
+      "pattern": "Wave",
+      "shape": 1.0
+    },
+    {
+      "name": "fade",
+      "folder": "Cyan + Green + Red",
+      "ids": [
+        5,
+        6,
+        2
+      ],
+      "beats_per": 2.0,
+      "master_beat": true,
+      "spread": 0.84,
+      "pattern": "Random",
+      "shape": 0.0
+    },
+    {
+      "name": "Fast flash",
+      "folder": "Cyan + Green + Red",
+      "ids": [
+        2,
+        6,
+        5
+      ],
+      "beats_per": 0.5,
+      "master_beat": true,
+      "spread": 0.84,
+      "pattern": "Random",
+      "shape": 1.0
+    },
+    {
+      "name": "flash",
+      "folder": "Cyan + Green + Red",
+      "ids": [
+        5,
+        6,
+        2
+      ],
+      "beats_per": 2.0,
+      "master_beat": true,
+      "spread": 0.84,
+      "pattern": "Random",
+      "shape": 1.0
+    },
+    {
+      "name": "Long wave",
+      "folder": "Cyan + Green + Red",
+      "ids": [
+        5,
+        6,
+        2
+      ],
+      "beats_per": 8.0,
+      "master_beat": true,
+      "spread": 0.4,
+      "pattern": "Wave",
+      "shape": 1.0
+    },
+    {
+      "name": "Slow fade",
+      "folder": "Cyan + Green + Red",
+      "ids": [
+        5,
+        6,
+        2
+      ],
+      "beats_per": 4.0,
+      "master_beat": true,
+      "spread": 0.55,
+      "pattern": "Random",
+      "shape": 0.0
+    },
+    {
+      "name": "Wave",
+      "folder": "Cyan + Green + Red",
+      "ids": [
+        5,
+        6,
+        2
+      ],
+      "beats_per": 2.0,
+      "master_beat": true,
+      "spread": 0.84,
+      "pattern": "Wave",
+      "shape": 1.0
+    },
+    {
+      "name": "Back + forth",
+      "folder": "Cyan + Green + White",
+      "ids": [
+        5,
+        6,
+        4
+      ],
+      "beats_per": 1.0,
+      "master_beat": true,
+      "spread": 0.0,
+      "pattern": "Wave",
+      "shape": 1.0
+    },
+    {
+      "name": "fade",
+      "folder": "Cyan + Green + White",
+      "ids": [
+        5,
+        6,
+        4
+      ],
+      "beats_per": 2.0,
+      "master_beat": true,
+      "spread": 0.84,
+      "pattern": "Random",
+      "shape": 0.0
+    },
+    {
+      "name": "Fast flash",
+      "folder": "Cyan + Green + White",
+      "ids": [
+        4,
+        6,
+        5
+      ],
+      "beats_per": 0.5,
+      "master_beat": true,
+      "spread": 0.84,
+      "pattern": "Random",
+      "shape": 1.0
+    },
+    {
+      "name": "flash",
+      "folder": "Cyan + Green + White",
+      "ids": [
+        5,
+        6,
+        4
+      ],
+      "beats_per": 2.0,
+      "master_beat": true,
+      "spread": 0.84,
+      "pattern": "Random",
+      "shape": 1.0
+    },
+    {
+      "name": "Long wave",
+      "folder": "Cyan + Green + White",
+      "ids": [
+        5,
+        6,
+        4
+      ],
+      "beats_per": 8.0,
+      "master_beat": true,
+      "spread": 0.4,
+      "pattern": "Wave",
+      "shape": 1.0
+    },
+    {
+      "name": "Slow fade",
+      "folder": "Cyan + Green + White",
+      "ids": [
+        5,
+        6,
+        4
+      ],
+      "beats_per": 4.0,
+      "master_beat": true,
+      "spread": 0.55,
+      "pattern": "Random",
+      "shape": 0.0
+    },
+    {
+      "name": "Wave",
+      "folder": "Cyan + Green + White",
+      "ids": [
+        5,
+        6,
+        4
+      ],
+      "beats_per": 2.0,
+      "master_beat": true,
+      "spread": 0.84,
+      "pattern": "Wave",
+      "shape": 1.0
+    },
+    {
+      "name": "Back + forth",
+      "folder": "Cyan + Green + Yellow",
+      "ids": [
+        5,
+        6,
+        3
+      ],
+      "beats_per": 1.0,
+      "master_beat": true,
+      "spread": 0.0,
+      "pattern": "Wave",
+      "shape": 1.0
+    },
+    {
+      "name": "fade",
+      "folder": "Cyan + Green + Yellow",
+      "ids": [
+        5,
+        6,
+        3
+      ],
+      "beats_per": 2.0,
+      "master_beat": true,
+      "spread": 0.84,
+      "pattern": "Random",
+      "shape": 0.0
+    },
+    {
+      "name": "Fast flash",
+      "folder": "Cyan + Green + Yellow",
+      "ids": [
+        3,
+        6,
+        5
+      ],
+      "beats_per": 0.5,
+      "master_beat": true,
+      "spread": 0.84,
+      "pattern": "Random",
+      "shape": 1.0
+    },
+    {
+      "name": "flash",
+      "folder": "Cyan + Green + Yellow",
+      "ids": [
+        5,
+        6,
+        3
+      ],
+      "beats_per": 2.0,
+      "master_beat": true,
+      "spread": 0.84,
+      "pattern": "Random",
+      "shape": 1.0
+    },
+    {
+      "name": "Long wave",
+      "folder": "Cyan + Green + Yellow",
+      "ids": [
+        5,
+        6,
+        3
+      ],
+      "beats_per": 8.0,
+      "master_beat": true,
+      "spread": 0.4,
+      "pattern": "Wave",
+      "shape": 1.0
+    },
+    {
+      "name": "Slow fade",
+      "folder": "Cyan + Green + Yellow",
+      "ids": [
+        5,
+        6,
+        3
+      ],
+      "beats_per": 4.0,
+      "master_beat": true,
+      "spread": 0.55,
+      "pattern": "Random",
+      "shape": 0.0
+    },
+    {
+      "name": "Wave",
+      "folder": "Cyan + Green + Yellow",
+      "ids": [
+        5,
+        6,
+        3
+      ],
+      "beats_per": 2.0,
+      "master_beat": true,
+      "spread": 0.84,
+      "pattern": "Wave",
+      "shape": 1.0
+    },
+    {
+      "name": "Back + forth",
+      "folder": "Cyan + Magenta",
+      "ids": [
+        5,
+        7
+      ],
+      "beats_per": 1.0,
+      "master_beat": true,
+      "spread": 0.0,
+      "pattern": "Wave",
+      "shape": 1.0
+    },
+    {
+      "name": "fade",
+      "folder": "Cyan + Magenta",
+      "ids": [
+        5,
+        7
+      ],
+      "beats_per": 2.0,
+      "master_beat": true,
+      "spread": 0.84,
+      "pattern": "Random",
+      "shape": 0.0
+    },
+    {
+      "name": "Fast flash",
+      "folder": "Cyan + Magenta",
+      "ids": [
+        7,
+        5
+      ],
+      "beats_per": 0.5,
+      "master_beat": true,
+      "spread": 0.84,
+      "pattern": "Random",
+      "shape": 1.0
+    },
+    {
+      "name": "flash",
+      "folder": "Cyan + Magenta",
+      "ids": [
+        5,
+        7
+      ],
+      "beats_per": 2.0,
+      "master_beat": true,
+      "spread": 0.84,
+      "pattern": "Random",
+      "shape": 1.0
+    },
+    {
+      "name": "Long wave",
+      "folder": "Cyan + Magenta",
+      "ids": [
+        5,
+        7
+      ],
+      "beats_per": 8.0,
+      "master_beat": true,
+      "spread": 0.4,
+      "pattern": "Wave",
+      "shape": 1.0
+    },
+    {
+      "name": "Slow fade",
+      "folder": "Cyan + Magenta",
+      "ids": [
+        5,
+        7
+      ],
+      "beats_per": 4.0,
+      "master_beat": true,
+      "spread": 0.55,
+      "pattern": "Random",
+      "shape": 0.0
+    },
+    {
+      "name": "Wave",
+      "folder": "Cyan + Magenta",
+      "ids": [
+        5,
+        7
+      ],
+      "beats_per": 2.0,
+      "master_beat": true,
+      "spread": 0.84,
+      "pattern": "Wave",
+      "shape": 1.0
+    },
+    {
+      "name": "Back + forth",
+      "folder": "Cyan + Magenta + Red",
+      "ids": [
+        5,
+        7,
+        2
+      ],
+      "beats_per": 1.0,
+      "master_beat": true,
+      "spread": 0.0,
+      "pattern": "Wave",
+      "shape": 1.0
+    },
+    {
+      "name": "fade",
+      "folder": "Cyan + Magenta + Red",
+      "ids": [
+        5,
+        7,
+        2
+      ],
+      "beats_per": 2.0,
+      "master_beat": true,
+      "spread": 0.84,
+      "pattern": "Random",
+      "shape": 0.0
+    },
+    {
+      "name": "Fast flash",
+      "folder": "Cyan + Magenta + Red",
+      "ids": [
+        2,
+        7,
+        5
+      ],
+      "beats_per": 0.5,
+      "master_beat": true,
+      "spread": 0.84,
+      "pattern": "Random",
+      "shape": 1.0
+    },
+    {
+      "name": "flash",
+      "folder": "Cyan + Magenta + Red",
+      "ids": [
+        5,
+        7,
+        2
+      ],
+      "beats_per": 2.0,
+      "master_beat": true,
+      "spread": 0.84,
+      "pattern": "Random",
+      "shape": 1.0
+    },
+    {
+      "name": "Long wave",
+      "folder": "Cyan + Magenta + Red",
+      "ids": [
+        5,
+        7,
+        2
+      ],
+      "beats_per": 8.0,
+      "master_beat": true,
+      "spread": 0.4,
+      "pattern": "Wave",
+      "shape": 1.0
+    },
+    {
+      "name": "Slow fade",
+      "folder": "Cyan + Magenta + Red",
+      "ids": [
+        5,
+        7,
+        2
+      ],
+      "beats_per": 4.0,
+      "master_beat": true,
+      "spread": 0.55,
+      "pattern": "Random",
+      "shape": 0.0
+    },
+    {
+      "name": "Wave",
+      "folder": "Cyan + Magenta + Red",
+      "ids": [
+        5,
+        7,
+        2
+      ],
+      "beats_per": 2.0,
+      "master_beat": true,
+      "spread": 0.84,
+      "pattern": "Wave",
+      "shape": 1.0
+    },
+    {
+      "name": "Back + forth",
+      "folder": "Cyan + Magenta + White",
+      "ids": [
+        5,
+        7,
+        4
+      ],
+      "beats_per": 1.0,
+      "master_beat": true,
+      "spread": 0.0,
+      "pattern": "Wave",
+      "shape": 1.0
+    },
+    {
+      "name": "fade",
+      "folder": "Cyan + Magenta + White",
+      "ids": [
+        5,
+        7,
+        4
+      ],
+      "beats_per": 2.0,
+      "master_beat": true,
+      "spread": 0.84,
+      "pattern": "Random",
+      "shape": 0.0
+    },
+    {
+      "name": "Fast flash",
+      "folder": "Cyan + Magenta + White",
+      "ids": [
+        4,
+        7,
+        5
+      ],
+      "beats_per": 0.5,
+      "master_beat": true,
+      "spread": 0.84,
+      "pattern": "Random",
+      "shape": 1.0
+    },
+    {
+      "name": "flash",
+      "folder": "Cyan + Magenta + White",
+      "ids": [
+        5,
+        7,
+        4
+      ],
+      "beats_per": 2.0,
+      "master_beat": true,
+      "spread": 0.84,
+      "pattern": "Random",
+      "shape": 1.0
+    },
+    {
+      "name": "Long wave",
+      "folder": "Cyan + Magenta + White",
+      "ids": [
+        5,
+        7,
+        4
+      ],
+      "beats_per": 8.0,
+      "master_beat": true,
+      "spread": 0.4,
+      "pattern": "Wave",
+      "shape": 1.0
+    },
+    {
+      "name": "Slow fade",
+      "folder": "Cyan + Magenta + White",
+      "ids": [
+        5,
+        7,
+        4
+      ],
+      "beats_per": 4.0,
+      "master_beat": true,
+      "spread": 0.55,
+      "pattern": "Random",
+      "shape": 0.0
+    },
+    {
+      "name": "Wave",
+      "folder": "Cyan + Magenta + White",
+      "ids": [
+        5,
+        7,
+        4
+      ],
+      "beats_per": 2.0,
+      "master_beat": true,
+      "spread": 0.84,
+      "pattern": "Wave",
+      "shape": 1.0
+    },
+    {
+      "name": "Back + forth",
+      "folder": "Cyan + Magenta + Yellow",
+      "ids": [
+        5,
+        7,
+        3
+      ],
+      "beats_per": 1.0,
+      "master_beat": true,
+      "spread": 0.0,
+      "pattern": "Wave",
+      "shape": 1.0
+    },
+    {
+      "name": "fade",
+      "folder": "Cyan + Magenta + Yellow",
+      "ids": [
+        5,
+        7,
+        3
+      ],
+      "beats_per": 2.0,
+      "master_beat": true,
+      "spread": 0.84,
+      "pattern": "Random",
+      "shape": 0.0
+    },
+    {
+      "name": "Fast flash",
+      "folder": "Cyan + Magenta + Yellow",
+      "ids": [
+        3,
+        7,
+        5
+      ],
+      "beats_per": 0.5,
+      "master_beat": true,
+      "spread": 0.84,
+      "pattern": "Random",
+      "shape": 1.0
+    },
+    {
+      "name": "flash",
+      "folder": "Cyan + Magenta + Yellow",
+      "ids": [
+        5,
+        7,
+        3
+      ],
+      "beats_per": 2.0,
+      "master_beat": true,
+      "spread": 0.84,
+      "pattern": "Random",
+      "shape": 1.0
+    },
+    {
+      "name": "Long wave",
+      "folder": "Cyan + Magenta + Yellow",
+      "ids": [
+        5,
+        7,
+        3
+      ],
+      "beats_per": 8.0,
+      "master_beat": true,
+      "spread": 0.4,
+      "pattern": "Wave",
+      "shape": 1.0
+    },
+    {
+      "name": "Slow fade",
+      "folder": "Cyan + Magenta + Yellow",
+      "ids": [
+        5,
+        7,
+        3
+      ],
+      "beats_per": 4.0,
+      "master_beat": true,
+      "spread": 0.55,
+      "pattern": "Random",
+      "shape": 0.0
+    },
+    {
+      "name": "Wave",
+      "folder": "Cyan + Magenta + Yellow",
+      "ids": [
+        5,
+        7,
+        3
+      ],
+      "beats_per": 2.0,
+      "master_beat": true,
+      "spread": 0.84,
+      "pattern": "Wave",
+      "shape": 1.0
+    },
+    {
+      "name": "Back + forth",
+      "folder": "Cyan + Red",
+      "ids": [
+        5,
+        2
+      ],
+      "beats_per": 1.0,
+      "master_beat": true,
+      "spread": 0.0,
+      "pattern": "Wave",
+      "shape": 1.0
+    },
+    {
+      "name": "fade",
+      "folder": "Cyan + Red",
+      "ids": [
+        5,
+        2
+      ],
+      "beats_per": 2.0,
+      "master_beat": true,
+      "spread": 0.84,
+      "pattern": "Random",
+      "shape": 0.0
+    },
+    {
+      "name": "Fast flash",
+      "folder": "Cyan + Red",
+      "ids": [
+        2,
+        5
+      ],
+      "beats_per": 0.5,
+      "master_beat": true,
+      "spread": 0.84,
+      "pattern": "Random",
+      "shape": 1.0
+    },
+    {
+      "name": "flash",
+      "folder": "Cyan + Red",
+      "ids": [
+        5,
+        2
+      ],
+      "beats_per": 2.0,
+      "master_beat": true,
+      "spread": 0.84,
+      "pattern": "Random",
+      "shape": 1.0
+    },
+    {
+      "name": "Long wave",
+      "folder": "Cyan + Red",
+      "ids": [
+        5,
+        2
+      ],
+      "beats_per": 8.0,
+      "master_beat": true,
+      "spread": 0.4,
+      "pattern": "Wave",
+      "shape": 1.0
+    },
+    {
+      "name": "Slow fade",
+      "folder": "Cyan + Red",
+      "ids": [
+        5,
+        2
+      ],
+      "beats_per": 4.0,
+      "master_beat": true,
+      "spread": 0.55,
+      "pattern": "Random",
+      "shape": 0.0
+    },
+    {
+      "name": "Wave",
+      "folder": "Cyan + Red",
+      "ids": [
+        5,
+        2
+      ],
+      "beats_per": 2.0,
+      "master_beat": true,
+      "spread": 0.84,
+      "pattern": "Wave",
+      "shape": 1.0
+    },
+    {
+      "name": "Back + forth",
+      "folder": "Cyan + Red + White",
+      "ids": [
+        5,
+        2,
+        4
+      ],
+      "beats_per": 1.0,
+      "master_beat": true,
+      "spread": 0.0,
+      "pattern": "Wave",
+      "shape": 1.0
+    },
+    {
+      "name": "fade",
+      "folder": "Cyan + Red + White",
+      "ids": [
+        5,
+        2,
+        4
+      ],
+      "beats_per": 2.0,
+      "master_beat": true,
+      "spread": 0.84,
+      "pattern": "Random",
+      "shape": 0.0
+    },
+    {
+      "name": "Fast flash",
+      "folder": "Cyan + Red + White",
+      "ids": [
+        4,
+        2,
+        5
+      ],
+      "beats_per": 0.5,
+      "master_beat": true,
+      "spread": 0.84,
+      "pattern": "Random",
+      "shape": 1.0
+    },
+    {
+      "name": "flash",
+      "folder": "Cyan + Red + White",
+      "ids": [
+        5,
+        2,
+        4
+      ],
+      "beats_per": 2.0,
+      "master_beat": true,
+      "spread": 0.84,
+      "pattern": "Random",
+      "shape": 1.0
+    },
+    {
+      "name": "Long wave",
+      "folder": "Cyan + Red + White",
+      "ids": [
+        5,
+        2,
+        4
+      ],
+      "beats_per": 8.0,
+      "master_beat": true,
+      "spread": 0.4,
+      "pattern": "Wave",
+      "shape": 1.0
+    },
+    {
+      "name": "Slow fade",
+      "folder": "Cyan + Red + White",
+      "ids": [
+        5,
+        2,
+        4
+      ],
+      "beats_per": 4.0,
+      "master_beat": true,
+      "spread": 0.55,
+      "pattern": "Random",
+      "shape": 0.0
+    },
+    {
+      "name": "Wave",
+      "folder": "Cyan + Red + White",
+      "ids": [
+        5,
+        2,
+        4
+      ],
+      "beats_per": 2.0,
+      "master_beat": true,
+      "spread": 0.84,
+      "pattern": "Wave",
+      "shape": 1.0
+    },
+    {
+      "name": "Back + forth",
+      "folder": "Cyan + Red + Yellow",
+      "ids": [
+        5,
+        2,
+        3
+      ],
+      "beats_per": 1.0,
+      "master_beat": true,
+      "spread": 0.0,
+      "pattern": "Wave",
+      "shape": 1.0
+    },
+    {
+      "name": "fade",
+      "folder": "Cyan + Red + Yellow",
+      "ids": [
+        5,
+        2,
+        3
+      ],
+      "beats_per": 2.0,
+      "master_beat": true,
+      "spread": 0.84,
+      "pattern": "Random",
+      "shape": 0.0
+    },
+    {
+      "name": "Fast flash",
+      "folder": "Cyan + Red + Yellow",
+      "ids": [
+        3,
+        2,
+        5
+      ],
+      "beats_per": 0.5,
+      "master_beat": true,
+      "spread": 0.84,
+      "pattern": "Random",
+      "shape": 1.0
+    },
+    {
+      "name": "flash",
+      "folder": "Cyan + Red + Yellow",
+      "ids": [
+        5,
+        2,
+        3
+      ],
+      "beats_per": 2.0,
+      "master_beat": true,
+      "spread": 0.84,
+      "pattern": "Random",
+      "shape": 1.0
+    },
+    {
+      "name": "Long wave",
+      "folder": "Cyan + Red + Yellow",
+      "ids": [
+        5,
+        2,
+        3
+      ],
+      "beats_per": 8.0,
+      "master_beat": true,
+      "spread": 0.4,
+      "pattern": "Wave",
+      "shape": 1.0
+    },
+    {
+      "name": "Slow fade",
+      "folder": "Cyan + Red + Yellow",
+      "ids": [
+        5,
+        2,
+        3
+      ],
+      "beats_per": 4.0,
+      "master_beat": true,
+      "spread": 0.55,
+      "pattern": "Random",
+      "shape": 0.0
+    },
+    {
+      "name": "Wave",
+      "folder": "Cyan + Red + Yellow",
+      "ids": [
+        5,
+        2,
+        3
+      ],
+      "beats_per": 2.0,
+      "master_beat": true,
+      "spread": 0.84,
+      "pattern": "Wave",
+      "shape": 1.0
+    },
+    {
+      "name": "Back + forth",
+      "folder": "Cyan + White",
+      "ids": [
+        5,
+        4
+      ],
+      "beats_per": 1.0,
+      "master_beat": true,
+      "spread": 0.0,
+      "pattern": "Wave",
+      "shape": 1.0
+    },
+    {
+      "name": "fade",
+      "folder": "Cyan + White",
+      "ids": [
+        5,
+        4
+      ],
+      "beats_per": 2.0,
+      "master_beat": true,
+      "spread": 0.84,
+      "pattern": "Random",
+      "shape": 0.0
+    },
+    {
+      "name": "Fast flash",
+      "folder": "Cyan + White",
+      "ids": [
+        4,
+        5
+      ],
+      "beats_per": 0.5,
+      "master_beat": true,
+      "spread": 0.84,
+      "pattern": "Random",
+      "shape": 1.0
+    },
+    {
+      "name": "flash",
+      "folder": "Cyan + White",
+      "ids": [
+        5,
+        4
+      ],
+      "beats_per": 2.0,
+      "master_beat": true,
+      "spread": 0.84,
+      "pattern": "Random",
+      "shape": 1.0
+    },
+    {
+      "name": "Long wave",
+      "folder": "Cyan + White",
+      "ids": [
+        5,
+        4
+      ],
+      "beats_per": 8.0,
+      "master_beat": true,
+      "spread": 0.4,
+      "pattern": "Wave",
+      "shape": 1.0
+    },
+    {
+      "name": "Slow fade",
+      "folder": "Cyan + White",
+      "ids": [
+        5,
+        4
+      ],
+      "beats_per": 4.0,
+      "master_beat": true,
+      "spread": 0.55,
+      "pattern": "Random",
+      "shape": 0.0
+    },
+    {
+      "name": "Wave",
+      "folder": "Cyan + White",
+      "ids": [
+        5,
+        4
+      ],
+      "beats_per": 2.0,
+      "master_beat": true,
+      "spread": 0.84,
+      "pattern": "Wave",
+      "shape": 1.0
+    },
+    {
+      "name": "Back + forth",
+      "folder": "Cyan + White + Yellow",
+      "ids": [
+        5,
+        4,
+        3
+      ],
+      "beats_per": 1.0,
+      "master_beat": true,
+      "spread": 0.0,
+      "pattern": "Wave",
+      "shape": 1.0
+    },
+    {
+      "name": "fade",
+      "folder": "Cyan + White + Yellow",
+      "ids": [
+        5,
+        4,
+        3
+      ],
+      "beats_per": 2.0,
+      "master_beat": true,
+      "spread": 0.84,
+      "pattern": "Random",
+      "shape": 0.0
+    },
+    {
+      "name": "Fast flash",
+      "folder": "Cyan + White + Yellow",
+      "ids": [
+        3,
+        4,
+        5
+      ],
+      "beats_per": 0.5,
+      "master_beat": true,
+      "spread": 0.84,
+      "pattern": "Random",
+      "shape": 1.0
+    },
+    {
+      "name": "flash",
+      "folder": "Cyan + White + Yellow",
+      "ids": [
+        5,
+        4,
+        3
+      ],
+      "beats_per": 2.0,
+      "master_beat": true,
+      "spread": 0.84,
+      "pattern": "Random",
+      "shape": 1.0
+    },
+    {
+      "name": "Long wave",
+      "folder": "Cyan + White + Yellow",
+      "ids": [
+        5,
+        4,
+        3
+      ],
+      "beats_per": 8.0,
+      "master_beat": true,
+      "spread": 0.4,
+      "pattern": "Wave",
+      "shape": 1.0
+    },
+    {
+      "name": "Slow fade",
+      "folder": "Cyan + White + Yellow",
+      "ids": [
+        5,
+        4,
+        3
+      ],
+      "beats_per": 4.0,
+      "master_beat": true,
+      "spread": 0.55,
+      "pattern": "Random",
+      "shape": 0.0
+    },
+    {
+      "name": "Wave",
+      "folder": "Cyan + White + Yellow",
+      "ids": [
+        5,
+        4,
+        3
+      ],
+      "beats_per": 2.0,
+      "master_beat": true,
+      "spread": 0.84,
+      "pattern": "Wave",
+      "shape": 1.0
+    },
+    {
+      "name": "Back + forth",
+      "folder": "Cyan + Yellow",
+      "ids": [
+        5,
+        3
+      ],
+      "beats_per": 1.0,
+      "master_beat": true,
+      "spread": 0.0,
+      "pattern": "Wave",
+      "shape": 1.0
+    },
+    {
+      "name": "fade",
+      "folder": "Cyan + Yellow",
+      "ids": [
+        5,
+        3
+      ],
+      "beats_per": 2.0,
+      "master_beat": true,
+      "spread": 0.84,
+      "pattern": "Random",
+      "shape": 0.0
+    },
+    {
+      "name": "Fast flash",
+      "folder": "Cyan + Yellow",
+      "ids": [
+        3,
+        5
+      ],
+      "beats_per": 0.5,
+      "master_beat": true,
+      "spread": 0.84,
+      "pattern": "Random",
+      "shape": 1.0
+    },
+    {
+      "name": "flash",
+      "folder": "Cyan + Yellow",
+      "ids": [
+        5,
+        3
+      ],
+      "beats_per": 2.0,
+      "master_beat": true,
+      "spread": 0.84,
+      "pattern": "Random",
+      "shape": 1.0
+    },
+    {
+      "name": "Long wave",
+      "folder": "Cyan + Yellow",
+      "ids": [
+        5,
+        3
+      ],
+      "beats_per": 8.0,
+      "master_beat": true,
+      "spread": 0.4,
+      "pattern": "Wave",
+      "shape": 1.0
+    },
+    {
+      "name": "Slow fade",
+      "folder": "Cyan + Yellow",
+      "ids": [
+        5,
+        3
+      ],
+      "beats_per": 4.0,
+      "master_beat": true,
+      "spread": 0.55,
+      "pattern": "Random",
+      "shape": 0.0
+    },
+    {
+      "name": "Wave",
+      "folder": "Cyan + Yellow",
+      "ids": [
+        5,
+        3
+      ],
+      "beats_per": 2.0,
+      "master_beat": true,
+      "spread": 0.84,
+      "pattern": "Wave",
+      "shape": 1.0
+    },
+    {
+      "name": "g + w + cyan",
+      "folder": "Green",
+      "ids": [
+        6,
+        4,
+        5
+      ],
+      "beats_per": 4.0,
+      "master_beat": true,
+      "spread": 0.84,
+      "pattern": "Random",
+      "shape": 0.0
+    },
+    {
+      "name": "Lime",
+      "folder": "Green",
+      "ids": [
+        6,
+        4
+      ],
+      "beats_per": 4.0,
+      "master_beat": true,
+      "spread": 0.84,
+      "pattern": "Random",
+      "shape": 0.0
+    },
+    {
+      "name": "Lime faster",
+      "folder": "Green",
+      "ids": [
+        6,
+        4
+      ],
+      "beats_per": 1.0,
+      "master_beat": true,
+      "spread": 0.84,
+      "pattern": "Random",
+      "shape": 0.0
+    },
+    {
+      "name": "Back + forth",
+      "folder": "Green + Magenta",
+      "ids": [
+        6,
+        7
+      ],
+      "beats_per": 1.0,
+      "master_beat": true,
+      "spread": 0.0,
+      "pattern": "Wave",
+      "shape": 1.0
+    },
+    {
+      "name": "fade",
+      "folder": "Green + Magenta",
+      "ids": [
+        6,
+        7
+      ],
+      "beats_per": 2.0,
+      "master_beat": true,
+      "spread": 0.84,
+      "pattern": "Random",
+      "shape": 0.0
+    },
+    {
+      "name": "Fast flash",
+      "folder": "Green + Magenta",
+      "ids": [
+        7,
+        6
+      ],
+      "beats_per": 0.5,
+      "master_beat": true,
+      "spread": 0.84,
+      "pattern": "Random",
+      "shape": 1.0
+    },
+    {
+      "name": "flash",
+      "folder": "Green + Magenta",
+      "ids": [
+        6,
+        7
+      ],
+      "beats_per": 2.0,
+      "master_beat": true,
+      "spread": 0.84,
+      "pattern": "Random",
+      "shape": 1.0
+    },
+    {
+      "name": "Long wave",
+      "folder": "Green + Magenta",
+      "ids": [
+        6,
+        7
+      ],
+      "beats_per": 8.0,
+      "master_beat": true,
+      "spread": 0.4,
+      "pattern": "Wave",
+      "shape": 1.0
+    },
+    {
+      "name": "Slow fade",
+      "folder": "Green + Magenta",
+      "ids": [
+        6,
+        7
+      ],
+      "beats_per": 4.0,
+      "master_beat": true,
+      "spread": 0.55,
+      "pattern": "Random",
+      "shape": 0.0
+    },
+    {
+      "name": "Wave",
+      "folder": "Green + Magenta",
+      "ids": [
+        6,
+        7
+      ],
+      "beats_per": 2.0,
+      "master_beat": true,
+      "spread": 0.84,
+      "pattern": "Wave",
+      "shape": 1.0
+    },
+    {
+      "name": "Back + forth",
+      "folder": "Green + Magenta + Red",
+      "ids": [
+        6,
+        7,
+        2
+      ],
+      "beats_per": 1.0,
+      "master_beat": true,
+      "spread": 0.0,
+      "pattern": "Wave",
+      "shape": 1.0
+    },
+    {
+      "name": "fade",
+      "folder": "Green + Magenta + Red",
+      "ids": [
+        6,
+        7,
+        2
+      ],
+      "beats_per": 2.0,
+      "master_beat": true,
+      "spread": 0.84,
+      "pattern": "Random",
+      "shape": 0.0
+    },
+    {
+      "name": "Fast flash",
+      "folder": "Green + Magenta + Red",
+      "ids": [
+        2,
+        7,
+        6
+      ],
+      "beats_per": 0.5,
+      "master_beat": true,
+      "spread": 0.84,
+      "pattern": "Random",
+      "shape": 1.0
+    },
+    {
+      "name": "flash",
+      "folder": "Green + Magenta + Red",
+      "ids": [
+        6,
+        7,
+        2
+      ],
+      "beats_per": 2.0,
+      "master_beat": true,
+      "spread": 0.84,
+      "pattern": "Random",
+      "shape": 1.0
+    },
+    {
+      "name": "Long wave",
+      "folder": "Green + Magenta + Red",
+      "ids": [
+        6,
+        7,
+        2
+      ],
+      "beats_per": 8.0,
+      "master_beat": true,
+      "spread": 0.4,
+      "pattern": "Wave",
+      "shape": 1.0
+    },
+    {
+      "name": "Slow fade",
+      "folder": "Green + Magenta + Red",
+      "ids": [
+        6,
+        7,
+        2
+      ],
+      "beats_per": 4.0,
+      "master_beat": true,
+      "spread": 0.55,
+      "pattern": "Random",
+      "shape": 0.0
+    },
+    {
+      "name": "Wave",
+      "folder": "Green + Magenta + Red",
+      "ids": [
+        6,
+        7,
+        2
+      ],
+      "beats_per": 2.0,
+      "master_beat": true,
+      "spread": 0.84,
+      "pattern": "Wave",
+      "shape": 1.0
+    },
+    {
+      "name": "Back + forth",
+      "folder": "Green + Magenta + White",
+      "ids": [
+        6,
+        7,
+        4
+      ],
+      "beats_per": 1.0,
+      "master_beat": true,
+      "spread": 0.0,
+      "pattern": "Wave",
+      "shape": 1.0
+    },
+    {
+      "name": "fade",
+      "folder": "Green + Magenta + White",
+      "ids": [
+        6,
+        7,
+        4
+      ],
+      "beats_per": 2.0,
+      "master_beat": true,
+      "spread": 0.84,
+      "pattern": "Random",
+      "shape": 0.0
+    },
+    {
+      "name": "Fast flash",
+      "folder": "Green + Magenta + White",
+      "ids": [
+        4,
+        7,
+        6
+      ],
+      "beats_per": 0.5,
+      "master_beat": true,
+      "spread": 0.84,
+      "pattern": "Random",
+      "shape": 1.0
+    },
+    {
+      "name": "flash",
+      "folder": "Green + Magenta + White",
+      "ids": [
+        6,
+        7,
+        4
+      ],
+      "beats_per": 2.0,
+      "master_beat": true,
+      "spread": 0.84,
+      "pattern": "Random",
+      "shape": 1.0
+    },
+    {
+      "name": "Long wave",
+      "folder": "Green + Magenta + White",
+      "ids": [
+        6,
+        7,
+        4
+      ],
+      "beats_per": 8.0,
+      "master_beat": true,
+      "spread": 0.4,
+      "pattern": "Wave",
+      "shape": 1.0
+    },
+    {
+      "name": "Slow fade",
+      "folder": "Green + Magenta + White",
+      "ids": [
+        6,
+        7,
+        4
+      ],
+      "beats_per": 4.0,
+      "master_beat": true,
+      "spread": 0.55,
+      "pattern": "Random",
+      "shape": 0.0
+    },
+    {
+      "name": "Wave",
+      "folder": "Green + Magenta + White",
+      "ids": [
+        6,
+        7,
+        4
+      ],
+      "beats_per": 2.0,
+      "master_beat": true,
+      "spread": 0.84,
+      "pattern": "Wave",
+      "shape": 1.0
+    },
+    {
+      "name": "Back + forth",
+      "folder": "Green + Magenta + Yellow",
+      "ids": [
+        6,
+        7,
+        3
+      ],
+      "beats_per": 1.0,
+      "master_beat": true,
+      "spread": 0.0,
+      "pattern": "Wave",
+      "shape": 1.0
+    },
+    {
+      "name": "fade",
+      "folder": "Green + Magenta + Yellow",
+      "ids": [
+        6,
+        7,
+        3
+      ],
+      "beats_per": 2.0,
+      "master_beat": true,
+      "spread": 0.84,
+      "pattern": "Random",
+      "shape": 0.0
+    },
+    {
+      "name": "Fast flash",
+      "folder": "Green + Magenta + Yellow",
+      "ids": [
+        3,
+        7,
+        6
+      ],
+      "beats_per": 0.5,
+      "master_beat": true,
+      "spread": 0.84,
+      "pattern": "Random",
+      "shape": 1.0
+    },
+    {
+      "name": "flash",
+      "folder": "Green + Magenta + Yellow",
+      "ids": [
+        6,
+        7,
+        3
+      ],
+      "beats_per": 2.0,
+      "master_beat": true,
+      "spread": 0.84,
+      "pattern": "Random",
+      "shape": 1.0
+    },
+    {
+      "name": "Long wave",
+      "folder": "Green + Magenta + Yellow",
+      "ids": [
+        6,
+        7,
+        3
+      ],
+      "beats_per": 8.0,
+      "master_beat": true,
+      "spread": 0.4,
+      "pattern": "Wave",
+      "shape": 1.0
+    },
+    {
+      "name": "Slow fade",
+      "folder": "Green + Magenta + Yellow",
+      "ids": [
+        6,
+        7,
+        3
+      ],
+      "beats_per": 4.0,
+      "master_beat": true,
+      "spread": 0.55,
+      "pattern": "Random",
+      "shape": 0.0
+    },
+    {
+      "name": "Wave",
+      "folder": "Green + Magenta + Yellow",
+      "ids": [
+        6,
+        7,
+        3
+      ],
+      "beats_per": 2.0,
+      "master_beat": true,
+      "spread": 0.84,
+      "pattern": "Wave",
+      "shape": 1.0
+    },
+    {
+      "name": "Back + forth",
+      "folder": "Green + Red + White",
+      "ids": [
+        6,
+        2,
+        4
+      ],
+      "beats_per": 1.0,
+      "master_beat": true,
+      "spread": 0.0,
+      "pattern": "Wave",
+      "shape": 1.0
+    },
+    {
+      "name": "fade",
+      "folder": "Green + Red + White",
+      "ids": [
+        6,
+        2,
+        4
+      ],
+      "beats_per": 2.0,
+      "master_beat": true,
+      "spread": 0.84,
+      "pattern": "Random",
+      "shape": 0.0
+    },
+    {
+      "name": "Fast flash",
+      "folder": "Green + Red + White",
+      "ids": [
+        4,
+        2,
+        6
+      ],
+      "beats_per": 0.5,
+      "master_beat": true,
+      "spread": 0.84,
+      "pattern": "Random",
+      "shape": 1.0
+    },
+    {
+      "name": "flash",
+      "folder": "Green + Red + White",
+      "ids": [
+        6,
+        2,
+        4
+      ],
+      "beats_per": 2.0,
+      "master_beat": true,
+      "spread": 0.84,
+      "pattern": "Random",
+      "shape": 1.0
+    },
+    {
+      "name": "Long wave",
+      "folder": "Green + Red + White",
+      "ids": [
+        6,
+        2,
+        4
+      ],
+      "beats_per": 8.0,
+      "master_beat": true,
+      "spread": 0.4,
+      "pattern": "Wave",
+      "shape": 1.0
+    },
+    {
+      "name": "Slow fade",
+      "folder": "Green + Red + White",
+      "ids": [
+        6,
+        2,
+        4
+      ],
+      "beats_per": 4.0,
+      "master_beat": true,
+      "spread": 0.55,
+      "pattern": "Random",
+      "shape": 0.0
+    },
+    {
+      "name": "Wave",
+      "folder": "Green + Red + White",
+      "ids": [
+        6,
+        2,
+        4
+      ],
+      "beats_per": 2.0,
+      "master_beat": true,
+      "spread": 0.84,
+      "pattern": "Wave",
+      "shape": 1.0
+    },
+    {
+      "name": "Back + forth",
+      "folder": "Green + Red + Yellow",
+      "ids": [
+        6,
+        2,
+        3
+      ],
+      "beats_per": 1.0,
+      "master_beat": true,
+      "spread": 0.0,
+      "pattern": "Wave",
+      "shape": 1.0
+    },
+    {
+      "name": "fade",
+      "folder": "Green + Red + Yellow",
+      "ids": [
+        6,
+        2,
+        3
+      ],
+      "beats_per": 2.0,
+      "master_beat": true,
+      "spread": 0.84,
+      "pattern": "Random",
+      "shape": 0.0
+    },
+    {
+      "name": "Fast flash",
+      "folder": "Green + Red + Yellow",
+      "ids": [
+        3,
+        2,
+        6
+      ],
+      "beats_per": 0.5,
+      "master_beat": true,
+      "spread": 0.84,
+      "pattern": "Random",
+      "shape": 1.0
+    },
+    {
+      "name": "flash",
+      "folder": "Green + Red + Yellow",
+      "ids": [
+        6,
+        2,
+        3
+      ],
+      "beats_per": 2.0,
+      "master_beat": true,
+      "spread": 0.84,
+      "pattern": "Random",
+      "shape": 1.0
+    },
+    {
+      "name": "Long wave",
+      "folder": "Green + Red + Yellow",
+      "ids": [
+        6,
+        2,
+        3
+      ],
+      "beats_per": 8.0,
+      "master_beat": true,
+      "spread": 0.4,
+      "pattern": "Wave",
+      "shape": 1.0
+    },
+    {
+      "name": "Slow fade",
+      "folder": "Green + Red + Yellow",
+      "ids": [
+        6,
+        2,
+        3
+      ],
+      "beats_per": 4.0,
+      "master_beat": true,
+      "spread": 0.55,
+      "pattern": "Random",
+      "shape": 0.0
+    },
+    {
+      "name": "Wave",
+      "folder": "Green + Red + Yellow",
+      "ids": [
+        6,
+        2,
+        3
+      ],
+      "beats_per": 2.0,
+      "master_beat": true,
+      "spread": 0.84,
+      "pattern": "Wave",
+      "shape": 1.0
+    },
+    {
+      "name": "Back + forth",
+      "folder": "Green + White",
+      "ids": [
+        6,
+        4
+      ],
+      "beats_per": 1.0,
+      "master_beat": true,
+      "spread": 0.0,
+      "pattern": "Wave",
+      "shape": 1.0
+    },
+    {
+      "name": "fade",
+      "folder": "Green + White",
+      "ids": [
+        6,
+        4
+      ],
+      "beats_per": 2.0,
+      "master_beat": true,
+      "spread": 0.84,
+      "pattern": "Random",
+      "shape": 0.0
+    },
+    {
+      "name": "Fast flash",
+      "folder": "Green + White",
+      "ids": [
+        4,
+        6
+      ],
+      "beats_per": 0.5,
+      "master_beat": true,
+      "spread": 0.84,
+      "pattern": "Random",
+      "shape": 1.0
+    },
+    {
+      "name": "flash",
+      "folder": "Green + White",
+      "ids": [
+        6,
+        4
+      ],
+      "beats_per": 2.0,
+      "master_beat": true,
+      "spread": 0.84,
+      "pattern": "Random",
+      "shape": 1.0
+    },
+    {
+      "name": "Long wave",
+      "folder": "Green + White",
+      "ids": [
+        6,
+        4
+      ],
+      "beats_per": 8.0,
+      "master_beat": true,
+      "spread": 0.4,
+      "pattern": "Wave",
+      "shape": 1.0
+    },
+    {
+      "name": "Slow fade",
+      "folder": "Green + White",
+      "ids": [
+        6,
+        4
+      ],
+      "beats_per": 4.0,
+      "master_beat": true,
+      "spread": 0.55,
+      "pattern": "Random",
+      "shape": 0.0
+    },
+    {
+      "name": "Wave",
+      "folder": "Green + White",
+      "ids": [
+        6,
+        4
+      ],
+      "beats_per": 2.0,
+      "master_beat": true,
+      "spread": 0.84,
+      "pattern": "Wave",
+      "shape": 1.0
+    },
+    {
+      "name": "Back + forth",
+      "folder": "Green + White + Yellow",
+      "ids": [
+        6,
+        4,
+        3
+      ],
+      "beats_per": 1.0,
+      "master_beat": true,
+      "spread": 0.0,
+      "pattern": "Wave",
+      "shape": 1.0
+    },
+    {
+      "name": "fade",
+      "folder": "Green + White + Yellow",
+      "ids": [
+        6,
+        4,
+        3
+      ],
+      "beats_per": 2.0,
+      "master_beat": true,
+      "spread": 0.84,
+      "pattern": "Random",
+      "shape": 0.0
+    },
+    {
+      "name": "Fast flash",
+      "folder": "Green + White + Yellow",
+      "ids": [
+        3,
+        4,
+        6
+      ],
+      "beats_per": 0.5,
+      "master_beat": true,
+      "spread": 0.84,
+      "pattern": "Random",
+      "shape": 1.0
+    },
+    {
+      "name": "flash",
+      "folder": "Green + White + Yellow",
+      "ids": [
+        6,
+        4,
+        3
+      ],
+      "beats_per": 2.0,
+      "master_beat": true,
+      "spread": 0.84,
+      "pattern": "Random",
+      "shape": 1.0
+    },
+    {
+      "name": "Long wave",
+      "folder": "Green + White + Yellow",
+      "ids": [
+        6,
+        4,
+        3
+      ],
+      "beats_per": 8.0,
+      "master_beat": true,
+      "spread": 0.4,
+      "pattern": "Wave",
+      "shape": 1.0
+    },
+    {
+      "name": "Slow fade",
+      "folder": "Green + White + Yellow",
+      "ids": [
+        6,
+        4,
+        3
+      ],
+      "beats_per": 4.0,
+      "master_beat": true,
+      "spread": 0.55,
+      "pattern": "Random",
+      "shape": 0.0
+    },
+    {
+      "name": "Wave",
+      "folder": "Green + White + Yellow",
+      "ids": [
+        6,
+        4,
+        3
+      ],
+      "beats_per": 2.0,
+      "master_beat": true,
+      "spread": 0.84,
+      "pattern": "Wave",
+      "shape": 1.0
+    },
+    {
+      "name": "Back + forth",
+      "folder": "Green + Yellow",
+      "ids": [
+        6,
+        3
+      ],
+      "beats_per": 1.0,
+      "master_beat": true,
+      "spread": 0.0,
+      "pattern": "Wave",
+      "shape": 1.0
+    },
+    {
+      "name": "fade",
+      "folder": "Green + Yellow",
+      "ids": [
+        6,
+        3
+      ],
+      "beats_per": 2.0,
+      "master_beat": true,
+      "spread": 0.84,
+      "pattern": "Random",
+      "shape": 0.0
+    },
+    {
+      "name": "Fast flash",
+      "folder": "Green + Yellow",
+      "ids": [
+        3,
+        6
+      ],
+      "beats_per": 0.5,
+      "master_beat": true,
+      "spread": 0.84,
+      "pattern": "Random",
+      "shape": 1.0
+    },
+    {
+      "name": "flash",
+      "folder": "Green + Yellow",
+      "ids": [
+        6,
+        3
+      ],
+      "beats_per": 2.0,
+      "master_beat": true,
+      "spread": 0.84,
+      "pattern": "Random",
+      "shape": 1.0
+    },
+    {
+      "name": "Long wave",
+      "folder": "Green + Yellow",
+      "ids": [
+        6,
+        3
+      ],
+      "beats_per": 8.0,
+      "master_beat": true,
+      "spread": 0.4,
+      "pattern": "Wave",
+      "shape": 1.0
+    },
+    {
+      "name": "Slow fade",
+      "folder": "Green + Yellow",
+      "ids": [
+        6,
+        3
+      ],
+      "beats_per": 4.0,
+      "master_beat": true,
+      "spread": 0.55,
+      "pattern": "Random",
+      "shape": 0.0
+    },
+    {
+      "name": "Wave",
+      "folder": "Green + Yellow",
+      "ids": [
+        6,
+        3
+      ],
+      "beats_per": 2.0,
+      "master_beat": true,
+      "spread": 0.84,
+      "pattern": "Wave",
+      "shape": 1.0
+    },
+    {
+      "name": "Back + forth",
+      "folder": "Magenta + Red",
+      "ids": [
+        7,
+        2
+      ],
+      "beats_per": 1.0,
+      "master_beat": true,
+      "spread": 0.0,
+      "pattern": "Wave",
+      "shape": 1.0
+    },
+    {
+      "name": "fade",
+      "folder": "Magenta + Red",
+      "ids": [
+        7,
+        2
+      ],
+      "beats_per": 2.0,
+      "master_beat": true,
+      "spread": 0.84,
+      "pattern": "Random",
+      "shape": 0.0
+    },
+    {
+      "name": "Fast flash",
+      "folder": "Magenta + Red",
+      "ids": [
+        2,
+        7
+      ],
+      "beats_per": 0.5,
+      "master_beat": true,
+      "spread": 0.84,
+      "pattern": "Random",
+      "shape": 1.0
+    },
+    {
+      "name": "flash",
+      "folder": "Magenta + Red",
+      "ids": [
+        7,
+        2
+      ],
+      "beats_per": 2.0,
+      "master_beat": true,
+      "spread": 0.84,
+      "pattern": "Random",
+      "shape": 1.0
+    },
+    {
+      "name": "Long wave",
+      "folder": "Magenta + Red",
+      "ids": [
+        7,
+        2
+      ],
+      "beats_per": 8.0,
+      "master_beat": true,
+      "spread": 0.4,
+      "pattern": "Wave",
+      "shape": 1.0
+    },
+    {
+      "name": "Slow fade",
+      "folder": "Magenta + Red",
+      "ids": [
+        7,
+        2
+      ],
+      "beats_per": 4.0,
+      "master_beat": true,
+      "spread": 0.55,
+      "pattern": "Random",
+      "shape": 0.0
+    },
+    {
+      "name": "Wave",
+      "folder": "Magenta + Red",
+      "ids": [
+        7,
+        2
+      ],
+      "beats_per": 2.0,
+      "master_beat": true,
+      "spread": 0.84,
+      "pattern": "Wave",
+      "shape": 1.0
+    },
+    {
+      "name": "Back + forth",
+      "folder": "Magenta + Red + White",
+      "ids": [
+        7,
+        2,
+        4
+      ],
+      "beats_per": 1.0,
+      "master_beat": true,
+      "spread": 0.0,
+      "pattern": "Wave",
+      "shape": 1.0
+    },
+    {
+      "name": "fade",
+      "folder": "Magenta + Red + White",
+      "ids": [
+        7,
+        2,
+        4
+      ],
+      "beats_per": 2.0,
+      "master_beat": true,
+      "spread": 0.84,
+      "pattern": "Random",
+      "shape": 0.0
+    },
+    {
+      "name": "Fast flash",
+      "folder": "Magenta + Red + White",
+      "ids": [
+        4,
+        2,
+        7
+      ],
+      "beats_per": 0.5,
+      "master_beat": true,
+      "spread": 0.84,
+      "pattern": "Random",
+      "shape": 1.0
+    },
+    {
+      "name": "flash",
+      "folder": "Magenta + Red + White",
+      "ids": [
+        7,
+        2,
+        4
+      ],
+      "beats_per": 2.0,
+      "master_beat": true,
+      "spread": 0.84,
+      "pattern": "Random",
+      "shape": 1.0
+    },
+    {
+      "name": "Long wave",
+      "folder": "Magenta + Red + White",
+      "ids": [
+        7,
+        2,
+        4
+      ],
+      "beats_per": 8.0,
+      "master_beat": true,
+      "spread": 0.4,
+      "pattern": "Wave",
+      "shape": 1.0
+    },
+    {
+      "name": "Slow fade",
+      "folder": "Magenta + Red + White",
+      "ids": [
+        7,
+        2,
+        4
+      ],
+      "beats_per": 4.0,
+      "master_beat": true,
+      "spread": 0.55,
+      "pattern": "Random",
+      "shape": 0.0
+    },
+    {
+      "name": "Wave",
+      "folder": "Magenta + Red + White",
+      "ids": [
+        7,
+        2,
+        4
+      ],
+      "beats_per": 2.0,
+      "master_beat": true,
+      "spread": 0.84,
+      "pattern": "Wave",
+      "shape": 1.0
+    },
+    {
+      "name": "Back + forth",
+      "folder": "Magenta + Red + Yellow",
+      "ids": [
+        7,
+        2,
+        3
+      ],
+      "beats_per": 1.0,
+      "master_beat": true,
+      "spread": 0.0,
+      "pattern": "Wave",
+      "shape": 1.0
+    },
+    {
+      "name": "fade",
+      "folder": "Magenta + Red + Yellow",
+      "ids": [
+        7,
+        2,
+        3
+      ],
+      "beats_per": 2.0,
+      "master_beat": true,
+      "spread": 0.84,
+      "pattern": "Random",
+      "shape": 0.0
+    },
+    {
+      "name": "Fast flash",
+      "folder": "Magenta + Red + Yellow",
+      "ids": [
+        3,
+        2,
+        7
+      ],
+      "beats_per": 0.5,
+      "master_beat": true,
+      "spread": 0.84,
+      "pattern": "Random",
+      "shape": 1.0
+    },
+    {
+      "name": "flash",
+      "folder": "Magenta + Red + Yellow",
+      "ids": [
+        7,
+        2,
+        3
+      ],
+      "beats_per": 2.0,
+      "master_beat": true,
+      "spread": 0.84,
+      "pattern": "Random",
+      "shape": 1.0
+    },
+    {
+      "name": "Long wave",
+      "folder": "Magenta + Red + Yellow",
+      "ids": [
+        7,
+        2,
+        3
+      ],
+      "beats_per": 8.0,
+      "master_beat": true,
+      "spread": 0.4,
+      "pattern": "Wave",
+      "shape": 1.0
+    },
+    {
+      "name": "Slow fade",
+      "folder": "Magenta + Red + Yellow",
+      "ids": [
+        7,
+        2,
+        3
+      ],
+      "beats_per": 4.0,
+      "master_beat": true,
+      "spread": 0.55,
+      "pattern": "Random",
+      "shape": 0.0
+    },
+    {
+      "name": "Wave",
+      "folder": "Magenta + Red + Yellow",
+      "ids": [
+        7,
+        2,
+        3
+      ],
+      "beats_per": 2.0,
+      "master_beat": true,
+      "spread": 0.84,
+      "pattern": "Wave",
+      "shape": 1.0
+    },
+    {
+      "name": "Back + forth",
+      "folder": "Magenta + White",
+      "ids": [
+        7,
+        4
+      ],
+      "beats_per": 1.0,
+      "master_beat": true,
+      "spread": 0.0,
+      "pattern": "Wave",
+      "shape": 1.0
+    },
+    {
+      "name": "fade",
+      "folder": "Magenta + White",
+      "ids": [
+        7,
+        4
+      ],
+      "beats_per": 2.0,
+      "master_beat": true,
+      "spread": 0.84,
+      "pattern": "Random",
+      "shape": 0.0
+    },
+    {
+      "name": "Fast flash",
+      "folder": "Magenta + White",
+      "ids": [
+        4,
+        7
+      ],
+      "beats_per": 0.5,
+      "master_beat": true,
+      "spread": 0.84,
+      "pattern": "Random",
+      "shape": 1.0
+    },
+    {
+      "name": "flash",
+      "folder": "Magenta + White",
+      "ids": [
+        7,
+        4
+      ],
+      "beats_per": 2.0,
+      "master_beat": true,
+      "spread": 0.84,
+      "pattern": "Random",
+      "shape": 1.0
+    },
+    {
+      "name": "Long wave",
+      "folder": "Magenta + White",
+      "ids": [
+        7,
+        4
+      ],
+      "beats_per": 8.0,
+      "master_beat": true,
+      "spread": 0.4,
+      "pattern": "Wave",
+      "shape": 1.0
+    },
+    {
+      "name": "Slow fade",
+      "folder": "Magenta + White",
+      "ids": [
+        7,
+        4
+      ],
+      "beats_per": 4.0,
+      "master_beat": true,
+      "spread": 0.55,
+      "pattern": "Random",
+      "shape": 0.0
+    },
+    {
+      "name": "Wave",
+      "folder": "Magenta + White",
+      "ids": [
+        7,
+        4
+      ],
+      "beats_per": 2.0,
+      "master_beat": true,
+      "spread": 0.84,
+      "pattern": "Wave",
+      "shape": 1.0
+    },
+    {
+      "name": "Back + forth",
+      "folder": "Magenta + White + Yellow",
+      "ids": [
+        7,
+        4,
+        3
+      ],
+      "beats_per": 1.0,
+      "master_beat": true,
+      "spread": 0.0,
+      "pattern": "Wave",
+      "shape": 1.0
+    },
+    {
+      "name": "fade",
+      "folder": "Magenta + White + Yellow",
+      "ids": [
+        7,
+        4,
+        3
+      ],
+      "beats_per": 2.0,
+      "master_beat": true,
+      "spread": 0.84,
+      "pattern": "Random",
+      "shape": 0.0
+    },
+    {
+      "name": "Fast flash",
+      "folder": "Magenta + White + Yellow",
+      "ids": [
+        3,
+        4,
+        7
+      ],
+      "beats_per": 0.5,
+      "master_beat": true,
+      "spread": 0.84,
+      "pattern": "Random",
+      "shape": 1.0
+    },
+    {
+      "name": "flash",
+      "folder": "Magenta + White + Yellow",
+      "ids": [
+        7,
+        4,
+        3
+      ],
+      "beats_per": 2.0,
+      "master_beat": true,
+      "spread": 0.84,
+      "pattern": "Random",
+      "shape": 1.0
+    },
+    {
+      "name": "Long wave",
+      "folder": "Magenta + White + Yellow",
+      "ids": [
+        7,
+        4,
+        3
+      ],
+      "beats_per": 8.0,
+      "master_beat": true,
+      "spread": 0.4,
+      "pattern": "Wave",
+      "shape": 1.0
+    },
+    {
+      "name": "Slow fade",
+      "folder": "Magenta + White + Yellow",
+      "ids": [
+        7,
+        4,
+        3
+      ],
+      "beats_per": 4.0,
+      "master_beat": true,
+      "spread": 0.55,
+      "pattern": "Random",
+      "shape": 0.0
+    },
+    {
+      "name": "Wave",
+      "folder": "Magenta + White + Yellow",
+      "ids": [
+        7,
+        4,
+        3
+      ],
+      "beats_per": 2.0,
+      "master_beat": true,
+      "spread": 0.84,
+      "pattern": "Wave",
+      "shape": 1.0
+    },
+    {
+      "name": "Back + forth",
+      "folder": "Magenta + Yellow",
+      "ids": [
+        7,
+        3
+      ],
+      "beats_per": 1.0,
+      "master_beat": true,
+      "spread": 0.0,
+      "pattern": "Wave",
+      "shape": 1.0
+    },
+    {
+      "name": "fade",
+      "folder": "Magenta + Yellow",
+      "ids": [
+        7,
+        3
+      ],
+      "beats_per": 2.0,
+      "master_beat": true,
+      "spread": 0.84,
+      "pattern": "Random",
+      "shape": 0.0
+    },
+    {
+      "name": "Fast flash",
+      "folder": "Magenta + Yellow",
+      "ids": [
+        3,
+        7
+      ],
+      "beats_per": 0.5,
+      "master_beat": true,
+      "spread": 0.84,
+      "pattern": "Random",
+      "shape": 1.0
+    },
+    {
+      "name": "flash",
+      "folder": "Magenta + Yellow",
+      "ids": [
+        7,
+        3
+      ],
+      "beats_per": 2.0,
+      "master_beat": true,
+      "spread": 0.84,
+      "pattern": "Random",
+      "shape": 1.0
+    },
+    {
+      "name": "Long wave",
+      "folder": "Magenta + Yellow",
+      "ids": [
+        7,
+        3
+      ],
+      "beats_per": 8.0,
+      "master_beat": true,
+      "spread": 0.4,
+      "pattern": "Wave",
+      "shape": 1.0
+    },
+    {
+      "name": "Slow fade",
+      "folder": "Magenta + Yellow",
+      "ids": [
+        7,
+        3
+      ],
+      "beats_per": 4.0,
+      "master_beat": true,
+      "spread": 0.55,
+      "pattern": "Random",
+      "shape": 0.0
+    },
+    {
+      "name": "Wave",
+      "folder": "Magenta + Yellow",
+      "ids": [
+        7,
+        3
+      ],
+      "beats_per": 2.0,
+      "master_beat": true,
+      "spread": 0.84,
+      "pattern": "Wave",
+      "shape": 1.0
+    },
+    {
+      "name": "Back + forth",
+      "folder": "Red + green",
+      "ids": [
+        2,
+        6
+      ],
+      "beats_per": 1.0,
+      "master_beat": true,
+      "spread": 0.0,
+      "pattern": "Wave",
+      "shape": 1.0
+    },
+    {
+      "name": "fade",
+      "folder": "Red + green",
+      "ids": [
+        2,
+        6
+      ],
+      "beats_per": 2.0,
+      "master_beat": true,
+      "spread": 0.84,
+      "pattern": "Random",
+      "shape": 0.0
+    },
+    {
+      "name": "Fast flash",
+      "folder": "Red + green",
+      "ids": [
+        6,
+        2
+      ],
+      "beats_per": 0.5,
+      "master_beat": true,
+      "spread": 0.84,
+      "pattern": "Random",
+      "shape": 1.0
+    },
+    {
+      "name": "flash",
+      "folder": "Red + green",
+      "ids": [
+        2,
+        6
+      ],
+      "beats_per": 2.0,
+      "master_beat": true,
+      "spread": 0.84,
+      "pattern": "Random",
+      "shape": 1.0
+    },
+    {
+      "name": "Long wave",
+      "folder": "Red + green",
+      "ids": [
+        2,
+        6
+      ],
+      "beats_per": 8.0,
+      "master_beat": true,
+      "spread": 0.4,
+      "pattern": "Wave",
+      "shape": 1.0
+    },
+    {
+      "name": "Slow fade",
+      "folder": "Red + green",
+      "ids": [
+        2,
+        6
+      ],
+      "beats_per": 4.0,
+      "master_beat": true,
+      "spread": 0.55,
+      "pattern": "Random",
+      "shape": 0.0
+    },
+    {
+      "name": "Wave",
+      "folder": "Red + green",
+      "ids": [
+        2,
+        6
+      ],
+      "beats_per": 2.0,
+      "master_beat": true,
+      "spread": 0.84,
+      "pattern": "Wave",
+      "shape": 1.0
+    },
+    {
+      "name": "Back + forth",
+      "folder": "Red + White",
+      "ids": [
+        2,
+        4
+      ],
+      "beats_per": 1.0,
+      "master_beat": true,
+      "spread": 0.0,
+      "pattern": "Wave",
+      "shape": 1.0
+    },
+    {
+      "name": "fade",
+      "folder": "Red + White",
+      "ids": [
+        2,
+        4
+      ],
+      "beats_per": 2.0,
+      "master_beat": true,
+      "spread": 0.84,
+      "pattern": "Random",
+      "shape": 0.0
+    },
+    {
+      "name": "Fast flash",
+      "folder": "Red + White",
+      "ids": [
+        4,
+        2
+      ],
+      "beats_per": 0.5,
+      "master_beat": true,
+      "spread": 0.84,
+      "pattern": "Random",
+      "shape": 1.0
+    },
+    {
+      "name": "flash",
+      "folder": "Red + White",
+      "ids": [
+        2,
+        4
+      ],
+      "beats_per": 2.0,
+      "master_beat": true,
+      "spread": 0.84,
+      "pattern": "Random",
+      "shape": 1.0
+    },
+    {
+      "name": "Long wave",
+      "folder": "Red + White",
+      "ids": [
+        2,
+        4
+      ],
+      "beats_per": 8.0,
+      "master_beat": true,
+      "spread": 0.4,
+      "pattern": "Wave",
+      "shape": 1.0
+    },
+    {
+      "name": "Slow fade",
+      "folder": "Red + White",
+      "ids": [
+        2,
+        4
+      ],
+      "beats_per": 4.0,
+      "master_beat": true,
+      "spread": 0.55,
+      "pattern": "Random",
+      "shape": 0.0
+    },
+    {
+      "name": "Wave",
+      "folder": "Red + White",
+      "ids": [
+        2,
+        4
+      ],
+      "beats_per": 2.0,
+      "master_beat": true,
+      "spread": 0.84,
+      "pattern": "Wave",
+      "shape": 1.0
+    },
+    {
+      "name": "Back + forth",
+      "folder": "Red + White + Yellow",
+      "ids": [
+        2,
+        4,
+        3
+      ],
+      "beats_per": 1.0,
+      "master_beat": true,
+      "spread": 0.0,
+      "pattern": "Wave",
+      "shape": 1.0
+    },
+    {
+      "name": "fade",
+      "folder": "Red + White + Yellow",
+      "ids": [
+        2,
+        4,
+        3
+      ],
+      "beats_per": 2.0,
+      "master_beat": true,
+      "spread": 0.84,
+      "pattern": "Random",
+      "shape": 0.0
+    },
+    {
+      "name": "Fast flash",
+      "folder": "Red + White + Yellow",
+      "ids": [
+        3,
+        4,
+        2
+      ],
+      "beats_per": 0.5,
+      "master_beat": true,
+      "spread": 0.84,
+      "pattern": "Random",
+      "shape": 1.0
+    },
+    {
+      "name": "flash",
+      "folder": "Red + White + Yellow",
+      "ids": [
+        2,
+        4,
+        3
+      ],
+      "beats_per": 2.0,
+      "master_beat": true,
+      "spread": 0.84,
+      "pattern": "Random",
+      "shape": 1.0
+    },
+    {
+      "name": "Long wave",
+      "folder": "Red + White + Yellow",
+      "ids": [
+        2,
+        4,
+        3
+      ],
+      "beats_per": 8.0,
+      "master_beat": true,
+      "spread": 0.4,
+      "pattern": "Wave",
+      "shape": 1.0
+    },
+    {
+      "name": "Slow fade",
+      "folder": "Red + White + Yellow",
+      "ids": [
+        2,
+        4,
+        3
+      ],
+      "beats_per": 4.0,
+      "master_beat": true,
+      "spread": 0.55,
+      "pattern": "Random",
+      "shape": 0.0
+    },
+    {
+      "name": "Wave",
+      "folder": "Red + White + Yellow",
+      "ids": [
+        2,
+        4,
+        3
+      ],
+      "beats_per": 2.0,
+      "master_beat": true,
+      "spread": 0.84,
+      "pattern": "Wave",
+      "shape": 1.0
+    },
+    {
+      "name": "Back + forth",
+      "folder": "Red + Yellow",
+      "ids": [
+        2,
+        3
+      ],
+      "beats_per": 1.0,
+      "master_beat": true,
+      "spread": 0.0,
+      "pattern": "Wave",
+      "shape": 1.0
+    },
+    {
+      "name": "fade",
+      "folder": "Red + Yellow",
+      "ids": [
+        2,
+        3
+      ],
+      "beats_per": 2.0,
+      "master_beat": true,
+      "spread": 0.84,
+      "pattern": "Random",
+      "shape": 0.0
+    },
+    {
+      "name": "Fast flash",
+      "folder": "Red + Yellow",
+      "ids": [
+        3,
+        2
+      ],
+      "beats_per": 0.5,
+      "master_beat": true,
+      "spread": 0.84,
+      "pattern": "Random",
+      "shape": 1.0
+    },
+    {
+      "name": "flash",
+      "folder": "Red + Yellow",
+      "ids": [
+        2,
+        3
+      ],
+      "beats_per": 2.0,
+      "master_beat": true,
+      "spread": 0.84,
+      "pattern": "Random",
+      "shape": 1.0
+    },
+    {
+      "name": "Long wave",
+      "folder": "Red + Yellow",
+      "ids": [
+        2,
+        3
+      ],
+      "beats_per": 8.0,
+      "master_beat": true,
+      "spread": 0.4,
+      "pattern": "Wave",
+      "shape": 1.0
+    },
+    {
+      "name": "Slow fade",
+      "folder": "Red + Yellow",
+      "ids": [
+        2,
+        3
+      ],
+      "beats_per": 4.0,
+      "master_beat": true,
+      "spread": 0.55,
+      "pattern": "Random",
+      "shape": 0.0
+    },
+    {
+      "name": "Wave",
+      "folder": "Red + Yellow",
+      "ids": [
+        2,
+        3
+      ],
+      "beats_per": 2.0,
+      "master_beat": true,
+      "spread": 0.84,
+      "pattern": "Wave",
+      "shape": 1.0
+    },
+    {
+      "name": "Desert",
+      "folder": "Themes",
+      "ids": [
+        2,
+        3,
+        4
+      ],
+      "beats_per": 4.0,
+      "master_beat": true,
+      "spread": 0.84,
+      "pattern": "Random",
+      "shape": 0.0
+    },
+    {
+      "name": "Rainbow",
+      "folder": "Themes",
+      "ids": [
+        1,
+        3,
+        4,
+        5,
+        2,
+        7,
+        6
+      ],
+      "beats_per": 0.5,
+      "master_beat": true,
+      "spread": 0.97,
+      "pattern": "Wings",
+      "shape": 0.71
+    },
+    {
+      "name": "Back + forth",
+      "folder": "White + Yellow",
+      "ids": [
+        4,
+        3
+      ],
+      "beats_per": 1.0,
+      "master_beat": true,
+      "spread": 0.0,
+      "pattern": "Wave",
+      "shape": 1.0
+    },
+    {
+      "name": "fade",
+      "folder": "White + Yellow",
+      "ids": [
+        4,
+        3
+      ],
+      "beats_per": 2.0,
+      "master_beat": true,
+      "spread": 0.84,
+      "pattern": "Random",
+      "shape": 0.0
+    },
+    {
+      "name": "Fast flash",
+      "folder": "White + Yellow",
+      "ids": [
+        3,
+        4
+      ],
+      "beats_per": 0.5,
+      "master_beat": true,
+      "spread": 0.84,
+      "pattern": "Random",
+      "shape": 1.0
+    },
+    {
+      "name": "flash",
+      "folder": "White + Yellow",
+      "ids": [
+        4,
+        3
+      ],
+      "beats_per": 2.0,
+      "master_beat": true,
+      "spread": 0.84,
+      "pattern": "Random",
+      "shape": 1.0
+    },
+    {
+      "name": "Long wave",
+      "folder": "White + Yellow",
+      "ids": [
+        4,
+        3
+      ],
+      "beats_per": 8.0,
+      "master_beat": true,
+      "spread": 0.4,
+      "pattern": "Wave",
+      "shape": 1.0
+    },
+    {
+      "name": "Slow fade",
+      "folder": "White + Yellow",
+      "ids": [
+        4,
+        3
+      ],
+      "beats_per": 4.0,
+      "master_beat": true,
+      "spread": 0.55,
+      "pattern": "Random",
+      "shape": 0.0
+    },
+    {
+      "name": "Wave",
+      "folder": "White + Yellow",
+      "ids": [
+        4,
+        3
+      ],
+      "beats_per": 2.0,
+      "master_beat": true,
+      "spread": 0.84,
+      "pattern": "Wave",
+      "shape": 1.0
+    },
+    {
+      "name": "Yellow white",
+      "folder": "Yellow white",
+      "ids": [
+        4,
+        3
+      ],
+      "beats_per": 4.0,
+      "master_beat": true,
+      "spread": 0.84,
+      "pattern": "Random",
+      "shape": 0.0
+    },
+    {
+      "name": "Yellow white fast",
+      "folder": "Yellow white",
+      "ids": [
+        4,
+        3
+      ],
+      "beats_per": 0.5,
+      "master_beat": true,
+      "spread": 0.84,
+      "pattern": "Random",
+      "shape": 0.0
+    },
+    {
+      "name": "Yellow white flash",
+      "folder": "Yellow white",
+      "ids": [
+        4,
+        3
+      ],
+      "beats_per": 0.5,
+      "master_beat": true,
+      "spread": 0.84,
+      "pattern": "Random",
+      "shape": 1.0
+    }
+  ]
+}

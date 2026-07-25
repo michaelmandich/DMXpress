@@ -1,0 +1,828 @@
+{
+  "instances": [
+    {
+      "key": "8 channel par1@1",
+      "t": {
+        "pos": {
+          "x": 10.278519,
+          "y": 3.9999993,
+          "z": 2.2079296
+        },
+        "yaw_deg": 0.0,
+        "pitch_deg": -157.50424,
+        "roll_deg": 0.0,
+        "scale": 1.0
+      },
+      "mount": null
+    },
+    {
+      "key": "8 channel par1@9",
+      "t": {
+        "pos": {
+          "x": 9.401664,
+          "y": 4.0,
+          "z": 2.2079296
+        },
+        "yaw_deg": 0.0,
+        "pitch_deg": -157.50424,
+        "roll_deg": 0.0,
+        "scale": 1.0
+      },
+      "mount": null
+    },
+    {
+      "key": "moving par1@17",
+      "t": {
+        "pos": {
+          "x": -3.170978,
+          "y": 4.0,
+          "z": 1.5357159
+        },
+        "yaw_deg": 0.0,
+        "pitch_deg": -90.0,
+        "roll_deg": 0.0,
+        "scale": 1.0
+      },
+      "mount": null
+    },
+    {
+      "key": "moving par2@31",
+      "t": {
+        "pos": {
+          "x": -4.1027083,
+          "y": 2.9964244,
+          "z": 4.4553943
+        },
+        "yaw_deg": 0.0,
+        "pitch_deg": -90.0,
+        "roll_deg": 269.0,
+        "scale": 1.0
+      },
+      "mount": [
+        0,
+        5
+      ]
+    },
+    {
+      "key": "moving par3@45",
+      "t": {
+        "pos": {
+          "x": 3.3896613,
+          "y": 3.0,
+          "z": 5.487851
+        },
+        "yaw_deg": 0.0,
+        "pitch_deg": -90.0,
+        "roll_deg": 270.0,
+        "scale": 1.0
+      },
+      "mount": [
+        1,
+        5
+      ]
+    },
+    {
+      "key": "moving par4@59",
+      "t": {
+        "pos": {
+          "x": 4.301396,
+          "y": 4.0,
+          "z": 1.5878612
+        },
+        "yaw_deg": 0.0,
+        "pitch_deg": -90.0,
+        "roll_deg": 0.0,
+        "scale": 1.0
+      },
+      "mount": null
+    },
+    {
+      "key": "80w 17ch spot with circle1@73",
+      "t": {
+        "pos": {
+          "x": -2.3287125,
+          "y": 4.0,
+          "z": 1.5048087
+        },
+        "yaw_deg": 0.0,
+        "pitch_deg": -90.0,
+        "roll_deg": 0.0,
+        "scale": 1.0
+      },
+      "mount": null
+    },
+    {
+      "key": "120W moving head (mini beam spot LED)1@90",
+      "t": {
+        "pos": {
+          "x": -2.5027084,
+          "y": 2.9964244,
+          "z": 4.4553943
+        },
+        "yaw_deg": 0.0,
+        "pitch_deg": -90.0,
+        "roll_deg": 263.0,
+        "scale": 1.0
+      },
+      "mount": [
+        0,
+        7
+      ]
+    },
+    {
+      "key": "80w 17ch spot with circle1@102",
+      "t": {
+        "pos": {
+          "x": -3.3027084,
+          "y": 2.9964244,
+          "z": 4.4553943
+        },
+        "yaw_deg": 0.0,
+        "pitch_deg": -90.0,
+        "roll_deg": 263.0,
+        "scale": 0.86
+      },
+      "mount": [
+        0,
+        6
+      ]
+    },
+    {
+      "key": "120W moving head (mini beam spot LED)1@119",
+      "t": {
+        "pos": {
+          "x": -4.9027085,
+          "y": 2.9964244,
+          "z": 4.4553943
+        },
+        "yaw_deg": 0.0,
+        "pitch_deg": -90.0,
+        "roll_deg": 263.0,
+        "scale": 1.0
+      },
+      "mount": [
+        0,
+        4
+      ]
+    },
+    {
+      "key": "120W moving head (mini beam spot LED)1@131",
+      "t": {
+        "pos": {
+          "x": 4.989661,
+          "y": 3.0,
+          "z": 5.487851
+        },
+        "yaw_deg": 0.0,
+        "pitch_deg": -90.0,
+        "roll_deg": 265.0,
+        "scale": 1.0
+      },
+      "mount": [
+        1,
+        7
+      ]
+    },
+    {
+      "key": "80w 17ch spot with circle1@143",
+      "t": {
+        "pos": {
+          "x": 4.1896615,
+          "y": 3.0,
+          "z": 5.487851
+        },
+        "yaw_deg": 0.0,
+        "pitch_deg": -90.0,
+        "roll_deg": 265.0,
+        "scale": 1.0
+      },
+      "mount": [
+        1,
+        6
+      ]
+    },
+    {
+      "key": "120W moving head (mini beam spot LED)1@160",
+      "t": {
+        "pos": {
+          "x": 2.5896614,
+          "y": 3.0,
+          "z": 5.487851
+        },
+        "yaw_deg": 0.0,
+        "pitch_deg": -90.0,
+        "roll_deg": 265.0,
+        "scale": 1.0
+      },
+      "mount": [
+        1,
+        4
+      ]
+    },
+    {
+      "key": "80w 17ch spot with circle1@172",
+      "t": {
+        "pos": {
+          "x": 3.0112875,
+          "y": 4.0,
+          "z": 1.4646246
+        },
+        "yaw_deg": 0.0,
+        "pitch_deg": -90.0,
+        "roll_deg": 0.30857086,
+        "scale": 1.0
+      },
+      "mount": null
+    },
+    {
+      "key": "moving par1@189",
+      "t": {
+        "pos": {
+          "x": -1.9893506,
+          "y": 4.0,
+          "z": -0.009615719
+        },
+        "yaw_deg": 1.0825295,
+        "pitch_deg": -90.0,
+        "roll_deg": 0.0,
+        "scale": 1.0
+      },
+      "mount": null
+    },
+    {
+      "key": "moving par2@203",
+      "t": {
+        "pos": {
+          "x": -0.5792202,
+          "y": 4.0,
+          "z": -0.009615719
+        },
+        "yaw_deg": 0.6696465,
+        "pitch_deg": -98.552,
+        "roll_deg": 349.44067,
+        "scale": 1.0
+      },
+      "mount": null
+    },
+    {
+      "key": "moving par3@217",
+      "t": {
+        "pos": {
+          "x": 2.2137136,
+          "y": 4.0,
+          "z": -0.04306313
+        },
+        "yaw_deg": 0.0,
+        "pitch_deg": -90.0,
+        "roll_deg": 0.0,
+        "scale": 1.0
+      },
+      "mount": null
+    },
+    {
+      "key": "moving par4@231",
+      "t": {
+        "pos": {
+          "x": 4.493243,
+          "y": 4.0,
+          "z": 0.06715775
+        },
+        "yaw_deg": 0.0,
+        "pitch_deg": -90.0,
+        "roll_deg": 0.0,
+        "scale": 1.0
+      },
+      "mount": null
+    },
+    {
+      "key": "80w 17ch spot with circle1@245",
+      "t": {
+        "pos": {
+          "x": -2.6446247,
+          "y": 4.0,
+          "z": 0.006914735
+        },
+        "yaw_deg": 0.0,
+        "pitch_deg": -90.0,
+        "roll_deg": 0.55821913,
+        "scale": 1.0
+      },
+      "mount": null
+    },
+    {
+      "key": "80w 17ch spot with circle1@262",
+      "t": {
+        "pos": {
+          "x": -1.3523176,
+          "y": 4.0,
+          "z": -0.002649005
+        },
+        "yaw_deg": 0.0,
+        "pitch_deg": -90.0,
+        "roll_deg": 0.0,
+        "scale": 1.0
+      },
+      "mount": null
+    },
+    {
+      "key": "120W moving head (mini beam spot LED)1@279",
+      "t": {
+        "pos": {
+          "x": -4.1027083,
+          "y": 3.3964245,
+          "z": 4.4553943
+        },
+        "yaw_deg": 0.0,
+        "pitch_deg": 90.0,
+        "roll_deg": 270.0,
+        "scale": 1.0
+      },
+      "mount": [
+        0,
+        1
+      ]
+    },
+    {
+      "key": "120W moving head (mini beam spot LED)2@291",
+      "t": {
+        "pos": {
+          "x": 3.3896613,
+          "y": 3.4,
+          "z": 5.487851
+        },
+        "yaw_deg": 0.0,
+        "pitch_deg": 90.0,
+        "roll_deg": 270.0,
+        "scale": 1.0
+      },
+      "mount": [
+        1,
+        1
+      ]
+    },
+    {
+      "key": "80w 17ch spot with circle1@303",
+      "t": {
+        "pos": {
+          "x": 3.414781,
+          "y": 4.0,
+          "z": 0.030952692
+        },
+        "yaw_deg": 0.0,
+        "pitch_deg": -90.0,
+        "roll_deg": 0.0,
+        "scale": 1.0
+      },
+      "mount": null
+    },
+    {
+      "key": "80w 17ch spot with circle2@320",
+      "t": {
+        "pos": {
+          "x": 5.2789497,
+          "y": 4.0,
+          "z": 0.08589252
+        },
+        "yaw_deg": 0.0,
+        "pitch_deg": -90.0,
+        "roll_deg": 0.0,
+        "scale": 1.0
+      },
+      "mount": null
+    },
+    {
+      "key": "hurricane1@337",
+      "t": {
+        "pos": {
+          "x": 3.9515662,
+          "y": 4.0,
+          "z": -2.3173075
+        },
+        "yaw_deg": 0.0,
+        "pitch_deg": -90.0,
+        "roll_deg": 0.0,
+        "scale": 1.0
+      },
+      "mount": null
+    },
+    {
+      "key": "8 channel par1@338",
+      "t": {
+        "pos": {
+          "x": -3.5932486,
+          "y": 0.90000093,
+          "z": -2.8327127
+        },
+        "yaw_deg": 0.0,
+        "pitch_deg": 51.0,
+        "roll_deg": 0.0,
+        "scale": 1.0
+      },
+      "mount": null
+    },
+    {
+      "key": "8 channel par2@346",
+      "t": {
+        "pos": {
+          "x": -1.8112077,
+          "y": 0.90000093,
+          "z": -2.8017068
+        },
+        "yaw_deg": 0.0,
+        "pitch_deg": 51.0,
+        "roll_deg": 0.0,
+        "scale": 1.0
+      },
+      "mount": null
+    },
+    {
+      "key": "8 channel par3@354",
+      "t": {
+        "pos": {
+          "x": -0.18,
+          "y": 0.90000093,
+          "z": -2.7190273
+        },
+        "yaw_deg": 0.0,
+        "pitch_deg": 51.0,
+        "roll_deg": 0.0,
+        "scale": 1.0
+      },
+      "mount": null
+    },
+    {
+      "key": "8 channel par4@362",
+      "t": {
+        "pos": {
+          "x": 1.619795,
+          "y": 0.90000093,
+          "z": -2.7106872
+        },
+        "yaw_deg": 0.0,
+        "pitch_deg": 51.0,
+        "roll_deg": 0.0,
+        "scale": 1.0
+      },
+      "mount": null
+    },
+    {
+      "key": "8 channel par5@370",
+      "t": {
+        "pos": {
+          "x": 3.1991825,
+          "y": 0.90000093,
+          "z": -2.6561162
+        },
+        "yaw_deg": 0.0,
+        "pitch_deg": 51.0,
+        "roll_deg": 0.0,
+        "scale": 1.0
+      },
+      "mount": null
+    },
+    {
+      "key": "zooming wash1@378",
+      "t": {
+        "pos": {
+          "x": -11.7471285,
+          "y": 4.0,
+          "z": 1.5612309
+        },
+        "yaw_deg": 0.0,
+        "pitch_deg": -90.0,
+        "roll_deg": 0.0,
+        "scale": 1.0
+      },
+      "mount": null
+    },
+    {
+      "key": "zooming wash2@393",
+      "t": {
+        "pos": {
+          "x": -9.691226,
+          "y": 4.0,
+          "z": 1.4920331
+        },
+        "yaw_deg": 0.0,
+        "pitch_deg": -90.0,
+        "roll_deg": 0.0,
+        "scale": 1.0
+      },
+      "mount": null
+    },
+    {
+      "key": "15 channel bee eye1@408",
+      "t": {
+        "pos": {
+          "x": -2.4513068,
+          "y": 4.0,
+          "z": -1.7163461
+        },
+        "yaw_deg": 0.0,
+        "pitch_deg": -90.0,
+        "roll_deg": 0.0,
+        "scale": 1.0
+      },
+      "mount": null
+    },
+    {
+      "key": "15 channel bee eye2@423",
+      "t": {
+        "pos": {
+          "x": -1.587027,
+          "y": 4.0,
+          "z": -2.7980769
+        },
+        "yaw_deg": 0.0,
+        "pitch_deg": -90.0,
+        "roll_deg": 0.0,
+        "scale": 1.0
+      },
+      "mount": null
+    },
+    {
+      "key": "150w 11 channel1@456",
+      "t": {
+        "pos": {
+          "x": 0.41463232,
+          "y": 0.9955207,
+          "z": -2.7810493
+        },
+        "yaw_deg": 846.0,
+        "pitch_deg": 453.0,
+        "roll_deg": 89.0,
+        "scale": 0.42241958
+      },
+      "mount": null
+    },
+    {
+      "key": "150w 11 channel2@468",
+      "t": {
+        "pos": {
+          "x": 0.9468225,
+          "y": 0.97850406,
+          "z": -2.7810493
+        },
+        "yaw_deg": 846.0,
+        "pitch_deg": 453.0,
+        "roll_deg": 89.0,
+        "scale": 0.42241958
+      },
+      "mount": null
+    },
+    {
+      "key": "150w 11 channel3@480",
+      "t": {
+        "pos": {
+          "x": 2.265728,
+          "y": 1.0000001,
+          "z": -2.742559
+        },
+        "yaw_deg": 846.0,
+        "pitch_deg": 453.0,
+        "roll_deg": 89.0,
+        "scale": 0.42241958
+      },
+      "mount": null
+    },
+    {
+      "key": "150w 11 channel4@492",
+      "t": {
+        "pos": {
+          "x": 2.8046465,
+          "y": 0.9779353,
+          "z": -2.7276497
+        },
+        "yaw_deg": 846.0,
+        "pitch_deg": 453.0,
+        "roll_deg": 89.0,
+        "scale": 0.42241958
+      },
+      "mount": null
+    },
+    {
+      "key": "25 ch banger1@513",
+      "t": {
+        "pos": {
+          "x": 2.3311472,
+          "y": 4.0,
+          "z": 3.4519231
+        },
+        "yaw_deg": 0.0,
+        "pitch_deg": -90.0,
+        "roll_deg": 0.0,
+        "scale": 1.0
+      },
+      "mount": null
+    },
+    {
+      "key": "25 ch banger1@538",
+      "t": {
+        "pos": {
+          "x": 3.0688512,
+          "y": 4.0,
+          "z": 3.4278846
+        },
+        "yaw_deg": 0.0,
+        "pitch_deg": -90.0,
+        "roll_deg": 0.0,
+        "scale": 1.0
+      },
+      "mount": null
+    },
+    {
+      "key": "25 ch banger1@563",
+      "t": {
+        "pos": {
+          "x": 3.9295077,
+          "y": 4.0,
+          "z": 3.4759612
+        },
+        "yaw_deg": 0.0,
+        "pitch_deg": -90.0,
+        "roll_deg": 0.0,
+        "scale": 1.0
+      },
+      "mount": null
+    },
+    {
+      "key": "25 ch banger1@588",
+      "t": {
+        "pos": {
+          "x": 4.6672125,
+          "y": 4.0,
+          "z": 3.4519231
+        },
+        "yaw_deg": 0.0,
+        "pitch_deg": -90.0,
+        "roll_deg": 0.0,
+        "scale": 1.0
+      },
+      "mount": null
+    },
+    {
+      "key": "150w 11 channel1@456",
+      "t": {
+        "pos": {
+          "x": -2.8986552,
+          "y": 1.061006,
+          "z": -2.981763
+        },
+        "yaw_deg": 846.0,
+        "pitch_deg": 453.0,
+        "roll_deg": 89.0,
+        "scale": 0.42241958
+      },
+      "mount": null
+    },
+    {
+      "key": "150w 11 channel2@468",
+      "t": {
+        "pos": {
+          "x": -2.366463,
+          "y": 1.061006,
+          "z": -2.981763
+        },
+        "yaw_deg": 846.0,
+        "pitch_deg": 453.0,
+        "roll_deg": 89.0,
+        "scale": 0.42241958
+      },
+      "mount": null
+    },
+    {
+      "key": "150w 11 channel3@480",
+      "t": {
+        "pos": {
+          "x": -1.2227849,
+          "y": 1.0797799,
+          "z": -2.814381
+        },
+        "yaw_deg": 846.0,
+        "pitch_deg": 453.0,
+        "roll_deg": 89.0,
+        "scale": 0.42241958
+      },
+      "mount": null
+    },
+    {
+      "key": "150w 11 channel4@492",
+      "t": {
+        "pos": {
+          "x": -0.6905961,
+          "y": 1.0797799,
+          "z": -2.814381
+        },
+        "yaw_deg": 846.0,
+        "pitch_deg": 453.0,
+        "roll_deg": 89.0,
+        "scale": 0.42241958
+      },
+      "mount": null
+    },
+    {
+      "key": "8 channel par1@1",
+      "t": {
+        "pos": {
+          "x": -2.5027084,
+          "y": 3.3964245,
+          "z": 4.4553943
+        },
+        "yaw_deg": -37.0,
+        "pitch_deg": 135.0,
+        "roll_deg": 321.8582,
+        "scale": 1.0
+      },
+      "mount": [
+        0,
+        3
+      ]
+    },
+    {
+      "key": "8 channel par1@9",
+      "t": {
+        "pos": {
+          "x": -4.9027085,
+          "y": 3.3964245,
+          "z": 4.4553943
+        },
+        "yaw_deg": 0.0,
+        "pitch_deg": 90.0,
+        "roll_deg": 345.22833,
+        "scale": 1.0
+      },
+      "mount": [
+        0,
+        0
+      ]
+    },
+    {
+      "key": "8 channel par1@1",
+      "t": {
+        "pos": {
+          "x": 4.989661,
+          "y": 3.4,
+          "z": 5.487851
+        },
+        "yaw_deg": -38.0,
+        "pitch_deg": 123.0,
+        "roll_deg": 0.0,
+        "scale": 1.0
+      },
+      "mount": [
+        1,
+        3
+      ]
+    },
+    {
+      "key": "8 channel par1@9",
+      "t": {
+        "pos": {
+          "x": 2.5896614,
+          "y": 3.4,
+          "z": 5.487851
+        },
+        "yaw_deg": 23.0,
+        "pitch_deg": 123.0,
+        "roll_deg": 0.0,
+        "scale": 1.0
+      },
+      "mount": [
+        1,
+        0
+      ]
+    }
+  ],
+  "towers": [
+    {
+      "pos": {
+        "x": -3.7027085,
+        "y": 0.0,
+        "z": 4.4553943
+      },
+      "yaw_deg": 0.0,
+      "height": 3.1964245,
+      "width": 2.4
+    },
+    {
+      "pos": {
+        "x": 3.7896614,
+        "y": 0.0,
+        "z": 5.487851
+      },
+      "yaw_deg": 0.0,
+      "height": 3.2,
+      "width": 2.4
+    },
+    {
+      "pos": {
+        "x": -6.1741,
+        "y": 0.0,
+        "z": -0.65485364
+      },
+      "yaw_deg": -55.0,
+      "height": 3.2,
+      "width": 2.4
+    }
+  ]
+}

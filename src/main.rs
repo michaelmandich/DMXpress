@@ -1,0 +1,42 @@
+mod app;
+mod artnet;
+mod chase;
+mod config;
+mod engine;
+mod group;
+mod net;
+mod oscillator;
+mod palette;
+mod phaser;
+mod preset;
+mod profiles;
+mod showbuddy;
+mod stack;
+mod stage;
+mod transition;
+mod ui;
+mod view;
+
+use eframe::egui;
+
+fn main() -> eframe::Result<()> {
+    let native_options = eframe::NativeOptions {
+        renderer: eframe::Renderer::Wgpu,
+        viewport: egui::ViewportBuilder::default()
+            .with_inner_size([1440.0, 900.0])
+            .with_min_inner_size([960.0, 640.0])
+            .with_title("DMXpress"),
+        ..Default::default()
+    };
+
+    eframe::run_native(
+        "DMXpress",
+        native_options,
+        Box::new(|cc| {
+            if let Some(render_state) = &cc.wgpu_render_state {
+                stage::initialize_volumetric(render_state);
+            }
+            Ok(Box::new(app::App::new()))
+        }),
+    )
+}

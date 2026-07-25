@@ -1,0 +1,562 @@
+{
+  "instances": [
+    {
+      "key": "120W moving head (mini beam spot LED)1@131",
+      "t": {
+        "pos": {
+          "x": 1.0687981,
+          "y": 4.0,
+          "z": 1.5549046
+        },
+        "yaw_deg": 0.0,
+        "pitch_deg": -90.0
+      },
+      "mount": null
+    },
+    {
+      "key": "120W moving head (mini beam spot LED)1@160",
+      "t": {
+        "pos": {
+          "x": 2.2419913,
+          "y": 4.0,
+          "z": 1.5799534
+        },
+        "yaw_deg": 0.0,
+        "pitch_deg": -90.0
+      },
+      "mount": null
+    },
+    {
+      "key": "150w 11 channel2@468",
+      "t": {
+        "pos": {
+          "x": -4.8877134,
+          "y": 4.0,
+          "z": -2.7303147
+        },
+        "yaw_deg": 0.0,
+        "pitch_deg": -90.0
+      },
+      "mount": null
+    },
+    {
+      "key": "80w 17ch spot with circle1@172",
+      "t": {
+        "pos": {
+          "x": 3.6118813,
+          "y": 4.0,
+          "z": 1.528846
+        },
+        "yaw_deg": 0.0,
+        "pitch_deg": -90.0
+      },
+      "mount": null
+    },
+    {
+      "key": "moving par4@59",
+      "t": {
+        "pos": {
+          "x": -3.4778614,
+          "y": 4.0,
+          "z": 1.456731
+        },
+        "yaw_deg": 0.0,
+        "pitch_deg": -90.0
+      },
+      "mount": null
+    },
+    {
+      "key": "25 ch banger1@538",
+      "t": {
+        "pos": {
+          "x": 3.0688512,
+          "y": 4.0,
+          "z": 3.4278846
+        },
+        "yaw_deg": 0.0,
+        "pitch_deg": -90.0
+      },
+      "mount": null
+    },
+    {
+      "key": "120W moving head (mini beam spot LED)1@279",
+      "t": {
+        "pos": {
+          "x": 0.18309832,
+          "y": 4.0,
+          "z": 0.030952692
+        },
+        "yaw_deg": 0.0,
+        "pitch_deg": -90.0
+      },
+      "mount": null
+    },
+    {
+      "key": "15 channel bee eye1@408",
+      "t": {
+        "pos": {
+          "x": -2.392483,
+          "y": 4.0,
+          "z": -2.726318
+        },
+        "yaw_deg": 0.0,
+        "pitch_deg": -90.0
+      },
+      "mount": null
+    },
+    {
+      "key": "8 channel par1@9",
+      "t": {
+        "pos": {
+          "x": 0.027091451,
+          "y": 4.0,
+          "z": 3.711605
+        },
+        "yaw_deg": 0.0,
+        "pitch_deg": -90.0
+      },
+      "mount": null
+    },
+    {
+      "key": "zooming wash1@378",
+      "t": {
+        "pos": {
+          "x": -4.7205544,
+          "y": 4.0,
+          "z": 3.7973576
+        },
+        "yaw_deg": 0.0,
+        "pitch_deg": -90.0
+      },
+      "mount": null
+    },
+    {
+      "key": "8 channel par2@346",
+      "t": {
+        "pos": {
+          "x": 0.9372139,
+          "y": 4.0,
+          "z": -3.5297136
+        },
+        "yaw_deg": 0.0,
+        "pitch_deg": -90.0
+      },
+      "mount": null
+    },
+    {
+      "key": "80w 17ch spot with circle1@262",
+      "t": {
+        "pos": {
+          "x": -2.0910888,
+          "y": 4.0,
+          "z": -0.009614825
+        },
+        "yaw_deg": 0.0,
+        "pitch_deg": -90.0
+      },
+      "mount": null
+    },
+    {
+      "key": "zooming wash2@393",
+      "t": {
+        "pos": {
+          "x": -3.132607,
+          "y": 4.0,
+          "z": 3.7825942
+        },
+        "yaw_deg": 0.0,
+        "pitch_deg": -90.0
+      },
+      "mount": null
+    },
+    {
+      "key": "8 channel par5@370",
+      "t": {
+        "pos": {
+          "x": 2.6803207,
+          "y": 4.0,
+          "z": -3.5297136
+        },
+        "yaw_deg": 0.0,
+        "pitch_deg": -90.0
+      },
+      "mount": null
+    },
+    {
+      "key": "80w 17ch spot with circle2@320",
+      "t": {
+        "pos": {
+          "x": 4.0380955,
+          "y": 4.0,
+          "z": 0.050637722
+        },
+        "yaw_deg": 0.0,
+        "pitch_deg": -90.0
+      },
+      "mount": null
+    },
+    {
+      "key": "25 ch banger1@513",
+      "t": {
+        "pos": {
+          "x": 2.3311472,
+          "y": 4.0,
+          "z": 3.4519231
+        },
+        "yaw_deg": 0.0,
+        "pitch_deg": -90.0
+      },
+      "mount": null
+    },
+    {
+      "key": "moving par2@31",
+      "t": {
+        "pos": {
+          "x": -4.5652275,
+          "y": 4.0,
+          "z": 1.456731
+        },
+        "yaw_deg": 0.0,
+        "pitch_deg": -90.0
+      },
+      "mount": null
+    },
+    {
+      "key": "moving par3@45",
+      "t": {
+        "pos": {
+          "x": -4.0215445,
+          "y": 4.0,
+          "z": 1.456731
+        },
+        "yaw_deg": 0.0,
+        "pitch_deg": -90.0
+      },
+      "mount": null
+    },
+    {
+      "key": "hurricane1@337",
+      "t": {
+        "pos": {
+          "x": 3.9515662,
+          "y": 4.0,
+          "z": -2.3173075
+        },
+        "yaw_deg": 0.0,
+        "pitch_deg": -90.0
+      },
+      "mount": null
+    },
+    {
+      "key": "8 channel par3@354",
+      "t": {
+        "pos": {
+          "x": 1.518249,
+          "y": 4.0,
+          "z": -3.5297136
+        },
+        "yaw_deg": 0.0,
+        "pitch_deg": -90.0
+      },
+      "mount": null
+    },
+    {
+      "key": "80w 17ch spot with circle1@143",
+      "t": {
+        "pos": {
+          "x": 1.6265445,
+          "y": 4.0,
+          "z": 1.5549046
+        },
+        "yaw_deg": 0.0,
+        "pitch_deg": -90.0
+      },
+      "mount": null
+    },
+    {
+      "key": "moving par1@189",
+      "t": {
+        "pos": {
+          "x": -5.061386,
+          "y": 4.0,
+          "z": -0.009615719
+        },
+        "yaw_deg": 0.0,
+        "pitch_deg": -90.0
+      },
+      "mount": null
+    },
+    {
+      "key": "80w 17ch spot with circle1@73",
+      "t": {
+        "pos": {
+          "x": -2.3287125,
+          "y": 4.0,
+          "z": 1.5048087
+        },
+        "yaw_deg": 0.0,
+        "pitch_deg": -90.0
+      },
+      "mount": null
+    },
+    {
+      "key": "15 channel bee eye2@423",
+      "t": {
+        "pos": {
+          "x": -1.587027,
+          "y": 4.0,
+          "z": -2.7980769
+        },
+        "yaw_deg": 0.0,
+        "pitch_deg": -90.0
+      },
+      "mount": null
+    },
+    {
+      "key": "150w 11 channel3@480",
+      "t": {
+        "pos": {
+          "x": -4.355523,
+          "y": 4.0,
+          "z": -2.7303147
+        },
+        "yaw_deg": 0.0,
+        "pitch_deg": -90.0
+      },
+      "mount": null
+    },
+    {
+      "key": "80w 17ch spot with circle1@303",
+      "t": {
+        "pos": {
+          "x": 3.414781,
+          "y": 4.0,
+          "z": 0.030952692
+        },
+        "yaw_deg": 0.0,
+        "pitch_deg": -90.0
+      },
+      "mount": null
+    },
+    {
+      "key": "150w 11 channel1@456",
+      "t": {
+        "pos": {
+          "x": -5.419904,
+          "y": 4.0,
+          "z": -2.7303147
+        },
+        "yaw_deg": 0.0,
+        "pitch_deg": -90.0
+      },
+      "mount": null
+    },
+    {
+      "key": "25 ch banger1@588",
+      "t": {
+        "pos": {
+          "x": 4.6672125,
+          "y": 4.0,
+          "z": 3.4519231
+        },
+        "yaw_deg": 0.0,
+        "pitch_deg": -90.0
+      },
+      "mount": null
+    },
+    {
+      "key": "8 channel par1@1",
+      "t": {
+        "pos": {
+          "x": 0.7442336,
+          "y": 4.0,
+          "z": 3.692308
+        },
+        "yaw_deg": 0.0,
+        "pitch_deg": -90.0
+      },
+      "mount": null
+    },
+    {
+      "key": "moving par3@217",
+      "t": {
+        "pos": {
+          "x": -3.97402,
+          "y": 4.0,
+          "z": -0.009615719
+        },
+        "yaw_deg": 0.0,
+        "pitch_deg": -90.0
+      },
+      "mount": null
+    },
+    {
+      "key": "8 channel par4@362",
+      "t": {
+        "pos": {
+          "x": 2.099285,
+          "y": 4.0,
+          "z": -3.5297136
+        },
+        "yaw_deg": 0.0,
+        "pitch_deg": -90.0
+      },
+      "mount": null
+    },
+    {
+      "key": "120W moving head (mini beam spot LED)1@90",
+      "t": {
+        "pos": {
+          "x": -1.0275722,
+          "y": 4.0,
+          "z": 1.5799516
+        },
+        "yaw_deg": 0.0,
+        "pitch_deg": -90.0
+      },
+      "mount": null
+    },
+    {
+      "key": "150w 11 channel4@492",
+      "t": {
+        "pos": {
+          "x": -3.8233328,
+          "y": 4.0,
+          "z": -2.7303147
+        },
+        "yaw_deg": 0.0,
+        "pitch_deg": -90.0
+      },
+      "mount": null
+    },
+    {
+      "key": "moving par4@231",
+      "t": {
+        "pos": {
+          "x": -3.4303365,
+          "y": 4.0,
+          "z": -0.009615719
+        },
+        "yaw_deg": 0.0,
+        "pitch_deg": -90.0
+      },
+      "mount": null
+    },
+    {
+      "key": "25 ch banger1@563",
+      "t": {
+        "pos": {
+          "x": 3.9295077,
+          "y": 4.0,
+          "z": 3.4759612
+        },
+        "yaw_deg": 0.0,
+        "pitch_deg": -90.0
+      },
+      "mount": null
+    },
+    {
+      "key": "80w 17ch spot with circle1@245",
+      "t": {
+        "pos": {
+          "x": -2.6446247,
+          "y": 4.0,
+          "z": 0.006914735
+        },
+        "yaw_deg": 0.0,
+        "pitch_deg": -90.0
+      },
+      "mount": null
+    },
+    {
+      "key": "120W moving head (mini beam spot LED)2@291",
+      "t": {
+        "pos": {
+          "x": 1.1782665,
+          "y": 4.0,
+          "z": -0.017124414
+        },
+        "yaw_deg": 0.0,
+        "pitch_deg": -90.0
+      },
+      "mount": null
+    },
+    {
+      "key": "moving par1@17",
+      "t": {
+        "pos": {
+          "x": -5.1089106,
+          "y": 4.0,
+          "z": 1.456731
+        },
+        "yaw_deg": 0.0,
+        "pitch_deg": -90.0
+      },
+      "mount": null
+    },
+    {
+      "key": "120W moving head (mini beam spot LED)1@119",
+      "t": {
+        "pos": {
+          "x": 0.10716033,
+          "y": 4.0,
+          "z": 1.5549052
+        },
+        "yaw_deg": 0.0,
+        "pitch_deg": -90.0
+      },
+      "mount": null
+    },
+    {
+      "key": "80w 17ch spot with circle1@102",
+      "t": {
+        "pos": {
+          "x": -0.4890554,
+          "y": 4.0,
+          "z": 1.579954
+        },
+        "yaw_deg": 0.0,
+        "pitch_deg": -90.0
+      },
+      "mount": null
+    },
+    {
+      "key": "8 channel par1@338",
+      "t": {
+        "pos": {
+          "x": 0.35617733,
+          "y": 4.0,
+          "z": -3.5297136
+        },
+        "yaw_deg": 0.0,
+        "pitch_deg": -90.0
+      },
+      "mount": null
+    },
+    {
+      "key": "moving par2@203",
+      "t": {
+        "pos": {
+          "x": -4.517703,
+          "y": 4.0,
+          "z": -0.009615719
+        },
+        "yaw_deg": 0.0,
+        "pitch_deg": -90.0
+      },
+      "mount": null
+    }
+  ],
+  "towers": [
+    {
+      "pos": {
+        "x": -4.0891876,
+        "y": 0.0,
+        "z": 5.2463737
+      },
+      "yaw_deg": 0.0,
+      "height": 3.2,
+      "width": 2.4
+    }
+  ]
+}

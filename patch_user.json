@@ -1,0 +1,14 @@
+{
+  "include_showbuddy": true,
+  "fixtures": [
+    {
+      "profile": "25 ch banger (25ch)",
+      "display": "disco banger",
+      "from": 408
+    }
+  ],
+  "excluded": [
+    "15 channel bee eye1@408",
+    "15 channel bee eye2@423"
+  ]
+}

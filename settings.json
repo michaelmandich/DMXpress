@@ -1,0 +1,10 @@
+{
+  "stage_half_w": 4.0,
+  "stage_half_d": 3.0,
+  "stage_h": 1.0,
+  "light_scale": 1.6,
+  "beam_opacity": 1.0,
+  "default_height": 4.0,
+  "default_yaw": 0.0,
+  "default_pitch": -90.0
+}
