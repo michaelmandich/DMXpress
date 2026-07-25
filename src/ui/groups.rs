@@ -4,7 +4,7 @@
 
 use eframe::egui;
 
-use super::{apply_zoom, zoom_controls};
+use super::{apply_zoom, theme, zoom_controls};
 use crate::app::App;
 use crate::group::{self, Group, GroupMode};
 
@@ -39,6 +39,16 @@ impl App {
         let Some(fixtures) = self.groups.get(idx).map(|g| g.fixtures.clone()) else {
             return;
         };
+        // Chaining: a plain click starts a new route, shift-click extends it.
+        // The Orders window turns that chain into a custom effect order.
+        if additive {
+            if !self.group_chain.contains(&idx) {
+                self.group_chain.push(idx);
+            }
+        } else {
+            self.group_chain.clear();
+            self.group_chain.push(idx);
+        }
         if !additive {
             self.stage.selection.clear();
         }
@@ -73,6 +83,13 @@ impl App {
     pub(crate) fn delete_group(&mut self, idx: usize) {
         if idx < self.groups.len() {
             let g = self.groups.remove(idx);
+            // Chained indices shift with the pool.
+            self.group_chain.retain(|&i| i != idx);
+            for i in &mut self.group_chain {
+                if *i > idx {
+                    *i -= 1;
+                }
+            }
             group::save_groups(&self.groups);
             self.log.push(format!("Deleted group \"{}\"", g.name));
         }
@@ -90,8 +107,26 @@ impl App {
         let mut do_update: Option<usize> = None;
         let mut do_delete: Option<usize> = None;
         let mut do_mode: Option<(usize, GroupMode)> = None;
+        let mut do_chain_mode: Option<GroupMode> = None;
+        let mut do_release: Option<Vec<usize>> = None;
 
-        egui::Window::new("👥 Groups")
+        // A multi-light step of the active order welds its lights together no
+        // matter what mode a group carries, so say so instead of letting the
+        // pool claim otherwise.
+        let order_bound = self.order_bound_fixtures();
+        let order_name = self
+            .active_order
+            .and_then(|i| self.orders.get(i))
+            .map(|o| o.name.clone());
+        let chain: Vec<usize> = self.group_chain.clone();
+        let chain_fixtures: Vec<usize> = chain
+            .iter()
+            .filter_map(|&gi| self.groups.get(gi))
+            .flat_map(|g| g.fixtures.iter().copied())
+            .collect();
+        let chain_locked = chain_fixtures.iter().any(|fi| order_bound.contains(fi));
+
+        egui::Window::new("Groups")
             .open(&mut open)
             .collapsible(true)
             .resizable(true)
@@ -120,6 +155,20 @@ impl App {
                     "{} fixture(s) selected · click recalls · ⇧ click adds",
                     cur.len()
                 ));
+                if !order_bound.is_empty() {
+                    let name = order_name.as_deref().unwrap_or("?");
+                    ui.horizontal_wrapped(|ui| {
+                        theme::pill(ui, "ORDER", theme::WARN);
+                        ui.colored_label(
+                            theme::WARN,
+                            format!(
+                                "\"{name}\" holds {} light(s) in folded steps — they move as \
+                                 one and cannot be picked apart, whatever mode is shown below.",
+                                order_bound.len()
+                            ),
+                        );
+                    });
+                }
                 ui.separator();
 
                 if self.groups.is_empty() {
@@ -131,8 +180,21 @@ impl App {
                         // (so combined shift-click groups all light up).
                         let active = !g.fixtures.is_empty()
                             && g.fixtures.iter().all(|fi| cur.contains(fi));
-                        let unit = if g.mode == GroupMode::AsFixture { " · 1→many" } else { "" };
-                        let label = format!("{}\n{} fx{}", g.name, g.fixtures.len(), unit);
+                        // What is actually binding these lights, order first.
+                        let locked = g.fixtures.iter().any(|fi| order_bound.contains(fi));
+                        let unit = if locked {
+                            " · order"
+                        } else if g.mode == GroupMode::AsFixture {
+                            " · 1 light"
+                        } else {
+                            ""
+                        };
+                        // Position in the shift-click chain the Orders window
+                        // turns into a route.
+                        let label = match self.group_chain.iter().position(|&c| c == i) {
+                            Some(k) => format!("{}\n{} fx{unit} · #{}", g.name, g.fixtures.len(), k + 1),
+                            None => format!("{}\n{} fx{unit}", g.name, g.fixtures.len()),
+                        };
                         let resp = ui.add_sized(
                             [86.0, 44.0],
                             egui::SelectableLabel::new(active, label),
@@ -142,6 +204,22 @@ impl App {
                             do_recall = Some((i, shift));
                         }
                         resp.context_menu(|ui| {
+                            // Lead with the truth about this group right now.
+                            if locked {
+                                ui.colored_label(
+                                    theme::WARN,
+                                    format!(
+                                        "Folded by order \"{}\"",
+                                        order_name.as_deref().unwrap_or("?")
+                                    ),
+                                );
+                                theme::hint(ui, "Its lights cannot be selected individually.");
+                            } else if g.mode == GroupMode::AsFixture {
+                                ui.colored_label(theme::ACCENT_SOFT, "Acts as one light");
+                            } else {
+                                theme::hint(ui, "Individual fixtures");
+                            }
+                            ui.separator();
                             if ui.button("Recall").clicked() {
                                 do_recall = Some((i, false));
                                 ui.close_menu();
@@ -162,6 +240,38 @@ impl App {
                                     .clicked()
                                 {
                                     do_mode = Some((i, mode));
+                                    ui.close_menu();
+                                }
+                            }
+                            if locked
+                                && ui
+                                    .button("Release from order")
+                                    .on_hover_text(
+                                        "Split the order's folded steps so these lights \
+                                         stand on their own again",
+                                    )
+                                    .clicked()
+                            {
+                                do_release = Some(g.fixtures.clone());
+                                ui.close_menu();
+                            }
+                            // Bulk edits over the shift-clicked chain, so a
+                            // whole route can be folded or freed in one go.
+                            if chain.len() > 1 && chain.contains(&i) {
+                                ui.separator();
+                                ui.label(format!("Chained groups ({})", chain.len()));
+                                if ui.button("All: individual fixtures").clicked() {
+                                    do_chain_mode = Some(GroupMode::Individual);
+                                    ui.close_menu();
+                                }
+                                if ui.button("All: one light each").clicked() {
+                                    do_chain_mode = Some(GroupMode::AsFixture);
+                                    ui.close_menu();
+                                }
+                                if chain_locked
+                                    && ui.button("All: release from order").clicked()
+                                {
+                                    do_release = Some(chain_fixtures.clone());
                                     ui.close_menu();
                                 }
                             }
@@ -192,6 +302,25 @@ impl App {
                 group::save_groups(&self.groups);
                 self.log.push(format!("Group \"{name}\": {}", mode.label()));
             }
+        }
+        if let Some(mode) = do_chain_mode {
+            let mut changed = 0;
+            for gi in &chain {
+                if let Some(g) = self.groups.get_mut(*gi) {
+                    if g.mode != mode {
+                        g.mode = mode;
+                        changed += 1;
+                    }
+                }
+            }
+            if changed > 0 {
+                group::save_groups(&self.groups);
+                self.log
+                    .push(format!("{changed} chained group(s): {}", mode.label()));
+            }
+        }
+        if let Some(fixtures) = do_release {
+            self.release_from_order(&fixtures);
         }
         if let Some(i) = do_delete {
             self.delete_group(i);

@@ -171,7 +171,7 @@ impl App {
         let mut do_fire: Option<(usize, usize)> = None;
         let mut do_delete_cue: Option<(usize, usize)> = None;
 
-        egui::Window::new("🎬 Stacks")
+        egui::Window::new("Stacks")
             .open(&mut open)
             .collapsible(true)
             .resizable(true)
@@ -253,7 +253,7 @@ impl App {
                     for f in Feature::ALL {
                         let on = self.record_mask.contains(&f);
                         if ui
-                            .selectable_label(on, f.icon())
+                            .selectable_label(on, f.short())
                             .on_hover_text(f.label())
                             .clicked()
                         {

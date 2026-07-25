@@ -38,7 +38,7 @@ impl App {
         let mut open = self.show_chases;
         let mut do_start = false;
         let mut do_stop = false;
-        egui::Window::new("🌀 Chases")
+        egui::Window::new("Chases")
             .open(&mut open)
             .collapsible(true)
             .resizable(true)

@@ -11,16 +11,23 @@ mod command;
 mod decks;
 mod dmxtest;
 mod groups;
+mod icons;
+mod orders;
 mod palettes;
 mod patchcfg;
 mod phasers;
 mod side;
 mod stacks;
+mod theme;
 mod top;
 mod views;
 mod windows;
 
 use eframe::egui;
+
+pub(crate) use theme::install as install_theme;
+pub(crate) use icons::window_icon;
+pub(crate) use theme::BACKDROP;
 
 use crate::showbuddy::Role;
 

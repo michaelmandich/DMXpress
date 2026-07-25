@@ -1,7 +1,7 @@
 //! Fixture mesh construction and painter projection. Beam haze is rendered by
 //! the Metal/wgpu volumetric callback in `volumetric`.
 
-use eframe::egui::{self, Color32, Rect, Shape, Stroke};
+use eframe::egui::{self, Color32, Pos2, Rect, Shape};
 
 use super::fixture::vis_curve;
 use super::math::{v3, Camera, V3};
@@ -164,10 +164,19 @@ pub(crate) fn add_cylinder(
     }
 }
 
-/// Project a mesh, shade by face normal, and return shapes far-to-near.
+/// Project a mesh, shade by face normal, and return it as a single triangle
+/// mesh with the far faces first.
+///
+/// The faces share one `egui::Mesh` instead of being one filled polygon each:
+/// egui anti-aliases every filled shape by feathering its own outline, so two
+/// abutting faces each fade out along the edge they share and leave a hairline
+/// seam between them. At macOS's 2x scaling that is invisible; at the
+/// fractional DPI Windows normally runs the feather lands mid-pixel and the
+/// seams read as thin lines all over the bodies. Raw triangles are not
+/// feathered at all, so shared edges stay watertight.
 pub(crate) fn mesh_shapes(cam: &Camera, rect: Rect, mesh: &Mesh) -> Vec<Shape> {
     let light = v3(0.35, 0.8, 0.5).norm();
-    let mut out: Vec<(f32, Shape)> = Vec::new();
+    let mut faces: Vec<(f32, Vec<Pos2>, Color32)> = Vec::new();
     for (pts, col, emissive) in &mesh.faces {
         let mut proj = Vec::with_capacity(pts.len());
         let mut depth = 0.0;
@@ -200,8 +209,28 @@ pub(crate) fn mesh_shapes(cam: &Camera, rect: Rect, mesh: &Mesh) -> Vec<Shape> {
                 col.a(),
             )
         };
-        out.push((depth, Shape::convex_polygon(proj, fill, Stroke::NONE)));
+        faces.push((depth, proj, fill));
     }
-    out.sort_by(|a, b| b.0.total_cmp(&a.0));
-    out.into_iter().map(|(_, s)| s).collect()
+    faces.sort_by(|a, b| b.0.total_cmp(&a.0));
+
+    let mut out = egui::Mesh::default();
+    for (_, proj, fill) in faces {
+        // Convex faces, so a fan from the first corner is a valid triangulation.
+        let base = out.vertices.len() as u32;
+        for pos in &proj {
+            out.vertices.push(egui::epaint::Vertex {
+                pos: *pos,
+                uv: egui::epaint::WHITE_UV,
+                color: fill,
+            });
+        }
+        for k in 1..proj.len() as u32 - 1 {
+            out.add_triangle(base, base + k, base + k + 1);
+        }
+    }
+    if out.is_empty() {
+        Vec::new()
+    } else {
+        vec![Shape::mesh(out)]
+    }
 }

@@ -4,7 +4,7 @@ use std::net::Ipv4Addr;
 
 use eframe::egui;
 
-use super::{apply_zoom, zoom_controls};
+use super::{apply_zoom, icons, theme, zoom_controls};
 use crate::app::App;
 use crate::net::NetCmd;
 
@@ -26,7 +26,25 @@ impl App {
     fn top_bar_contents(&mut self, ui: &mut egui::Ui) {
         {
             {
-                ui.heading("DMXpress");
+                // The DMXexpress mark, uploaded once and reused every frame.
+                let logo = self
+                    .logo
+                    .get_or_insert_with(|| icons::logo_texture(ui.ctx()));
+                match logo {
+                    Some(tex) => {
+                        let h = 30.0;
+                        let src = tex.size_vec2();
+                        let size = egui::vec2(h * src.x / src.y.max(1.0), h);
+                        ui.add(egui::Image::new(egui::load::SizedTexture::new(
+                            tex.id(),
+                            size,
+                        )))
+                        .on_hover_text("DMXexpress");
+                    }
+                    None => {
+                        ui.heading("DMXpress");
+                    }
+                }
                 ui.separator();
                 ui.label("Universe:");
                 if ui
@@ -43,20 +61,20 @@ impl App {
                     let _ = self.net.cmd_tx.send(NetCmd::Poll);
                 }
                 ui.separator();
-                let freeze_text = if self.frozen {
-                    "▶ UNFREEZE"
+                let (icon, text, fill) = if self.frozen {
+                    (icons::Icon::Play, "UNFREEZE", theme::ACCENT)
                 } else {
-                    "❄ FREEZE"
+                    (icons::Icon::Freeze, "FREEZE", theme::RAISED)
                 };
                 let freeze = ui
-                    .add(
-                        egui::Button::new(freeze_text)
-                            .fill(if self.frozen {
-                                egui::Color32::from_rgb(35, 125, 190)
-                            } else {
-                                egui::Color32::from_rgb(55, 65, 80)
-                            }),
-                    )
+                    .scope(|ui| {
+                        let v = &mut ui.visuals_mut().widgets;
+                        v.inactive.weak_bg_fill = fill;
+                        v.hovered.weak_bg_fill = fill.gamma_multiply(1.3);
+                        v.active.weak_bg_fill = fill.gamma_multiply(1.5);
+                        icons::tab(ui, icon, text, self.frozen)
+                    })
+                    .inner
                     .on_hover_text(
                         "Hold the exact current output and pause every oscillator, \
                          transition, chase, palette cycle, cue fade, and timed ramp. \
@@ -70,100 +88,116 @@ impl App {
                     self.rebuild_patch();
                 }
                 ui.separator();
-                if ui
-                    .selectable_label(self.show_artnet, "📡 Art-Net")
-                    .clicked()
-                {
-                    self.show_artnet = !self.show_artnet;
-                }
-                if ui
-                    .selectable_label(self.show_osc, "🌊 Oscillator")
-                    .clicked()
-                {
-                    self.show_osc = !self.show_osc;
-                }
-                if ui
-                    .selectable_label(self.show_transition, "⏱ Transition")
-                    .clicked()
-                {
-                    self.show_transition = !self.show_transition;
-                }
-                if ui
-                    .selectable_label(self.show_chases, "🌀 Chases")
-                    .clicked()
-                {
-                    self.show_chases = !self.show_chases;
-                }
-                if ui
-                    .selectable_label(self.show_groups, "👥 Groups")
-                    .clicked()
-                {
-                    self.show_groups = !self.show_groups;
-                }
-                if ui
-                    .selectable_label(self.show_palettes, "🎨 Palettes")
-                    .clicked()
-                {
-                    self.show_palettes = !self.show_palettes;
-                }
-                if ui
-                    .selectable_label(self.show_phasers, "🌈 Phasers")
-                    .clicked()
-                {
-                    self.show_phasers = !self.show_phasers;
-                }
-                if ui
-                    .selectable_label(self.show_beat, "🥁 Beat")
-                    .on_hover_text("Master BPM & tap-to-the-band sync")
-                    .clicked()
-                {
-                    self.show_beat = !self.show_beat;
-                }
-                if ui
-                    .selectable_label(self.show_stacks, "🎬 Stacks")
-                    .clicked()
-                {
-                    self.show_stacks = !self.show_stacks;
-                }
-                if ui
-                    .selectable_label(self.show_decks, "🎚 Decks")
-                    .clicked()
-                {
-                    self.show_decks = !self.show_decks;
-                }
-                if ui
-                    .selectable_label(self.show_command, "⌨ Cmd")
-                    .clicked()
-                {
-                    self.show_command = !self.show_command;
-                }
-                if ui
-                    .selectable_label(self.show_views, "🗂 Views")
-                    .clicked()
-                {
-                    self.show_views = !self.show_views;
-                }
-                if ui.selectable_label(self.show_log, "📜 Log").clicked() {
-                    self.show_log = !self.show_log;
-                }
-                if ui.selectable_label(self.show_patch, "🔌 Patch").clicked() {
-                    self.show_patch = !self.show_patch;
-                }
-                if ui
-                    .selectable_label(self.show_configs, "💾 Configs")
-                    .clicked()
-                {
-                    self.show_configs = !self.show_configs;
-                }
-                if ui
-                    .selectable_label(self.show_dmx_test, "🧪 DMX")
-                    .on_hover_text("Channel monitor & connection tester")
-                    .clicked()
-                {
-                    self.show_dmx_test = !self.show_dmx_test;
-                }
-                if ui.button("⚙ Settings").clicked() {
-                    self.show_settings = !self.show_settings;
+                // Every pool and panel toggle, in one consistent icon row.
+                let tabs: [(icons::Icon, &str, &mut bool, &str); 18] = [
+                    (
+                        icons::Icon::Artnet,
+                        "Art-Net",
+                        &mut self.show_artnet,
+                        "Output nodes and universe targeting",
+                    ),
+                    (
+                        icons::Icon::Wave,
+                        "Oscillator",
+                        &mut self.show_osc,
+                        "Per-channel waveform engine",
+                    ),
+                    (
+                        icons::Icon::Timer,
+                        "Transition",
+                        &mut self.show_transition,
+                        "Spatial sweep between looks",
+                    ),
+                    (
+                        icons::Icon::Chase,
+                        "Chases",
+                        &mut self.show_chases,
+                        "Spatial chase patterns",
+                    ),
+                    (
+                        icons::Icon::Group,
+                        "Groups",
+                        &mut self.show_groups,
+                        "Stored fixture selections",
+                    ),
+                    (
+                        icons::Icon::Order,
+                        "Orders",
+                        &mut self.show_orders,
+                        "Custom routes effects travel along",
+                    ),
+                    (
+                        icons::Icon::Palette,
+                        "Palettes",
+                        &mut self.show_palettes,
+                        "Referenced looks and colour cycles",
+                    ),
+                    (
+                        icons::Icon::Phaser,
+                        "Phasers",
+                        &mut self.show_phasers,
+                        "Spread effects across the selection",
+                    ),
+                    (
+                        icons::Icon::Beat,
+                        "Beat",
+                        &mut self.show_beat,
+                        "Master BPM, tap sync, and the time machine",
+                    ),
+                    (
+                        icons::Icon::Stack,
+                        "Stacks",
+                        &mut self.show_stacks,
+                        "Cue lists",
+                    ),
+                    (
+                        icons::Icon::Deck,
+                        "Decks",
+                        &mut self.show_decks,
+                        "Live playback faders",
+                    ),
+                    (
+                        icons::Icon::Command,
+                        "Cmd",
+                        &mut self.show_command,
+                        "Command line",
+                    ),
+                    (
+                        icons::Icon::Views,
+                        "Views",
+                        &mut self.show_views,
+                        "Saved workspace layouts",
+                    ),
+                    (icons::Icon::Log, "Log", &mut self.show_log, "Activity log"),
+                    (
+                        icons::Icon::Patch,
+                        "Patch",
+                        &mut self.show_patch,
+                        "Fixtures and addresses",
+                    ),
+                    (
+                        icons::Icon::Config,
+                        "Configs",
+                        &mut self.show_configs,
+                        "Whole-show save slots",
+                    ),
+                    (
+                        icons::Icon::Test,
+                        "DMX",
+                        &mut self.show_dmx_test,
+                        "Channel monitor & connection tester",
+                    ),
+                    (
+                        icons::Icon::Settings,
+                        "Settings",
+                        &mut self.show_settings,
+                        "Stage and render options",
+                    ),
+                ];
+                for (icon, label, flag, hint) in tabs {
+                    if icons::tab(ui, icon, label, *flag).on_hover_text(hint).clicked() {
+                        *flag = !*flag;
+                    }
                 }
             }
         }
@@ -233,7 +267,7 @@ impl App {
         }
         let screen = ctx.screen_rect();
         let mut open = self.show_log;
-        egui::Window::new("📜 Log")
+        egui::Window::new("Log")
             .open(&mut open)
             .collapsible(true)
             .resizable(true)

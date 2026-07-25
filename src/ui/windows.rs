@@ -159,7 +159,7 @@ impl App {
         let active_progress = self.transition_run.as_ref().map(|run| run.progress());
         let mut open = self.show_transition;
         let mut stop_at_current = false;
-        egui::Window::new("⏱ Transition")
+        egui::Window::new("Transition")
             .open(&mut open)
             .collapsible(true)
             .resizable(true)
@@ -282,7 +282,7 @@ impl App {
         }
         let screen = ctx.screen_rect();
         let mut open = self.show_osc;
-        egui::Window::new("🌊 Oscillator")
+        egui::Window::new("Oscillator")
             .open(&mut open)
             .collapsible(true)
             .resizable(true)
@@ -551,12 +551,12 @@ impl App {
                     let x = egui::lerp(rect.x_range(), k as f32 / 4.0);
                     painter.line_segment(
                         [egui::pos2(x, rect.top()), egui::pos2(x, rect.bottom())],
-                        egui::Stroke::new(1.0, egui::Color32::from_gray(35)),
+                        egui::Stroke::new(1.0, super::theme::EDGE),
                     );
                 }
                 painter.line_segment(
                     [egui::pos2(rect.left(), rect.center().y), egui::pos2(rect.right(), rect.center().y)],
-                    egui::Stroke::new(1.5, egui::Color32::from_gray(85)),
+                    egui::Stroke::new(1.5, super::theme::TEXT_DIM),
                 );
                 let to_screen = |x: f32, y: f32| {
                     egui::pos2(

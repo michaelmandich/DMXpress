@@ -77,7 +77,7 @@ impl App {
                         let stroke = if in_sel {
                             egui::Stroke::new(2.0 * z, egui::Color32::from_rgb(120, 180, 255))
                         } else {
-                            egui::Stroke::new(1.0 * z, egui::Color32::from_gray(60))
+                            egui::Stroke::new(1.0 * z, super::theme::EDGE)
                         };
                         painter.rect_stroke(rect, rounding, stroke);
                         let resp = resp.on_hover_text(format!(

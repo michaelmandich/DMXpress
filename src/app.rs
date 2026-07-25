@@ -8,6 +8,7 @@ use std::net::Ipv4Addr;
 use eframe::egui;
 
 use crate::net::{self, DiscoveredNode, NetCmd, NetEvent, NetHandle};
+use crate::order::{self, Order};
 use crate::oscillator::{self, CustomWaveform, Look};
 use crate::palette::{self, Feature, Palette, PaletteRef, PaletteSeq, SeqPattern};
 use crate::phaser::{self, Phaser};
@@ -20,8 +21,7 @@ use crate::stage::{self, StageView, V3};
 use crate::transition::{TransitionBinding, TransitionConfig, TransitionRun};
 use crate::chase::{ChaseConfig, ChaseRun, ChaseSource};
 use crate::engine::{Layer, Mixer};
-use crate::group::{self, Group};
-
+use crate::group::{self, Group, GroupMode};
 /// A timed per-channel ramp used to fade palettes and phasers in and out.
 #[derive(Debug, Clone, Copy)]
 pub struct Ramp {
@@ -93,6 +93,18 @@ pub(crate) struct App {
     pub groups: Vec<Group>,
     /// Name field for storing the current selection as a group.
     pub group_name: String,
+    /// Groups recalled since the last fresh click, in click order. Shift-
+    /// clicking group after group builds this chain, which the Orders window
+    /// turns into a custom effect route.
+    pub group_chain: Vec<usize>,
+    /// Custom effect routes (see `order.rs`).
+    pub orders: Vec<Order>,
+    /// Which order effects currently travel along; `None` = patch order.
+    pub active_order: Option<usize>,
+    /// Order selected for editing in the Orders window.
+    pub order_edit: Option<usize>,
+    /// Name field for storing a new order.
+    pub order_name: String,
     /// Referenced presets (the renamed grandMA3 Palette pool).
     pub palettes: Vec<Palette>,
     /// Next stable palette id (never reused, so references stay valid).
@@ -195,6 +207,21 @@ pub(crate) struct App {
     pub master_bpm_on: bool,
     /// Recent tap-tempo timestamps (cleared after a pause).
     pub beat_taps: Vec<Instant>,
+    /// Time machine: how fast animation time flows (magnitude only).
+    pub time_rate: f32,
+    /// Time machine: run every clock backwards.
+    pub time_reverse: bool,
+    /// Auto-flip the direction every `pendulum_beats`, so looks sweep out and
+    /// retrace instead of looping.
+    pub pendulum: bool,
+    pub pendulum_beats: f32,
+    /// Beat clock reading at the last direction flip.
+    pub(crate) pendulum_anchor: f32,
+    /// Throw the beat clock back on itself every `stutter_beats`, freezing the
+    /// look into a short repeating loop.
+    pub stutter: bool,
+    pub stutter_beats: f32,
+    pub(crate) stutter_anchor: Option<f32>,
     /// Cue lists (the renamed grandMA3 Sequence/cuelist pool).
     pub stacks: Vec<Stack>,
     /// Stack shown/edited in the Stacks window.
@@ -216,6 +243,7 @@ pub(crate) struct App {
     pub show_transition: bool,
     pub show_chases: bool,
     pub show_groups: bool,
+    pub show_orders: bool,
     pub show_beat: bool,
     pub show_palettes: bool,
     pub show_phasers: bool,
@@ -266,6 +294,9 @@ pub(crate) struct App {
     pub sel_channels: HashSet<usize>,
     /// Independent UI zoom for each major panel (1.0 = default).
     pub zoom: PanelZoom,
+    /// The toolbar logo, uploaded on first paint. `Some(None)` means the
+    /// embedded PNG failed to decode, so the text wordmark is used instead.
+    pub(crate) logo: Option<Option<egui::TextureHandle>>,
 }
 
 /// Per-panel text/element scale factors.
@@ -277,6 +308,7 @@ pub(crate) struct PanelZoom {
     pub osc: f32,
     pub transition: f32,
     pub groups: f32,
+    pub orders: f32,
     pub palettes: f32,
     pub phasers: f32,
     pub stacks: f32,
@@ -293,6 +325,7 @@ impl Default for PanelZoom {
             osc: 1.0,
             transition: 1.0,
             groups: 1.0,
+            orders: 1.0,
             palettes: 1.0,
             phasers: 1.0,
             stacks: 1.0,
@@ -427,6 +460,11 @@ impl App {
             mixer: Mixer::new(),
             groups: group::load_groups(),
             group_name: String::new(),
+            group_chain: Vec::new(),
+            orders: order::load_orders(),
+            active_order: None,
+            order_edit: None,
+            order_name: String::new(),
             palettes,
             next_palette_id,
             palette_name: String::new(),
@@ -481,6 +519,14 @@ impl App {
             master_bpm: 120.0,
             master_bpm_on: false,
             beat_taps: Vec::new(),
+            time_rate: 1.0,
+            time_reverse: false,
+            pendulum: false,
+            pendulum_beats: 4.0,
+            pendulum_anchor: 0.0,
+            stutter: false,
+            stutter_beats: 0.5,
+            stutter_anchor: None,
             stacks: stack::load_stacks(),
             cur_stack: None,
             cue_fade: 3.0,
@@ -495,6 +541,7 @@ impl App {
             show_transition: false,
             show_chases: false,
             show_groups: false,
+            show_orders: false,
             show_beat: false,
             show_palettes: false,
             show_phasers: false,
@@ -523,6 +570,7 @@ impl App {
             new_show_reset_layout: true,
             sel_channels: HashSet::new(),
             zoom: PanelZoom::default(),
+            logo: None,
         }
     }
 
@@ -638,6 +686,7 @@ impl App {
                 .then(|| self.showbuddy_patch.clone()),
             excluded_fixtures: self.excluded_fixtures.clone(),
             groups: self.groups.clone(),
+            orders: self.orders.clone(),
             palettes: self.palettes.clone(),
             phasers: self.phasers.clone(),
             user_presets: self.user_presets.clone(),
@@ -686,6 +735,11 @@ impl App {
         self.stage
             .import_layout(&self.patch, &self.settings, cfg.layout);
         self.groups = cfg.groups;
+        self.orders = cfg.orders;
+        order::save_orders(&self.orders);
+        self.active_order = None;
+        self.order_edit = None;
+        self.group_chain.clear();
         group::save_groups(&self.groups);
         self.palettes = cfg.palettes;
         self.next_palette_id = self.palettes.iter().map(|p| p.id).max().map_or(0, |m| m + 1);
@@ -717,12 +771,157 @@ impl App {
 
     /// Fixtures that have a resolved stage position, paired with that position.
     fn fixture_positions(&self) -> Vec<(usize, V3)> {
-        self.stage
-            .fixture_positions(&self.patch)
-            .into_iter()
+        let mut pos = self.stage.fixture_positions(&self.patch);
+        // A super-fixture occupies a single place in space, so chases and
+        // spatial transitions sweep past it as one light instead of rippling
+        // through its members.
+        for bundle in self.super_fixtures() {
+            let mut sum = V3::default();
+            let mut n = 0.0;
+            for &fi in bundle {
+                if let Some(Some(p)) = pos.get(fi) {
+                    sum = sum + *p;
+                    n += 1.0;
+                }
+            }
+            if n > 0.0 {
+                let center = sum * (1.0 / n);
+                for &fi in bundle {
+                    if let Some(slot) = pos.get_mut(fi) {
+                        if slot.is_some() {
+                            *slot = Some(center);
+                        }
+                    }
+                }
+            }
+        }
+        pos.into_iter()
             .enumerate()
-            .filter_map(|(fi, pos)| pos.map(|pos| (fi, pos)))
+            .filter_map(|(fi, p)| p.map(|p| (fi, p)))
             .collect()
+    }
+
+    /// Lights the active order welds into multi-light steps. Touching any one
+    /// of them drags in the rest, so they cannot be addressed individually
+    /// while that order is active — whatever mode their group advertises.
+    pub(crate) fn order_bound_fixtures(&self) -> HashSet<usize> {
+        let mut out = HashSet::new();
+        if let Some(o) = self.active_order.and_then(|i| self.orders.get(i)) {
+            for step in o.steps.iter().filter(|s| s.is_unit()) {
+                out.extend(step.fixtures.iter().copied());
+            }
+        }
+        out
+    }
+
+    /// Fixture bundles that behave as one light no matter what is selected:
+    /// the multi-fixture steps of the active order, then every group in "One
+    /// fixture" mode. Order steps come first because an explicit order is the
+    /// user's final word on what travels together — which is also how a
+    /// fixture belonging to several groups stops being ambiguous.
+    fn super_fixtures(&self) -> Vec<&[usize]> {
+        let mut out: Vec<&[usize]> = Vec::new();
+        let mut claimed: HashSet<usize> = HashSet::new();
+        if let Some(o) = self.active_order.and_then(|i| self.orders.get(i)) {
+            for step in &o.steps {
+                if step.is_unit() && step.fixtures.iter().all(|fi| !claimed.contains(fi)) {
+                    claimed.extend(step.fixtures.iter().copied());
+                    out.push(&step.fixtures);
+                }
+            }
+        }
+        for g in &self.groups {
+            if g.mode == GroupMode::AsFixture
+                && g.fixtures.len() > 1
+                && g.fixtures.iter().all(|fi| !claimed.contains(fi))
+            {
+                claimed.extend(g.fixtures.iter().copied());
+                out.push(&g.fixtures);
+            }
+        }
+        out
+    }
+
+    /// Split `fixtures` into effect units — the slots a spread fans across.
+    ///
+    /// The active order goes first: its steps decide both the sequence and
+    /// which fixtures share a phase, so overlapping groups resolve cleanly.
+    /// Then any "One fixture" group still wholly unclaimed collapses into a
+    /// unit. Whatever is left keeps patch order, one slot each.
+    pub(crate) fn effect_units(&self, fixtures: &[usize]) -> Vec<Vec<usize>> {
+        let mut remaining: HashSet<usize> = fixtures.iter().copied().collect();
+        let mut units: Vec<Vec<usize>> = Vec::new();
+        if let Some(o) = self.active_order.and_then(|i| self.orders.get(i)) {
+            for step in &o.steps {
+                let unit: Vec<usize> = step
+                    .fixtures
+                    .iter()
+                    .copied()
+                    .filter(|fi| remaining.remove(fi))
+                    .collect();
+                if !unit.is_empty() {
+                    units.push(unit);
+                }
+            }
+        }
+        for group in &self.groups {
+            if group.mode == GroupMode::AsFixture
+                && !group.fixtures.is_empty()
+                && group.fixtures.iter().all(|fi| remaining.contains(fi))
+            {
+                for fi in &group.fixtures {
+                    remaining.remove(fi);
+                }
+                units.push(group.fixtures.clone());
+            }
+        }
+        for &fi in fixtures {
+            if remaining.remove(&fi) {
+                units.push(vec![fi]);
+            }
+        }
+        units
+    }
+
+    /// A super-fixture behaves as a single light, so the selection can never
+    /// hold only part of one: touching any member pulls in the rest. Also
+    /// forgets the group chain once nothing is selected, so the next click
+    /// starts a fresh route.
+    pub(crate) fn sync_selection_units(&mut self) {
+        if self.stage.selection.is_empty() {
+            self.group_chain.clear();
+        }
+        let selected: HashSet<usize> = self.stage.selected_fixtures().into_iter().collect();
+        let missing: Vec<usize> = self
+            .super_fixtures()
+            .into_iter()
+            .filter(|b| b.iter().any(|fi| selected.contains(fi)))
+            .flat_map(|b| b.iter().copied())
+            .filter(|fi| !selected.contains(fi))
+            .collect();
+        for fi in missing {
+            self.stage.add_fixture_to_selection(fi);
+        }
+    }
+
+    /// Put every group the selection fully covers into `mode`. Returns how
+    /// many groups changed.
+    pub(crate) fn set_covered_groups_mode(&mut self, mode: GroupMode) -> usize {
+        let selected: HashSet<usize> = self.stage.selected_fixtures().into_iter().collect();
+        let mut changed = 0;
+        for g in &mut self.groups {
+            if g.fixtures.is_empty() || g.mode == mode {
+                continue;
+            }
+            if g.fixtures.iter().all(|fi| selected.contains(fi)) {
+                g.mode = mode;
+                changed += 1;
+            }
+        }
+        if changed > 0 {
+            group::save_groups(&self.groups);
+        }
+        changed
     }
 
     /// Freeze or resume the complete show transport without rewriting effect
@@ -782,6 +981,7 @@ impl App {
         self.chases_window(ctx);
         self.beat_window(ctx);
         self.groups_window(ctx);
+        self.orders_window(ctx);
         self.palettes_window(ctx);
         self.phasers_window(ctx);
         self.stacks_window(ctx);
@@ -1212,15 +1412,22 @@ impl App {
                 }
             }
         }
-        // Group the addresses by fixture (patch order) so spacing can offset
-        // each fixture's position in the cycle.
+        // Group the addresses by effect unit — the active order's steps, then
+        // whatever is left in patch order — so spacing can offset each unit's
+        // position in the cycle. A super-fixture takes one slot, so the cycle
+        // treats it as a single light.
+        let all: Vec<usize> = (0..self.patch.fixtures.len()).collect();
         let mut fix_addrs: Vec<Vec<usize>> = Vec::new();
         let mut claimed: HashSet<usize> = HashSet::new();
-        for f in &self.patch.fixtures {
-            let from0 = f.from as usize - 1;
-            let mine: Vec<usize> = (from0..from0 + f.channel_count())
-                .filter(|a| addrs.contains(a))
-                .collect();
+        for unit in self.effect_units(&all) {
+            let mut mine: Vec<usize> = Vec::new();
+            for fi in unit {
+                let Some(f) = self.patch.fixtures.get(fi) else {
+                    continue;
+                };
+                let from0 = f.from as usize - 1;
+                mine.extend((from0..from0 + f.channel_count()).filter(|a| addrs.contains(a)));
+            }
             if !mine.is_empty() {
                 claimed.extend(mine.iter().copied());
                 fix_addrs.push(mine);
@@ -1314,6 +1521,8 @@ impl App {
 impl eframe::App for App {
     fn update(&mut self, ctx: &egui::Context, _frame: &mut eframe::Frame) {
         self.drain_events();
+        // Keep super-fixtures whole before anything reads the selection.
+        self.sync_selection_units();
 
         // A true sample-and-hold: no renderer is called because renderers own
         // their clocks. Art-Net keeps transmitting the unchanged DMX buffer.
@@ -1335,6 +1544,9 @@ impl eframe::App for App {
             }
         }
 
+        // Direction, rate, pendulum and stutter, published for every clock.
+        self.advance_time_machine();
+
         // Fixture world positions are only needed to place the chase band.
         let chase_active = self.chase.enabled && self.chase_run.is_some();
         let positions = if chase_active {
@@ -1355,7 +1567,8 @@ impl eframe::App for App {
             } else {
                 self.cycle_tempo
             };
-            self.cycle_beats += dt * bpm.max(1.0) / 60.0;
+            // Palette cycles ride the time machine along with everything else.
+            self.cycle_beats += dt * oscillator::time_warp() * bpm.max(1.0) / 60.0;
             if self.cycle_master_beat && self.cycle_beat_nudge.abs() > 0.0001 {
                 let step = self.cycle_beat_nudge * (1.0 - (-4.0 * dt).exp());
                 self.cycle_beats += step;

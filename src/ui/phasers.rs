@@ -6,7 +6,7 @@ use eframe::egui;
 
 use std::collections::HashSet;
 
-use super::{apply_zoom, zoom_controls};
+use super::{apply_zoom, theme, zoom_controls};
 use crate::app::{App, Ramp};
 use crate::group::GroupMode;
 use crate::net;
@@ -14,6 +14,75 @@ use crate::oscillator::{subdiv_label, Osc, SPEED_CHOICES};
 use crate::palette::Feature;
 use crate::phaser::{self, spread_phase, ChannelFilter, ComponentMode, Phaser, PhaserMode};
 use crate::showbuddy::{Band, Role};
+
+/// The "one light or many" row inside the shared-motion frame: how the current
+/// selection breaks into effect units, and a switch to fold the groups it
+/// covers into single super-fixtures.
+fn group_unit_row(
+    ui: &mut egui::Ui,
+    set_mode: &mut Option<GroupMode>,
+    units: usize,
+    order: Option<&str>,
+    covered: &[(String, GroupMode)],
+) {
+    ui.horizontal_wrapped(|ui| {
+        ui.label("Effect units");
+        theme::pill(ui, &units.to_string(), theme::ACCENT_SOFT);
+        ui.label("along");
+        match order {
+            Some(name) => {
+                theme::pill(ui, name, theme::ACCENT_SOFT);
+            }
+            None => {
+                theme::pill(ui, "patch order", theme::TEXT_DIM);
+            }
+        }
+        ui.weak("— pick a route in the Orders window.");
+    });
+    if covered.is_empty() {
+        theme::hint(
+            ui,
+            "Select every light of a group to fold it into one unit from here.",
+        );
+        return;
+    }
+    let as_fixture = covered
+        .iter()
+        .filter(|(_, m)| *m == GroupMode::AsFixture)
+        .count();
+    ui.horizontal_wrapped(|ui| {
+        for (name, mode) in covered {
+            let on = *mode == GroupMode::AsFixture;
+            theme::pill(
+                ui,
+                name,
+                if on { theme::ACCENT_SOFT } else { theme::TEXT_DIM },
+            );
+        }
+    });
+    ui.horizontal_wrapped(|ui| {
+        if ui
+            .add_enabled(
+                as_fixture < covered.len(),
+                egui::Button::new("Fold into one light"),
+            )
+            .on_hover_text(
+                "The whole group takes a single phase slot and moves together, \
+                 and selecting any one of its lights selects all of them",
+            )
+            .clicked()
+        {
+            *set_mode = Some(GroupMode::AsFixture);
+        }
+        if ui
+            .add_enabled(as_fixture > 0, egui::Button::new("Back to individual"))
+            .on_hover_text("Every light in the group gets its own phase again")
+            .clicked()
+        {
+            *set_mode = Some(GroupMode::Individual);
+        }
+    });
+}
 
 impl App {
     /// Arm the phaser's oscillators across every selected fixture's channels of
@@ -59,24 +128,7 @@ impl App {
         // Build effect units. Selected groups marked "One fixture" become a
         // single phase slot; all their members receive that slot's phase.
         // Remaining fixtures are one slot each.
-        let selected: HashSet<usize> = fixtures.iter().copied().collect();
-        let mut claimed: HashSet<usize> = HashSet::new();
-        let mut units: Vec<Vec<usize>> = Vec::new();
-        for group in &self.groups {
-            if group.mode == GroupMode::AsFixture
-                && !group.fixtures.is_empty()
-                && group.fixtures.iter().all(|fi| selected.contains(fi))
-                && group.fixtures.iter().all(|fi| !claimed.contains(fi))
-            {
-                claimed.extend(group.fixtures.iter().copied());
-                units.push(group.fixtures.clone());
-            }
-        }
-        for &fi in &fixtures {
-            if claimed.insert(fi) {
-                units.push(vec![fi]);
-            }
-        }
+        let units = self.effect_units(&fixtures);
         let mut fixture_phase = std::collections::HashMap::new();
         for (k, unit) in units.iter().enumerate() {
             let phase = spread_phase(k, units.len(), ph.spread, ph.wings as usize);
@@ -490,10 +542,11 @@ impl App {
         let mut do_bind: Option<usize> = None;
         let mut do_unbind: Option<usize> = None;
         let mut do_master_beat: Option<usize> = None;
+        let mut set_groups_mode: Option<GroupMode> = None;
         let edit_before = self.phaser_edit.clone();
         let name_before = self.phaser_name.clone();
 
-        egui::Window::new("🌈 Phasers")
+        egui::Window::new("Phasers")
             .open(&mut open)
             .collapsible(true)
             .resizable(true)
@@ -505,6 +558,21 @@ impl App {
                 apply_zoom(ui, self.zoom.phasers);
 
                 let sel = self.stage.selected_fixtures();
+                // How the selection breaks into effect units, and which groups
+                // it covers entirely (only those can be switched wholesale).
+                let unit_count = self.effect_units(&sel).len();
+                let order_name = self
+                    .active_order
+                    .and_then(|i| self.orders.get(i))
+                    .map(|o| o.name.clone());
+                let covered_groups: Vec<(String, GroupMode)> = self
+                    .groups
+                    .iter()
+                    .filter(|g| {
+                        !g.fixtures.is_empty() && g.fixtures.iter().all(|fi| sel.contains(fi))
+                    })
+                    .map(|g| (g.name.clone(), g.mode))
+                    .collect();
                 // Channel-type chips: the same grouping as the collective
                 // channel list — built from the selected fixtures (or the
                 // whole patch when nothing is selected).
@@ -583,7 +651,7 @@ impl App {
                                     .on_hover_text("Phaser card colour");
                             });
                         });
-                        ui.label(egui::RichText::new("Common channels").strong().color(egui::Color32::from_gray(220)));
+                        ui.label(egui::RichText::new("Common channels").strong().color(theme::TEXT));
                         ui.horizontal_wrapped(|ui| {
                             for (key, label) in &easy {
                                 let on = e.components.iter().any(|c| c.target.eq_ignore_ascii_case(key))
@@ -645,8 +713,8 @@ impl App {
                 let mut remove_component = None;
                 for (index, component) in e.components.iter_mut().enumerate() {
                     egui::Frame::none()
-                        .fill(egui::Color32::from_rgb(28, 30, 39))
-                        .stroke(egui::Stroke::new(1.0, egui::Color32::from_rgb(62, 67, 86)))
+                        .fill(theme::RAISED)
+                        .stroke(egui::Stroke::new(1.0, theme::EDGE))
                         .rounding(8.0)
                         .inner_margin(10.0)
                         .show(ui, |ui| {
@@ -734,7 +802,8 @@ impl App {
 
                 // Shared motion controls fan all animated components across fixtures.
                 egui::Frame::none()
-                    .fill(egui::Color32::from_rgb(23, 25, 32))
+                    .fill(theme::WELL)
+                    .stroke(egui::Stroke::new(1.0, theme::EDGE))
                     .rounding(7.0)
                     .inner_margin(8.0)
                     .show(ui, |ui| {
@@ -751,6 +820,14 @@ impl App {
                                 ui.selectable_value(&mut e.mode, PhaserMode::Add, "Flat add");
                             }
                         });
+                        ui.add_space(4.0);
+                        group_unit_row(
+                            ui,
+                            &mut set_groups_mode,
+                            unit_count,
+                            order_name.as_deref(),
+                            &covered_groups,
+                        );
                     });
 
                 ui.separator();
@@ -1171,6 +1248,19 @@ impl App {
                 });
             });
         self.show_phasers = open;
+
+        if let Some(mode) = set_groups_mode {
+            let n = self.set_covered_groups_mode(mode);
+            if n > 0 {
+                self.log.push(format!(
+                    "{n} group(s) now behave as {}",
+                    match mode {
+                        GroupMode::AsFixture => "one light",
+                        GroupMode::Individual => "individual lights",
+                    }
+                ));
+            }
+        }
 
         // Edit mode: write editor changes straight back into the selected
         // pool tile (and rename it from the name field), saving as we go. If

@@ -28,7 +28,7 @@ impl App {
         let buf = *self.net.dmx.lock();
         let overrides = &mut self.test_overrides;
 
-        egui::Window::new("🧪 DMX Monitor")
+        egui::Window::new("DMX Monitor")
             .open(&mut open)
             .resizable(true)
             .default_size([380.0, 460.0])
@@ -70,7 +70,7 @@ impl App {
                                     egui::vec2(110.0, 11.0),
                                     Sense::hover(),
                                 );
-                                ui.painter().rect_filled(rect, 2.0, Color32::from_gray(28));
+                                ui.painter().rect_filled(rect, 2.0, crate::ui::theme::WELL);
                                 if v > 0 {
                                     let w = rect.width() * v as f32 / 255.0;
                                     let col = if overrides.contains_key(&a) {

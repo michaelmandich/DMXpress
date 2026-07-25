@@ -17,6 +17,7 @@ impl App {
             transition: self.show_transition,
             chases: self.show_chases,
             groups: self.show_groups,
+            orders: self.show_orders,
             palettes: self.show_palettes,
             phasers: self.show_phasers,
             stacks: self.show_stacks,
@@ -37,6 +38,7 @@ impl App {
         self.show_transition = v.transition;
         self.show_chases = v.chases;
         self.show_groups = v.groups;
+        self.show_orders = v.orders;
         self.show_palettes = v.palettes;
         self.show_phasers = v.phasers;
         self.show_stacks = v.stacks;
@@ -56,7 +58,7 @@ impl App {
         let mut do_delete: Option<usize> = None;
         let mut do_save = false;
 
-        egui::Window::new("🗂 Views")
+        egui::Window::new("Views")
             .open(&mut open)
             .default_width(220.0)
             .show(ctx, |ui| {

@@ -51,12 +51,12 @@ impl ChaseKind {
 
     pub fn label(self) -> &'static str {
         match self {
-            ChaseKind::Sphere => "🌀 Sphere",
-            ChaseKind::Linear => "➡ Linear",
-            ChaseKind::Boomerang => "↔ Boomerang",
-            ChaseKind::Stripes => "▥ Stripes",
-            ChaseKind::Glitter => "✨ Glitter",
-            ChaseKind::Pulse => "💥 Pulse",
+            ChaseKind::Sphere => "Sphere",
+            ChaseKind::Linear => "Linear",
+            ChaseKind::Boomerang => "Boomerang",
+            ChaseKind::Stripes => "Stripes",
+            ChaseKind::Glitter => "Glitter",
+            ChaseKind::Pulse => "Pulse",
         }
     }
 }

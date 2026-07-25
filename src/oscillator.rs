@@ -4,6 +4,24 @@
 use std::collections::HashMap;
 use std::time::Instant;
 
+/// Global multiplier on the flow of animation time, driven by the Beat
+/// window's time machine: 1 = real time, 2 = double speed, 0.25 = slow motion,
+/// and negative values run every clock backwards. It scales the per-frame
+/// delta rather than the tempo, so oscillator phase, free-run cycles and
+/// per-channel local clocks all bend together and nothing jumps.
+///
+/// Bits of an `f32`, because looks integrate their own clocks from several
+/// call sites and threading the factor through all of them would buy nothing.
+static TIME_WARP: std::sync::atomic::AtomicU32 = std::sync::atomic::AtomicU32::new(0x3f80_0000);
+
+pub fn set_time_warp(v: f32) {
+    TIME_WARP.store(v.to_bits(), std::sync::atomic::Ordering::Relaxed);
+}
+
+pub fn time_warp() -> f32 {
+    f32::from_bits(TIME_WARP.load(std::sync::atomic::Ordering::Relaxed))
+}
+
 use serde::{Deserialize, Serialize};
 
 use crate::net::Frame;
@@ -249,6 +267,12 @@ impl Look {
         self.beats
     }
 
+    /// Jump the shared beat clock by `d` beats. Used for manual nudges and for
+    /// the stutter loop, which repeatedly throws the clock back on itself.
+    pub fn shift_beats(&mut self, d: f32) {
+        self.beats += d;
+    }
+
     /// Rebase wall-clock sampling without changing either integrated phase.
     /// Used by the global transport after a freeze so the paused duration is
     /// never interpreted as animation time.
@@ -264,15 +288,18 @@ impl Look {
             self.last = Instant::now();
             return self.base;
         }
-        let dt = self.last.elapsed().as_secs_f32().min(0.25);
+        let real_dt = self.last.elapsed().as_secs_f32().min(0.25);
         self.last = Instant::now();
+        let dt = real_dt * time_warp();
         self.beats += dt * self.tempo / 60.0 * self.master_speed;
         self.cycles += dt * (0.25 + self.speed * 3.75) * self.master_speed;
 
         // Settle most of a tap correction in roughly one second. Repeated
         // taps continuously refine the destination instead of jumping phase.
+        // This eases on real time so a slowed or reversed clock still lands on
+        // the beat you tapped.
         if self.beat_nudge.abs() > 0.0001 {
-            let step = self.beat_nudge * (1.0 - (-4.0 * dt).exp());
+            let step = self.beat_nudge * (1.0 - (-4.0 * real_dt).exp());
             self.beats += step;
             self.beat_nudge -= step;
         } else {

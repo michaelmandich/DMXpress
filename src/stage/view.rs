@@ -311,6 +311,17 @@ impl StageView {
         self.last_selected = Some(fi);
     }
 
+    /// Add every instance of patch fixture `fi` without disturbing the click
+    /// anchor. Used to complete a "One fixture" group behind the user's back,
+    /// where moving the anchor would break shift-range selection.
+    pub fn add_fixture_to_selection(&mut self, fi: usize) {
+        for (i, inst) in self.instances.iter().enumerate() {
+            if inst.fixture == fi {
+                self.selection.insert(i);
+            }
+        }
+    }
+
     /// ⇧-click in the fixture list: toggle all instances of fixture `fi`.
     pub fn toggle_fixture(&mut self, fi: usize) {
         let idxs: Vec<usize> = self

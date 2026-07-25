@@ -9,6 +9,7 @@ use serde::{Deserialize, Serialize};
 use std::path::PathBuf;
 
 use crate::group::Group;
+use crate::order::Order;
 use crate::palette::Palette;
 use crate::phaser::Phaser;
 use crate::preset::UserPreset;
@@ -46,6 +47,10 @@ pub struct Configuration {
     pub excluded_fixtures: Vec<String>,
     #[serde(default)]
     pub groups: Vec<Group>,
+    /// Custom effect routes. Absent in configurations written before orders
+    /// existed, in which case effects simply fan out in patch order.
+    #[serde(default)]
+    pub orders: Vec<Order>,
     #[serde(default)]
     pub palettes: Vec<Palette>,
     #[serde(default)]

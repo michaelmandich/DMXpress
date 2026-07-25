@@ -261,7 +261,7 @@ impl App {
         let mut do_folder_add = false;
         let mut do_folder_delete: Option<String> = None;
 
-        egui::Window::new("🎨 Palettes")
+        egui::Window::new("Palettes")
             .open(&mut open)
             .collapsible(true)
             .resizable(true)
@@ -274,7 +274,7 @@ impl App {
                 // Feature tabs.
                 ui.horizontal_wrapped(|ui| {
                     for feat in Feature::ALL {
-                        let label = format!("{} {}", feat.icon(), feat.label());
+                        let label = feat.label().to_string();
                         if ui
                             .selectable_label(self.palette_tab == feat, label)
                             .clicked()
@@ -564,12 +564,12 @@ impl App {
                             ))
                             .size(11.0);
                             let mut btn = egui::Button::new(text)
-                                .fill(egui::Color32::from_rgb(55, 45, 70))
+                                .fill(super::theme::RAISED)
                                 .min_size([84.0, 40.0].into());
                             if running {
                                 btn = btn.stroke(egui::Stroke::new(
                                     2.0,
-                                    egui::Color32::from_rgb(250, 165, 60),
+                                    super::theme::ACCENT_SOFT,
                                 ));
                             }
                             let resp = if drag_mode {
