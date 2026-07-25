@@ -59,6 +59,7 @@ pub enum Icon {
     Group,
     Order,
     Scene,
+    Audio,
     Palette,
     Phaser,
     Beat,
@@ -150,9 +151,15 @@ pub fn draw(painter: &egui::Painter, rect: Rect, icon: Icon, color: Color32) {
                 painter.circle_filled(p(r, x, y), side * 0.09, color);
             }
         }
+        // Equaliser bars mid-dance.
+        Icon::Audio => {
+            let bar = Stroke::new((side * 0.13).clamp(1.5, 3.0), color);
+            for (x, h) in [(0.24f32, 0.38f32), (0.44, 0.66), (0.64, 0.48), (0.84, 0.76)] {
+                path(painter, r, bar, &[(x, 0.86), (x, 0.86 - h)]);
+            }
+        }
         // Three offset cards: looks stacked on top of one another.
-        Icon::Scene => {
-            for (i, (x, y)) in [(0.36f32, 0.34f32), (0.5, 0.5), (0.64, 0.66)]
+        Icon::Scene => {            for (i, (x, y)) in [(0.36f32, 0.34f32), (0.5, 0.5), (0.64, 0.66)]
                 .iter()
                 .enumerate()
             {

@@ -17,6 +17,9 @@ serde_json = "1"
 bytemuck = { version = "1", features = ["derive"] }
 # Only used to decode the embedded logo at startup.
 image = { version = "0.25", default-features = false, features = ["png"] }
+# Audio-reactive triggers: capture (incl. WASAPI loopback) and spectrum.
+cpal = "0.15"
+realfft = "3"
 
 [profile.release]
 opt-level = 3

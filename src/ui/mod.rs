@@ -5,6 +5,7 @@
 //! - `windows` — Settings, reset confirmation, floating Oscillator window
 
 mod central;
+mod audio;
 mod beat;
 mod chases;
 mod command;

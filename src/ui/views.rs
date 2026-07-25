@@ -19,6 +19,7 @@ impl App {
             groups: self.show_groups,
             orders: self.show_orders,
             scenes: self.show_scenes,
+            audio: self.show_audio,
             palettes: self.show_palettes,
             phasers: self.show_phasers,
             stacks: self.show_stacks,
@@ -41,6 +42,7 @@ impl App {
         self.show_groups = v.groups;
         self.show_orders = v.orders;
         self.show_scenes = v.scenes;
+        self.show_audio = v.audio;
         self.show_palettes = v.palettes;
         self.show_phasers = v.phasers;
         self.show_stacks = v.stacks;

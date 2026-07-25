@@ -8,6 +8,7 @@ use std::net::Ipv4Addr;
 use eframe::egui;
 
 use crate::net::{self, DiscoveredNode, NetCmd, NetEvent, NetHandle};
+use crate::audio::{self, AudioEngine, AudioTrigger};
 use crate::order::{self, Order};
 use crate::oscillator::{self, CustomWaveform, Look};
 use crate::palette::{self, Feature, Palette, PaletteRef, PaletteSeq, SeqPattern};
@@ -232,6 +233,24 @@ pub(crate) struct App {
     pub scene_name: String,
     /// Play the pool in order, each scene handing to the next on its hold.
     pub scene_chain: bool,
+    /// Live audio capture and analysis (spectrum, beat tracker).
+    pub audio: AudioEngine,
+    /// Band-threshold rules painting looks over the show (see `audio.rs`).
+    pub audio_triggers: Vec<AudioTrigger>,
+    /// Detected beats press the TAP button automatically.
+    pub audio_follow_beat: bool,
+    /// Last beat counter value folded into the tap machinery.
+    pub audio_beat_seen: u64,
+    /// When the last detected beat arrived (drives the UI flash).
+    pub audio_beat_flash: Option<Instant>,
+    /// Wall clock of the last audio-trigger evaluation (for envelopes).
+    pub audio_last_eval: Option<Instant>,
+    /// Trigger selected on the graph for band/threshold dragging.
+    pub audio_sel: Option<usize>,
+    /// Capture sources found at the last refresh.
+    pub audio_devices: Vec<audio::AudioSource>,
+    /// Device name remembered from `audio.json` for preselection.
+    pub audio_device_pref: Option<(String, bool)>,
     /// Stack shown/edited in the Stacks window.
     pub cur_stack: Option<usize>,
     /// Default fade applied to newly recorded cues.
@@ -253,6 +272,7 @@ pub(crate) struct App {
     pub show_groups: bool,
     pub show_orders: bool,
     pub show_scenes: bool,
+    pub show_audio: bool,
     pub show_beat: bool,
     pub show_palettes: bool,
     pub show_phasers: bool,
@@ -319,6 +339,7 @@ pub(crate) struct PanelZoom {
     pub groups: f32,
     pub orders: f32,
     pub scenes: f32,
+    pub audio: f32,
     pub palettes: f32,
     pub phasers: f32,
     pub stacks: f32,
@@ -337,6 +358,7 @@ impl Default for PanelZoom {
             groups: 1.0,
             orders: 1.0,
             scenes: 1.0,
+            audio: 1.0,
             palettes: 1.0,
             phasers: 1.0,
             stacks: 1.0,
@@ -446,6 +468,7 @@ impl App {
         let next_palette_id = palettes.iter().map(|p| p.id).max().map_or(0, |m| m + 1);
         let seq_store = palette::load_seqs();
         let preset_store = preset::load_presets();
+        let audio_file = audio::load_audio();
         Self {
             net,
             nodes: Vec::new(),
@@ -542,6 +565,15 @@ impl App {
             scenes: scene::load_scenes(),
             scene_name: String::new(),
             scene_chain: false,
+            audio: AudioEngine::new(),
+            audio_triggers: audio_file.triggers,
+            audio_follow_beat: audio_file.follow_beat,
+            audio_beat_seen: 0,
+            audio_beat_flash: None,
+            audio_last_eval: None,
+            audio_sel: None,
+            audio_devices: Vec::new(),
+            audio_device_pref: audio_file.device.map(|d| (d, audio_file.loopback)),
             cur_stack: None,
             cue_fade: 3.0,
             grand_master: 1.0,
@@ -557,6 +589,7 @@ impl App {
             show_groups: false,
             show_orders: false,
             show_scenes: false,
+            show_audio: false,
             show_beat: false,
             show_palettes: false,
             show_phasers: false,
@@ -861,6 +894,45 @@ impl App {
         out
     }
 
+    /// What an audio trigger paints: the source's stored values, cut down to
+    /// the group's addresses when a group is set.
+    pub(crate) fn trigger_values(&self, t: &AudioTrigger) -> Vec<(usize, u8)> {
+        let Some(source) = t.source else {
+            return Vec::new();
+        };
+        let values: Vec<(usize, u8)> = match source {
+            audio::TriggerSource::Palette(id) => self
+                .palettes
+                .iter()
+                .find(|p| p.id == id)
+                .map(|p| p.values.clone())
+                .unwrap_or_default(),
+            audio::TriggerSource::Preset(i) => self
+                .user_presets
+                .get(i)
+                .map(|p| p.values.clone())
+                .unwrap_or_default(),
+        };
+        let Some(g) = t.group.and_then(|gi| self.groups.get(gi)) else {
+            return values;
+        };
+        let mut mask = vec![false; net::DMX_SLOTS];
+        for &fi in &g.fixtures {
+            if let Some(fx) = self.patch.fixtures.get(fi) {
+                let base = fx.from.saturating_sub(1) as usize;
+                for ci in 0..fx.channels.len() {
+                    if base + ci < mask.len() {
+                        mask[base + ci] = true;
+                    }
+                }
+            }
+        }
+        values
+            .into_iter()
+            .filter(|&(a, _)| a < mask.len() && mask[a])
+            .collect()
+    }
+
     /// Split `fixtures` into effect units — the slots a spread fans across.
     ///
     /// The active order goes first: its steps decide both the sequence and
@@ -1005,6 +1077,7 @@ impl App {
         self.groups_window(ctx);
         self.orders_window(ctx);
         self.scenes_window(ctx);
+        self.audio_window(ctx);
         self.palettes_window(ctx);
         self.phasers_window(ctx);
         self.stacks_window(ctx);
@@ -1679,6 +1752,51 @@ impl eframe::App for App {
                 self.mixer.push(layer);
                 repaint_ms = repaint_ms.min(25);
             }
+        }
+        // Audio triggers: band-threshold flashes ride above the cycle so
+        // whatever the music does stays visible over the settled look.
+        if self.audio.is_running() {
+            let analysis = self.audio.analysis();
+            let n = self.audio.beats();
+            if n != self.audio_beat_seen {
+                self.audio_beat_seen = n;
+                self.audio_beat_flash = Some(Instant::now());
+                // The tracker presses TAP like a very patient drummer.
+                if self.audio_follow_beat {
+                    self.beat_tap();
+                }
+            }
+            let now = Instant::now();
+            let dt = self
+                .audio_last_eval
+                .map_or(0.05, |t| now.duration_since(t).as_secs_f32())
+                .clamp(0.001, 0.25);
+            self.audio_last_eval = Some(now);
+            let resolved: Vec<Vec<(usize, u8)>> = self
+                .audio_triggers
+                .iter()
+                .map(|t| {
+                    if t.enabled {
+                        self.trigger_values(t)
+                    } else {
+                        Vec::new()
+                    }
+                })
+                .collect();
+            for (t, values) in self.audio_triggers.iter_mut().zip(&resolved) {
+                if !t.enabled {
+                    t.env = 0.0;
+                    continue;
+                }
+                let energy = t.energy(&analysis.spectrum);
+                let w = t.advance(energy, dt);
+                if let Some(layer) = AudioTrigger::layer(values, w, t.merge) {
+                    self.mixer.push(layer);
+                }
+            }
+            repaint_ms = repaint_ms.min(25);
+        } else {
+            self.audio_last_eval = None;
         }
         // The chase overlays on top of everything.
         if let Some(layer) = chase_layer {

@@ -11,6 +11,7 @@ mod palette;
 mod phaser;
 mod preset;
 mod profiles;
+mod audio;
 mod scene;
 mod showbuddy;
 mod stack;

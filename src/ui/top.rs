@@ -89,7 +89,7 @@ impl App {
                 }
                 ui.separator();
                 // Every pool and panel toggle, in one consistent icon row.
-                let tabs: [(icons::Icon, &str, &mut bool, &str); 19] = [
+                let tabs: [(icons::Icon, &str, &mut bool, &str); 20] = [
                     (
                         icons::Icon::Artnet,
                         "Art-Net",
@@ -149,6 +149,12 @@ impl App {
                         "Beat",
                         &mut self.show_beat,
                         "Master BPM, tap sync, and the time machine",
+                    ),
+                    (
+                        icons::Icon::Audio,
+                        "Audio",
+                        &mut self.show_audio,
+                        "Listen to the computer: spectrum triggers and beat follow",
                     ),
                     (
                         icons::Icon::Stack,
