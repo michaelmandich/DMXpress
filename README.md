@@ -8,22 +8,17 @@ DMXpress is intended to make better-than-average light shows approachable withou
 
 ## Showcase
 
-Screenshots and example setups are coming soon.
+### Building a starting position
 
-<!--
-Suggested image layout once screenshots are available:
+Select the full rig, apply an `All 50` starting look, then shape the scene with pan and tilt controls while watching the result in the 3D visualizer.
 
-<p align="center">
-  <img src="docs/images/stage-visualizer.png" width="48%" alt="DMXpress 3D stage visualizer">
-  <img src="docs/images/live-control.png" width="48%" alt="DMXpress live control interface">
-</p>
+![DMXpress showing the full fixture rig in an All 50 starting position with pan and tilt controls](docs/images/all-50-starting-position.png)
 
-Additional ideas:
-- A full-rig overview
-- A close-up of volumetric beams
-- Programmer, palette, and phaser workflows
-- Cue stacks and playback decks during a live show
--->
+### Running phasers
+
+The same rig in motion with two phasers active: an intensity phaser and a larger tilt movement phaser. The phaser editor remains open beside the live 3D result for immediate adjustment.
+
+![DMXpress visualizing a light show in motion with intensity and tilt phasers active](docs/images/two-phasers-in-motion.png)
 
 ## Features
 
