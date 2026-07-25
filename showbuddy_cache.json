@@ -1,0 +1,9597 @@
+[
+  {
+    "display": "8 channel par1",
+    "file": "/Library/Application Support/db audioware/Show Buddy Active//DmxLibrary//Custom/8 channel par.dmx",
+    "from": 1,
+    "to": 8,
+    "x": 0.56201947,
+    "y": 0.8692308,
+    "pan_range": 540.0,
+    "tilt_range": 170.0,
+    "beam_width": 30.0,
+    "channels": [
+      {
+        "name": "DIM",
+        "bands": [
+          {
+            "kind": "D",
+            "min": 0,
+            "max": 255,
+            "label": ""
+          }
+        ]
+      },
+      {
+        "name": "RED",
+        "bands": [
+          {
+            "kind": "V",
+            "min": 0,
+            "max": 255,
+            "label": ""
+          }
+        ]
+      },
+      {
+        "name": "GRN",
+        "bands": [
+          {
+            "kind": "V",
+            "min": 0,
+            "max": 255,
+            "label": ""
+          }
+        ]
+      },
+      {
+        "name": "BLUE",
+        "bands": [
+          {
+            "kind": "V",
+            "min": 0,
+            "max": 255,
+            "label": ""
+          }
+        ]
+      },
+      {
+        "name": "White",
+        "bands": [
+          {
+            "kind": "S",
+            "min": 0,
+            "max": 255,
+            "label": ""
+          }
+        ]
+      },
+      {
+        "name": "Til strobe",
+        "bands": [
+          {
+            "kind": "S",
+            "min": 0,
+            "max": 255,
+            "label": ""
+          }
+        ]
+      },
+      {
+        "name": "Auto",
+        "bands": [
+          {
+            "kind": "S",
+            "min": 0,
+            "max": 255,
+            "label": ""
+          }
+        ]
+      },
+      {
+        "name": "Auto speed",
+        "bands": [
+          {
+            "kind": "S",
+            "min": 0,
+            "max": 255,
+            "label": "F>S"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "display": "8 channel par1",
+    "file": "/Library/Application Support/db audioware/Show Buddy Active//DmxLibrary//Custom/8 channel par.dmx",
+    "from": 9,
+    "to": 16,
+    "x": 0.48894837,
+    "y": 0.8692307,
+    "pan_range": 540.0,
+    "tilt_range": 170.0,
+    "beam_width": 30.0,
+    "channels": [
+      {
+        "name": "DIM",
+        "bands": [
+          {
+            "kind": "D",
+            "min": 0,
+            "max": 255,
+            "label": ""
+          }
+        ]
+      },
+      {
+        "name": "RED",
+        "bands": [
+          {
+            "kind": "V",
+            "min": 0,
+            "max": 255,
+            "label": ""
+          }
+        ]
+      },
+      {
+        "name": "GRN",
+        "bands": [
+          {
+            "kind": "V",
+            "min": 0,
+            "max": 255,
+            "label": ""
+          }
+        ]
+      },
+      {
+        "name": "BLUE",
+        "bands": [
+          {
+            "kind": "V",
+            "min": 0,
+            "max": 255,
+            "label": ""
+          }
+        ]
+      },
+      {
+        "name": "White",
+        "bands": [
+          {
+            "kind": "S",
+            "min": 0,
+            "max": 255,
+            "label": ""
+          }
+        ]
+      },
+      {
+        "name": "Til strobe",
+        "bands": [
+          {
+            "kind": "S",
+            "min": 0,
+            "max": 255,
+            "label": ""
+          }
+        ]
+      },
+      {
+        "name": "Auto",
+        "bands": [
+          {
+            "kind": "S",
+            "min": 0,
+            "max": 255,
+            "label": ""
+          }
+        ]
+      },
+      {
+        "name": "Auto speed",
+        "bands": [
+          {
+            "kind": "S",
+            "min": 0,
+            "max": 255,
+            "label": "F>S"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "display": "moving par1",
+    "file": "/Library/Application Support/db audioware/Show Buddy Active//DmxLibrary//Custom/moving par.dmx",
+    "from": 17,
+    "to": 30,
+    "x": 0.07425743,
+    "y": 0.6456731,
+    "pan_range": 540.0,
+    "tilt_range": 170.0,
+    "beam_width": 30.0,
+    "channels": [
+      {
+        "name": "Pan",
+        "bands": [
+          {
+            "kind": "V",
+            "min": 0,
+            "max": 255,
+            "label": ""
+          }
+        ]
+      },
+      {
+        "name": "Panfine",
+        "bands": [
+          {
+            "kind": "V",
+            "min": 0,
+            "max": 255,
+            "label": ""
+          }
+        ]
+      },
+      {
+        "name": "Tilt",
+        "bands": [
+          {
+            "kind": "V",
+            "min": 0,
+            "max": 255,
+            "label": ""
+          }
+        ]
+      },
+      {
+        "name": "Tiltfine",
+        "bands": [
+          {
+            "kind": "V",
+            "min": 0,
+            "max": 255,
+            "label": ""
+          }
+        ]
+      },
+      {
+        "name": "Movement speed",
+        "bands": [
+          {
+            "kind": "V",
+            "min": 0,
+            "max": 255,
+            "label": "Speed"
+          }
+        ]
+      },
+      {
+        "name": "Dimmer",
+        "bands": [
+          {
+            "kind": "S",
+            "min": 0,
+            "max": 7,
+            "label": "Nothing"
+          },
+          {
+            "kind": "S",
+            "min": 8,
+            "max": 134,
+            "label": "dimming"
+          },
+          {
+            "kind": "S",
+            "min": 135,
+            "max": 239,
+            "label": "Strobes>f"
+          },
+          {
+            "kind": "S",
+            "min": 240,
+            "max": 255,
+            "label": "medallion"
+          }
+        ]
+      },
+      {
+        "name": "Red",
+        "bands": [
+          {
+            "kind": "S",
+            "min": 0,
+            "max": 255,
+            "label": ""
+          }
+        ]
+      },
+      {
+        "name": "Green",
+        "bands": [
+          {
+            "kind": "S",
+            "min": 0,
+            "max": 255,
+            "label": ""
+          }
+        ]
+      },
+      {
+        "name": "Blue",
+        "bands": [
+          {
+            "kind": "S",
+            "min": 0,
+            "max": 255,
+            "label": ""
+          }
+        ]
+      },
+      {
+        "name": "White",
+        "bands": [
+          {
+            "kind": "S",
+            "min": 0,
+            "max": 255,
+            "label": ""
+          }
+        ]
+      },
+      {
+        "name": "Macro",
+        "bands": [
+          {
+            "kind": "S",
+            "min": 0,
+            "max": 7,
+            "label": "colorselect"
+          },
+          {
+            "kind": "S",
+            "min": 8,
+            "max": 231,
+            "label": "color combo"
+          },
+          {
+            "kind": "S",
+            "min": 232,
+            "max": 255,
+            "label": "color jump"
+          }
+        ]
+      },
+      {
+        "name": "ClrSpd",
+        "bands": [
+          {
+            "kind": "S",
+            "min": 0,
+            "max": 255,
+            "label": "speed"
+          }
+        ]
+      },
+      {
+        "name": "SndMd",
+        "bands": [
+          {
+            "kind": "S",
+            "min": 0,
+            "max": 255,
+            "label": ""
+          }
+        ]
+      },
+      {
+        "name": "Reset",
+        "bands": [
+          {
+            "kind": "S",
+            "min": 0,
+            "max": 255,
+            "label": ""
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "display": "moving par2",
+    "file": "/Library/Application Support/db audioware/Show Buddy Active//DmxLibrary//Custom/moving par.dmx",
+    "from": 31,
+    "to": 44,
+    "x": 0.11956437,
+    "y": 0.6456731,
+    "pan_range": 540.0,
+    "tilt_range": 170.0,
+    "beam_width": 30.0,
+    "channels": [
+      {
+        "name": "Pan",
+        "bands": [
+          {
+            "kind": "V",
+            "min": 0,
+            "max": 255,
+            "label": ""
+          }
+        ]
+      },
+      {
+        "name": "Panfine",
+        "bands": [
+          {
+            "kind": "V",
+            "min": 0,
+            "max": 255,
+            "label": ""
+          }
+        ]
+      },
+      {
+        "name": "Tilt",
+        "bands": [
+          {
+            "kind": "V",
+            "min": 0,
+            "max": 255,
+            "label": ""
+          }
+        ]
+      },
+      {
+        "name": "Tiltfine",
+        "bands": [
+          {
+            "kind": "V",
+            "min": 0,
+            "max": 255,
+            "label": ""
+          }
+        ]
+      },
+      {
+        "name": "Movement speed",
+        "bands": [
+          {
+            "kind": "V",
+            "min": 0,
+            "max": 255,
+            "label": "Speed"
+          }
+        ]
+      },
+      {
+        "name": "Dimmer",
+        "bands": [
+          {
+            "kind": "S",
+            "min": 0,
+            "max": 7,
+            "label": "Nothing"
+          },
+          {
+            "kind": "S",
+            "min": 8,
+            "max": 134,
+            "label": "dimming"
+          },
+          {
+            "kind": "S",
+            "min": 135,
+            "max": 239,
+            "label": "Strobes>f"
+          },
+          {
+            "kind": "S",
+            "min": 240,
+            "max": 255,
+            "label": "medallion"
+          }
+        ]
+      },
+      {
+        "name": "Red",
+        "bands": [
+          {
+            "kind": "S",
+            "min": 0,
+            "max": 255,
+            "label": ""
+          }
+        ]
+      },
+      {
+        "name": "Green",
+        "bands": [
+          {
+            "kind": "S",
+            "min": 0,
+            "max": 255,
+            "label": ""
+          }
+        ]
+      },
+      {
+        "name": "Blue",
+        "bands": [
+          {
+            "kind": "S",
+            "min": 0,
+            "max": 255,
+            "label": ""
+          }
+        ]
+      },
+      {
+        "name": "White",
+        "bands": [
+          {
+            "kind": "S",
+            "min": 0,
+            "max": 255,
+            "label": ""
+          }
+        ]
+      },
+      {
+        "name": "Macro",
+        "bands": [
+          {
+            "kind": "S",
+            "min": 0,
+            "max": 7,
+            "label": "colorselect"
+          },
+          {
+            "kind": "S",
+            "min": 8,
+            "max": 231,
+            "label": "color combo"
+          },
+          {
+            "kind": "S",
+            "min": 232,
+            "max": 255,
+            "label": "color jump"
+          }
+        ]
+      },
+      {
+        "name": "ClrSpd",
+        "bands": [
+          {
+            "kind": "S",
+            "min": 0,
+            "max": 255,
+            "label": "speed"
+          }
+        ]
+      },
+      {
+        "name": "SndMd",
+        "bands": [
+          {
+            "kind": "S",
+            "min": 0,
+            "max": 255,
+            "label": ""
+          }
+        ]
+      },
+      {
+        "name": "Reset",
+        "bands": [
+          {
+            "kind": "S",
+            "min": 0,
+            "max": 255,
+            "label": ""
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "display": "moving par3",
+    "file": "/Library/Application Support/db audioware/Show Buddy Active//DmxLibrary//Custom/moving par.dmx",
+    "from": 45,
+    "to": 58,
+    "x": 0.1648713,
+    "y": 0.6456731,
+    "pan_range": 540.0,
+    "tilt_range": 170.0,
+    "beam_width": 30.0,
+    "channels": [
+      {
+        "name": "Pan",
+        "bands": [
+          {
+            "kind": "V",
+            "min": 0,
+            "max": 255,
+            "label": ""
+          }
+        ]
+      },
+      {
+        "name": "Panfine",
+        "bands": [
+          {
+            "kind": "V",
+            "min": 0,
+            "max": 255,
+            "label": ""
+          }
+        ]
+      },
+      {
+        "name": "Tilt",
+        "bands": [
+          {
+            "kind": "V",
+            "min": 0,
+            "max": 255,
+            "label": ""
+          }
+        ]
+      },
+      {
+        "name": "Tiltfine",
+        "bands": [
+          {
+            "kind": "V",
+            "min": 0,
+            "max": 255,
+            "label": ""
+          }
+        ]
+      },
+      {
+        "name": "Movement speed",
+        "bands": [
+          {
+            "kind": "V",
+            "min": 0,
+            "max": 255,
+            "label": "Speed"
+          }
+        ]
+      },
+      {
+        "name": "Dimmer",
+        "bands": [
+          {
+            "kind": "S",
+            "min": 0,
+            "max": 7,
+            "label": "Nothing"
+          },
+          {
+            "kind": "S",
+            "min": 8,
+            "max": 134,
+            "label": "dimming"
+          },
+          {
+            "kind": "S",
+            "min": 135,
+            "max": 239,
+            "label": "Strobes>f"
+          },
+          {
+            "kind": "S",
+            "min": 240,
+            "max": 255,
+            "label": "medallion"
+          }
+        ]
+      },
+      {
+        "name": "Red",
+        "bands": [
+          {
+            "kind": "S",
+            "min": 0,
+            "max": 255,
+            "label": ""
+          }
+        ]
+      },
+      {
+        "name": "Green",
+        "bands": [
+          {
+            "kind": "S",
+            "min": 0,
+            "max": 255,
+            "label": ""
+          }
+        ]
+      },
+      {
+        "name": "Blue",
+        "bands": [
+          {
+            "kind": "S",
+            "min": 0,
+            "max": 255,
+            "label": ""
+          }
+        ]
+      },
+      {
+        "name": "White",
+        "bands": [
+          {
+            "kind": "S",
+            "min": 0,
+            "max": 255,
+            "label": ""
+          }
+        ]
+      },
+      {
+        "name": "Macro",
+        "bands": [
+          {
+            "kind": "S",
+            "min": 0,
+            "max": 7,
+            "label": "colorselect"
+          },
+          {
+            "kind": "S",
+            "min": 8,
+            "max": 231,
+            "label": "color combo"
+          },
+          {
+            "kind": "S",
+            "min": 232,
+            "max": 255,
+            "label": "color jump"
+          }
+        ]
+      },
+      {
+        "name": "ClrSpd",
+        "bands": [
+          {
+            "kind": "S",
+            "min": 0,
+            "max": 255,
+            "label": "speed"
+          }
+        ]
+      },
+      {
+        "name": "SndMd",
+        "bands": [
+          {
+            "kind": "S",
+            "min": 0,
+            "max": 255,
+            "label": ""
+          }
+        ]
+      },
+      {
+        "name": "Reset",
+        "bands": [
+          {
+            "kind": "S",
+            "min": 0,
+            "max": 255,
+            "label": ""
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "display": "moving par4",
+    "file": "/Library/Application Support/db audioware/Show Buddy Active//DmxLibrary//Custom/moving par.dmx",
+    "from": 59,
+    "to": 72,
+    "x": 0.21017823,
+    "y": 0.6456731,
+    "pan_range": 540.0,
+    "tilt_range": 170.0,
+    "beam_width": 30.0,
+    "channels": [
+      {
+        "name": "Pan",
+        "bands": [
+          {
+            "kind": "V",
+            "min": 0,
+            "max": 255,
+            "label": ""
+          }
+        ]
+      },
+      {
+        "name": "Panfine",
+        "bands": [
+          {
+            "kind": "V",
+            "min": 0,
+            "max": 255,
+            "label": ""
+          }
+        ]
+      },
+      {
+        "name": "Tilt",
+        "bands": [
+          {
+            "kind": "V",
+            "min": 0,
+            "max": 255,
+            "label": ""
+          }
+        ]
+      },
+      {
+        "name": "Tiltfine",
+        "bands": [
+          {
+            "kind": "V",
+            "min": 0,
+            "max": 255,
+            "label": ""
+          }
+        ]
+      },
+      {
+        "name": "Movement speed",
+        "bands": [
+          {
+            "kind": "V",
+            "min": 0,
+            "max": 255,
+            "label": "Speed"
+          }
+        ]
+      },
+      {
+        "name": "Dimmer",
+        "bands": [
+          {
+            "kind": "S",
+            "min": 0,
+            "max": 7,
+            "label": "Nothing"
+          },
+          {
+            "kind": "S",
+            "min": 8,
+            "max": 134,
+            "label": "dimming"
+          },
+          {
+            "kind": "S",
+            "min": 135,
+            "max": 239,
+            "label": "Strobes>f"
+          },
+          {
+            "kind": "S",
+            "min": 240,
+            "max": 255,
+            "label": "medallion"
+          }
+        ]
+      },
+      {
+        "name": "Red",
+        "bands": [
+          {
+            "kind": "S",
+            "min": 0,
+            "max": 255,
+            "label": ""
+          }
+        ]
+      },
+      {
+        "name": "Green",
+        "bands": [
+          {
+            "kind": "S",
+            "min": 0,
+            "max": 255,
+            "label": ""
+          }
+        ]
+      },
+      {
+        "name": "Blue",
+        "bands": [
+          {
+            "kind": "S",
+            "min": 0,
+            "max": 255,
+            "label": ""
+          }
+        ]
+      },
+      {
+        "name": "White",
+        "bands": [
+          {
+            "kind": "S",
+            "min": 0,
+            "max": 255,
+            "label": ""
+          }
+        ]
+      },
+      {
+        "name": "Macro",
+        "bands": [
+          {
+            "kind": "S",
+            "min": 0,
+            "max": 7,
+            "label": "colorselect"
+          },
+          {
+            "kind": "S",
+            "min": 8,
+            "max": 231,
+            "label": "color combo"
+          },
+          {
+            "kind": "S",
+            "min": 232,
+            "max": 255,
+            "label": "color jump"
+          }
+        ]
+      },
+      {
+        "name": "ClrSpd",
+        "bands": [
+          {
+            "kind": "S",
+            "min": 0,
+            "max": 255,
+            "label": "speed"
+          }
+        ]
+      },
+      {
+        "name": "SndMd",
+        "bands": [
+          {
+            "kind": "S",
+            "min": 0,
+            "max": 255,
+            "label": ""
+          }
+        ]
+      },
+      {
+        "name": "Reset",
+        "bands": [
+          {
+            "kind": "S",
+            "min": 0,
+            "max": 255,
+            "label": ""
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "display": "80w 17ch spot with circle1",
+    "file": "/Library/Application Support/db audioware/Show Buddy Active//DmxLibrary//Custom/80w 17ch spot with circle.dmx",
+    "from": 73,
+    "to": 89,
+    "x": 0.30594063,
+    "y": 0.65048087,
+    "pan_range": 540.0,
+    "tilt_range": 170.0,
+    "beam_width": 30.0,
+    "channels": [
+      {
+        "name": "Pan",
+        "bands": [
+          {
+            "kind": "V",
+            "min": 0,
+            "max": 255,
+            "label": "Coarse"
+          }
+        ]
+      },
+      {
+        "name": "Pan",
+        "bands": [
+          {
+            "kind": "V",
+            "min": 0,
+            "max": 255,
+            "label": "Fine"
+          }
+        ]
+      },
+      {
+        "name": "Tilt",
+        "bands": [
+          {
+            "kind": "V",
+            "min": 0,
+            "max": 255,
+            "label": "Coarse"
+          }
+        ]
+      },
+      {
+        "name": "Tilt",
+        "bands": [
+          {
+            "kind": "V",
+            "min": 0,
+            "max": 255,
+            "label": "Fine"
+          }
+        ]
+      },
+      {
+        "name": "Movement speed",
+        "bands": [
+          {
+            "kind": "V",
+            "min": 0,
+            "max": 255,
+            "label": "Speed"
+          }
+        ]
+      },
+      {
+        "name": "Dimmer",
+        "bands": [
+          {
+            "kind": "D",
+            "min": 0,
+            "max": 255,
+            "label": ""
+          }
+        ]
+      },
+      {
+        "name": "cirstbOI",
+        "bands": [
+          {
+            "kind": "S",
+            "min": 0,
+            "max": 10,
+            "label": "NoStrb"
+          },
+          {
+            "kind": "S",
+            "min": 20,
+            "max": 80,
+            "label": "SlowStrb"
+          },
+          {
+            "kind": "S",
+            "min": 81,
+            "max": 180,
+            "label": "MidStrb"
+          },
+          {
+            "kind": "S",
+            "min": 181,
+            "max": 255,
+            "label": "FastStrb"
+          }
+        ]
+      },
+      {
+        "name": "Stbbm",
+        "bands": [
+          {
+            "kind": "S",
+            "min": 0,
+            "max": 10,
+            "label": "NoStrb"
+          },
+          {
+            "kind": "S",
+            "min": 20,
+            "max": 80,
+            "label": "SlowStrb"
+          },
+          {
+            "kind": "S",
+            "min": 81,
+            "max": 180,
+            "label": "MidStrb"
+          },
+          {
+            "kind": "S",
+            "min": 181,
+            "max": 255,
+            "label": "FastStrb"
+          }
+        ]
+      },
+      {
+        "name": "Stbcr",
+        "bands": [
+          {
+            "kind": "S",
+            "min": 0,
+            "max": 10,
+            "label": "NoStrb"
+          },
+          {
+            "kind": "S",
+            "min": 20,
+            "max": 80,
+            "label": "SlowStrb"
+          },
+          {
+            "kind": "S",
+            "min": 81,
+            "max": 180,
+            "label": "MidStrb"
+          },
+          {
+            "kind": "S",
+            "min": 181,
+            "max": 255,
+            "label": "FastStrb"
+          }
+        ]
+      },
+      {
+        "name": "Red",
+        "bands": [
+          {
+            "kind": "S",
+            "min": 0,
+            "max": 255,
+            "label": ""
+          }
+        ]
+      },
+      {
+        "name": "Green",
+        "bands": [
+          {
+            "kind": "S",
+            "min": 0,
+            "max": 255,
+            "label": ""
+          }
+        ]
+      },
+      {
+        "name": "Blue",
+        "bands": [
+          {
+            "kind": "S",
+            "min": 0,
+            "max": 255,
+            "label": ""
+          }
+        ]
+      },
+      {
+        "name": "White",
+        "bands": [
+          {
+            "kind": "S",
+            "min": 0,
+            "max": 255,
+            "label": ""
+          }
+        ]
+      },
+      {
+        "name": "Sound control",
+        "bands": [
+          {
+            "kind": "S",
+            "min": 0,
+            "max": 255,
+            "label": ""
+          }
+        ]
+      },
+      {
+        "name": "Staining",
+        "bands": [
+          {
+            "kind": "S",
+            "min": 0,
+            "max": 255,
+            "label": ""
+          }
+        ]
+      },
+      {
+        "name": "Circle effect",
+        "bands": [
+          {
+            "kind": "S",
+            "min": 0,
+            "max": 255,
+            "label": ""
+          }
+        ]
+      },
+      {
+        "name": "Reset",
+        "bands": [
+          {
+            "kind": "S",
+            "min": 0,
+            "max": 255,
+            "label": ""
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "display": "120W moving head (mini beam spot LED)1",
+    "file": "/Library/Application Support/db audioware/Show Buddy Active//DmxLibrary//Custom/120W moving head (mini beam spot LED).dmx",
+    "from": 90,
+    "to": 101,
+    "x": 0.414369,
+    "y": 0.65799516,
+    "pan_range": 540.0,
+    "tilt_range": 170.0,
+    "beam_width": 30.0,
+    "channels": [
+      {
+        "name": "Pan",
+        "bands": [
+          {
+            "kind": "V",
+            "min": 0,
+            "max": 255,
+            "label": "Coarse"
+          }
+        ]
+      },
+      {
+        "name": "Pan",
+        "bands": [
+          {
+            "kind": "V",
+            "min": 0,
+            "max": 255,
+            "label": "Fine"
+          }
+        ]
+      },
+      {
+        "name": "Tilt",
+        "bands": [
+          {
+            "kind": "V",
+            "min": 0,
+            "max": 255,
+            "label": "Coarse"
+          }
+        ]
+      },
+      {
+        "name": "Tilt",
+        "bands": [
+          {
+            "kind": "V",
+            "min": 0,
+            "max": 255,
+            "label": "Fine"
+          }
+        ]
+      },
+      {
+        "name": "Movement speed",
+        "bands": [
+          {
+            "kind": "V",
+            "min": 0,
+            "max": 255,
+            "label": "Speed"
+          }
+        ]
+      },
+      {
+        "name": "Dimmer",
+        "bands": [
+          {
+            "kind": "D",
+            "min": 0,
+            "max": 255,
+            "label": ""
+          }
+        ]
+      },
+      {
+        "name": "Strobe",
+        "bands": [
+          {
+            "kind": "S",
+            "min": 0,
+            "max": 10,
+            "label": "NoStrb"
+          },
+          {
+            "kind": "S",
+            "min": 20,
+            "max": 80,
+            "label": "SlowStrb"
+          },
+          {
+            "kind": "S",
+            "min": 81,
+            "max": 180,
+            "label": "MidStrb"
+          },
+          {
+            "kind": "S",
+            "min": 181,
+            "max": 255,
+            "label": "FastStrb"
+          }
+        ]
+      },
+      {
+        "name": "Color",
+        "bands": [
+          {
+            "kind": "S",
+            "min": 0,
+            "max": 19,
+            "label": "White"
+          },
+          {
+            "kind": "S",
+            "min": 20,
+            "max": 39,
+            "label": "Red"
+          },
+          {
+            "kind": "S",
+            "min": 40,
+            "max": 59,
+            "label": "Orange"
+          },
+          {
+            "kind": "S",
+            "min": 60,
+            "max": 79,
+            "label": "Yellow"
+          },
+          {
+            "kind": "S",
+            "min": 80,
+            "max": 99,
+            "label": "Green"
+          },
+          {
+            "kind": "S",
+            "min": 100,
+            "max": 119,
+            "label": "Blue"
+          },
+          {
+            "kind": "S",
+            "min": 120,
+            "max": 139,
+            "label": "Magenta"
+          },
+          {
+            "kind": "S",
+            "min": 140,
+            "max": 159,
+            "label": "Cyan"
+          },
+          {
+            "kind": "S",
+            "min": 160,
+            "max": 255,
+            "label": "auto/multicolor"
+          }
+        ]
+      },
+      {
+        "name": "Gobo",
+        "bands": [
+          {
+            "kind": "S",
+            "min": 0,
+            "max": 9,
+            "label": "Spot"
+          },
+          {
+            "kind": "S",
+            "min": 10,
+            "max": 19,
+            "label": "Small"
+          },
+          {
+            "kind": "S",
+            "min": 20,
+            "max": 29,
+            "label": "Flwr"
+          },
+          {
+            "kind": "S",
+            "min": 30,
+            "max": 39,
+            "label": "Vortex"
+          },
+          {
+            "kind": "S",
+            "min": 40,
+            "max": 49,
+            "label": "Daisy"
+          },
+          {
+            "kind": "S",
+            "min": 50,
+            "max": 59,
+            "label": "dotring"
+          },
+          {
+            "kind": "S",
+            "min": 60,
+            "max": 69,
+            "label": "invVortex"
+          },
+          {
+            "kind": "S",
+            "min": 70,
+            "max": 79,
+            "label": "Sun"
+          },
+          {
+            "kind": "S",
+            "min": 80,
+            "max": 89,
+            "label": "Sspot"
+          },
+          {
+            "kind": "S",
+            "min": 90,
+            "max": 99,
+            "label": "Ssmall"
+          },
+          {
+            "kind": "S",
+            "min": 100,
+            "max": 109,
+            "label": "Sflw"
+          },
+          {
+            "kind": "S",
+            "min": 110,
+            "max": 119,
+            "label": "Svort"
+          },
+          {
+            "kind": "S",
+            "min": 120,
+            "max": 129,
+            "label": "Sdaisy"
+          },
+          {
+            "kind": "S",
+            "min": 130,
+            "max": 139,
+            "label": "Sdotring"
+          },
+          {
+            "kind": "S",
+            "min": 140,
+            "max": 149,
+            "label": "ssun-"
+          },
+          {
+            "kind": "V",
+            "min": 150,
+            "max": 255,
+            "label": "switchS->F"
+          }
+        ]
+      },
+      {
+        "name": "Prism",
+        "bands": [
+          {
+            "kind": "S",
+            "min": 0,
+            "max": 127,
+            "label": "off"
+          },
+          {
+            "kind": "S",
+            "min": 128,
+            "max": 156,
+            "label": "on"
+          },
+          {
+            "kind": "S",
+            "min": 157,
+            "max": 255,
+            "label": "spins>f"
+          }
+        ]
+      },
+      {
+        "name": "Macro",
+        "bands": [
+          {
+            "kind": "S",
+            "min": 0,
+            "max": 29,
+            "label": "none"
+          },
+          {
+            "kind": "S",
+            "min": 30,
+            "max": 59,
+            "label": "aut1"
+          },
+          {
+            "kind": "S",
+            "min": 60,
+            "max": 89,
+            "label": "aut2"
+          },
+          {
+            "kind": "S",
+            "min": 90,
+            "max": 119,
+            "label": "aut3"
+          },
+          {
+            "kind": "S",
+            "min": 120,
+            "max": 149,
+            "label": "aut4"
+          },
+          {
+            "kind": "S",
+            "min": 150,
+            "max": 179,
+            "label": "s1"
+          },
+          {
+            "kind": "S",
+            "min": 180,
+            "max": 209,
+            "label": "s2"
+          },
+          {
+            "kind": "S",
+            "min": 210,
+            "max": 239,
+            "label": "s3"
+          },
+          {
+            "kind": "S",
+            "min": 240,
+            "max": 255,
+            "label": "s4"
+          }
+        ]
+      },
+      {
+        "name": "Reset",
+        "bands": [
+          {
+            "kind": "S",
+            "min": 0,
+            "max": 249,
+            "label": "None"
+          },
+          {
+            "kind": "S",
+            "min": 0,
+            "max": 255,
+            "label": "3secReset"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "display": "80w 17ch spot with circle1",
+    "file": "/Library/Application Support/db audioware/Show Buddy Active//DmxLibrary//Custom/80w 17ch spot with circle.dmx",
+    "from": 102,
+    "to": 118,
+    "x": 0.45924538,
+    "y": 0.6579954,
+    "pan_range": 540.0,
+    "tilt_range": 170.0,
+    "beam_width": 30.0,
+    "channels": [
+      {
+        "name": "Pan",
+        "bands": [
+          {
+            "kind": "V",
+            "min": 0,
+            "max": 255,
+            "label": "Coarse"
+          }
+        ]
+      },
+      {
+        "name": "Pan",
+        "bands": [
+          {
+            "kind": "V",
+            "min": 0,
+            "max": 255,
+            "label": "Fine"
+          }
+        ]
+      },
+      {
+        "name": "Tilt",
+        "bands": [
+          {
+            "kind": "V",
+            "min": 0,
+            "max": 255,
+            "label": "Coarse"
+          }
+        ]
+      },
+      {
+        "name": "Tilt",
+        "bands": [
+          {
+            "kind": "V",
+            "min": 0,
+            "max": 255,
+            "label": "Fine"
+          }
+        ]
+      },
+      {
+        "name": "Movement speed",
+        "bands": [
+          {
+            "kind": "V",
+            "min": 0,
+            "max": 255,
+            "label": "Speed"
+          }
+        ]
+      },
+      {
+        "name": "Dimmer",
+        "bands": [
+          {
+            "kind": "D",
+            "min": 0,
+            "max": 255,
+            "label": ""
+          }
+        ]
+      },
+      {
+        "name": "cirstbOI",
+        "bands": [
+          {
+            "kind": "S",
+            "min": 0,
+            "max": 10,
+            "label": "NoStrb"
+          },
+          {
+            "kind": "S",
+            "min": 20,
+            "max": 80,
+            "label": "SlowStrb"
+          },
+          {
+            "kind": "S",
+            "min": 81,
+            "max": 180,
+            "label": "MidStrb"
+          },
+          {
+            "kind": "S",
+            "min": 181,
+            "max": 255,
+            "label": "FastStrb"
+          }
+        ]
+      },
+      {
+        "name": "Stbbm",
+        "bands": [
+          {
+            "kind": "S",
+            "min": 0,
+            "max": 10,
+            "label": "NoStrb"
+          },
+          {
+            "kind": "S",
+            "min": 20,
+            "max": 80,
+            "label": "SlowStrb"
+          },
+          {
+            "kind": "S",
+            "min": 81,
+            "max": 180,
+            "label": "MidStrb"
+          },
+          {
+            "kind": "S",
+            "min": 181,
+            "max": 255,
+            "label": "FastStrb"
+          }
+        ]
+      },
+      {
+        "name": "Stbcr",
+        "bands": [
+          {
+            "kind": "S",
+            "min": 0,
+            "max": 10,
+            "label": "NoStrb"
+          },
+          {
+            "kind": "S",
+            "min": 20,
+            "max": 80,
+            "label": "SlowStrb"
+          },
+          {
+            "kind": "S",
+            "min": 81,
+            "max": 180,
+            "label": "MidStrb"
+          },
+          {
+            "kind": "S",
+            "min": 181,
+            "max": 255,
+            "label": "FastStrb"
+          }
+        ]
+      },
+      {
+        "name": "Red",
+        "bands": [
+          {
+            "kind": "S",
+            "min": 0,
+            "max": 255,
+            "label": ""
+          }
+        ]
+      },
+      {
+        "name": "Green",
+        "bands": [
+          {
+            "kind": "S",
+            "min": 0,
+            "max": 255,
+            "label": ""
+          }
+        ]
+      },
+      {
+        "name": "Blue",
+        "bands": [
+          {
+            "kind": "S",
+            "min": 0,
+            "max": 255,
+            "label": ""
+          }
+        ]
+      },
+      {
+        "name": "White",
+        "bands": [
+          {
+            "kind": "S",
+            "min": 0,
+            "max": 255,
+            "label": ""
+          }
+        ]
+      },
+      {
+        "name": "Sound control",
+        "bands": [
+          {
+            "kind": "S",
+            "min": 0,
+            "max": 255,
+            "label": ""
+          }
+        ]
+      },
+      {
+        "name": "Staining",
+        "bands": [
+          {
+            "kind": "S",
+            "min": 0,
+            "max": 255,
+            "label": ""
+          }
+        ]
+      },
+      {
+        "name": "Circle effect",
+        "bands": [
+          {
+            "kind": "S",
+            "min": 0,
+            "max": 255,
+            "label": ""
+          }
+        ]
+      },
+      {
+        "name": "Reset",
+        "bands": [
+          {
+            "kind": "S",
+            "min": 0,
+            "max": 255,
+            "label": ""
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "display": "120W moving head (mini beam spot LED)1",
+    "file": "/Library/Application Support/db audioware/Show Buddy Active//DmxLibrary//Custom/120W moving head (mini beam spot LED).dmx",
+    "from": 119,
+    "to": 130,
+    "x": 0.50893,
+    "y": 0.6554905,
+    "pan_range": 540.0,
+    "tilt_range": 170.0,
+    "beam_width": 30.0,
+    "channels": [
+      {
+        "name": "Pan",
+        "bands": [
+          {
+            "kind": "V",
+            "min": 0,
+            "max": 255,
+            "label": "Coarse"
+          }
+        ]
+      },
+      {
+        "name": "Pan",
+        "bands": [
+          {
+            "kind": "V",
+            "min": 0,
+            "max": 255,
+            "label": "Fine"
+          }
+        ]
+      },
+      {
+        "name": "Tilt",
+        "bands": [
+          {
+            "kind": "V",
+            "min": 0,
+            "max": 255,
+            "label": "Coarse"
+          }
+        ]
+      },
+      {
+        "name": "Tilt",
+        "bands": [
+          {
+            "kind": "V",
+            "min": 0,
+            "max": 255,
+            "label": "Fine"
+          }
+        ]
+      },
+      {
+        "name": "Movement speed",
+        "bands": [
+          {
+            "kind": "V",
+            "min": 0,
+            "max": 255,
+            "label": "Speed"
+          }
+        ]
+      },
+      {
+        "name": "Dimmer",
+        "bands": [
+          {
+            "kind": "D",
+            "min": 0,
+            "max": 255,
+            "label": ""
+          }
+        ]
+      },
+      {
+        "name": "Strobe",
+        "bands": [
+          {
+            "kind": "S",
+            "min": 0,
+            "max": 10,
+            "label": "NoStrb"
+          },
+          {
+            "kind": "S",
+            "min": 20,
+            "max": 80,
+            "label": "SlowStrb"
+          },
+          {
+            "kind": "S",
+            "min": 81,
+            "max": 180,
+            "label": "MidStrb"
+          },
+          {
+            "kind": "S",
+            "min": 181,
+            "max": 255,
+            "label": "FastStrb"
+          }
+        ]
+      },
+      {
+        "name": "Color",
+        "bands": [
+          {
+            "kind": "S",
+            "min": 0,
+            "max": 19,
+            "label": "White"
+          },
+          {
+            "kind": "S",
+            "min": 20,
+            "max": 39,
+            "label": "Red"
+          },
+          {
+            "kind": "S",
+            "min": 40,
+            "max": 59,
+            "label": "Orange"
+          },
+          {
+            "kind": "S",
+            "min": 60,
+            "max": 79,
+            "label": "Yellow"
+          },
+          {
+            "kind": "S",
+            "min": 80,
+            "max": 99,
+            "label": "Green"
+          },
+          {
+            "kind": "S",
+            "min": 100,
+            "max": 119,
+            "label": "Blue"
+          },
+          {
+            "kind": "S",
+            "min": 120,
+            "max": 139,
+            "label": "Magenta"
+          },
+          {
+            "kind": "S",
+            "min": 140,
+            "max": 159,
+            "label": "Cyan"
+          },
+          {
+            "kind": "S",
+            "min": 160,
+            "max": 255,
+            "label": "auto/multicolor"
+          }
+        ]
+      },
+      {
+        "name": "Gobo",
+        "bands": [
+          {
+            "kind": "S",
+            "min": 0,
+            "max": 9,
+            "label": "Spot"
+          },
+          {
+            "kind": "S",
+            "min": 10,
+            "max": 19,
+            "label": "Small"
+          },
+          {
+            "kind": "S",
+            "min": 20,
+            "max": 29,
+            "label": "Flwr"
+          },
+          {
+            "kind": "S",
+            "min": 30,
+            "max": 39,
+            "label": "Vortex"
+          },
+          {
+            "kind": "S",
+            "min": 40,
+            "max": 49,
+            "label": "Daisy"
+          },
+          {
+            "kind": "S",
+            "min": 50,
+            "max": 59,
+            "label": "dotring"
+          },
+          {
+            "kind": "S",
+            "min": 60,
+            "max": 69,
+            "label": "invVortex"
+          },
+          {
+            "kind": "S",
+            "min": 70,
+            "max": 79,
+            "label": "Sun"
+          },
+          {
+            "kind": "S",
+            "min": 80,
+            "max": 89,
+            "label": "Sspot"
+          },
+          {
+            "kind": "S",
+            "min": 90,
+            "max": 99,
+            "label": "Ssmall"
+          },
+          {
+            "kind": "S",
+            "min": 100,
+            "max": 109,
+            "label": "Sflw"
+          },
+          {
+            "kind": "S",
+            "min": 110,
+            "max": 119,
+            "label": "Svort"
+          },
+          {
+            "kind": "S",
+            "min": 120,
+            "max": 129,
+            "label": "Sdaisy"
+          },
+          {
+            "kind": "S",
+            "min": 130,
+            "max": 139,
+            "label": "Sdotring"
+          },
+          {
+            "kind": "S",
+            "min": 140,
+            "max": 149,
+            "label": "ssun-"
+          },
+          {
+            "kind": "V",
+            "min": 150,
+            "max": 255,
+            "label": "switchS->F"
+          }
+        ]
+      },
+      {
+        "name": "Prism",
+        "bands": [
+          {
+            "kind": "S",
+            "min": 0,
+            "max": 127,
+            "label": "off"
+          },
+          {
+            "kind": "S",
+            "min": 128,
+            "max": 156,
+            "label": "on"
+          },
+          {
+            "kind": "S",
+            "min": 157,
+            "max": 255,
+            "label": "spins>f"
+          }
+        ]
+      },
+      {
+        "name": "Macro",
+        "bands": [
+          {
+            "kind": "S",
+            "min": 0,
+            "max": 29,
+            "label": "none"
+          },
+          {
+            "kind": "S",
+            "min": 30,
+            "max": 59,
+            "label": "aut1"
+          },
+          {
+            "kind": "S",
+            "min": 60,
+            "max": 89,
+            "label": "aut2"
+          },
+          {
+            "kind": "S",
+            "min": 90,
+            "max": 119,
+            "label": "aut3"
+          },
+          {
+            "kind": "S",
+            "min": 120,
+            "max": 149,
+            "label": "aut4"
+          },
+          {
+            "kind": "S",
+            "min": 150,
+            "max": 179,
+            "label": "s1"
+          },
+          {
+            "kind": "S",
+            "min": 180,
+            "max": 209,
+            "label": "s2"
+          },
+          {
+            "kind": "S",
+            "min": 210,
+            "max": 239,
+            "label": "s3"
+          },
+          {
+            "kind": "S",
+            "min": 240,
+            "max": 255,
+            "label": "s4"
+          }
+        ]
+      },
+      {
+        "name": "Reset",
+        "bands": [
+          {
+            "kind": "S",
+            "min": 0,
+            "max": 249,
+            "label": "None"
+          },
+          {
+            "kind": "S",
+            "min": 0,
+            "max": 255,
+            "label": "3secReset"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "display": "120W moving head (mini beam spot LED)1",
+    "file": "/Library/Application Support/db audioware/Show Buddy Active//DmxLibrary//Custom/120W moving head (mini beam spot LED).dmx",
+    "from": 131,
+    "to": 142,
+    "x": 0.5890665,
+    "y": 0.65549046,
+    "pan_range": 540.0,
+    "tilt_range": 170.0,
+    "beam_width": 30.0,
+    "channels": [
+      {
+        "name": "Pan",
+        "bands": [
+          {
+            "kind": "V",
+            "min": 0,
+            "max": 255,
+            "label": "Coarse"
+          }
+        ]
+      },
+      {
+        "name": "Pan",
+        "bands": [
+          {
+            "kind": "V",
+            "min": 0,
+            "max": 255,
+            "label": "Fine"
+          }
+        ]
+      },
+      {
+        "name": "Tilt",
+        "bands": [
+          {
+            "kind": "V",
+            "min": 0,
+            "max": 255,
+            "label": "Coarse"
+          }
+        ]
+      },
+      {
+        "name": "Tilt",
+        "bands": [
+          {
+            "kind": "V",
+            "min": 0,
+            "max": 255,
+            "label": "Fine"
+          }
+        ]
+      },
+      {
+        "name": "Movement speed",
+        "bands": [
+          {
+            "kind": "V",
+            "min": 0,
+            "max": 255,
+            "label": "Speed"
+          }
+        ]
+      },
+      {
+        "name": "Dimmer",
+        "bands": [
+          {
+            "kind": "D",
+            "min": 0,
+            "max": 255,
+            "label": ""
+          }
+        ]
+      },
+      {
+        "name": "Strobe",
+        "bands": [
+          {
+            "kind": "S",
+            "min": 0,
+            "max": 10,
+            "label": "NoStrb"
+          },
+          {
+            "kind": "S",
+            "min": 20,
+            "max": 80,
+            "label": "SlowStrb"
+          },
+          {
+            "kind": "S",
+            "min": 81,
+            "max": 180,
+            "label": "MidStrb"
+          },
+          {
+            "kind": "S",
+            "min": 181,
+            "max": 255,
+            "label": "FastStrb"
+          }
+        ]
+      },
+      {
+        "name": "Color",
+        "bands": [
+          {
+            "kind": "S",
+            "min": 0,
+            "max": 19,
+            "label": "White"
+          },
+          {
+            "kind": "S",
+            "min": 20,
+            "max": 39,
+            "label": "Red"
+          },
+          {
+            "kind": "S",
+            "min": 40,
+            "max": 59,
+            "label": "Orange"
+          },
+          {
+            "kind": "S",
+            "min": 60,
+            "max": 79,
+            "label": "Yellow"
+          },
+          {
+            "kind": "S",
+            "min": 80,
+            "max": 99,
+            "label": "Green"
+          },
+          {
+            "kind": "S",
+            "min": 100,
+            "max": 119,
+            "label": "Blue"
+          },
+          {
+            "kind": "S",
+            "min": 120,
+            "max": 139,
+            "label": "Magenta"
+          },
+          {
+            "kind": "S",
+            "min": 140,
+            "max": 159,
+            "label": "Cyan"
+          },
+          {
+            "kind": "S",
+            "min": 160,
+            "max": 255,
+            "label": "auto/multicolor"
+          }
+        ]
+      },
+      {
+        "name": "Gobo",
+        "bands": [
+          {
+            "kind": "S",
+            "min": 0,
+            "max": 9,
+            "label": "Spot"
+          },
+          {
+            "kind": "S",
+            "min": 10,
+            "max": 19,
+            "label": "Small"
+          },
+          {
+            "kind": "S",
+            "min": 20,
+            "max": 29,
+            "label": "Flwr"
+          },
+          {
+            "kind": "S",
+            "min": 30,
+            "max": 39,
+            "label": "Vortex"
+          },
+          {
+            "kind": "S",
+            "min": 40,
+            "max": 49,
+            "label": "Daisy"
+          },
+          {
+            "kind": "S",
+            "min": 50,
+            "max": 59,
+            "label": "dotring"
+          },
+          {
+            "kind": "S",
+            "min": 60,
+            "max": 69,
+            "label": "invVortex"
+          },
+          {
+            "kind": "S",
+            "min": 70,
+            "max": 79,
+            "label": "Sun"
+          },
+          {
+            "kind": "S",
+            "min": 80,
+            "max": 89,
+            "label": "Sspot"
+          },
+          {
+            "kind": "S",
+            "min": 90,
+            "max": 99,
+            "label": "Ssmall"
+          },
+          {
+            "kind": "S",
+            "min": 100,
+            "max": 109,
+            "label": "Sflw"
+          },
+          {
+            "kind": "S",
+            "min": 110,
+            "max": 119,
+            "label": "Svort"
+          },
+          {
+            "kind": "S",
+            "min": 120,
+            "max": 129,
+            "label": "Sdaisy"
+          },
+          {
+            "kind": "S",
+            "min": 130,
+            "max": 139,
+            "label": "Sdotring"
+          },
+          {
+            "kind": "S",
+            "min": 140,
+            "max": 149,
+            "label": "ssun-"
+          },
+          {
+            "kind": "V",
+            "min": 150,
+            "max": 255,
+            "label": "switchS->F"
+          }
+        ]
+      },
+      {
+        "name": "Prism",
+        "bands": [
+          {
+            "kind": "S",
+            "min": 0,
+            "max": 127,
+            "label": "off"
+          },
+          {
+            "kind": "S",
+            "min": 128,
+            "max": 156,
+            "label": "on"
+          },
+          {
+            "kind": "S",
+            "min": 157,
+            "max": 255,
+            "label": "spins>f"
+          }
+        ]
+      },
+      {
+        "name": "Macro",
+        "bands": [
+          {
+            "kind": "S",
+            "min": 0,
+            "max": 29,
+            "label": "none"
+          },
+          {
+            "kind": "S",
+            "min": 30,
+            "max": 59,
+            "label": "aut1"
+          },
+          {
+            "kind": "S",
+            "min": 60,
+            "max": 89,
+            "label": "aut2"
+          },
+          {
+            "kind": "S",
+            "min": 90,
+            "max": 119,
+            "label": "aut3"
+          },
+          {
+            "kind": "S",
+            "min": 120,
+            "max": 149,
+            "label": "aut4"
+          },
+          {
+            "kind": "S",
+            "min": 150,
+            "max": 179,
+            "label": "s1"
+          },
+          {
+            "kind": "S",
+            "min": 180,
+            "max": 209,
+            "label": "s2"
+          },
+          {
+            "kind": "S",
+            "min": 210,
+            "max": 239,
+            "label": "s3"
+          },
+          {
+            "kind": "S",
+            "min": 240,
+            "max": 255,
+            "label": "s4"
+          }
+        ]
+      },
+      {
+        "name": "Reset",
+        "bands": [
+          {
+            "kind": "S",
+            "min": 0,
+            "max": 249,
+            "label": "None"
+          },
+          {
+            "kind": "S",
+            "min": 0,
+            "max": 255,
+            "label": "3secReset"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "display": "80w 17ch spot with circle1",
+    "file": "/Library/Application Support/db audioware/Show Buddy Active//DmxLibrary//Custom/80w 17ch spot with circle.dmx",
+    "from": 143,
+    "to": 159,
+    "x": 0.6355454,
+    "y": 0.65549046,
+    "pan_range": 540.0,
+    "tilt_range": 170.0,
+    "beam_width": 30.0,
+    "channels": [
+      {
+        "name": "Pan",
+        "bands": [
+          {
+            "kind": "V",
+            "min": 0,
+            "max": 255,
+            "label": "Coarse"
+          }
+        ]
+      },
+      {
+        "name": "Pan",
+        "bands": [
+          {
+            "kind": "V",
+            "min": 0,
+            "max": 255,
+            "label": "Fine"
+          }
+        ]
+      },
+      {
+        "name": "Tilt",
+        "bands": [
+          {
+            "kind": "V",
+            "min": 0,
+            "max": 255,
+            "label": "Coarse"
+          }
+        ]
+      },
+      {
+        "name": "Tilt",
+        "bands": [
+          {
+            "kind": "V",
+            "min": 0,
+            "max": 255,
+            "label": "Fine"
+          }
+        ]
+      },
+      {
+        "name": "Movement speed",
+        "bands": [
+          {
+            "kind": "V",
+            "min": 0,
+            "max": 255,
+            "label": "Speed"
+          }
+        ]
+      },
+      {
+        "name": "Dimmer",
+        "bands": [
+          {
+            "kind": "D",
+            "min": 0,
+            "max": 255,
+            "label": ""
+          }
+        ]
+      },
+      {
+        "name": "cirstbOI",
+        "bands": [
+          {
+            "kind": "S",
+            "min": 0,
+            "max": 10,
+            "label": "NoStrb"
+          },
+          {
+            "kind": "S",
+            "min": 20,
+            "max": 80,
+            "label": "SlowStrb"
+          },
+          {
+            "kind": "S",
+            "min": 81,
+            "max": 180,
+            "label": "MidStrb"
+          },
+          {
+            "kind": "S",
+            "min": 181,
+            "max": 255,
+            "label": "FastStrb"
+          }
+        ]
+      },
+      {
+        "name": "Stbbm",
+        "bands": [
+          {
+            "kind": "S",
+            "min": 0,
+            "max": 10,
+            "label": "NoStrb"
+          },
+          {
+            "kind": "S",
+            "min": 20,
+            "max": 80,
+            "label": "SlowStrb"
+          },
+          {
+            "kind": "S",
+            "min": 81,
+            "max": 180,
+            "label": "MidStrb"
+          },
+          {
+            "kind": "S",
+            "min": 181,
+            "max": 255,
+            "label": "FastStrb"
+          }
+        ]
+      },
+      {
+        "name": "Stbcr",
+        "bands": [
+          {
+            "kind": "S",
+            "min": 0,
+            "max": 10,
+            "label": "NoStrb"
+          },
+          {
+            "kind": "S",
+            "min": 20,
+            "max": 80,
+            "label": "SlowStrb"
+          },
+          {
+            "kind": "S",
+            "min": 81,
+            "max": 180,
+            "label": "MidStrb"
+          },
+          {
+            "kind": "S",
+            "min": 181,
+            "max": 255,
+            "label": "FastStrb"
+          }
+        ]
+      },
+      {
+        "name": "Red",
+        "bands": [
+          {
+            "kind": "S",
+            "min": 0,
+            "max": 255,
+            "label": ""
+          }
+        ]
+      },
+      {
+        "name": "Green",
+        "bands": [
+          {
+            "kind": "S",
+            "min": 0,
+            "max": 255,
+            "label": ""
+          }
+        ]
+      },
+      {
+        "name": "Blue",
+        "bands": [
+          {
+            "kind": "S",
+            "min": 0,
+            "max": 255,
+            "label": ""
+          }
+        ]
+      },
+      {
+        "name": "White",
+        "bands": [
+          {
+            "kind": "S",
+            "min": 0,
+            "max": 255,
+            "label": ""
+          }
+        ]
+      },
+      {
+        "name": "Sound control",
+        "bands": [
+          {
+            "kind": "S",
+            "min": 0,
+            "max": 255,
+            "label": ""
+          }
+        ]
+      },
+      {
+        "name": "Staining",
+        "bands": [
+          {
+            "kind": "S",
+            "min": 0,
+            "max": 255,
+            "label": ""
+          }
+        ]
+      },
+      {
+        "name": "Circle effect",
+        "bands": [
+          {
+            "kind": "S",
+            "min": 0,
+            "max": 255,
+            "label": ""
+          }
+        ]
+      },
+      {
+        "name": "Reset",
+        "bands": [
+          {
+            "kind": "S",
+            "min": 0,
+            "max": 255,
+            "label": ""
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "display": "120W moving head (mini beam spot LED)1",
+    "file": "/Library/Application Support/db audioware/Show Buddy Active//DmxLibrary//Custom/120W moving head (mini beam spot LED).dmx",
+    "from": 160,
+    "to": 171,
+    "x": 0.6868326,
+    "y": 0.65799534,
+    "pan_range": 540.0,
+    "tilt_range": 170.0,
+    "beam_width": 30.0,
+    "channels": [
+      {
+        "name": "Pan",
+        "bands": [
+          {
+            "kind": "V",
+            "min": 0,
+            "max": 255,
+            "label": "Coarse"
+          }
+        ]
+      },
+      {
+        "name": "Pan",
+        "bands": [
+          {
+            "kind": "V",
+            "min": 0,
+            "max": 255,
+            "label": "Fine"
+          }
+        ]
+      },
+      {
+        "name": "Tilt",
+        "bands": [
+          {
+            "kind": "V",
+            "min": 0,
+            "max": 255,
+            "label": "Coarse"
+          }
+        ]
+      },
+      {
+        "name": "Tilt",
+        "bands": [
+          {
+            "kind": "V",
+            "min": 0,
+            "max": 255,
+            "label": "Fine"
+          }
+        ]
+      },
+      {
+        "name": "Movement speed",
+        "bands": [
+          {
+            "kind": "V",
+            "min": 0,
+            "max": 255,
+            "label": "Speed"
+          }
+        ]
+      },
+      {
+        "name": "Dimmer",
+        "bands": [
+          {
+            "kind": "D",
+            "min": 0,
+            "max": 255,
+            "label": ""
+          }
+        ]
+      },
+      {
+        "name": "Strobe",
+        "bands": [
+          {
+            "kind": "S",
+            "min": 0,
+            "max": 10,
+            "label": "NoStrb"
+          },
+          {
+            "kind": "S",
+            "min": 20,
+            "max": 80,
+            "label": "SlowStrb"
+          },
+          {
+            "kind": "S",
+            "min": 81,
+            "max": 180,
+            "label": "MidStrb"
+          },
+          {
+            "kind": "S",
+            "min": 181,
+            "max": 255,
+            "label": "FastStrb"
+          }
+        ]
+      },
+      {
+        "name": "Color",
+        "bands": [
+          {
+            "kind": "S",
+            "min": 0,
+            "max": 19,
+            "label": "White"
+          },
+          {
+            "kind": "S",
+            "min": 20,
+            "max": 39,
+            "label": "Red"
+          },
+          {
+            "kind": "S",
+            "min": 40,
+            "max": 59,
+            "label": "Orange"
+          },
+          {
+            "kind": "S",
+            "min": 60,
+            "max": 79,
+            "label": "Yellow"
+          },
+          {
+            "kind": "S",
+            "min": 80,
+            "max": 99,
+            "label": "Green"
+          },
+          {
+            "kind": "S",
+            "min": 100,
+            "max": 119,
+            "label": "Blue"
+          },
+          {
+            "kind": "S",
+            "min": 120,
+            "max": 139,
+            "label": "Magenta"
+          },
+          {
+            "kind": "S",
+            "min": 140,
+            "max": 159,
+            "label": "Cyan"
+          },
+          {
+            "kind": "S",
+            "min": 160,
+            "max": 255,
+            "label": "auto/multicolor"
+          }
+        ]
+      },
+      {
+        "name": "Gobo",
+        "bands": [
+          {
+            "kind": "S",
+            "min": 0,
+            "max": 9,
+            "label": "Spot"
+          },
+          {
+            "kind": "S",
+            "min": 10,
+            "max": 19,
+            "label": "Small"
+          },
+          {
+            "kind": "S",
+            "min": 20,
+            "max": 29,
+            "label": "Flwr"
+          },
+          {
+            "kind": "S",
+            "min": 30,
+            "max": 39,
+            "label": "Vortex"
+          },
+          {
+            "kind": "S",
+            "min": 40,
+            "max": 49,
+            "label": "Daisy"
+          },
+          {
+            "kind": "S",
+            "min": 50,
+            "max": 59,
+            "label": "dotring"
+          },
+          {
+            "kind": "S",
+            "min": 60,
+            "max": 69,
+            "label": "invVortex"
+          },
+          {
+            "kind": "S",
+            "min": 70,
+            "max": 79,
+            "label": "Sun"
+          },
+          {
+            "kind": "S",
+            "min": 80,
+            "max": 89,
+            "label": "Sspot"
+          },
+          {
+            "kind": "S",
+            "min": 90,
+            "max": 99,
+            "label": "Ssmall"
+          },
+          {
+            "kind": "S",
+            "min": 100,
+            "max": 109,
+            "label": "Sflw"
+          },
+          {
+            "kind": "S",
+            "min": 110,
+            "max": 119,
+            "label": "Svort"
+          },
+          {
+            "kind": "S",
+            "min": 120,
+            "max": 129,
+            "label": "Sdaisy"
+          },
+          {
+            "kind": "S",
+            "min": 130,
+            "max": 139,
+            "label": "Sdotring"
+          },
+          {
+            "kind": "S",
+            "min": 140,
+            "max": 149,
+            "label": "ssun-"
+          },
+          {
+            "kind": "V",
+            "min": 150,
+            "max": 255,
+            "label": "switchS->F"
+          }
+        ]
+      },
+      {
+        "name": "Prism",
+        "bands": [
+          {
+            "kind": "S",
+            "min": 0,
+            "max": 127,
+            "label": "off"
+          },
+          {
+            "kind": "S",
+            "min": 128,
+            "max": 156,
+            "label": "on"
+          },
+          {
+            "kind": "S",
+            "min": 157,
+            "max": 255,
+            "label": "spins>f"
+          }
+        ]
+      },
+      {
+        "name": "Macro",
+        "bands": [
+          {
+            "kind": "S",
+            "min": 0,
+            "max": 29,
+            "label": "none"
+          },
+          {
+            "kind": "S",
+            "min": 30,
+            "max": 59,
+            "label": "aut1"
+          },
+          {
+            "kind": "S",
+            "min": 60,
+            "max": 89,
+            "label": "aut2"
+          },
+          {
+            "kind": "S",
+            "min": 90,
+            "max": 119,
+            "label": "aut3"
+          },
+          {
+            "kind": "S",
+            "min": 120,
+            "max": 149,
+            "label": "aut4"
+          },
+          {
+            "kind": "S",
+            "min": 150,
+            "max": 179,
+            "label": "s1"
+          },
+          {
+            "kind": "S",
+            "min": 180,
+            "max": 209,
+            "label": "s2"
+          },
+          {
+            "kind": "S",
+            "min": 210,
+            "max": 239,
+            "label": "s3"
+          },
+          {
+            "kind": "S",
+            "min": 240,
+            "max": 255,
+            "label": "s4"
+          }
+        ]
+      },
+      {
+        "name": "Reset",
+        "bands": [
+          {
+            "kind": "S",
+            "min": 0,
+            "max": 249,
+            "label": "None"
+          },
+          {
+            "kind": "S",
+            "min": 0,
+            "max": 255,
+            "label": "3secReset"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "display": "80w 17ch spot with circle1",
+    "file": "/Library/Application Support/db audioware/Show Buddy Active//DmxLibrary//Custom/80w 17ch spot with circle.dmx",
+    "from": 172,
+    "to": 188,
+    "x": 0.8009901,
+    "y": 0.6528846,
+    "pan_range": 540.0,
+    "tilt_range": 170.0,
+    "beam_width": 30.0,
+    "channels": [
+      {
+        "name": "Pan",
+        "bands": [
+          {
+            "kind": "V",
+            "min": 0,
+            "max": 255,
+            "label": "Coarse"
+          }
+        ]
+      },
+      {
+        "name": "Pan",
+        "bands": [
+          {
+            "kind": "V",
+            "min": 0,
+            "max": 255,
+            "label": "Fine"
+          }
+        ]
+      },
+      {
+        "name": "Tilt",
+        "bands": [
+          {
+            "kind": "V",
+            "min": 0,
+            "max": 255,
+            "label": "Coarse"
+          }
+        ]
+      },
+      {
+        "name": "Tilt",
+        "bands": [
+          {
+            "kind": "V",
+            "min": 0,
+            "max": 255,
+            "label": "Fine"
+          }
+        ]
+      },
+      {
+        "name": "Movement speed",
+        "bands": [
+          {
+            "kind": "V",
+            "min": 0,
+            "max": 255,
+            "label": "Speed"
+          }
+        ]
+      },
+      {
+        "name": "Dimmer",
+        "bands": [
+          {
+            "kind": "D",
+            "min": 0,
+            "max": 255,
+            "label": ""
+          }
+        ]
+      },
+      {
+        "name": "cirstbOI",
+        "bands": [
+          {
+            "kind": "S",
+            "min": 0,
+            "max": 10,
+            "label": "NoStrb"
+          },
+          {
+            "kind": "S",
+            "min": 20,
+            "max": 80,
+            "label": "SlowStrb"
+          },
+          {
+            "kind": "S",
+            "min": 81,
+            "max": 180,
+            "label": "MidStrb"
+          },
+          {
+            "kind": "S",
+            "min": 181,
+            "max": 255,
+            "label": "FastStrb"
+          }
+        ]
+      },
+      {
+        "name": "Stbbm",
+        "bands": [
+          {
+            "kind": "S",
+            "min": 0,
+            "max": 10,
+            "label": "NoStrb"
+          },
+          {
+            "kind": "S",
+            "min": 20,
+            "max": 80,
+            "label": "SlowStrb"
+          },
+          {
+            "kind": "S",
+            "min": 81,
+            "max": 180,
+            "label": "MidStrb"
+          },
+          {
+            "kind": "S",
+            "min": 181,
+            "max": 255,
+            "label": "FastStrb"
+          }
+        ]
+      },
+      {
+        "name": "Stbcr",
+        "bands": [
+          {
+            "kind": "S",
+            "min": 0,
+            "max": 10,
+            "label": "NoStrb"
+          },
+          {
+            "kind": "S",
+            "min": 20,
+            "max": 80,
+            "label": "SlowStrb"
+          },
+          {
+            "kind": "S",
+            "min": 81,
+            "max": 180,
+            "label": "MidStrb"
+          },
+          {
+            "kind": "S",
+            "min": 181,
+            "max": 255,
+            "label": "FastStrb"
+          }
+        ]
+      },
+      {
+        "name": "Red",
+        "bands": [
+          {
+            "kind": "S",
+            "min": 0,
+            "max": 255,
+            "label": ""
+          }
+        ]
+      },
+      {
+        "name": "Green",
+        "bands": [
+          {
+            "kind": "S",
+            "min": 0,
+            "max": 255,
+            "label": ""
+          }
+        ]
+      },
+      {
+        "name": "Blue",
+        "bands": [
+          {
+            "kind": "S",
+            "min": 0,
+            "max": 255,
+            "label": ""
+          }
+        ]
+      },
+      {
+        "name": "White",
+        "bands": [
+          {
+            "kind": "S",
+            "min": 0,
+            "max": 255,
+            "label": ""
+          }
+        ]
+      },
+      {
+        "name": "Sound control",
+        "bands": [
+          {
+            "kind": "S",
+            "min": 0,
+            "max": 255,
+            "label": ""
+          }
+        ]
+      },
+      {
+        "name": "Staining",
+        "bands": [
+          {
+            "kind": "S",
+            "min": 0,
+            "max": 255,
+            "label": ""
+          }
+        ]
+      },
+      {
+        "name": "Circle effect",
+        "bands": [
+          {
+            "kind": "S",
+            "min": 0,
+            "max": 255,
+            "label": ""
+          }
+        ]
+      },
+      {
+        "name": "Reset",
+        "bands": [
+          {
+            "kind": "S",
+            "min": 0,
+            "max": 255,
+            "label": ""
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "display": "moving par1",
+    "file": "/Library/Application Support/db audioware/Show Buddy Active//DmxLibrary//Custom/moving par.dmx",
+    "from": 189,
+    "to": 202,
+    "x": 0.07821782,
+    "y": 0.49903843,
+    "pan_range": 540.0,
+    "tilt_range": 170.0,
+    "beam_width": 30.0,
+    "channels": [
+      {
+        "name": "Pan",
+        "bands": [
+          {
+            "kind": "V",
+            "min": 0,
+            "max": 255,
+            "label": ""
+          }
+        ]
+      },
+      {
+        "name": "Panfine",
+        "bands": [
+          {
+            "kind": "V",
+            "min": 0,
+            "max": 255,
+            "label": ""
+          }
+        ]
+      },
+      {
+        "name": "Tilt",
+        "bands": [
+          {
+            "kind": "V",
+            "min": 0,
+            "max": 255,
+            "label": ""
+          }
+        ]
+      },
+      {
+        "name": "Tiltfine",
+        "bands": [
+          {
+            "kind": "V",
+            "min": 0,
+            "max": 255,
+            "label": ""
+          }
+        ]
+      },
+      {
+        "name": "Movement speed",
+        "bands": [
+          {
+            "kind": "V",
+            "min": 0,
+            "max": 255,
+            "label": "Speed"
+          }
+        ]
+      },
+      {
+        "name": "Dimmer",
+        "bands": [
+          {
+            "kind": "S",
+            "min": 0,
+            "max": 7,
+            "label": "Nothing"
+          },
+          {
+            "kind": "S",
+            "min": 8,
+            "max": 134,
+            "label": "dimming"
+          },
+          {
+            "kind": "S",
+            "min": 135,
+            "max": 239,
+            "label": "Strobes>f"
+          },
+          {
+            "kind": "S",
+            "min": 240,
+            "max": 255,
+            "label": "medallion"
+          }
+        ]
+      },
+      {
+        "name": "Red",
+        "bands": [
+          {
+            "kind": "S",
+            "min": 0,
+            "max": 255,
+            "label": ""
+          }
+        ]
+      },
+      {
+        "name": "Green",
+        "bands": [
+          {
+            "kind": "S",
+            "min": 0,
+            "max": 255,
+            "label": ""
+          }
+        ]
+      },
+      {
+        "name": "Blue",
+        "bands": [
+          {
+            "kind": "S",
+            "min": 0,
+            "max": 255,
+            "label": ""
+          }
+        ]
+      },
+      {
+        "name": "White",
+        "bands": [
+          {
+            "kind": "S",
+            "min": 0,
+            "max": 255,
+            "label": ""
+          }
+        ]
+      },
+      {
+        "name": "Macro",
+        "bands": [
+          {
+            "kind": "S",
+            "min": 0,
+            "max": 7,
+            "label": "colorselect"
+          },
+          {
+            "kind": "S",
+            "min": 8,
+            "max": 231,
+            "label": "color combo"
+          },
+          {
+            "kind": "S",
+            "min": 232,
+            "max": 255,
+            "label": "color jump"
+          }
+        ]
+      },
+      {
+        "name": "ClrSpd",
+        "bands": [
+          {
+            "kind": "S",
+            "min": 0,
+            "max": 255,
+            "label": "speed"
+          }
+        ]
+      },
+      {
+        "name": "SndMd",
+        "bands": [
+          {
+            "kind": "S",
+            "min": 0,
+            "max": 255,
+            "label": ""
+          }
+        ]
+      },
+      {
+        "name": "Reset",
+        "bands": [
+          {
+            "kind": "S",
+            "min": 0,
+            "max": 255,
+            "label": ""
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "display": "moving par2",
+    "file": "/Library/Application Support/db audioware/Show Buddy Active//DmxLibrary//Custom/moving par.dmx",
+    "from": 203,
+    "to": 216,
+    "x": 0.12352475,
+    "y": 0.49903843,
+    "pan_range": 540.0,
+    "tilt_range": 170.0,
+    "beam_width": 30.0,
+    "channels": [
+      {
+        "name": "Pan",
+        "bands": [
+          {
+            "kind": "V",
+            "min": 0,
+            "max": 255,
+            "label": ""
+          }
+        ]
+      },
+      {
+        "name": "Panfine",
+        "bands": [
+          {
+            "kind": "V",
+            "min": 0,
+            "max": 255,
+            "label": ""
+          }
+        ]
+      },
+      {
+        "name": "Tilt",
+        "bands": [
+          {
+            "kind": "V",
+            "min": 0,
+            "max": 255,
+            "label": ""
+          }
+        ]
+      },
+      {
+        "name": "Tiltfine",
+        "bands": [
+          {
+            "kind": "V",
+            "min": 0,
+            "max": 255,
+            "label": ""
+          }
+        ]
+      },
+      {
+        "name": "Movement speed",
+        "bands": [
+          {
+            "kind": "V",
+            "min": 0,
+            "max": 255,
+            "label": "Speed"
+          }
+        ]
+      },
+      {
+        "name": "Dimmer",
+        "bands": [
+          {
+            "kind": "S",
+            "min": 0,
+            "max": 7,
+            "label": "Nothing"
+          },
+          {
+            "kind": "S",
+            "min": 8,
+            "max": 134,
+            "label": "dimming"
+          },
+          {
+            "kind": "S",
+            "min": 135,
+            "max": 239,
+            "label": "Strobes>f"
+          },
+          {
+            "kind": "S",
+            "min": 240,
+            "max": 255,
+            "label": "medallion"
+          }
+        ]
+      },
+      {
+        "name": "Red",
+        "bands": [
+          {
+            "kind": "S",
+            "min": 0,
+            "max": 255,
+            "label": ""
+          }
+        ]
+      },
+      {
+        "name": "Green",
+        "bands": [
+          {
+            "kind": "S",
+            "min": 0,
+            "max": 255,
+            "label": ""
+          }
+        ]
+      },
+      {
+        "name": "Blue",
+        "bands": [
+          {
+            "kind": "S",
+            "min": 0,
+            "max": 255,
+            "label": ""
+          }
+        ]
+      },
+      {
+        "name": "White",
+        "bands": [
+          {
+            "kind": "S",
+            "min": 0,
+            "max": 255,
+            "label": ""
+          }
+        ]
+      },
+      {
+        "name": "Macro",
+        "bands": [
+          {
+            "kind": "S",
+            "min": 0,
+            "max": 7,
+            "label": "colorselect"
+          },
+          {
+            "kind": "S",
+            "min": 8,
+            "max": 231,
+            "label": "color combo"
+          },
+          {
+            "kind": "S",
+            "min": 232,
+            "max": 255,
+            "label": "color jump"
+          }
+        ]
+      },
+      {
+        "name": "ClrSpd",
+        "bands": [
+          {
+            "kind": "S",
+            "min": 0,
+            "max": 255,
+            "label": "speed"
+          }
+        ]
+      },
+      {
+        "name": "SndMd",
+        "bands": [
+          {
+            "kind": "S",
+            "min": 0,
+            "max": 255,
+            "label": ""
+          }
+        ]
+      },
+      {
+        "name": "Reset",
+        "bands": [
+          {
+            "kind": "S",
+            "min": 0,
+            "max": 255,
+            "label": ""
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "display": "moving par3",
+    "file": "/Library/Application Support/db audioware/Show Buddy Active//DmxLibrary//Custom/moving par.dmx",
+    "from": 217,
+    "to": 230,
+    "x": 0.16883168,
+    "y": 0.49903843,
+    "pan_range": 540.0,
+    "tilt_range": 170.0,
+    "beam_width": 30.0,
+    "channels": [
+      {
+        "name": "Pan",
+        "bands": [
+          {
+            "kind": "V",
+            "min": 0,
+            "max": 255,
+            "label": ""
+          }
+        ]
+      },
+      {
+        "name": "Panfine",
+        "bands": [
+          {
+            "kind": "V",
+            "min": 0,
+            "max": 255,
+            "label": ""
+          }
+        ]
+      },
+      {
+        "name": "Tilt",
+        "bands": [
+          {
+            "kind": "V",
+            "min": 0,
+            "max": 255,
+            "label": ""
+          }
+        ]
+      },
+      {
+        "name": "Tiltfine",
+        "bands": [
+          {
+            "kind": "V",
+            "min": 0,
+            "max": 255,
+            "label": ""
+          }
+        ]
+      },
+      {
+        "name": "Movement speed",
+        "bands": [
+          {
+            "kind": "V",
+            "min": 0,
+            "max": 255,
+            "label": "Speed"
+          }
+        ]
+      },
+      {
+        "name": "Dimmer",
+        "bands": [
+          {
+            "kind": "S",
+            "min": 0,
+            "max": 7,
+            "label": "Nothing"
+          },
+          {
+            "kind": "S",
+            "min": 8,
+            "max": 134,
+            "label": "dimming"
+          },
+          {
+            "kind": "S",
+            "min": 135,
+            "max": 239,
+            "label": "Strobes>f"
+          },
+          {
+            "kind": "S",
+            "min": 240,
+            "max": 255,
+            "label": "medallion"
+          }
+        ]
+      },
+      {
+        "name": "Red",
+        "bands": [
+          {
+            "kind": "S",
+            "min": 0,
+            "max": 255,
+            "label": ""
+          }
+        ]
+      },
+      {
+        "name": "Green",
+        "bands": [
+          {
+            "kind": "S",
+            "min": 0,
+            "max": 255,
+            "label": ""
+          }
+        ]
+      },
+      {
+        "name": "Blue",
+        "bands": [
+          {
+            "kind": "S",
+            "min": 0,
+            "max": 255,
+            "label": ""
+          }
+        ]
+      },
+      {
+        "name": "White",
+        "bands": [
+          {
+            "kind": "S",
+            "min": 0,
+            "max": 255,
+            "label": ""
+          }
+        ]
+      },
+      {
+        "name": "Macro",
+        "bands": [
+          {
+            "kind": "S",
+            "min": 0,
+            "max": 7,
+            "label": "colorselect"
+          },
+          {
+            "kind": "S",
+            "min": 8,
+            "max": 231,
+            "label": "color combo"
+          },
+          {
+            "kind": "S",
+            "min": 232,
+            "max": 255,
+            "label": "color jump"
+          }
+        ]
+      },
+      {
+        "name": "ClrSpd",
+        "bands": [
+          {
+            "kind": "S",
+            "min": 0,
+            "max": 255,
+            "label": "speed"
+          }
+        ]
+      },
+      {
+        "name": "SndMd",
+        "bands": [
+          {
+            "kind": "S",
+            "min": 0,
+            "max": 255,
+            "label": ""
+          }
+        ]
+      },
+      {
+        "name": "Reset",
+        "bands": [
+          {
+            "kind": "S",
+            "min": 0,
+            "max": 255,
+            "label": ""
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "display": "moving par4",
+    "file": "/Library/Application Support/db audioware/Show Buddy Active//DmxLibrary//Custom/moving par.dmx",
+    "from": 231,
+    "to": 244,
+    "x": 0.21413863,
+    "y": 0.49903843,
+    "pan_range": 540.0,
+    "tilt_range": 170.0,
+    "beam_width": 30.0,
+    "channels": [
+      {
+        "name": "Pan",
+        "bands": [
+          {
+            "kind": "V",
+            "min": 0,
+            "max": 255,
+            "label": ""
+          }
+        ]
+      },
+      {
+        "name": "Panfine",
+        "bands": [
+          {
+            "kind": "V",
+            "min": 0,
+            "max": 255,
+            "label": ""
+          }
+        ]
+      },
+      {
+        "name": "Tilt",
+        "bands": [
+          {
+            "kind": "V",
+            "min": 0,
+            "max": 255,
+            "label": ""
+          }
+        ]
+      },
+      {
+        "name": "Tiltfine",
+        "bands": [
+          {
+            "kind": "V",
+            "min": 0,
+            "max": 255,
+            "label": ""
+          }
+        ]
+      },
+      {
+        "name": "Movement speed",
+        "bands": [
+          {
+            "kind": "V",
+            "min": 0,
+            "max": 255,
+            "label": "Speed"
+          }
+        ]
+      },
+      {
+        "name": "Dimmer",
+        "bands": [
+          {
+            "kind": "S",
+            "min": 0,
+            "max": 7,
+            "label": "Nothing"
+          },
+          {
+            "kind": "S",
+            "min": 8,
+            "max": 134,
+            "label": "dimming"
+          },
+          {
+            "kind": "S",
+            "min": 135,
+            "max": 239,
+            "label": "Strobes>f"
+          },
+          {
+            "kind": "S",
+            "min": 240,
+            "max": 255,
+            "label": "medallion"
+          }
+        ]
+      },
+      {
+        "name": "Red",
+        "bands": [
+          {
+            "kind": "S",
+            "min": 0,
+            "max": 255,
+            "label": ""
+          }
+        ]
+      },
+      {
+        "name": "Green",
+        "bands": [
+          {
+            "kind": "S",
+            "min": 0,
+            "max": 255,
+            "label": ""
+          }
+        ]
+      },
+      {
+        "name": "Blue",
+        "bands": [
+          {
+            "kind": "S",
+            "min": 0,
+            "max": 255,
+            "label": ""
+          }
+        ]
+      },
+      {
+        "name": "White",
+        "bands": [
+          {
+            "kind": "S",
+            "min": 0,
+            "max": 255,
+            "label": ""
+          }
+        ]
+      },
+      {
+        "name": "Macro",
+        "bands": [
+          {
+            "kind": "S",
+            "min": 0,
+            "max": 7,
+            "label": "colorselect"
+          },
+          {
+            "kind": "S",
+            "min": 8,
+            "max": 231,
+            "label": "color combo"
+          },
+          {
+            "kind": "S",
+            "min": 232,
+            "max": 255,
+            "label": "color jump"
+          }
+        ]
+      },
+      {
+        "name": "ClrSpd",
+        "bands": [
+          {
+            "kind": "S",
+            "min": 0,
+            "max": 255,
+            "label": "speed"
+          }
+        ]
+      },
+      {
+        "name": "SndMd",
+        "bands": [
+          {
+            "kind": "S",
+            "min": 0,
+            "max": 255,
+            "label": ""
+          }
+        ]
+      },
+      {
+        "name": "Reset",
+        "bands": [
+          {
+            "kind": "S",
+            "min": 0,
+            "max": 255,
+            "label": ""
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "display": "80w 17ch spot with circle1",
+    "file": "/Library/Application Support/db audioware/Show Buddy Active//DmxLibrary//Custom/80w 17ch spot with circle.dmx",
+    "from": 245,
+    "to": 261,
+    "x": 0.2796146,
+    "y": 0.5006915,
+    "pan_range": 540.0,
+    "tilt_range": 170.0,
+    "beam_width": 30.0,
+    "channels": [
+      {
+        "name": "Pan",
+        "bands": [
+          {
+            "kind": "V",
+            "min": 0,
+            "max": 255,
+            "label": "Coarse"
+          }
+        ]
+      },
+      {
+        "name": "Pan",
+        "bands": [
+          {
+            "kind": "V",
+            "min": 0,
+            "max": 255,
+            "label": "Fine"
+          }
+        ]
+      },
+      {
+        "name": "Tilt",
+        "bands": [
+          {
+            "kind": "V",
+            "min": 0,
+            "max": 255,
+            "label": "Coarse"
+          }
+        ]
+      },
+      {
+        "name": "Tilt",
+        "bands": [
+          {
+            "kind": "V",
+            "min": 0,
+            "max": 255,
+            "label": "Fine"
+          }
+        ]
+      },
+      {
+        "name": "Movement speed",
+        "bands": [
+          {
+            "kind": "V",
+            "min": 0,
+            "max": 255,
+            "label": "Speed"
+          }
+        ]
+      },
+      {
+        "name": "Dimmer",
+        "bands": [
+          {
+            "kind": "D",
+            "min": 0,
+            "max": 255,
+            "label": ""
+          }
+        ]
+      },
+      {
+        "name": "cirstbOI",
+        "bands": [
+          {
+            "kind": "S",
+            "min": 0,
+            "max": 10,
+            "label": "NoStrb"
+          },
+          {
+            "kind": "S",
+            "min": 20,
+            "max": 80,
+            "label": "SlowStrb"
+          },
+          {
+            "kind": "S",
+            "min": 81,
+            "max": 180,
+            "label": "MidStrb"
+          },
+          {
+            "kind": "S",
+            "min": 181,
+            "max": 255,
+            "label": "FastStrb"
+          }
+        ]
+      },
+      {
+        "name": "Stbbm",
+        "bands": [
+          {
+            "kind": "S",
+            "min": 0,
+            "max": 10,
+            "label": "NoStrb"
+          },
+          {
+            "kind": "S",
+            "min": 20,
+            "max": 80,
+            "label": "SlowStrb"
+          },
+          {
+            "kind": "S",
+            "min": 81,
+            "max": 180,
+            "label": "MidStrb"
+          },
+          {
+            "kind": "S",
+            "min": 181,
+            "max": 255,
+            "label": "FastStrb"
+          }
+        ]
+      },
+      {
+        "name": "Stbcr",
+        "bands": [
+          {
+            "kind": "S",
+            "min": 0,
+            "max": 10,
+            "label": "NoStrb"
+          },
+          {
+            "kind": "S",
+            "min": 20,
+            "max": 80,
+            "label": "SlowStrb"
+          },
+          {
+            "kind": "S",
+            "min": 81,
+            "max": 180,
+            "label": "MidStrb"
+          },
+          {
+            "kind": "S",
+            "min": 181,
+            "max": 255,
+            "label": "FastStrb"
+          }
+        ]
+      },
+      {
+        "name": "Red",
+        "bands": [
+          {
+            "kind": "S",
+            "min": 0,
+            "max": 255,
+            "label": ""
+          }
+        ]
+      },
+      {
+        "name": "Green",
+        "bands": [
+          {
+            "kind": "S",
+            "min": 0,
+            "max": 255,
+            "label": ""
+          }
+        ]
+      },
+      {
+        "name": "Blue",
+        "bands": [
+          {
+            "kind": "S",
+            "min": 0,
+            "max": 255,
+            "label": ""
+          }
+        ]
+      },
+      {
+        "name": "White",
+        "bands": [
+          {
+            "kind": "S",
+            "min": 0,
+            "max": 255,
+            "label": ""
+          }
+        ]
+      },
+      {
+        "name": "Sound control",
+        "bands": [
+          {
+            "kind": "S",
+            "min": 0,
+            "max": 255,
+            "label": ""
+          }
+        ]
+      },
+      {
+        "name": "Staining",
+        "bands": [
+          {
+            "kind": "S",
+            "min": 0,
+            "max": 255,
+            "label": ""
+          }
+        ]
+      },
+      {
+        "name": "Circle effect",
+        "bands": [
+          {
+            "kind": "S",
+            "min": 0,
+            "max": 255,
+            "label": ""
+          }
+        ]
+      },
+      {
+        "name": "Reset",
+        "bands": [
+          {
+            "kind": "S",
+            "min": 0,
+            "max": 255,
+            "label": ""
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "display": "80w 17ch spot with circle1",
+    "file": "/Library/Application Support/db audioware/Show Buddy Active//DmxLibrary//Custom/80w 17ch spot with circle.dmx",
+    "from": 262,
+    "to": 278,
+    "x": 0.3257426,
+    "y": 0.49903852,
+    "pan_range": 540.0,
+    "tilt_range": 170.0,
+    "beam_width": 30.0,
+    "channels": [
+      {
+        "name": "Pan",
+        "bands": [
+          {
+            "kind": "V",
+            "min": 0,
+            "max": 255,
+            "label": "Coarse"
+          }
+        ]
+      },
+      {
+        "name": "Pan",
+        "bands": [
+          {
+            "kind": "V",
+            "min": 0,
+            "max": 255,
+            "label": "Fine"
+          }
+        ]
+      },
+      {
+        "name": "Tilt",
+        "bands": [
+          {
+            "kind": "V",
+            "min": 0,
+            "max": 255,
+            "label": "Coarse"
+          }
+        ]
+      },
+      {
+        "name": "Tilt",
+        "bands": [
+          {
+            "kind": "V",
+            "min": 0,
+            "max": 255,
+            "label": "Fine"
+          }
+        ]
+      },
+      {
+        "name": "Movement speed",
+        "bands": [
+          {
+            "kind": "V",
+            "min": 0,
+            "max": 255,
+            "label": "Speed"
+          }
+        ]
+      },
+      {
+        "name": "Dimmer",
+        "bands": [
+          {
+            "kind": "D",
+            "min": 0,
+            "max": 255,
+            "label": ""
+          }
+        ]
+      },
+      {
+        "name": "cirstbOI",
+        "bands": [
+          {
+            "kind": "S",
+            "min": 0,
+            "max": 10,
+            "label": "NoStrb"
+          },
+          {
+            "kind": "S",
+            "min": 20,
+            "max": 80,
+            "label": "SlowStrb"
+          },
+          {
+            "kind": "S",
+            "min": 81,
+            "max": 180,
+            "label": "MidStrb"
+          },
+          {
+            "kind": "S",
+            "min": 181,
+            "max": 255,
+            "label": "FastStrb"
+          }
+        ]
+      },
+      {
+        "name": "Stbbm",
+        "bands": [
+          {
+            "kind": "S",
+            "min": 0,
+            "max": 10,
+            "label": "NoStrb"
+          },
+          {
+            "kind": "S",
+            "min": 20,
+            "max": 80,
+            "label": "SlowStrb"
+          },
+          {
+            "kind": "S",
+            "min": 81,
+            "max": 180,
+            "label": "MidStrb"
+          },
+          {
+            "kind": "S",
+            "min": 181,
+            "max": 255,
+            "label": "FastStrb"
+          }
+        ]
+      },
+      {
+        "name": "Stbcr",
+        "bands": [
+          {
+            "kind": "S",
+            "min": 0,
+            "max": 10,
+            "label": "NoStrb"
+          },
+          {
+            "kind": "S",
+            "min": 20,
+            "max": 80,
+            "label": "SlowStrb"
+          },
+          {
+            "kind": "S",
+            "min": 81,
+            "max": 180,
+            "label": "MidStrb"
+          },
+          {
+            "kind": "S",
+            "min": 181,
+            "max": 255,
+            "label": "FastStrb"
+          }
+        ]
+      },
+      {
+        "name": "Red",
+        "bands": [
+          {
+            "kind": "S",
+            "min": 0,
+            "max": 255,
+            "label": ""
+          }
+        ]
+      },
+      {
+        "name": "Green",
+        "bands": [
+          {
+            "kind": "S",
+            "min": 0,
+            "max": 255,
+            "label": ""
+          }
+        ]
+      },
+      {
+        "name": "Blue",
+        "bands": [
+          {
+            "kind": "S",
+            "min": 0,
+            "max": 255,
+            "label": ""
+          }
+        ]
+      },
+      {
+        "name": "White",
+        "bands": [
+          {
+            "kind": "S",
+            "min": 0,
+            "max": 255,
+            "label": ""
+          }
+        ]
+      },
+      {
+        "name": "Sound control",
+        "bands": [
+          {
+            "kind": "S",
+            "min": 0,
+            "max": 255,
+            "label": ""
+          }
+        ]
+      },
+      {
+        "name": "Staining",
+        "bands": [
+          {
+            "kind": "S",
+            "min": 0,
+            "max": 255,
+            "label": ""
+          }
+        ]
+      },
+      {
+        "name": "Circle effect",
+        "bands": [
+          {
+            "kind": "S",
+            "min": 0,
+            "max": 255,
+            "label": ""
+          }
+        ]
+      },
+      {
+        "name": "Reset",
+        "bands": [
+          {
+            "kind": "S",
+            "min": 0,
+            "max": 255,
+            "label": ""
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "display": "120W moving head (mini beam spot LED)1",
+    "file": "/Library/Application Support/db audioware/Show Buddy Active//DmxLibrary//Custom/120W moving head (mini beam spot LED).dmx",
+    "from": 279,
+    "to": 290,
+    "x": 0.5152582,
+    "y": 0.50309527,
+    "pan_range": 540.0,
+    "tilt_range": 170.0,
+    "beam_width": 30.0,
+    "channels": [
+      {
+        "name": "Pan",
+        "bands": [
+          {
+            "kind": "V",
+            "min": 0,
+            "max": 255,
+            "label": "Coarse"
+          }
+        ]
+      },
+      {
+        "name": "Pan",
+        "bands": [
+          {
+            "kind": "V",
+            "min": 0,
+            "max": 255,
+            "label": "Fine"
+          }
+        ]
+      },
+      {
+        "name": "Tilt",
+        "bands": [
+          {
+            "kind": "V",
+            "min": 0,
+            "max": 255,
+            "label": "Coarse"
+          }
+        ]
+      },
+      {
+        "name": "Tilt",
+        "bands": [
+          {
+            "kind": "V",
+            "min": 0,
+            "max": 255,
+            "label": "Fine"
+          }
+        ]
+      },
+      {
+        "name": "Movement speed",
+        "bands": [
+          {
+            "kind": "V",
+            "min": 0,
+            "max": 255,
+            "label": "Speed"
+          }
+        ]
+      },
+      {
+        "name": "Dimmer",
+        "bands": [
+          {
+            "kind": "D",
+            "min": 0,
+            "max": 255,
+            "label": ""
+          }
+        ]
+      },
+      {
+        "name": "Strobe",
+        "bands": [
+          {
+            "kind": "S",
+            "min": 0,
+            "max": 10,
+            "label": "NoStrb"
+          },
+          {
+            "kind": "S",
+            "min": 20,
+            "max": 80,
+            "label": "SlowStrb"
+          },
+          {
+            "kind": "S",
+            "min": 81,
+            "max": 180,
+            "label": "MidStrb"
+          },
+          {
+            "kind": "S",
+            "min": 181,
+            "max": 255,
+            "label": "FastStrb"
+          }
+        ]
+      },
+      {
+        "name": "Color",
+        "bands": [
+          {
+            "kind": "S",
+            "min": 0,
+            "max": 19,
+            "label": "White"
+          },
+          {
+            "kind": "S",
+            "min": 20,
+            "max": 39,
+            "label": "Red"
+          },
+          {
+            "kind": "S",
+            "min": 40,
+            "max": 59,
+            "label": "Orange"
+          },
+          {
+            "kind": "S",
+            "min": 60,
+            "max": 79,
+            "label": "Yellow"
+          },
+          {
+            "kind": "S",
+            "min": 80,
+            "max": 99,
+            "label": "Green"
+          },
+          {
+            "kind": "S",
+            "min": 100,
+            "max": 119,
+            "label": "Blue"
+          },
+          {
+            "kind": "S",
+            "min": 120,
+            "max": 139,
+            "label": "Magenta"
+          },
+          {
+            "kind": "S",
+            "min": 140,
+            "max": 159,
+            "label": "Cyan"
+          },
+          {
+            "kind": "S",
+            "min": 160,
+            "max": 255,
+            "label": "auto/multicolor"
+          }
+        ]
+      },
+      {
+        "name": "Gobo",
+        "bands": [
+          {
+            "kind": "S",
+            "min": 0,
+            "max": 9,
+            "label": "Spot"
+          },
+          {
+            "kind": "S",
+            "min": 10,
+            "max": 19,
+            "label": "Small"
+          },
+          {
+            "kind": "S",
+            "min": 20,
+            "max": 29,
+            "label": "Flwr"
+          },
+          {
+            "kind": "S",
+            "min": 30,
+            "max": 39,
+            "label": "Vortex"
+          },
+          {
+            "kind": "S",
+            "min": 40,
+            "max": 49,
+            "label": "Daisy"
+          },
+          {
+            "kind": "S",
+            "min": 50,
+            "max": 59,
+            "label": "dotring"
+          },
+          {
+            "kind": "S",
+            "min": 60,
+            "max": 69,
+            "label": "invVortex"
+          },
+          {
+            "kind": "S",
+            "min": 70,
+            "max": 79,
+            "label": "Sun"
+          },
+          {
+            "kind": "S",
+            "min": 80,
+            "max": 89,
+            "label": "Sspot"
+          },
+          {
+            "kind": "S",
+            "min": 90,
+            "max": 99,
+            "label": "Ssmall"
+          },
+          {
+            "kind": "S",
+            "min": 100,
+            "max": 109,
+            "label": "Sflw"
+          },
+          {
+            "kind": "S",
+            "min": 110,
+            "max": 119,
+            "label": "Svort"
+          },
+          {
+            "kind": "S",
+            "min": 120,
+            "max": 129,
+            "label": "Sdaisy"
+          },
+          {
+            "kind": "S",
+            "min": 130,
+            "max": 139,
+            "label": "Sdotring"
+          },
+          {
+            "kind": "S",
+            "min": 140,
+            "max": 149,
+            "label": "ssun-"
+          },
+          {
+            "kind": "V",
+            "min": 150,
+            "max": 255,
+            "label": "switchS->F"
+          }
+        ]
+      },
+      {
+        "name": "Prism",
+        "bands": [
+          {
+            "kind": "S",
+            "min": 0,
+            "max": 127,
+            "label": "off"
+          },
+          {
+            "kind": "S",
+            "min": 128,
+            "max": 156,
+            "label": "on"
+          },
+          {
+            "kind": "S",
+            "min": 157,
+            "max": 255,
+            "label": "spins>f"
+          }
+        ]
+      },
+      {
+        "name": "Macro",
+        "bands": [
+          {
+            "kind": "S",
+            "min": 0,
+            "max": 29,
+            "label": "none"
+          },
+          {
+            "kind": "S",
+            "min": 30,
+            "max": 59,
+            "label": "aut1"
+          },
+          {
+            "kind": "S",
+            "min": 60,
+            "max": 89,
+            "label": "aut2"
+          },
+          {
+            "kind": "S",
+            "min": 90,
+            "max": 119,
+            "label": "aut3"
+          },
+          {
+            "kind": "S",
+            "min": 120,
+            "max": 149,
+            "label": "aut4"
+          },
+          {
+            "kind": "S",
+            "min": 150,
+            "max": 179,
+            "label": "s1"
+          },
+          {
+            "kind": "S",
+            "min": 180,
+            "max": 209,
+            "label": "s2"
+          },
+          {
+            "kind": "S",
+            "min": 210,
+            "max": 239,
+            "label": "s3"
+          },
+          {
+            "kind": "S",
+            "min": 240,
+            "max": 255,
+            "label": "s4"
+          }
+        ]
+      },
+      {
+        "name": "Reset",
+        "bands": [
+          {
+            "kind": "S",
+            "min": 0,
+            "max": 249,
+            "label": "None"
+          },
+          {
+            "kind": "S",
+            "min": 0,
+            "max": 255,
+            "label": "3secReset"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "display": "120W moving head (mini beam spot LED)2",
+    "file": "/Library/Application Support/db audioware/Show Buddy Active//DmxLibrary//Custom/120W moving head (mini beam spot LED).dmx",
+    "from": 291,
+    "to": 302,
+    "x": 0.5981889,
+    "y": 0.49828756,
+    "pan_range": 540.0,
+    "tilt_range": 170.0,
+    "beam_width": 30.0,
+    "channels": [
+      {
+        "name": "Pan",
+        "bands": [
+          {
+            "kind": "V",
+            "min": 0,
+            "max": 255,
+            "label": "Coarse"
+          }
+        ]
+      },
+      {
+        "name": "Pan",
+        "bands": [
+          {
+            "kind": "V",
+            "min": 0,
+            "max": 255,
+            "label": "Fine"
+          }
+        ]
+      },
+      {
+        "name": "Tilt",
+        "bands": [
+          {
+            "kind": "V",
+            "min": 0,
+            "max": 255,
+            "label": "Coarse"
+          }
+        ]
+      },
+      {
+        "name": "Tilt",
+        "bands": [
+          {
+            "kind": "V",
+            "min": 0,
+            "max": 255,
+            "label": "Fine"
+          }
+        ]
+      },
+      {
+        "name": "Movement speed",
+        "bands": [
+          {
+            "kind": "V",
+            "min": 0,
+            "max": 255,
+            "label": "Speed"
+          }
+        ]
+      },
+      {
+        "name": "Dimmer",
+        "bands": [
+          {
+            "kind": "D",
+            "min": 0,
+            "max": 255,
+            "label": ""
+          }
+        ]
+      },
+      {
+        "name": "Strobe",
+        "bands": [
+          {
+            "kind": "S",
+            "min": 0,
+            "max": 10,
+            "label": "NoStrb"
+          },
+          {
+            "kind": "S",
+            "min": 20,
+            "max": 80,
+            "label": "SlowStrb"
+          },
+          {
+            "kind": "S",
+            "min": 81,
+            "max": 180,
+            "label": "MidStrb"
+          },
+          {
+            "kind": "S",
+            "min": 181,
+            "max": 255,
+            "label": "FastStrb"
+          }
+        ]
+      },
+      {
+        "name": "Color",
+        "bands": [
+          {
+            "kind": "S",
+            "min": 0,
+            "max": 19,
+            "label": "White"
+          },
+          {
+            "kind": "S",
+            "min": 20,
+            "max": 39,
+            "label": "Red"
+          },
+          {
+            "kind": "S",
+            "min": 40,
+            "max": 59,
+            "label": "Orange"
+          },
+          {
+            "kind": "S",
+            "min": 60,
+            "max": 79,
+            "label": "Yellow"
+          },
+          {
+            "kind": "S",
+            "min": 80,
+            "max": 99,
+            "label": "Green"
+          },
+          {
+            "kind": "S",
+            "min": 100,
+            "max": 119,
+            "label": "Blue"
+          },
+          {
+            "kind": "S",
+            "min": 120,
+            "max": 139,
+            "label": "Magenta"
+          },
+          {
+            "kind": "S",
+            "min": 140,
+            "max": 159,
+            "label": "Cyan"
+          },
+          {
+            "kind": "S",
+            "min": 160,
+            "max": 255,
+            "label": "auto/multicolor"
+          }
+        ]
+      },
+      {
+        "name": "Gobo",
+        "bands": [
+          {
+            "kind": "S",
+            "min": 0,
+            "max": 9,
+            "label": "Spot"
+          },
+          {
+            "kind": "S",
+            "min": 10,
+            "max": 19,
+            "label": "Small"
+          },
+          {
+            "kind": "S",
+            "min": 20,
+            "max": 29,
+            "label": "Flwr"
+          },
+          {
+            "kind": "S",
+            "min": 30,
+            "max": 39,
+            "label": "Vortex"
+          },
+          {
+            "kind": "S",
+            "min": 40,
+            "max": 49,
+            "label": "Daisy"
+          },
+          {
+            "kind": "S",
+            "min": 50,
+            "max": 59,
+            "label": "dotring"
+          },
+          {
+            "kind": "S",
+            "min": 60,
+            "max": 69,
+            "label": "invVortex"
+          },
+          {
+            "kind": "S",
+            "min": 70,
+            "max": 79,
+            "label": "Sun"
+          },
+          {
+            "kind": "S",
+            "min": 80,
+            "max": 89,
+            "label": "Sspot"
+          },
+          {
+            "kind": "S",
+            "min": 90,
+            "max": 99,
+            "label": "Ssmall"
+          },
+          {
+            "kind": "S",
+            "min": 100,
+            "max": 109,
+            "label": "Sflw"
+          },
+          {
+            "kind": "S",
+            "min": 110,
+            "max": 119,
+            "label": "Svort"
+          },
+          {
+            "kind": "S",
+            "min": 120,
+            "max": 129,
+            "label": "Sdaisy"
+          },
+          {
+            "kind": "S",
+            "min": 130,
+            "max": 139,
+            "label": "Sdotring"
+          },
+          {
+            "kind": "S",
+            "min": 140,
+            "max": 149,
+            "label": "ssun-"
+          },
+          {
+            "kind": "V",
+            "min": 150,
+            "max": 255,
+            "label": "switchS->F"
+          }
+        ]
+      },
+      {
+        "name": "Prism",
+        "bands": [
+          {
+            "kind": "S",
+            "min": 0,
+            "max": 127,
+            "label": "off"
+          },
+          {
+            "kind": "S",
+            "min": 128,
+            "max": 156,
+            "label": "on"
+          },
+          {
+            "kind": "S",
+            "min": 157,
+            "max": 255,
+            "label": "spins>f"
+          }
+        ]
+      },
+      {
+        "name": "Macro",
+        "bands": [
+          {
+            "kind": "S",
+            "min": 0,
+            "max": 29,
+            "label": "none"
+          },
+          {
+            "kind": "S",
+            "min": 30,
+            "max": 59,
+            "label": "aut1"
+          },
+          {
+            "kind": "S",
+            "min": 60,
+            "max": 89,
+            "label": "aut2"
+          },
+          {
+            "kind": "S",
+            "min": 90,
+            "max": 119,
+            "label": "aut3"
+          },
+          {
+            "kind": "S",
+            "min": 120,
+            "max": 149,
+            "label": "aut4"
+          },
+          {
+            "kind": "S",
+            "min": 150,
+            "max": 179,
+            "label": "s1"
+          },
+          {
+            "kind": "S",
+            "min": 180,
+            "max": 209,
+            "label": "s2"
+          },
+          {
+            "kind": "S",
+            "min": 210,
+            "max": 239,
+            "label": "s3"
+          },
+          {
+            "kind": "S",
+            "min": 240,
+            "max": 255,
+            "label": "s4"
+          }
+        ]
+      },
+      {
+        "name": "Reset",
+        "bands": [
+          {
+            "kind": "S",
+            "min": 0,
+            "max": 249,
+            "label": "None"
+          },
+          {
+            "kind": "S",
+            "min": 0,
+            "max": 255,
+            "label": "3secReset"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "display": "80w 17ch spot with circle1",
+    "file": "/Library/Application Support/db audioware/Show Buddy Active//DmxLibrary//Custom/80w 17ch spot with circle.dmx",
+    "from": 303,
+    "to": 319,
+    "x": 0.7845651,
+    "y": 0.50309527,
+    "pan_range": 540.0,
+    "tilt_range": 170.0,
+    "beam_width": 30.0,
+    "channels": [
+      {
+        "name": "Pan",
+        "bands": [
+          {
+            "kind": "V",
+            "min": 0,
+            "max": 255,
+            "label": "Coarse"
+          }
+        ]
+      },
+      {
+        "name": "Pan",
+        "bands": [
+          {
+            "kind": "V",
+            "min": 0,
+            "max": 255,
+            "label": "Fine"
+          }
+        ]
+      },
+      {
+        "name": "Tilt",
+        "bands": [
+          {
+            "kind": "V",
+            "min": 0,
+            "max": 255,
+            "label": "Coarse"
+          }
+        ]
+      },
+      {
+        "name": "Tilt",
+        "bands": [
+          {
+            "kind": "V",
+            "min": 0,
+            "max": 255,
+            "label": "Fine"
+          }
+        ]
+      },
+      {
+        "name": "Movement speed",
+        "bands": [
+          {
+            "kind": "V",
+            "min": 0,
+            "max": 255,
+            "label": "Speed"
+          }
+        ]
+      },
+      {
+        "name": "Dimmer",
+        "bands": [
+          {
+            "kind": "D",
+            "min": 0,
+            "max": 255,
+            "label": ""
+          }
+        ]
+      },
+      {
+        "name": "cirstbOI",
+        "bands": [
+          {
+            "kind": "S",
+            "min": 0,
+            "max": 10,
+            "label": "NoStrb"
+          },
+          {
+            "kind": "S",
+            "min": 20,
+            "max": 80,
+            "label": "SlowStrb"
+          },
+          {
+            "kind": "S",
+            "min": 81,
+            "max": 180,
+            "label": "MidStrb"
+          },
+          {
+            "kind": "S",
+            "min": 181,
+            "max": 255,
+            "label": "FastStrb"
+          }
+        ]
+      },
+      {
+        "name": "Stbbm",
+        "bands": [
+          {
+            "kind": "S",
+            "min": 0,
+            "max": 10,
+            "label": "NoStrb"
+          },
+          {
+            "kind": "S",
+            "min": 20,
+            "max": 80,
+            "label": "SlowStrb"
+          },
+          {
+            "kind": "S",
+            "min": 81,
+            "max": 180,
+            "label": "MidStrb"
+          },
+          {
+            "kind": "S",
+            "min": 181,
+            "max": 255,
+            "label": "FastStrb"
+          }
+        ]
+      },
+      {
+        "name": "Stbcr",
+        "bands": [
+          {
+            "kind": "S",
+            "min": 0,
+            "max": 10,
+            "label": "NoStrb"
+          },
+          {
+            "kind": "S",
+            "min": 20,
+            "max": 80,
+            "label": "SlowStrb"
+          },
+          {
+            "kind": "S",
+            "min": 81,
+            "max": 180,
+            "label": "MidStrb"
+          },
+          {
+            "kind": "S",
+            "min": 181,
+            "max": 255,
+            "label": "FastStrb"
+          }
+        ]
+      },
+      {
+        "name": "Red",
+        "bands": [
+          {
+            "kind": "S",
+            "min": 0,
+            "max": 255,
+            "label": ""
+          }
+        ]
+      },
+      {
+        "name": "Green",
+        "bands": [
+          {
+            "kind": "S",
+            "min": 0,
+            "max": 255,
+            "label": ""
+          }
+        ]
+      },
+      {
+        "name": "Blue",
+        "bands": [
+          {
+            "kind": "S",
+            "min": 0,
+            "max": 255,
+            "label": ""
+          }
+        ]
+      },
+      {
+        "name": "White",
+        "bands": [
+          {
+            "kind": "S",
+            "min": 0,
+            "max": 255,
+            "label": ""
+          }
+        ]
+      },
+      {
+        "name": "Sound control",
+        "bands": [
+          {
+            "kind": "S",
+            "min": 0,
+            "max": 255,
+            "label": ""
+          }
+        ]
+      },
+      {
+        "name": "Staining",
+        "bands": [
+          {
+            "kind": "S",
+            "min": 0,
+            "max": 255,
+            "label": ""
+          }
+        ]
+      },
+      {
+        "name": "Circle effect",
+        "bands": [
+          {
+            "kind": "S",
+            "min": 0,
+            "max": 255,
+            "label": ""
+          }
+        ]
+      },
+      {
+        "name": "Reset",
+        "bands": [
+          {
+            "kind": "S",
+            "min": 0,
+            "max": 255,
+            "label": ""
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "display": "80w 17ch spot with circle2",
+    "file": "/Library/Application Support/db audioware/Show Buddy Active//DmxLibrary//Custom/80w 17ch spot with circle.dmx",
+    "from": 320,
+    "to": 336,
+    "x": 0.836508,
+    "y": 0.5050638,
+    "pan_range": 540.0,
+    "tilt_range": 170.0,
+    "beam_width": 30.0,
+    "channels": [
+      {
+        "name": "Pan",
+        "bands": [
+          {
+            "kind": "V",
+            "min": 0,
+            "max": 255,
+            "label": "Coarse"
+          }
+        ]
+      },
+      {
+        "name": "Pan",
+        "bands": [
+          {
+            "kind": "V",
+            "min": 0,
+            "max": 255,
+            "label": "Fine"
+          }
+        ]
+      },
+      {
+        "name": "Tilt",
+        "bands": [
+          {
+            "kind": "V",
+            "min": 0,
+            "max": 255,
+            "label": "Coarse"
+          }
+        ]
+      },
+      {
+        "name": "Tilt",
+        "bands": [
+          {
+            "kind": "V",
+            "min": 0,
+            "max": 255,
+            "label": "Fine"
+          }
+        ]
+      },
+      {
+        "name": "Movement speed",
+        "bands": [
+          {
+            "kind": "V",
+            "min": 0,
+            "max": 255,
+            "label": "Speed"
+          }
+        ]
+      },
+      {
+        "name": "Dimmer",
+        "bands": [
+          {
+            "kind": "D",
+            "min": 0,
+            "max": 255,
+            "label": ""
+          }
+        ]
+      },
+      {
+        "name": "cirstbOI",
+        "bands": [
+          {
+            "kind": "S",
+            "min": 0,
+            "max": 10,
+            "label": "NoStrb"
+          },
+          {
+            "kind": "S",
+            "min": 20,
+            "max": 80,
+            "label": "SlowStrb"
+          },
+          {
+            "kind": "S",
+            "min": 81,
+            "max": 180,
+            "label": "MidStrb"
+          },
+          {
+            "kind": "S",
+            "min": 181,
+            "max": 255,
+            "label": "FastStrb"
+          }
+        ]
+      },
+      {
+        "name": "Stbbm",
+        "bands": [
+          {
+            "kind": "S",
+            "min": 0,
+            "max": 10,
+            "label": "NoStrb"
+          },
+          {
+            "kind": "S",
+            "min": 20,
+            "max": 80,
+            "label": "SlowStrb"
+          },
+          {
+            "kind": "S",
+            "min": 81,
+            "max": 180,
+            "label": "MidStrb"
+          },
+          {
+            "kind": "S",
+            "min": 181,
+            "max": 255,
+            "label": "FastStrb"
+          }
+        ]
+      },
+      {
+        "name": "Stbcr",
+        "bands": [
+          {
+            "kind": "S",
+            "min": 0,
+            "max": 10,
+            "label": "NoStrb"
+          },
+          {
+            "kind": "S",
+            "min": 20,
+            "max": 80,
+            "label": "SlowStrb"
+          },
+          {
+            "kind": "S",
+            "min": 81,
+            "max": 180,
+            "label": "MidStrb"
+          },
+          {
+            "kind": "S",
+            "min": 181,
+            "max": 255,
+            "label": "FastStrb"
+          }
+        ]
+      },
+      {
+        "name": "Red",
+        "bands": [
+          {
+            "kind": "S",
+            "min": 0,
+            "max": 255,
+            "label": ""
+          }
+        ]
+      },
+      {
+        "name": "Green",
+        "bands": [
+          {
+            "kind": "S",
+            "min": 0,
+            "max": 255,
+            "label": ""
+          }
+        ]
+      },
+      {
+        "name": "Blue",
+        "bands": [
+          {
+            "kind": "S",
+            "min": 0,
+            "max": 255,
+            "label": ""
+          }
+        ]
+      },
+      {
+        "name": "White",
+        "bands": [
+          {
+            "kind": "S",
+            "min": 0,
+            "max": 255,
+            "label": ""
+          }
+        ]
+      },
+      {
+        "name": "Sound control",
+        "bands": [
+          {
+            "kind": "S",
+            "min": 0,
+            "max": 255,
+            "label": ""
+          }
+        ]
+      },
+      {
+        "name": "Staining",
+        "bands": [
+          {
+            "kind": "S",
+            "min": 0,
+            "max": 255,
+            "label": ""
+          }
+        ]
+      },
+      {
+        "name": "Circle effect",
+        "bands": [
+          {
+            "kind": "S",
+            "min": 0,
+            "max": 255,
+            "label": ""
+          }
+        ]
+      },
+      {
+        "name": "Reset",
+        "bands": [
+          {
+            "kind": "S",
+            "min": 0,
+            "max": 255,
+            "label": ""
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "display": "hurricane1",
+    "file": "/Library/Application Support/db audioware/Show Buddy Active//DmxLibrary//Custom/hurricane.dmx",
+    "from": 337,
+    "to": 337,
+    "x": 0.8292972,
+    "y": 0.26826924,
+    "pan_range": 540.0,
+    "tilt_range": 170.0,
+    "beam_width": 30.0,
+    "channels": [
+      {
+        "name": "Fog",
+        "bands": [
+          {
+            "kind": "S",
+            "min": 0,
+            "max": 10,
+            "label": "none"
+          },
+          {
+            "kind": "S",
+            "min": 20,
+            "max": 80,
+            "label": "low"
+          },
+          {
+            "kind": "S",
+            "min": 81,
+            "max": 180,
+            "label": "medium"
+          },
+          {
+            "kind": "S",
+            "min": 181,
+            "max": 255,
+            "label": "high"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "display": "8 channel par1",
+    "file": "/Library/Application Support/db audioware/Show Buddy Active//DmxLibrary//Custom/8 channel par.dmx",
+    "from": 338,
+    "to": 345,
+    "x": 0.52968144,
+    "y": 0.14702863,
+    "pan_range": 540.0,
+    "tilt_range": 170.0,
+    "beam_width": 30.0,
+    "channels": [
+      {
+        "name": "DIM",
+        "bands": [
+          {
+            "kind": "D",
+            "min": 0,
+            "max": 255,
+            "label": ""
+          }
+        ]
+      },
+      {
+        "name": "RED",
+        "bands": [
+          {
+            "kind": "V",
+            "min": 0,
+            "max": 255,
+            "label": ""
+          }
+        ]
+      },
+      {
+        "name": "GRN",
+        "bands": [
+          {
+            "kind": "V",
+            "min": 0,
+            "max": 255,
+            "label": ""
+          }
+        ]
+      },
+      {
+        "name": "BLUE",
+        "bands": [
+          {
+            "kind": "V",
+            "min": 0,
+            "max": 255,
+            "label": ""
+          }
+        ]
+      },
+      {
+        "name": "White",
+        "bands": [
+          {
+            "kind": "S",
+            "min": 0,
+            "max": 255,
+            "label": ""
+          }
+        ]
+      },
+      {
+        "name": "Til strobe",
+        "bands": [
+          {
+            "kind": "S",
+            "min": 0,
+            "max": 255,
+            "label": ""
+          }
+        ]
+      },
+      {
+        "name": "Auto",
+        "bands": [
+          {
+            "kind": "S",
+            "min": 0,
+            "max": 255,
+            "label": ""
+          }
+        ]
+      },
+      {
+        "name": "Auto speed",
+        "bands": [
+          {
+            "kind": "S",
+            "min": 0,
+            "max": 255,
+            "label": "F>S"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "display": "8 channel par2",
+    "file": "/Library/Application Support/db audioware/Show Buddy Active//DmxLibrary//Custom/8 channel par.dmx",
+    "from": 346,
+    "to": 353,
+    "x": 0.57810116,
+    "y": 0.14702863,
+    "pan_range": 540.0,
+    "tilt_range": 170.0,
+    "beam_width": 30.0,
+    "channels": [
+      {
+        "name": "DIM",
+        "bands": [
+          {
+            "kind": "D",
+            "min": 0,
+            "max": 255,
+            "label": ""
+          }
+        ]
+      },
+      {
+        "name": "RED",
+        "bands": [
+          {
+            "kind": "V",
+            "min": 0,
+            "max": 255,
+            "label": ""
+          }
+        ]
+      },
+      {
+        "name": "GRN",
+        "bands": [
+          {
+            "kind": "V",
+            "min": 0,
+            "max": 255,
+            "label": ""
+          }
+        ]
+      },
+      {
+        "name": "BLUE",
+        "bands": [
+          {
+            "kind": "V",
+            "min": 0,
+            "max": 255,
+            "label": ""
+          }
+        ]
+      },
+      {
+        "name": "White",
+        "bands": [
+          {
+            "kind": "S",
+            "min": 0,
+            "max": 255,
+            "label": ""
+          }
+        ]
+      },
+      {
+        "name": "Til strobe",
+        "bands": [
+          {
+            "kind": "S",
+            "min": 0,
+            "max": 255,
+            "label": ""
+          }
+        ]
+      },
+      {
+        "name": "Auto",
+        "bands": [
+          {
+            "kind": "S",
+            "min": 0,
+            "max": 255,
+            "label": ""
+          }
+        ]
+      },
+      {
+        "name": "Auto speed",
+        "bands": [
+          {
+            "kind": "S",
+            "min": 0,
+            "max": 255,
+            "label": "F>S"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "display": "8 channel par3",
+    "file": "/Library/Application Support/db audioware/Show Buddy Active//DmxLibrary//Custom/8 channel par.dmx",
+    "from": 354,
+    "to": 361,
+    "x": 0.62652075,
+    "y": 0.14702863,
+    "pan_range": 540.0,
+    "tilt_range": 170.0,
+    "beam_width": 30.0,
+    "channels": [
+      {
+        "name": "DIM",
+        "bands": [
+          {
+            "kind": "D",
+            "min": 0,
+            "max": 255,
+            "label": ""
+          }
+        ]
+      },
+      {
+        "name": "RED",
+        "bands": [
+          {
+            "kind": "V",
+            "min": 0,
+            "max": 255,
+            "label": ""
+          }
+        ]
+      },
+      {
+        "name": "GRN",
+        "bands": [
+          {
+            "kind": "V",
+            "min": 0,
+            "max": 255,
+            "label": ""
+          }
+        ]
+      },
+      {
+        "name": "BLUE",
+        "bands": [
+          {
+            "kind": "V",
+            "min": 0,
+            "max": 255,
+            "label": ""
+          }
+        ]
+      },
+      {
+        "name": "White",
+        "bands": [
+          {
+            "kind": "S",
+            "min": 0,
+            "max": 255,
+            "label": ""
+          }
+        ]
+      },
+      {
+        "name": "Til strobe",
+        "bands": [
+          {
+            "kind": "S",
+            "min": 0,
+            "max": 255,
+            "label": ""
+          }
+        ]
+      },
+      {
+        "name": "Auto",
+        "bands": [
+          {
+            "kind": "S",
+            "min": 0,
+            "max": 255,
+            "label": ""
+          }
+        ]
+      },
+      {
+        "name": "Auto speed",
+        "bands": [
+          {
+            "kind": "S",
+            "min": 0,
+            "max": 255,
+            "label": "F>S"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "display": "8 channel par4",
+    "file": "/Library/Application Support/db audioware/Show Buddy Active//DmxLibrary//Custom/8 channel par.dmx",
+    "from": 362,
+    "to": 369,
+    "x": 0.6749404,
+    "y": 0.14702863,
+    "pan_range": 540.0,
+    "tilt_range": 170.0,
+    "beam_width": 30.0,
+    "channels": [
+      {
+        "name": "DIM",
+        "bands": [
+          {
+            "kind": "D",
+            "min": 0,
+            "max": 255,
+            "label": ""
+          }
+        ]
+      },
+      {
+        "name": "RED",
+        "bands": [
+          {
+            "kind": "V",
+            "min": 0,
+            "max": 255,
+            "label": ""
+          }
+        ]
+      },
+      {
+        "name": "GRN",
+        "bands": [
+          {
+            "kind": "V",
+            "min": 0,
+            "max": 255,
+            "label": ""
+          }
+        ]
+      },
+      {
+        "name": "BLUE",
+        "bands": [
+          {
+            "kind": "V",
+            "min": 0,
+            "max": 255,
+            "label": ""
+          }
+        ]
+      },
+      {
+        "name": "White",
+        "bands": [
+          {
+            "kind": "S",
+            "min": 0,
+            "max": 255,
+            "label": ""
+          }
+        ]
+      },
+      {
+        "name": "Til strobe",
+        "bands": [
+          {
+            "kind": "S",
+            "min": 0,
+            "max": 255,
+            "label": ""
+          }
+        ]
+      },
+      {
+        "name": "Auto",
+        "bands": [
+          {
+            "kind": "S",
+            "min": 0,
+            "max": 255,
+            "label": ""
+          }
+        ]
+      },
+      {
+        "name": "Auto speed",
+        "bands": [
+          {
+            "kind": "S",
+            "min": 0,
+            "max": 255,
+            "label": "F>S"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "display": "8 channel par5",
+    "file": "/Library/Application Support/db audioware/Show Buddy Active//DmxLibrary//Custom/8 channel par.dmx",
+    "from": 370,
+    "to": 377,
+    "x": 0.72336006,
+    "y": 0.14702863,
+    "pan_range": 540.0,
+    "tilt_range": 170.0,
+    "beam_width": 30.0,
+    "channels": [
+      {
+        "name": "DIM",
+        "bands": [
+          {
+            "kind": "D",
+            "min": 0,
+            "max": 255,
+            "label": ""
+          }
+        ]
+      },
+      {
+        "name": "RED",
+        "bands": [
+          {
+            "kind": "V",
+            "min": 0,
+            "max": 255,
+            "label": ""
+          }
+        ]
+      },
+      {
+        "name": "GRN",
+        "bands": [
+          {
+            "kind": "V",
+            "min": 0,
+            "max": 255,
+            "label": ""
+          }
+        ]
+      },
+      {
+        "name": "BLUE",
+        "bands": [
+          {
+            "kind": "V",
+            "min": 0,
+            "max": 255,
+            "label": ""
+          }
+        ]
+      },
+      {
+        "name": "White",
+        "bands": [
+          {
+            "kind": "S",
+            "min": 0,
+            "max": 255,
+            "label": ""
+          }
+        ]
+      },
+      {
+        "name": "Til strobe",
+        "bands": [
+          {
+            "kind": "S",
+            "min": 0,
+            "max": 255,
+            "label": ""
+          }
+        ]
+      },
+      {
+        "name": "Auto",
+        "bands": [
+          {
+            "kind": "S",
+            "min": 0,
+            "max": 255,
+            "label": ""
+          }
+        ]
+      },
+      {
+        "name": "Auto speed",
+        "bands": [
+          {
+            "kind": "S",
+            "min": 0,
+            "max": 255,
+            "label": "F>S"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "display": "zooming wash1",
+    "file": "/Library/Application Support/db audioware/Show Buddy Active//DmxLibrary//Custom/zooming wash.dmx",
+    "from": 378,
+    "to": 392,
+    "x": 0.106620505,
+    "y": 0.87973577,
+    "pan_range": 540.0,
+    "tilt_range": 170.0,
+    "beam_width": 30.0,
+    "channels": [
+      {
+        "name": "Pan",
+        "bands": [
+          {
+            "kind": "V",
+            "min": 0,
+            "max": 255,
+            "label": "Coarse"
+          }
+        ]
+      },
+      {
+        "name": "Tilt",
+        "bands": [
+          {
+            "kind": "V",
+            "min": 0,
+            "max": 255,
+            "label": "Fine"
+          }
+        ]
+      },
+      {
+        "name": "Move speed",
+        "bands": [
+          {
+            "kind": "V",
+            "min": 0,
+            "max": 255,
+            "label": "Coarse"
+          }
+        ]
+      },
+      {
+        "name": "Dimmer",
+        "bands": [
+          {
+            "kind": "V",
+            "min": 0,
+            "max": 255,
+            "label": ""
+          }
+        ]
+      },
+      {
+        "name": "Red",
+        "bands": [
+          {
+            "kind": "V",
+            "min": 0,
+            "max": 255,
+            "label": ""
+          }
+        ]
+      },
+      {
+        "name": "Green",
+        "bands": [
+          {
+            "kind": "V",
+            "min": 0,
+            "max": 255,
+            "label": ""
+          }
+        ]
+      },
+      {
+        "name": "Blue",
+        "bands": [
+          {
+            "kind": "S",
+            "min": 0,
+            "max": 255,
+            "label": ""
+          }
+        ]
+      },
+      {
+        "name": "White",
+        "bands": [
+          {
+            "kind": "S",
+            "min": 0,
+            "max": 255,
+            "label": ""
+          }
+        ]
+      },
+      {
+        "name": "Strobe",
+        "bands": [
+          {
+            "kind": "S",
+            "min": 0,
+            "max": 255,
+            "label": ""
+          }
+        ]
+      },
+      {
+        "name": "Focus",
+        "bands": [
+          {
+            "kind": "S",
+            "min": 0,
+            "max": 255,
+            "label": ""
+          }
+        ]
+      },
+      {
+        "name": "Auto run",
+        "bands": [
+          {
+            "kind": "S",
+            "min": 0,
+            "max": 255,
+            "label": ""
+          }
+        ]
+      },
+      {
+        "name": "Auto speed",
+        "bands": [
+          {
+            "kind": "S",
+            "min": 0,
+            "max": 255,
+            "label": ""
+          }
+        ]
+      },
+      {
+        "name": "Pan fine",
+        "bands": [
+          {
+            "kind": "S",
+            "min": 0,
+            "max": 255,
+            "label": ""
+          }
+        ]
+      },
+      {
+        "name": "Tilt fine",
+        "bands": [
+          {
+            "kind": "S",
+            "min": 0,
+            "max": 255,
+            "label": ""
+          }
+        ]
+      },
+      {
+        "name": "Reset",
+        "bands": [
+          {
+            "kind": "S",
+            "min": 0,
+            "max": 255,
+            "label": ""
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "display": "zooming wash2",
+    "file": "/Library/Application Support/db audioware/Show Buddy Active//DmxLibrary//Custom/zooming wash.dmx",
+    "from": 393,
+    "to": 407,
+    "x": 0.2389494,
+    "y": 0.8782594,
+    "pan_range": 540.0,
+    "tilt_range": 170.0,
+    "beam_width": 30.0,
+    "channels": [
+      {
+        "name": "Pan",
+        "bands": [
+          {
+            "kind": "V",
+            "min": 0,
+            "max": 255,
+            "label": "Coarse"
+          }
+        ]
+      },
+      {
+        "name": "Tilt",
+        "bands": [
+          {
+            "kind": "V",
+            "min": 0,
+            "max": 255,
+            "label": "Fine"
+          }
+        ]
+      },
+      {
+        "name": "Move speed",
+        "bands": [
+          {
+            "kind": "V",
+            "min": 0,
+            "max": 255,
+            "label": "Coarse"
+          }
+        ]
+      },
+      {
+        "name": "Dimmer",
+        "bands": [
+          {
+            "kind": "V",
+            "min": 0,
+            "max": 255,
+            "label": ""
+          }
+        ]
+      },
+      {
+        "name": "Red",
+        "bands": [
+          {
+            "kind": "V",
+            "min": 0,
+            "max": 255,
+            "label": ""
+          }
+        ]
+      },
+      {
+        "name": "Green",
+        "bands": [
+          {
+            "kind": "V",
+            "min": 0,
+            "max": 255,
+            "label": ""
+          }
+        ]
+      },
+      {
+        "name": "Blue",
+        "bands": [
+          {
+            "kind": "S",
+            "min": 0,
+            "max": 255,
+            "label": ""
+          }
+        ]
+      },
+      {
+        "name": "White",
+        "bands": [
+          {
+            "kind": "S",
+            "min": 0,
+            "max": 255,
+            "label": ""
+          }
+        ]
+      },
+      {
+        "name": "Strobe",
+        "bands": [
+          {
+            "kind": "S",
+            "min": 0,
+            "max": 255,
+            "label": ""
+          }
+        ]
+      },
+      {
+        "name": "Focus",
+        "bands": [
+          {
+            "kind": "S",
+            "min": 0,
+            "max": 255,
+            "label": ""
+          }
+        ]
+      },
+      {
+        "name": "Auto run",
+        "bands": [
+          {
+            "kind": "S",
+            "min": 0,
+            "max": 255,
+            "label": ""
+          }
+        ]
+      },
+      {
+        "name": "Auto speed",
+        "bands": [
+          {
+            "kind": "S",
+            "min": 0,
+            "max": 255,
+            "label": ""
+          }
+        ]
+      },
+      {
+        "name": "Pan fine",
+        "bands": [
+          {
+            "kind": "S",
+            "min": 0,
+            "max": 255,
+            "label": ""
+          }
+        ]
+      },
+      {
+        "name": "Tilt fine",
+        "bands": [
+          {
+            "kind": "S",
+            "min": 0,
+            "max": 255,
+            "label": ""
+          }
+        ]
+      },
+      {
+        "name": "Reset",
+        "bands": [
+          {
+            "kind": "S",
+            "min": 0,
+            "max": 255,
+            "label": ""
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "display": "15 channel bee eye1",
+    "file": "/Library/Application Support/db audioware/Show Buddy Active//DmxLibrary//Custom/15 channel bee eye.dmx",
+    "from": 408,
+    "to": 422,
+    "x": 0.29572442,
+    "y": 0.3283654,
+    "pan_range": 540.0,
+    "tilt_range": 170.0,
+    "beam_width": 30.0,
+    "channels": [
+      {
+        "name": "Pan",
+        "bands": [
+          {
+            "kind": "V",
+            "min": 0,
+            "max": 255,
+            "label": "Coarse"
+          }
+        ]
+      },
+      {
+        "name": "Panf",
+        "bands": [
+          {
+            "kind": "V",
+            "min": 0,
+            "max": 255,
+            "label": "Fine"
+          }
+        ]
+      },
+      {
+        "name": "Tilt",
+        "bands": [
+          {
+            "kind": "V",
+            "min": 0,
+            "max": 255,
+            "label": "Coarse"
+          }
+        ]
+      },
+      {
+        "name": "Tiltf",
+        "bands": [
+          {
+            "kind": "V",
+            "min": 0,
+            "max": 255,
+            "label": "Fine"
+          }
+        ]
+      },
+      {
+        "name": "Spd",
+        "bands": [
+          {
+            "kind": "V",
+            "min": 0,
+            "max": 255,
+            "label": "Fine"
+          }
+        ]
+      },
+      {
+        "name": "Zaxis",
+        "bands": [
+          {
+            "kind": "V",
+            "min": 0,
+            "max": 127,
+            "label": "zMotor"
+          },
+          {
+            "kind": "V",
+            "min": 128,
+            "max": 191,
+            "label": "FWD"
+          },
+          {
+            "kind": "V",
+            "min": 192,
+            "max": 255,
+            "label": "Rotate"
+          }
+        ]
+      },
+      {
+        "name": "DIM",
+        "bands": [
+          {
+            "kind": "D",
+            "min": 0,
+            "max": 255,
+            "label": ""
+          }
+        ]
+      },
+      {
+        "name": "Red",
+        "bands": [
+          {
+            "kind": "V",
+            "min": 0,
+            "max": 255,
+            "label": ""
+          }
+        ]
+      },
+      {
+        "name": "Green",
+        "bands": [
+          {
+            "kind": "V",
+            "min": 0,
+            "max": 255,
+            "label": ""
+          }
+        ]
+      },
+      {
+        "name": "Blue",
+        "bands": [
+          {
+            "kind": "S",
+            "min": 0,
+            "max": 255,
+            "label": ""
+          }
+        ]
+      },
+      {
+        "name": "White",
+        "bands": [
+          {
+            "kind": "S",
+            "min": 0,
+            "max": 255,
+            "label": ""
+          }
+        ]
+      },
+      {
+        "name": "STRB",
+        "bands": [
+          {
+            "kind": "S",
+            "min": 0,
+            "max": 255,
+            "label": ""
+          }
+        ]
+      },
+      {
+        "name": "Auto",
+        "bands": [
+          {
+            "kind": "S",
+            "min": 0,
+            "max": 10,
+            "label": "off"
+          },
+          {
+            "kind": "S",
+            "min": 11,
+            "max": 127,
+            "label": "clrcmbo"
+          },
+          {
+            "kind": "S",
+            "min": 128,
+            "max": 160,
+            "label": "colorjmp"
+          },
+          {
+            "kind": "S",
+            "min": 161,
+            "max": 200,
+            "label": "gradient"
+          },
+          {
+            "kind": "S",
+            "min": 201,
+            "max": 255,
+            "label": "gradient2"
+          }
+        ]
+      },
+      {
+        "name": "SpdAdj",
+        "bands": [
+          {
+            "kind": "S",
+            "min": 0,
+            "max": 255,
+            "label": "?"
+          }
+        ]
+      },
+      {
+        "name": "Reset",
+        "bands": [
+          {
+            "kind": "S",
+            "min": 0,
+            "max": 250,
+            "label": "none"
+          },
+          {
+            "kind": "S",
+            "min": 251,
+            "max": 255,
+            "label": "reset"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "display": "15 channel bee eye2",
+    "file": "/Library/Application Support/db audioware/Show Buddy Active//DmxLibrary//Custom/15 channel bee eye.dmx",
+    "from": 423,
+    "to": 437,
+    "x": 0.36774775,
+    "y": 0.22019231,
+    "pan_range": 540.0,
+    "tilt_range": 170.0,
+    "beam_width": 30.0,
+    "channels": [
+      {
+        "name": "Pan",
+        "bands": [
+          {
+            "kind": "V",
+            "min": 0,
+            "max": 255,
+            "label": "Coarse"
+          }
+        ]
+      },
+      {
+        "name": "Panf",
+        "bands": [
+          {
+            "kind": "V",
+            "min": 0,
+            "max": 255,
+            "label": "Fine"
+          }
+        ]
+      },
+      {
+        "name": "Tilt",
+        "bands": [
+          {
+            "kind": "V",
+            "min": 0,
+            "max": 255,
+            "label": "Coarse"
+          }
+        ]
+      },
+      {
+        "name": "Tiltf",
+        "bands": [
+          {
+            "kind": "V",
+            "min": 0,
+            "max": 255,
+            "label": "Fine"
+          }
+        ]
+      },
+      {
+        "name": "Spd",
+        "bands": [
+          {
+            "kind": "V",
+            "min": 0,
+            "max": 255,
+            "label": "Fine"
+          }
+        ]
+      },
+      {
+        "name": "Zaxis",
+        "bands": [
+          {
+            "kind": "V",
+            "min": 0,
+            "max": 127,
+            "label": "zMotor"
+          },
+          {
+            "kind": "V",
+            "min": 128,
+            "max": 191,
+            "label": "FWD"
+          },
+          {
+            "kind": "V",
+            "min": 192,
+            "max": 255,
+            "label": "Rotate"
+          }
+        ]
+      },
+      {
+        "name": "DIM",
+        "bands": [
+          {
+            "kind": "D",
+            "min": 0,
+            "max": 255,
+            "label": ""
+          }
+        ]
+      },
+      {
+        "name": "Red",
+        "bands": [
+          {
+            "kind": "V",
+            "min": 0,
+            "max": 255,
+            "label": ""
+          }
+        ]
+      },
+      {
+        "name": "Green",
+        "bands": [
+          {
+            "kind": "V",
+            "min": 0,
+            "max": 255,
+            "label": ""
+          }
+        ]
+      },
+      {
+        "name": "Blue",
+        "bands": [
+          {
+            "kind": "S",
+            "min": 0,
+            "max": 255,
+            "label": ""
+          }
+        ]
+      },
+      {
+        "name": "White",
+        "bands": [
+          {
+            "kind": "S",
+            "min": 0,
+            "max": 255,
+            "label": ""
+          }
+        ]
+      },
+      {
+        "name": "STRB",
+        "bands": [
+          {
+            "kind": "S",
+            "min": 0,
+            "max": 255,
+            "label": ""
+          }
+        ]
+      },
+      {
+        "name": "Auto",
+        "bands": [
+          {
+            "kind": "S",
+            "min": 0,
+            "max": 10,
+            "label": "off"
+          },
+          {
+            "kind": "S",
+            "min": 11,
+            "max": 127,
+            "label": "clrcmbo"
+          },
+          {
+            "kind": "S",
+            "min": 128,
+            "max": 160,
+            "label": "colorjmp"
+          },
+          {
+            "kind": "S",
+            "min": 161,
+            "max": 200,
+            "label": "gradient"
+          },
+          {
+            "kind": "S",
+            "min": 201,
+            "max": 255,
+            "label": "gradient2"
+          }
+        ]
+      },
+      {
+        "name": "SpdAdj",
+        "bands": [
+          {
+            "kind": "S",
+            "min": 0,
+            "max": 255,
+            "label": "?"
+          }
+        ]
+      },
+      {
+        "name": "Reset",
+        "bands": [
+          {
+            "kind": "S",
+            "min": 0,
+            "max": 250,
+            "label": "none"
+          },
+          {
+            "kind": "S",
+            "min": 251,
+            "max": 255,
+            "label": "reset"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "display": "150w 11 channel1",
+    "file": "/Library/Application Support/db audioware/Show Buddy Active//DmxLibrary//Custom/150w 11 channel.dmx",
+    "from": 456,
+    "to": 467,
+    "x": 0.04834131,
+    "y": 0.22696851,
+    "pan_range": 540.0,
+    "tilt_range": 170.0,
+    "beam_width": 30.0,
+    "channels": [
+      {
+        "name": "Pan",
+        "bands": [
+          {
+            "kind": "V",
+            "min": 0,
+            "max": 255,
+            "label": "Coarse"
+          }
+        ]
+      },
+      {
+        "name": "Panf",
+        "bands": [
+          {
+            "kind": "V",
+            "min": 0,
+            "max": 255,
+            "label": "Fine"
+          }
+        ]
+      },
+      {
+        "name": "Tilt",
+        "bands": [
+          {
+            "kind": "V",
+            "min": 0,
+            "max": 255,
+            "label": "Coarse"
+          }
+        ]
+      },
+      {
+        "name": "Tiltf",
+        "bands": [
+          {
+            "kind": "V",
+            "min": 0,
+            "max": 255,
+            "label": "Fine"
+          }
+        ]
+      },
+      {
+        "name": "Tiltspd",
+        "bands": [
+          {
+            "kind": "V",
+            "min": 0,
+            "max": 255,
+            "label": "Fine"
+          }
+        ]
+      },
+      {
+        "name": "Dimmer",
+        "bands": [
+          {
+            "kind": "D",
+            "min": 0,
+            "max": 255,
+            "label": ""
+          }
+        ]
+      },
+      {
+        "name": "Strobe",
+        "bands": [
+          {
+            "kind": "S",
+            "min": 0,
+            "max": 10,
+            "label": "NoStrb"
+          },
+          {
+            "kind": "S",
+            "min": 20,
+            "max": 80,
+            "label": "SlowStrb"
+          },
+          {
+            "kind": "S",
+            "min": 81,
+            "max": 180,
+            "label": "MidStrb"
+          },
+          {
+            "kind": "S",
+            "min": 181,
+            "max": 255,
+            "label": "FastStrb"
+          }
+        ]
+      },
+      {
+        "name": "Color",
+        "bands": [
+          {
+            "kind": "S",
+            "min": 0,
+            "max": 15,
+            "label": "White"
+          },
+          {
+            "kind": "S",
+            "min": 16,
+            "max": 31,
+            "label": "Red"
+          },
+          {
+            "kind": "S",
+            "min": 32,
+            "max": 47,
+            "label": "Green"
+          },
+          {
+            "kind": "S",
+            "min": 48,
+            "max": 63,
+            "label": "Blue"
+          },
+          {
+            "kind": "S",
+            "min": 64,
+            "max": 79,
+            "label": "Magenta"
+          },
+          {
+            "kind": "S",
+            "min": 80,
+            "max": 95,
+            "label": "Orange"
+          },
+          {
+            "kind": "S",
+            "min": 96,
+            "max": 111,
+            "label": "Cyan"
+          },
+          {
+            "kind": "S",
+            "min": 112,
+            "max": 128,
+            "label": "Yellow"
+          },
+          {
+            "kind": "S",
+            "min": 119,
+            "max": 255,
+            "label": "auto"
+          }
+        ]
+      },
+      {
+        "name": "Gobo",
+        "bands": [
+          {
+            "kind": "S",
+            "min": 0,
+            "max": 15,
+            "label": "spot"
+          },
+          {
+            "kind": "S",
+            "min": 16,
+            "max": 31,
+            "label": "notes"
+          },
+          {
+            "kind": "S",
+            "min": 32,
+            "max": 47,
+            "label": "squiggle"
+          },
+          {
+            "kind": "S",
+            "min": 48,
+            "max": 63,
+            "label": "X"
+          },
+          {
+            "kind": "S",
+            "min": 64,
+            "max": 79,
+            "label": "sun"
+          },
+          {
+            "kind": "S",
+            "min": 80,
+            "max": 95,
+            "label": "star"
+          },
+          {
+            "kind": "S",
+            "min": 96,
+            "max": 111,
+            "label": "mercedes"
+          },
+          {
+            "kind": "S",
+            "min": 112,
+            "max": 128,
+            "label": "octagon"
+          },
+          {
+            "kind": "S",
+            "min": 119,
+            "max": 255,
+            "label": "auto s>f"
+          }
+        ]
+      },
+      {
+        "name": "Spinner",
+        "bands": [
+          {
+            "kind": "S",
+            "min": 0,
+            "max": 127,
+            "label": "off"
+          },
+          {
+            "kind": "S",
+            "min": 128,
+            "max": 255,
+            "label": "on s>f"
+          }
+        ]
+      },
+      {
+        "name": "Auto",
+        "bands": [
+          {
+            "kind": "S",
+            "min": 0,
+            "max": 52,
+            "label": "off"
+          },
+          {
+            "kind": "S",
+            "min": 53,
+            "max": 255,
+            "label": "on"
+          }
+        ]
+      },
+      {
+        "name": "Reset",
+        "bands": [
+          {
+            "kind": "S",
+            "min": 0,
+            "max": 127,
+            "label": "off"
+          },
+          {
+            "kind": "S",
+            "min": 128,
+            "max": 156,
+            "label": "on"
+          },
+          {
+            "kind": "S",
+            "min": 157,
+            "max": 255,
+            "label": "spins>f"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "display": "150w 11 channel2",
+    "file": "/Library/Application Support/db audioware/Show Buddy Active//DmxLibrary//Custom/150w 11 channel.dmx",
+    "from": 468,
+    "to": 479,
+    "x": 0.09269053,
+    "y": 0.22696851,
+    "pan_range": 540.0,
+    "tilt_range": 170.0,
+    "beam_width": 30.0,
+    "channels": [
+      {
+        "name": "Pan",
+        "bands": [
+          {
+            "kind": "V",
+            "min": 0,
+            "max": 255,
+            "label": "Coarse"
+          }
+        ]
+      },
+      {
+        "name": "Panf",
+        "bands": [
+          {
+            "kind": "V",
+            "min": 0,
+            "max": 255,
+            "label": "Fine"
+          }
+        ]
+      },
+      {
+        "name": "Tilt",
+        "bands": [
+          {
+            "kind": "V",
+            "min": 0,
+            "max": 255,
+            "label": "Coarse"
+          }
+        ]
+      },
+      {
+        "name": "Tiltf",
+        "bands": [
+          {
+            "kind": "V",
+            "min": 0,
+            "max": 255,
+            "label": "Fine"
+          }
+        ]
+      },
+      {
+        "name": "Tiltspd",
+        "bands": [
+          {
+            "kind": "V",
+            "min": 0,
+            "max": 255,
+            "label": "Fine"
+          }
+        ]
+      },
+      {
+        "name": "Dimmer",
+        "bands": [
+          {
+            "kind": "D",
+            "min": 0,
+            "max": 255,
+            "label": ""
+          }
+        ]
+      },
+      {
+        "name": "Strobe",
+        "bands": [
+          {
+            "kind": "S",
+            "min": 0,
+            "max": 10,
+            "label": "NoStrb"
+          },
+          {
+            "kind": "S",
+            "min": 20,
+            "max": 80,
+            "label": "SlowStrb"
+          },
+          {
+            "kind": "S",
+            "min": 81,
+            "max": 180,
+            "label": "MidStrb"
+          },
+          {
+            "kind": "S",
+            "min": 181,
+            "max": 255,
+            "label": "FastStrb"
+          }
+        ]
+      },
+      {
+        "name": "Color",
+        "bands": [
+          {
+            "kind": "S",
+            "min": 0,
+            "max": 15,
+            "label": "White"
+          },
+          {
+            "kind": "S",
+            "min": 16,
+            "max": 31,
+            "label": "Red"
+          },
+          {
+            "kind": "S",
+            "min": 32,
+            "max": 47,
+            "label": "Green"
+          },
+          {
+            "kind": "S",
+            "min": 48,
+            "max": 63,
+            "label": "Blue"
+          },
+          {
+            "kind": "S",
+            "min": 64,
+            "max": 79,
+            "label": "Magenta"
+          },
+          {
+            "kind": "S",
+            "min": 80,
+            "max": 95,
+            "label": "Orange"
+          },
+          {
+            "kind": "S",
+            "min": 96,
+            "max": 111,
+            "label": "Cyan"
+          },
+          {
+            "kind": "S",
+            "min": 112,
+            "max": 128,
+            "label": "Yellow"
+          },
+          {
+            "kind": "S",
+            "min": 119,
+            "max": 255,
+            "label": "auto"
+          }
+        ]
+      },
+      {
+        "name": "Gobo",
+        "bands": [
+          {
+            "kind": "S",
+            "min": 0,
+            "max": 15,
+            "label": "spot"
+          },
+          {
+            "kind": "S",
+            "min": 16,
+            "max": 31,
+            "label": "notes"
+          },
+          {
+            "kind": "S",
+            "min": 32,
+            "max": 47,
+            "label": "squiggle"
+          },
+          {
+            "kind": "S",
+            "min": 48,
+            "max": 63,
+            "label": "X"
+          },
+          {
+            "kind": "S",
+            "min": 64,
+            "max": 79,
+            "label": "sun"
+          },
+          {
+            "kind": "S",
+            "min": 80,
+            "max": 95,
+            "label": "star"
+          },
+          {
+            "kind": "S",
+            "min": 96,
+            "max": 111,
+            "label": "mercedes"
+          },
+          {
+            "kind": "S",
+            "min": 112,
+            "max": 128,
+            "label": "octagon"
+          },
+          {
+            "kind": "S",
+            "min": 119,
+            "max": 255,
+            "label": "auto s>f"
+          }
+        ]
+      },
+      {
+        "name": "Spinner",
+        "bands": [
+          {
+            "kind": "S",
+            "min": 0,
+            "max": 127,
+            "label": "off"
+          },
+          {
+            "kind": "S",
+            "min": 128,
+            "max": 255,
+            "label": "on s>f"
+          }
+        ]
+      },
+      {
+        "name": "Auto",
+        "bands": [
+          {
+            "kind": "S",
+            "min": 0,
+            "max": 52,
+            "label": "off"
+          },
+          {
+            "kind": "S",
+            "min": 53,
+            "max": 255,
+            "label": "on"
+          }
+        ]
+      },
+      {
+        "name": "Reset",
+        "bands": [
+          {
+            "kind": "S",
+            "min": 0,
+            "max": 127,
+            "label": "off"
+          },
+          {
+            "kind": "S",
+            "min": 128,
+            "max": 156,
+            "label": "on"
+          },
+          {
+            "kind": "S",
+            "min": 157,
+            "max": 255,
+            "label": "spins>f"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "display": "150w 11 channel3",
+    "file": "/Library/Application Support/db audioware/Show Buddy Active//DmxLibrary//Custom/150w 11 channel.dmx",
+    "from": 480,
+    "to": 491,
+    "x": 0.13703974,
+    "y": 0.22696851,
+    "pan_range": 540.0,
+    "tilt_range": 170.0,
+    "beam_width": 30.0,
+    "channels": [
+      {
+        "name": "Pan",
+        "bands": [
+          {
+            "kind": "V",
+            "min": 0,
+            "max": 255,
+            "label": "Coarse"
+          }
+        ]
+      },
+      {
+        "name": "Panf",
+        "bands": [
+          {
+            "kind": "V",
+            "min": 0,
+            "max": 255,
+            "label": "Fine"
+          }
+        ]
+      },
+      {
+        "name": "Tilt",
+        "bands": [
+          {
+            "kind": "V",
+            "min": 0,
+            "max": 255,
+            "label": "Coarse"
+          }
+        ]
+      },
+      {
+        "name": "Tiltf",
+        "bands": [
+          {
+            "kind": "V",
+            "min": 0,
+            "max": 255,
+            "label": "Fine"
+          }
+        ]
+      },
+      {
+        "name": "Tiltspd",
+        "bands": [
+          {
+            "kind": "V",
+            "min": 0,
+            "max": 255,
+            "label": "Fine"
+          }
+        ]
+      },
+      {
+        "name": "Dimmer",
+        "bands": [
+          {
+            "kind": "D",
+            "min": 0,
+            "max": 255,
+            "label": ""
+          }
+        ]
+      },
+      {
+        "name": "Strobe",
+        "bands": [
+          {
+            "kind": "S",
+            "min": 0,
+            "max": 10,
+            "label": "NoStrb"
+          },
+          {
+            "kind": "S",
+            "min": 20,
+            "max": 80,
+            "label": "SlowStrb"
+          },
+          {
+            "kind": "S",
+            "min": 81,
+            "max": 180,
+            "label": "MidStrb"
+          },
+          {
+            "kind": "S",
+            "min": 181,
+            "max": 255,
+            "label": "FastStrb"
+          }
+        ]
+      },
+      {
+        "name": "Color",
+        "bands": [
+          {
+            "kind": "S",
+            "min": 0,
+            "max": 15,
+            "label": "White"
+          },
+          {
+            "kind": "S",
+            "min": 16,
+            "max": 31,
+            "label": "Red"
+          },
+          {
+            "kind": "S",
+            "min": 32,
+            "max": 47,
+            "label": "Green"
+          },
+          {
+            "kind": "S",
+            "min": 48,
+            "max": 63,
+            "label": "Blue"
+          },
+          {
+            "kind": "S",
+            "min": 64,
+            "max": 79,
+            "label": "Magenta"
+          },
+          {
+            "kind": "S",
+            "min": 80,
+            "max": 95,
+            "label": "Orange"
+          },
+          {
+            "kind": "S",
+            "min": 96,
+            "max": 111,
+            "label": "Cyan"
+          },
+          {
+            "kind": "S",
+            "min": 112,
+            "max": 128,
+            "label": "Yellow"
+          },
+          {
+            "kind": "S",
+            "min": 119,
+            "max": 255,
+            "label": "auto"
+          }
+        ]
+      },
+      {
+        "name": "Gobo",
+        "bands": [
+          {
+            "kind": "S",
+            "min": 0,
+            "max": 15,
+            "label": "spot"
+          },
+          {
+            "kind": "S",
+            "min": 16,
+            "max": 31,
+            "label": "notes"
+          },
+          {
+            "kind": "S",
+            "min": 32,
+            "max": 47,
+            "label": "squiggle"
+          },
+          {
+            "kind": "S",
+            "min": 48,
+            "max": 63,
+            "label": "X"
+          },
+          {
+            "kind": "S",
+            "min": 64,
+            "max": 79,
+            "label": "sun"
+          },
+          {
+            "kind": "S",
+            "min": 80,
+            "max": 95,
+            "label": "star"
+          },
+          {
+            "kind": "S",
+            "min": 96,
+            "max": 111,
+            "label": "mercedes"
+          },
+          {
+            "kind": "S",
+            "min": 112,
+            "max": 128,
+            "label": "octagon"
+          },
+          {
+            "kind": "S",
+            "min": 119,
+            "max": 255,
+            "label": "auto s>f"
+          }
+        ]
+      },
+      {
+        "name": "Spinner",
+        "bands": [
+          {
+            "kind": "S",
+            "min": 0,
+            "max": 127,
+            "label": "off"
+          },
+          {
+            "kind": "S",
+            "min": 128,
+            "max": 255,
+            "label": "on s>f"
+          }
+        ]
+      },
+      {
+        "name": "Auto",
+        "bands": [
+          {
+            "kind": "S",
+            "min": 0,
+            "max": 52,
+            "label": "off"
+          },
+          {
+            "kind": "S",
+            "min": 53,
+            "max": 255,
+            "label": "on"
+          }
+        ]
+      },
+      {
+        "name": "Reset",
+        "bands": [
+          {
+            "kind": "S",
+            "min": 0,
+            "max": 127,
+            "label": "off"
+          },
+          {
+            "kind": "S",
+            "min": 128,
+            "max": 156,
+            "label": "on"
+          },
+          {
+            "kind": "S",
+            "min": 157,
+            "max": 255,
+            "label": "spins>f"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "display": "150w 11 channel4",
+    "file": "/Library/Application Support/db audioware/Show Buddy Active//DmxLibrary//Custom/150w 11 channel.dmx",
+    "from": 492,
+    "to": 503,
+    "x": 0.18138894,
+    "y": 0.22696851,
+    "pan_range": 540.0,
+    "tilt_range": 170.0,
+    "beam_width": 30.0,
+    "channels": [
+      {
+        "name": "Pan",
+        "bands": [
+          {
+            "kind": "V",
+            "min": 0,
+            "max": 255,
+            "label": "Coarse"
+          }
+        ]
+      },
+      {
+        "name": "Panf",
+        "bands": [
+          {
+            "kind": "V",
+            "min": 0,
+            "max": 255,
+            "label": "Fine"
+          }
+        ]
+      },
+      {
+        "name": "Tilt",
+        "bands": [
+          {
+            "kind": "V",
+            "min": 0,
+            "max": 255,
+            "label": "Coarse"
+          }
+        ]
+      },
+      {
+        "name": "Tiltf",
+        "bands": [
+          {
+            "kind": "V",
+            "min": 0,
+            "max": 255,
+            "label": "Fine"
+          }
+        ]
+      },
+      {
+        "name": "Tiltspd",
+        "bands": [
+          {
+            "kind": "V",
+            "min": 0,
+            "max": 255,
+            "label": "Fine"
+          }
+        ]
+      },
+      {
+        "name": "Dimmer",
+        "bands": [
+          {
+            "kind": "D",
+            "min": 0,
+            "max": 255,
+            "label": ""
+          }
+        ]
+      },
+      {
+        "name": "Strobe",
+        "bands": [
+          {
+            "kind": "S",
+            "min": 0,
+            "max": 10,
+            "label": "NoStrb"
+          },
+          {
+            "kind": "S",
+            "min": 20,
+            "max": 80,
+            "label": "SlowStrb"
+          },
+          {
+            "kind": "S",
+            "min": 81,
+            "max": 180,
+            "label": "MidStrb"
+          },
+          {
+            "kind": "S",
+            "min": 181,
+            "max": 255,
+            "label": "FastStrb"
+          }
+        ]
+      },
+      {
+        "name": "Color",
+        "bands": [
+          {
+            "kind": "S",
+            "min": 0,
+            "max": 15,
+            "label": "White"
+          },
+          {
+            "kind": "S",
+            "min": 16,
+            "max": 31,
+            "label": "Red"
+          },
+          {
+            "kind": "S",
+            "min": 32,
+            "max": 47,
+            "label": "Green"
+          },
+          {
+            "kind": "S",
+            "min": 48,
+            "max": 63,
+            "label": "Blue"
+          },
+          {
+            "kind": "S",
+            "min": 64,
+            "max": 79,
+            "label": "Magenta"
+          },
+          {
+            "kind": "S",
+            "min": 80,
+            "max": 95,
+            "label": "Orange"
+          },
+          {
+            "kind": "S",
+            "min": 96,
+            "max": 111,
+            "label": "Cyan"
+          },
+          {
+            "kind": "S",
+            "min": 112,
+            "max": 128,
+            "label": "Yellow"
+          },
+          {
+            "kind": "S",
+            "min": 119,
+            "max": 255,
+            "label": "auto"
+          }
+        ]
+      },
+      {
+        "name": "Gobo",
+        "bands": [
+          {
+            "kind": "S",
+            "min": 0,
+            "max": 15,
+            "label": "spot"
+          },
+          {
+            "kind": "S",
+            "min": 16,
+            "max": 31,
+            "label": "notes"
+          },
+          {
+            "kind": "S",
+            "min": 32,
+            "max": 47,
+            "label": "squiggle"
+          },
+          {
+            "kind": "S",
+            "min": 48,
+            "max": 63,
+            "label": "X"
+          },
+          {
+            "kind": "S",
+            "min": 64,
+            "max": 79,
+            "label": "sun"
+          },
+          {
+            "kind": "S",
+            "min": 80,
+            "max": 95,
+            "label": "star"
+          },
+          {
+            "kind": "S",
+            "min": 96,
+            "max": 111,
+            "label": "mercedes"
+          },
+          {
+            "kind": "S",
+            "min": 112,
+            "max": 128,
+            "label": "octagon"
+          },
+          {
+            "kind": "S",
+            "min": 119,
+            "max": 255,
+            "label": "auto s>f"
+          }
+        ]
+      },
+      {
+        "name": "Spinner",
+        "bands": [
+          {
+            "kind": "S",
+            "min": 0,
+            "max": 127,
+            "label": "off"
+          },
+          {
+            "kind": "S",
+            "min": 128,
+            "max": 255,
+            "label": "on s>f"
+          }
+        ]
+      },
+      {
+        "name": "Auto",
+        "bands": [
+          {
+            "kind": "S",
+            "min": 0,
+            "max": 52,
+            "label": "off"
+          },
+          {
+            "kind": "S",
+            "min": 53,
+            "max": 255,
+            "label": "on"
+          }
+        ]
+      },
+      {
+        "name": "Reset",
+        "bands": [
+          {
+            "kind": "S",
+            "min": 0,
+            "max": 127,
+            "label": "off"
+          },
+          {
+            "kind": "S",
+            "min": 128,
+            "max": 156,
+            "label": "on"
+          },
+          {
+            "kind": "S",
+            "min": 157,
+            "max": 255,
+            "label": "spins>f"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "display": "25 ch banger1",
+    "file": "/Library/Application Support/db audioware/Show Buddy Active//DmxLibrary//Custom/25 ch banger.dmx",
+    "from": 513,
+    "to": 536,
+    "x": 0.69426227,
+    "y": 0.8451923,
+    "pan_range": 540.0,
+    "tilt_range": 170.0,
+    "beam_width": 30.0,
+    "channels": [
+      {
+        "name": "Pan",
+        "bands": [
+          {
+            "kind": "V",
+            "min": 0,
+            "max": 255,
+            "label": "Coarse"
+          }
+        ]
+      },
+      {
+        "name": "Panf",
+        "bands": [
+          {
+            "kind": "V",
+            "min": 0,
+            "max": 255,
+            "label": "Fine"
+          }
+        ]
+      },
+      {
+        "name": "Tilt",
+        "bands": [
+          {
+            "kind": "V",
+            "min": 0,
+            "max": 255,
+            "label": "Coarse"
+          }
+        ]
+      },
+      {
+        "name": "Tiltf",
+        "bands": [
+          {
+            "kind": "V",
+            "min": 0,
+            "max": 255,
+            "label": "Fine"
+          }
+        ]
+      },
+      {
+        "name": "Tiltspd",
+        "bands": [
+          {
+            "kind": "V",
+            "min": 0,
+            "max": 255,
+            "label": "Fine"
+          }
+        ]
+      },
+      {
+        "name": "SPINNER",
+        "bands": [
+          {
+            "kind": "V",
+            "min": 0,
+            "max": 255,
+            "label": ""
+          }
+        ]
+      },
+      {
+        "name": "Master",
+        "bands": [
+          {
+            "kind": "D",
+            "min": 0,
+            "max": 255,
+            "label": ""
+          }
+        ]
+      },
+      {
+        "name": "STRB",
+        "bands": [
+          {
+            "kind": "V",
+            "min": 0,
+            "max": 255,
+            "label": ""
+          }
+        ]
+      },
+      {
+        "name": "RED",
+        "bands": [
+          {
+            "kind": "V",
+            "min": 0,
+            "max": 255,
+            "label": ""
+          }
+        ]
+      },
+      {
+        "name": "GRN",
+        "bands": [
+          {
+            "kind": "V",
+            "min": 0,
+            "max": 255,
+            "label": ""
+          }
+        ]
+      },
+      {
+        "name": "BLU",
+        "bands": [
+          {
+            "kind": "V",
+            "min": 0,
+            "max": 255,
+            "label": ""
+          }
+        ]
+      },
+      {
+        "name": "WHT",
+        "bands": [
+          {
+            "kind": "V",
+            "min": 0,
+            "max": 255,
+            "label": ""
+          }
+        ]
+      },
+      {
+        "name": "DRED",
+        "bands": [
+          {
+            "kind": "V",
+            "min": 0,
+            "max": 255,
+            "label": ""
+          }
+        ]
+      },
+      {
+        "name": "DGRN",
+        "bands": [
+          {
+            "kind": "V",
+            "min": 0,
+            "max": 255,
+            "label": ""
+          }
+        ]
+      },
+      {
+        "name": "DBLU",
+        "bands": [
+          {
+            "kind": "V",
+            "min": 0,
+            "max": 255,
+            "label": ""
+          }
+        ]
+      },
+      {
+        "name": "DWHITE",
+        "bands": [
+          {
+            "kind": "V",
+            "min": 0,
+            "max": 255,
+            "label": ""
+          }
+        ]
+      },
+      {
+        "name": "LRED",
+        "bands": [
+          {
+            "kind": "V",
+            "min": 0,
+            "max": 255,
+            "label": ""
+          }
+        ]
+      },
+      {
+        "name": "LGRN",
+        "bands": [
+          {
+            "kind": "V",
+            "min": 0,
+            "max": 255,
+            "label": ""
+          }
+        ]
+      },
+      {
+        "name": "LBLU",
+        "bands": [
+          {
+            "kind": "V",
+            "min": 0,
+            "max": 255,
+            "label": ""
+          }
+        ]
+      },
+      {
+        "name": "YSTB",
+        "bands": [
+          {
+            "kind": "V",
+            "min": 0,
+            "max": 255,
+            "label": ""
+          }
+        ]
+      },
+      {
+        "name": "LRING",
+        "bands": [
+          {
+            "kind": "V",
+            "min": 0,
+            "max": 255,
+            "label": ""
+          }
+        ]
+      },
+      {
+        "name": "Auto",
+        "bands": [
+          {
+            "kind": "V",
+            "min": 0,
+            "max": 255,
+            "label": ""
+          }
+        ]
+      },
+      {
+        "name": "AUTO",
+        "bands": [
+          {
+            "kind": "V",
+            "min": 0,
+            "max": 255,
+            "label": ""
+          }
+        ]
+      },
+      {
+        "name": "RST",
+        "bands": [
+          {
+            "kind": "V",
+            "min": 0,
+            "max": 255,
+            "label": ""
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "display": "25 ch banger1",
+    "file": "/Library/Application Support/db audioware/Show Buddy Active//DmxLibrary//Custom/25 ch banger.dmx",
+    "from": 538,
+    "to": 561,
+    "x": 0.7557376,
+    "y": 0.84278846,
+    "pan_range": 540.0,
+    "tilt_range": 170.0,
+    "beam_width": 30.0,
+    "channels": [
+      {
+        "name": "Pan",
+        "bands": [
+          {
+            "kind": "V",
+            "min": 0,
+            "max": 255,
+            "label": "Coarse"
+          }
+        ]
+      },
+      {
+        "name": "Panf",
+        "bands": [
+          {
+            "kind": "V",
+            "min": 0,
+            "max": 255,
+            "label": "Fine"
+          }
+        ]
+      },
+      {
+        "name": "Tilt",
+        "bands": [
+          {
+            "kind": "V",
+            "min": 0,
+            "max": 255,
+            "label": "Coarse"
+          }
+        ]
+      },
+      {
+        "name": "Tiltf",
+        "bands": [
+          {
+            "kind": "V",
+            "min": 0,
+            "max": 255,
+            "label": "Fine"
+          }
+        ]
+      },
+      {
+        "name": "Tiltspd",
+        "bands": [
+          {
+            "kind": "V",
+            "min": 0,
+            "max": 255,
+            "label": "Fine"
+          }
+        ]
+      },
+      {
+        "name": "SPINNER",
+        "bands": [
+          {
+            "kind": "V",
+            "min": 0,
+            "max": 255,
+            "label": ""
+          }
+        ]
+      },
+      {
+        "name": "Master",
+        "bands": [
+          {
+            "kind": "D",
+            "min": 0,
+            "max": 255,
+            "label": ""
+          }
+        ]
+      },
+      {
+        "name": "STRB",
+        "bands": [
+          {
+            "kind": "V",
+            "min": 0,
+            "max": 255,
+            "label": ""
+          }
+        ]
+      },
+      {
+        "name": "RED",
+        "bands": [
+          {
+            "kind": "V",
+            "min": 0,
+            "max": 255,
+            "label": ""
+          }
+        ]
+      },
+      {
+        "name": "GRN",
+        "bands": [
+          {
+            "kind": "V",
+            "min": 0,
+            "max": 255,
+            "label": ""
+          }
+        ]
+      },
+      {
+        "name": "BLU",
+        "bands": [
+          {
+            "kind": "V",
+            "min": 0,
+            "max": 255,
+            "label": ""
+          }
+        ]
+      },
+      {
+        "name": "WHT",
+        "bands": [
+          {
+            "kind": "V",
+            "min": 0,
+            "max": 255,
+            "label": ""
+          }
+        ]
+      },
+      {
+        "name": "DRED",
+        "bands": [
+          {
+            "kind": "V",
+            "min": 0,
+            "max": 255,
+            "label": ""
+          }
+        ]
+      },
+      {
+        "name": "DGRN",
+        "bands": [
+          {
+            "kind": "V",
+            "min": 0,
+            "max": 255,
+            "label": ""
+          }
+        ]
+      },
+      {
+        "name": "DBLU",
+        "bands": [
+          {
+            "kind": "V",
+            "min": 0,
+            "max": 255,
+            "label": ""
+          }
+        ]
+      },
+      {
+        "name": "DWHITE",
+        "bands": [
+          {
+            "kind": "V",
+            "min": 0,
+            "max": 255,
+            "label": ""
+          }
+        ]
+      },
+      {
+        "name": "LRED",
+        "bands": [
+          {
+            "kind": "V",
+            "min": 0,
+            "max": 255,
+            "label": ""
+          }
+        ]
+      },
+      {
+        "name": "LGRN",
+        "bands": [
+          {
+            "kind": "V",
+            "min": 0,
+            "max": 255,
+            "label": ""
+          }
+        ]
+      },
+      {
+        "name": "LBLU",
+        "bands": [
+          {
+            "kind": "V",
+            "min": 0,
+            "max": 255,
+            "label": ""
+          }
+        ]
+      },
+      {
+        "name": "YSTB",
+        "bands": [
+          {
+            "kind": "V",
+            "min": 0,
+            "max": 255,
+            "label": ""
+          }
+        ]
+      },
+      {
+        "name": "LRING",
+        "bands": [
+          {
+            "kind": "V",
+            "min": 0,
+            "max": 255,
+            "label": ""
+          }
+        ]
+      },
+      {
+        "name": "Auto",
+        "bands": [
+          {
+            "kind": "V",
+            "min": 0,
+            "max": 255,
+            "label": ""
+          }
+        ]
+      },
+      {
+        "name": "AUTO",
+        "bands": [
+          {
+            "kind": "V",
+            "min": 0,
+            "max": 255,
+            "label": ""
+          }
+        ]
+      },
+      {
+        "name": "RST",
+        "bands": [
+          {
+            "kind": "V",
+            "min": 0,
+            "max": 255,
+            "label": ""
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "display": "25 ch banger1",
+    "file": "/Library/Application Support/db audioware/Show Buddy Active//DmxLibrary//Custom/25 ch banger.dmx",
+    "from": 563,
+    "to": 586,
+    "x": 0.827459,
+    "y": 0.8475961,
+    "pan_range": 540.0,
+    "tilt_range": 170.0,
+    "beam_width": 30.0,
+    "channels": [
+      {
+        "name": "Pan",
+        "bands": [
+          {
+            "kind": "V",
+            "min": 0,
+            "max": 255,
+            "label": "Coarse"
+          }
+        ]
+      },
+      {
+        "name": "Panf",
+        "bands": [
+          {
+            "kind": "V",
+            "min": 0,
+            "max": 255,
+            "label": "Fine"
+          }
+        ]
+      },
+      {
+        "name": "Tilt",
+        "bands": [
+          {
+            "kind": "V",
+            "min": 0,
+            "max": 255,
+            "label": "Coarse"
+          }
+        ]
+      },
+      {
+        "name": "Tiltf",
+        "bands": [
+          {
+            "kind": "V",
+            "min": 0,
+            "max": 255,
+            "label": "Fine"
+          }
+        ]
+      },
+      {
+        "name": "Tiltspd",
+        "bands": [
+          {
+            "kind": "V",
+            "min": 0,
+            "max": 255,
+            "label": "Fine"
+          }
+        ]
+      },
+      {
+        "name": "SPINNER",
+        "bands": [
+          {
+            "kind": "V",
+            "min": 0,
+            "max": 255,
+            "label": ""
+          }
+        ]
+      },
+      {
+        "name": "Master",
+        "bands": [
+          {
+            "kind": "D",
+            "min": 0,
+            "max": 255,
+            "label": ""
+          }
+        ]
+      },
+      {
+        "name": "STRB",
+        "bands": [
+          {
+            "kind": "V",
+            "min": 0,
+            "max": 255,
+            "label": ""
+          }
+        ]
+      },
+      {
+        "name": "RED",
+        "bands": [
+          {
+            "kind": "V",
+            "min": 0,
+            "max": 255,
+            "label": ""
+          }
+        ]
+      },
+      {
+        "name": "GRN",
+        "bands": [
+          {
+            "kind": "V",
+            "min": 0,
+            "max": 255,
+            "label": ""
+          }
+        ]
+      },
+      {
+        "name": "BLU",
+        "bands": [
+          {
+            "kind": "V",
+            "min": 0,
+            "max": 255,
+            "label": ""
+          }
+        ]
+      },
+      {
+        "name": "WHT",
+        "bands": [
+          {
+            "kind": "V",
+            "min": 0,
+            "max": 255,
+            "label": ""
+          }
+        ]
+      },
+      {
+        "name": "DRED",
+        "bands": [
+          {
+            "kind": "V",
+            "min": 0,
+            "max": 255,
+            "label": ""
+          }
+        ]
+      },
+      {
+        "name": "DGRN",
+        "bands": [
+          {
+            "kind": "V",
+            "min": 0,
+            "max": 255,
+            "label": ""
+          }
+        ]
+      },
+      {
+        "name": "DBLU",
+        "bands": [
+          {
+            "kind": "V",
+            "min": 0,
+            "max": 255,
+            "label": ""
+          }
+        ]
+      },
+      {
+        "name": "DWHITE",
+        "bands": [
+          {
+            "kind": "V",
+            "min": 0,
+            "max": 255,
+            "label": ""
+          }
+        ]
+      },
+      {
+        "name": "LRED",
+        "bands": [
+          {
+            "kind": "V",
+            "min": 0,
+            "max": 255,
+            "label": ""
+          }
+        ]
+      },
+      {
+        "name": "LGRN",
+        "bands": [
+          {
+            "kind": "V",
+            "min": 0,
+            "max": 255,
+            "label": ""
+          }
+        ]
+      },
+      {
+        "name": "LBLU",
+        "bands": [
+          {
+            "kind": "V",
+            "min": 0,
+            "max": 255,
+            "label": ""
+          }
+        ]
+      },
+      {
+        "name": "YSTB",
+        "bands": [
+          {
+            "kind": "V",
+            "min": 0,
+            "max": 255,
+            "label": ""
+          }
+        ]
+      },
+      {
+        "name": "LRING",
+        "bands": [
+          {
+            "kind": "V",
+            "min": 0,
+            "max": 255,
+            "label": ""
+          }
+        ]
+      },
+      {
+        "name": "Auto",
+        "bands": [
+          {
+            "kind": "V",
+            "min": 0,
+            "max": 255,
+            "label": ""
+          }
+        ]
+      },
+      {
+        "name": "AUTO",
+        "bands": [
+          {
+            "kind": "V",
+            "min": 0,
+            "max": 255,
+            "label": ""
+          }
+        ]
+      },
+      {
+        "name": "RST",
+        "bands": [
+          {
+            "kind": "V",
+            "min": 0,
+            "max": 255,
+            "label": ""
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "display": "25 ch banger1",
+    "file": "/Library/Application Support/db audioware/Show Buddy Active//DmxLibrary//Custom/25 ch banger.dmx",
+    "from": 588,
+    "to": 611,
+    "x": 0.8889344,
+    "y": 0.8451923,
+    "pan_range": 540.0,
+    "tilt_range": 170.0,
+    "beam_width": 30.0,
+    "channels": [
+      {
+        "name": "Pan",
+        "bands": [
+          {
+            "kind": "V",
+            "min": 0,
+            "max": 255,
+            "label": "Coarse"
+          }
+        ]
+      },
+      {
+        "name": "Panf",
+        "bands": [
+          {
+            "kind": "V",
+            "min": 0,
+            "max": 255,
+            "label": "Fine"
+          }
+        ]
+      },
+      {
+        "name": "Tilt",
+        "bands": [
+          {
+            "kind": "V",
+            "min": 0,
+            "max": 255,
+            "label": "Coarse"
+          }
+        ]
+      },
+      {
+        "name": "Tiltf",
+        "bands": [
+          {
+            "kind": "V",
+            "min": 0,
+            "max": 255,
+            "label": "Fine"
+          }
+        ]
+      },
+      {
+        "name": "Tiltspd",
+        "bands": [
+          {
+            "kind": "V",
+            "min": 0,
+            "max": 255,
+            "label": "Fine"
+          }
+        ]
+      },
+      {
+        "name": "SPINNER",
+        "bands": [
+          {
+            "kind": "V",
+            "min": 0,
+            "max": 255,
+            "label": ""
+          }
+        ]
+      },
+      {
+        "name": "Master",
+        "bands": [
+          {
+            "kind": "D",
+            "min": 0,
+            "max": 255,
+            "label": ""
+          }
+        ]
+      },
+      {
+        "name": "STRB",
+        "bands": [
+          {
+            "kind": "V",
+            "min": 0,
+            "max": 255,
+            "label": ""
+          }
+        ]
+      },
+      {
+        "name": "RED",
+        "bands": [
+          {
+            "kind": "V",
+            "min": 0,
+            "max": 255,
+            "label": ""
+          }
+        ]
+      },
+      {
+        "name": "GRN",
+        "bands": [
+          {
+            "kind": "V",
+            "min": 0,
+            "max": 255,
+            "label": ""
+          }
+        ]
+      },
+      {
+        "name": "BLU",
+        "bands": [
+          {
+            "kind": "V",
+            "min": 0,
+            "max": 255,
+            "label": ""
+          }
+        ]
+      },
+      {
+        "name": "WHT",
+        "bands": [
+          {
+            "kind": "V",
+            "min": 0,
+            "max": 255,
+            "label": ""
+          }
+        ]
+      },
+      {
+        "name": "DRED",
+        "bands": [
+          {
+            "kind": "V",
+            "min": 0,
+            "max": 255,
+            "label": ""
+          }
+        ]
+      },
+      {
+        "name": "DGRN",
+        "bands": [
+          {
+            "kind": "V",
+            "min": 0,
+            "max": 255,
+            "label": ""
+          }
+        ]
+      },
+      {
+        "name": "DBLU",
+        "bands": [
+          {
+            "kind": "V",
+            "min": 0,
+            "max": 255,
+            "label": ""
+          }
+        ]
+      },
+      {
+        "name": "DWHITE",
+        "bands": [
+          {
+            "kind": "V",
+            "min": 0,
+            "max": 255,
+            "label": ""
+          }
+        ]
+      },
+      {
+        "name": "LRED",
+        "bands": [
+          {
+            "kind": "V",
+            "min": 0,
+            "max": 255,
+            "label": ""
+          }
+        ]
+      },
+      {
+        "name": "LGRN",
+        "bands": [
+          {
+            "kind": "V",
+            "min": 0,
+            "max": 255,
+            "label": ""
+          }
+        ]
+      },
+      {
+        "name": "LBLU",
+        "bands": [
+          {
+            "kind": "V",
+            "min": 0,
+            "max": 255,
+            "label": ""
+          }
+        ]
+      },
+      {
+        "name": "YSTB",
+        "bands": [
+          {
+            "kind": "V",
+            "min": 0,
+            "max": 255,
+            "label": ""
+          }
+        ]
+      },
+      {
+        "name": "LRING",
+        "bands": [
+          {
+            "kind": "V",
+            "min": 0,
+            "max": 255,
+            "label": ""
+          }
+        ]
+      },
+      {
+        "name": "Auto",
+        "bands": [
+          {
+            "kind": "V",
+            "min": 0,
+            "max": 255,
+            "label": ""
+          }
+        ]
+      },
+      {
+        "name": "AUTO",
+        "bands": [
+          {
+            "kind": "V",
+            "min": 0,
+            "max": 255,
+            "label": ""
+          }
+        ]
+      },
+      {
+        "name": "RST",
+        "bands": [
+          {
+            "kind": "V",
+            "min": 0,
+            "max": 255,
+            "label": ""
+          }
+        ]
+      }
+    ]
+  }
+]
