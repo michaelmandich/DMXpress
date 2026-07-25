@@ -75,7 +75,7 @@ impl StageView {
                         });
                     }
                     ui.add_space(6.0);
-                    if ui.button("🗑 Delete tower").clicked() {
+                    if ui.button("Delete tower").clicked() {
                         self.delete_tower(patch, ti);
                     } else if changed {
                         let dyaw = self.towers[ti].yaw_deg - old_yaw;
@@ -114,7 +114,7 @@ impl StageView {
                 }
             }
             if self.instances[i].mount.is_some() {
-                ui.weak("⚓ Snapped to tower — drag away to detach");
+                ui.weak("Snapped to tower — drag away to detach");
             }
             ui.separator();
             // Moving heads (a base + pan/tilt) only get a single base-spin

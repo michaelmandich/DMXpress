@@ -45,7 +45,7 @@ impl App {
                     } else {
                         ui.colored_label(
                             Color32::from_rgb(235, 160, 70),
-                            format!("⚠ {} override(s) forcing output", overrides.len()),
+                            format!("{} override(s) forcing output", overrides.len()),
                         );
                         if ui.button("Clear all").clicked() {
                             overrides.clear();

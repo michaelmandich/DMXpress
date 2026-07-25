@@ -14,6 +14,7 @@ use crate::palette::Palette;
 use crate::phaser::Phaser;
 use crate::preset::UserPreset;
 use crate::profiles::UserFixture;
+use crate::scene::Scene;
 use crate::showbuddy::Fixture;
 use crate::stack::Stack;
 use crate::stage::{LayoutFile, Settings};
@@ -61,6 +62,10 @@ pub struct Configuration {
     pub preset_folders: Vec<String>,
     #[serde(default)]
     pub stacks: Vec<Stack>,
+    /// Captured layerable effect states. Absent in configurations written
+    /// before scenes existed.
+    #[serde(default)]
+    pub scenes: Vec<Scene>,
     #[serde(default)]
     pub views: Vec<View>,
     #[serde(default)]

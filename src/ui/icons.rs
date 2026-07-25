@@ -58,6 +58,7 @@ pub enum Icon {
     Chase,
     Group,
     Order,
+    Scene,
     Palette,
     Phaser,
     Beat,
@@ -149,9 +150,22 @@ pub fn draw(painter: &egui::Painter, rect: Rect, icon: Icon, color: Color32) {
                 painter.circle_filled(p(r, x, y), side * 0.09, color);
             }
         }
+        // Three offset cards: looks stacked on top of one another.
+        Icon::Scene => {
+            for (i, (x, y)) in [(0.36f32, 0.34f32), (0.5, 0.5), (0.64, 0.66)]
+                .iter()
+                .enumerate()
+            {
+                let fade = 0.5 + i as f32 * 0.25;
+                painter.rect_stroke(
+                    Rect::from_center_size(p(r, *x, *y), Vec2::splat(side * 0.34)),
+                    2.0,
+                    Stroke::new(w, color.gamma_multiply(fade)),
+                );
+            }
+        }
         // Painter's palette: a rounded blob with wells.
-        Icon::Palette => {
-            painter.circle_stroke(r.center(), side * 0.36, s);
+        Icon::Palette => {            painter.circle_stroke(r.center(), side * 0.36, s);
             for (x, y) in [(0.36, 0.36), (0.62, 0.33), (0.68, 0.58)] {
                 painter.circle_filled(p(r, x, y), side * 0.07, color);
             }

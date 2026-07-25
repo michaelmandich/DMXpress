@@ -43,7 +43,7 @@ impl App {
                     ui.separator();
 
                     if self.stacks.is_empty() {
-                        ui.weak("No stacks yet — open 🎬 Stacks to build a cue list.");
+                        ui.weak("No stacks yet — open Stacks to build a cue list.");
                         return;
                     }
 
@@ -66,7 +66,7 @@ impl App {
                                             Some(c) => self.stacks[i]
                                                 .cues
                                                 .get(c)
-                                                .map(|q| format!("▶ {}", q.name))
+                                                .map(|q| format!("> {}", q.name))
                                                 .unwrap_or_else(|| "—".into()),
                                             None => "—".into(),
                                         };

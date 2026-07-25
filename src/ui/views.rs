@@ -18,6 +18,7 @@ impl App {
             chases: self.show_chases,
             groups: self.show_groups,
             orders: self.show_orders,
+            scenes: self.show_scenes,
             palettes: self.show_palettes,
             phasers: self.show_phasers,
             stacks: self.show_stacks,
@@ -39,6 +40,7 @@ impl App {
         self.show_chases = v.chases;
         self.show_groups = v.groups;
         self.show_orders = v.orders;
+        self.show_scenes = v.scenes;
         self.show_palettes = v.palettes;
         self.show_phasers = v.phasers;
         self.show_stacks = v.stacks;
@@ -68,7 +70,7 @@ impl App {
                 ui.horizontal(|ui| {
                     ui.label("Name");
                     ui.text_edit_singleline(&mut self.view_name);
-                    if ui.button("＋ Save").clicked() {
+                    if ui.button("Save").clicked() {
                         do_save = true;
                     }
                 });
@@ -87,7 +89,7 @@ impl App {
                         if ui.button(&v.name).clicked() {
                             do_apply = Some(i);
                         }
-                        if ui.small_button("🗑").on_hover_text("Delete").clicked() {
+                        if ui.small_button("x").on_hover_text("Delete").clicked() {
                             do_delete = Some(i);
                         }
                     });

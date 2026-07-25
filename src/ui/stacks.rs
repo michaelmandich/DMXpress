@@ -186,7 +186,7 @@ impl App {
                         let active = self.cur_stack == Some(i);
                         let playing = self.stacks[i].current.is_some();
                         let label = if playing {
-                            format!("▶ {}", self.stacks[i].name)
+                            format!("> {}", self.stacks[i].name)
                         } else {
                             self.stacks[i].name.clone()
                         };
@@ -194,14 +194,14 @@ impl App {
                             self.cur_stack = Some(i);
                         }
                     }
-                    if ui.button("＋ New").clicked() {
+                    if ui.button("New").clicked() {
                         do_new = true;
                     }
                 });
                 ui.separator();
 
                 let Some(si) = self.cur_stack.filter(|&i| i < self.stacks.len()) else {
-                    ui.weak("No stack selected. Press ＋ New to create a cue list.");
+                    ui.weak("No stack selected. Press New to create a cue list.");
                     return;
                 };
 
@@ -212,13 +212,13 @@ impl App {
                                 .desired_width(150.0),
                         )
                         .changed();
-                    if ui.button("🗑 Delete list").clicked() {
+                    if ui.button("Delete list").clicked() {
                         do_delete_stack = Some(si);
                     }
                 });
                 ui.horizontal(|ui| {
                     if ui
-                        .button("⏭ Go")
+                        .button("Go")
                         .on_hover_text("Fade to the next cue")
                         .clicked()
                     {
@@ -235,7 +235,7 @@ impl App {
                     if ui
                         .add_enabled(
                             !self.live_active.is_empty(),
-                            egui::Button::new("⏺ Store cue"),
+                            egui::Button::new("Store cue"),
                         )
                         .on_hover_text("Record the programmer as a new cue")
                         .clicked()
@@ -308,10 +308,10 @@ impl App {
                                             .suffix(" s"),
                                     )
                                     .changed();
-                                if ui.button("▶").on_hover_text("Go to this cue").clicked() {
+                                if ui.button("Go").on_hover_text("Go to this cue").clicked() {
                                     do_fire = Some((si, ci));
                                 }
-                                if ui.small_button("🗑").clicked() {
+                                if ui.small_button("x").clicked() {
                                     do_delete_cue = Some((si, ci));
                                 }
                                 ui.end_row();

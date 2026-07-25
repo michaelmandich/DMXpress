@@ -47,7 +47,7 @@ impl App {
             },
             ["go"] => match self.cur_stack {
                 Some(i) => self.go_stack(i),
-                None => self.log.push("No stack selected (open 🎬 Stacks)".into()),
+                None => self.log.push("No stack selected (open Stacks)".into()),
             },
             ["go", n] => match num(n) {
                 Some(s) if (1..=self.stacks.len()).contains(&s) => self.go_stack(s - 1),
@@ -86,7 +86,7 @@ impl App {
         let mut submit = false;
         egui::TopBottomPanel::bottom("command").show(ctx, |ui| {
             ui.horizontal(|ui| {
-                ui.strong("⌨");
+                ui.strong(">");
                 let resp = ui.add(
                     egui::TextEdit::singleline(&mut self.command)
                         .desired_width(f32::INFINITY)

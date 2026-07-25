@@ -14,6 +14,7 @@ use crate::palette::{self, Feature, Palette, PaletteRef, PaletteSeq, SeqPattern}
 use crate::phaser::{self, Phaser};
 use crate::preset::{self, SavedCycle, SavedOsc, UserPreset};
 use crate::profiles::{self, UserFixture};
+use crate::scene::{self, Scene};
 use crate::stack::{self, Stack};
 use crate::view::{self, View};
 use crate::showbuddy::{self, Patch, PresetBank, Role};
@@ -79,7 +80,7 @@ pub(crate) struct App {
     /// Spherical chase: a non-destructive moving pulse of another preset.
     pub chase: ChaseConfig,
     pub chase_run: Option<ChaseRun>,
-    /// Dimmer throb: moment the 💥 button was hit — dimmers surge to full
+    /// Dimmer throb: moment the throb button was hit — dimmers surge to full
     /// and decay back over ~half a second.
     pub throb_at: Option<Instant>,
     /// Global transport hold. While set, the last transmitted frame remains
@@ -224,6 +225,13 @@ pub(crate) struct App {
     pub(crate) stutter_anchor: Option<f32>,
     /// Cue lists (the renamed grandMA3 Sequence/cuelist pool).
     pub stacks: Vec<Stack>,
+    /// Captured effect states that play as their own mixer layers, so several
+    /// can run at once (see `scene.rs`). Pool order is priority.
+    pub scenes: Vec<Scene>,
+    /// Name field for capturing the programmer as a scene.
+    pub scene_name: String,
+    /// Play the pool in order, each scene handing to the next on its hold.
+    pub scene_chain: bool,
     /// Stack shown/edited in the Stacks window.
     pub cur_stack: Option<usize>,
     /// Default fade applied to newly recorded cues.
@@ -244,6 +252,7 @@ pub(crate) struct App {
     pub show_chases: bool,
     pub show_groups: bool,
     pub show_orders: bool,
+    pub show_scenes: bool,
     pub show_beat: bool,
     pub show_palettes: bool,
     pub show_phasers: bool,
@@ -309,6 +318,7 @@ pub(crate) struct PanelZoom {
     pub transition: f32,
     pub groups: f32,
     pub orders: f32,
+    pub scenes: f32,
     pub palettes: f32,
     pub phasers: f32,
     pub stacks: f32,
@@ -326,6 +336,7 @@ impl Default for PanelZoom {
             transition: 1.0,
             groups: 1.0,
             orders: 1.0,
+            scenes: 1.0,
             palettes: 1.0,
             phasers: 1.0,
             stacks: 1.0,
@@ -528,6 +539,9 @@ impl App {
             stutter_beats: 0.5,
             stutter_anchor: None,
             stacks: stack::load_stacks(),
+            scenes: scene::load_scenes(),
+            scene_name: String::new(),
+            scene_chain: false,
             cur_stack: None,
             cue_fade: 3.0,
             grand_master: 1.0,
@@ -542,6 +556,7 @@ impl App {
             show_chases: false,
             show_groups: false,
             show_orders: false,
+            show_scenes: false,
             show_beat: false,
             show_palettes: false,
             show_phasers: false,
@@ -692,6 +707,7 @@ impl App {
             user_presets: self.user_presets.clone(),
             preset_folders: self.preset_folders.clone(),
             stacks: self.stacks.clone(),
+            scenes: self.scenes.clone(),
             views: self.views.clone(),
             universe: self.universe,
             grand_master: self.grand_master,
@@ -754,6 +770,9 @@ impl App {
         self.stacks = cfg.stacks;
         stack::save_stacks(&self.stacks);
         self.cur_stack = None;
+        self.scenes = cfg.scenes;
+        scene::save_scenes(&self.scenes);
+        self.scene_chain = false;
         self.views = cfg.views;
         view::save_views(&self.views);
         self.universe = cfg.universe;
@@ -954,6 +973,9 @@ impl App {
         for stack in &mut self.stacks {
             stack.resume_after(paused);
         }
+        for sc in &mut self.scenes {
+            sc.resume_after(paused);
+        }
         for ramp in self
             .base_fades
             .values_mut()
@@ -982,6 +1004,7 @@ impl App {
         self.beat_window(ctx);
         self.groups_window(ctx);
         self.orders_window(ctx);
+        self.scenes_window(ctx);
         self.palettes_window(ctx);
         self.phasers_window(ctx);
         self.stacks_window(ctx);
@@ -1629,6 +1652,19 @@ impl eframe::App for App {
                 if st.is_fading() {
                     repaint_ms = repaint_ms.min(25);
                 }
+            }
+        }
+        // Scenes layer among themselves in pool order (later = higher
+        // priority) and all sit under the programmer, so you can keep
+        // building over whatever is running.
+        self.advance_scene_chain();
+        for sc in &mut self.scenes {
+            let animated = sc.is_animated() || sc.is_fading();
+            if let Some(layer) = sc.layer() {
+                self.mixer.push(layer);
+            }
+            if animated && sc.is_running() {
+                repaint_ms = repaint_ms.min(25);
             }
         }
         // The programmer asserts only the channels it is actively holding.

@@ -99,7 +99,7 @@ impl App {
         }
         // Selection first: applying with fixtures selected targets them.
         // With nothing selected the phaser falls back to the fixtures it was
-        // created with (recorded at store time, re-bindable via 🔗).
+        // created with (recorded at store time, re-bindable from the tile menu).
         let sel = self.stage.selected_fixtures();
         let fixtures: Vec<usize> = if !sel.is_empty() {
             sel
@@ -656,7 +656,7 @@ impl App {
                             for (key, label) in &easy {
                                 let on = e.components.iter().any(|c| c.target.eq_ignore_ascii_case(key))
                                     || (e.components.is_empty() && e.targets.iter().any(|t| t.eq_ignore_ascii_case(key)));
-                                let text = if on { format!("✓ {label}") } else { format!("＋ {label}") };
+                                let text = if on { format!("on: {label}") } else { format!("add {label}") };
                                 if ui.add_sized([92.0, 30.0], egui::Button::new(text).selected(on)).clicked() {
                                     if on {
                                         e.components.retain(|c| !c.target.eq_ignore_ascii_case(key));
@@ -677,7 +677,7 @@ impl App {
                                 }
                             }
                             egui::ComboBox::from_id_salt("phaser_add_special")
-                                .selected_text("＋ Add special…")
+                                .selected_text("Add special…")
                                 .show_ui(ui, |ui| {
                                     for (key, label) in &special {
                                         let on = e.components.iter().any(|c| c.target.eq_ignore_ascii_case(key));
@@ -733,7 +733,7 @@ impl App {
                                         }
                                     });
                                 ui.with_layout(egui::Layout::right_to_left(egui::Align::Center), |ui| {
-                                    if ui.small_button("✕").on_hover_text("Remove component").clicked() {
+                                    if ui.small_button("x").on_hover_text("Remove component").clicked() {
                                         remove_component = Some(index);
                                     }
                                 });
@@ -808,7 +808,7 @@ impl App {
                     .inner_margin(8.0)
                     .show(ui, |ui| {
                         ui.horizontal_wrapped(|ui| {
-                            ui.checkbox(&mut e.master_beat, "♪ Master beat");
+                            ui.checkbox(&mut e.master_beat, "Master beat");
                             ui.label("Spread");
                             ui.add_sized([120.0, 20.0], egui::Slider::new(&mut e.spread, 0.0..=2.0));
                             ui.label("Wings");
@@ -835,7 +835,7 @@ impl App {
                     let can_apply =
                         !sel.is_empty() || !self.phaser_edit.fixtures.is_empty();
                     if ui
-                        .add_enabled(can_apply, egui::Button::new("▶ Apply"))
+                        .add_enabled(can_apply, egui::Button::new("Apply"))
                         .on_hover_text(
                             "Apply to the selection — or, with nothing selected, \
                              to the fixtures the phaser was stored with",
@@ -891,11 +891,11 @@ impl App {
                             .hint_text("name…")
                             .desired_width(120.0),
                     );
-                    if ui.button("＋ Store").clicked() {
+                    if ui.button("Store").clicked() {
                         do_store = true;
                     }
                     if ui
-                        .add_enabled(!sel.is_empty(), egui::Button::new("📌 Store pose"))
+                        .add_enabled(!sel.is_empty(), egui::Button::new("Store pose"))
                         .on_hover_text(
                             "Save each selected light's current pan/tilt as a static \
                              position tile — clicking it stops movement and recalls the pose",
@@ -905,7 +905,7 @@ impl App {
                         do_store_pose = true;
                     }
                     if ui
-                        .add_enabled(!sel.is_empty(), egui::Button::new("🔒 Store hold"))
+                        .add_enabled(!sel.is_empty(), egui::Button::new("Store hold"))
                         .on_hover_text(
                             "Save the selected fixtures' non-zero channel values as an \
                              always-on tile — it overrides presets, blackouts and the \
@@ -916,7 +916,7 @@ impl App {
                         do_store_hold = true;
                     }
                     if ui
-                        .add_enabled(!sel.is_empty(), egui::Button::new("🔐 Lock fixtures"))
+                        .add_enabled(!sel.is_empty(), egui::Button::new("Lock fixtures"))
                         .on_hover_text(
                             "Freeze the selected fixtures exactly as they look right \
                              now — every channel forced (zeros included) until the \
@@ -930,7 +930,7 @@ impl App {
 
                 // Gobo / prism / effect wheels: drive the selection's slot
                 // channels directly and store combos as FX tiles.
-                egui::CollapsingHeader::new("🎭 Gobos & effects")
+                egui::CollapsingHeader::new("Gobos & effects")
                     .default_open(false)
                     .show(ui, |ui| {
                         if sel.is_empty() {
@@ -1020,7 +1020,7 @@ impl App {
                             }
                         }
                         if ui
-                            .button("＋ Store FX tile")
+                            .button("Store FX tile")
                             .on_hover_text(
                                 "Save the selection's gobo/prism/effect values as a \
                                  tile (named from the field above) — e.g. one per \
@@ -1034,7 +1034,7 @@ impl App {
                 ui.separator();
                 ui.horizontal(|ui| {
                     if ui
-                        .selectable_label(self.phaser_edit_mode, "✏ Edit mode")
+                        .selectable_label(self.phaser_edit_mode, "Edit mode")
                         .on_hover_text(
                             "Click tiles to load them into the editor and tweak them \
                              in place — without applying or stopping anything",
@@ -1063,8 +1063,8 @@ impl App {
 
                 egui::ScrollArea::vertical().show(ui, |ui| {
                     ui.columns(2, |cols| {
-                        cols[0].strong("🔆 Intensity & color");
-                        cols[1].strong("✛ Movement");
+                        cols[0].strong("Intensity & color");
+                        cols[1].strong("Movement");
                         let (mut left, mut right) = (Vec::new(), Vec::new());
                         for (i, ph) in self.phasers.iter().enumerate() {
                             if ph.is_movement() {
@@ -1125,17 +1125,17 @@ impl App {
                                             s.push('…');
                                         }
                                         if ph.mode == PhaserMode::Add {
-                                            format!("＋{s}")
+                                            format!("+{s}")
                                         } else {
                                             s
                                         }
                                     };
-                                    let bound = if ph.fixtures.is_empty() { "" } else { "🔗" };
-                                    let beat = if ph.master_beat { "♪" } else { "" };
+                                    let bound = if ph.fixtures.is_empty() { "" } else { "bound" };
+                                    let beat = if ph.master_beat { "beat" } else { "" };
                                     let label = egui::RichText::new(format!(
                                         "{}\n{}{}{}{}",
                                         ph.name,
-                                        if on { "▶ " } else { "" },
+                                        if on { "> " } else { "" },
                                         bound,
                                         beat,
                                         sub
@@ -1172,7 +1172,7 @@ impl App {
                                     }
                                     resp.context_menu(|ui| {
                                         if ui
-                                            .button("✏ Edit")
+                                            .button("Edit")
                                             .on_hover_text(
                                                 "Load into the editor and tweak in place — \
                                                  without applying or stopping it",
@@ -1205,7 +1205,7 @@ impl App {
                                         if ui
                                             .add_enabled(
                                                 !sel.is_empty(),
-                                                egui::Button::new("🔗 Bind to selection"),
+                                                egui::Button::new("Bind to selection"),
                                             )
                                             .on_hover_text(
                                                 "Remember the selected fixtures: with nothing \

@@ -318,7 +318,7 @@ impl App {
                             ui.add(egui::Slider::new(&mut live.speed, 0.0..=1.0));
                             ui.end_row();
                         });
-                    if ui.button("⏹ Stop all").clicked() {
+                    if ui.button("Stop all").clicked() {
                         // Freeze the current animated output as a static look.
                         let frozen = self.live.render();
                         self.live = Look::from_frame(frozen);
@@ -473,11 +473,11 @@ impl App {
     }
 
     fn custom_waveforms_ui(&mut self, ui: &mut egui::Ui) {
-        egui::CollapsingHeader::new("✦ Custom waveforms")
+        egui::CollapsingHeader::new("Custom waveforms")
             .default_open(false)
             .show(ui, |ui| {
                 ui.horizontal_wrapped(|ui| {
-                    if ui.button("＋ New").clicked() {
+                    if ui.button("New").clicked() {
                         let id = self.custom_waveforms.iter().map(|w| w.id).max().unwrap_or(0) + 1;
                         self.waveform_edit = CustomWaveform {
                             id,
@@ -647,7 +647,7 @@ impl App {
                         }
                     }
                     ui.separator();
-                    if ui.button("＋ Add break here").clicked() {
+                    if ui.button("Add break here").clicked() {
                         let y = custom_wave(x, &self.waveform_edit);
                         self.waveform_edit.points.push(WavePoint {
                             x: x.clamp(0.01, 0.99),

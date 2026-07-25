@@ -144,7 +144,7 @@ impl App {
                             .desired_width(140.0),
                     );
                     if ui
-                        .add_enabled(!cur.is_empty(), egui::Button::new("＋ Store"))
+                        .add_enabled(!cur.is_empty(), egui::Button::new("+ Store"))
                         .on_hover_text("Save the current selection as a group")
                         .clicked()
                     {

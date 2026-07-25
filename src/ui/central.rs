@@ -232,7 +232,7 @@ impl App {
                                     if !self.sel_channels.is_empty() {
                                         ui.separator();
                                         ui.label(format!("{} ch armed", self.sel_channels.len()));
-                                        if ui.small_button("✕ clear").clicked() {
+                                        if ui.small_button("clear").clicked() {
                                             self.sel_channels.clear();
                                         }
                                     }

@@ -140,7 +140,7 @@ impl App {
                                 .desired_width(90.0),
                         );
                         if ui
-                            .button("＋ Store look")
+                            .button("Store look")
                             .on_hover_text(
                                 "Save the programmer's current values and running \
                                  oscillations as a preset",
@@ -150,7 +150,7 @@ impl App {
                             store_preset = true;
                         }
                         if ui
-                            .button("＋ Folder")
+                            .button("Folder")
                             .on_hover_text(
                                 "Add a folder — drag presets onto it to file them \
                                  (drop on the Presets heading to unfile)",
@@ -181,9 +181,9 @@ impl App {
                         let p = &self.user_presets[i];
                         let active = self.active_user_preset == Some(i);
                         let label = if indent {
-                            format!("   ⭐ {}", p.name)
+                            format!("   {}", p.name)
                         } else {
-                            format!("⭐ {}", p.name)
+                            p.name.clone()
                         };
                         let resp = if drag_mode {
                             let id = egui::Id::new(("user_preset_drag", i));
@@ -226,7 +226,7 @@ impl App {
                     for (fi, folder) in self.preset_folders.iter().enumerate() {
                         let open = self.open_user_folders.contains(folder);
                         let resp =
-                            ui.selectable_label(open, format!("📁 {folder}"));
+                            ui.selectable_label(open, folder.to_string());
                         if resp.clicked() {
                             toggle_folder = Some(folder.clone());
                         }
@@ -363,7 +363,7 @@ impl App {
                             for (bi, bank) in self.banks.iter().enumerate() {
                                 let open = self.open_bank == Some(bi);
                                 if ui
-                                    .selectable_label(open, format!("📁 {}", bank.name))
+                                    .selectable_label(open, bank.name.clone())
                                     .clicked()
                                 {
                                     self.open_bank = if open { None } else { Some(bi) };
@@ -432,7 +432,7 @@ impl App {
                                         load = Some(name.clone());
                                     }
                                     if ui
-                                        .small_button("✕")
+                                        .small_button("x")
                                         .on_hover_text("Delete this saved setup")
                                         .clicked()
                                     {
@@ -454,7 +454,7 @@ impl App {
                         });
 
                     ui.add_space(8.0);
-                    if ui.button("➕ Add tower").on_hover_text(
+                    if ui.button("Add tower").on_hover_text(
                         "Floor stand with one crossbar (4 top + 4 bottom light slots). \
                          Drag lights near the blue rings to snap them on.",
                     ).clicked() {

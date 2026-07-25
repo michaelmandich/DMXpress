@@ -27,6 +27,8 @@ pub struct View {
     pub groups: bool,
     #[serde(default)]
     pub orders: bool,
+    #[serde(default)]
+    pub scenes: bool,
     pub palettes: bool,
     pub phasers: bool,
     pub stacks: bool,

@@ -16,6 +16,7 @@ mod orders;
 mod palettes;
 mod patchcfg;
 mod phasers;
+mod scenes;
 mod side;
 mod stacks;
 mod theme;
