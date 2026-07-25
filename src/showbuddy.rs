@@ -17,6 +17,12 @@ pub const PRESETS_DIR: &str =
 /// fixtures on any other machine (a fresh clone, Windows, a different Mac).
 pub const CACHE_FILE: &str = "showbuddy_cache.json";
 
+/// Local copy of the ShowBuddy preset banks, including each .prt's parsed
+/// contents. The banks themselves are just paths into ShowBuddy's Presets
+/// folder, so without the parsed data a show has no presets at all away from
+/// the machine ShowBuddy is installed on.
+pub const PRESET_CACHE_FILE: &str = "showbuddy_presets.json";
+
 /// What a channel most likely controls, inferred from its name/type.
 #[derive(Debug, Clone, Copy, PartialEq, Eq, Hash)]
 pub enum Role {
@@ -337,13 +343,17 @@ fn attr<'a>(s: &'a str, name: &str) -> Option<&'a str> {
 
 // ---------------------------------------------------------------- presets
 
-#[derive(Debug, Clone)]
+#[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct PresetRef {
     pub name: String,
     pub path: PathBuf,
+    /// The parsed .prt, kept inline so the preset still recalls when the file
+    /// itself is out of reach. Filled in by [`hydrate_presets`].
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub data: Option<PresetData>,
 }
 
-#[derive(Debug, Clone)]
+#[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct PresetBank {
     pub name: String,
     pub order: i32,
@@ -386,6 +396,7 @@ pub fn load_preset_banks() -> Result<Vec<PresetBank>> {
                 (p.extension().is_some_and(|x| x == "prt")).then(|| PresetRef {
                     name: p.file_stem().unwrap_or_default().to_string_lossy().into_owned(),
                     path: p,
+                    data: None,
                 })
             })
             .collect();
@@ -404,6 +415,44 @@ pub fn load_preset_banks() -> Result<Vec<PresetBank>> {
     }
     banks.sort_by(|a, b| a.order.cmp(&b.order).then_with(|| a.name.cmp(&b.name)));
     Ok(banks)
+}
+
+/// Parse every .prt in `banks` into its [`PresetRef::data`], so the banks no
+/// longer depend on the files staying where ShowBuddy put them. Returns how
+/// many presets were read.
+pub fn hydrate_presets(banks: &mut [PresetBank]) -> usize {
+    let mut n = 0;
+    for bank in banks.iter_mut() {
+        for p in &mut bank.presets {
+            if p.data.is_some() {
+                continue;
+            }
+            if let Ok(data) = load_preset(&p.path) {
+                p.data = Some(data);
+                n += 1;
+            }
+        }
+    }
+    n
+}
+
+/// Preset banks from the last successful ShowBuddy import, if cached.
+pub fn load_preset_cache() -> Vec<PresetBank> {
+    std::fs::read_to_string(PRESET_CACHE_FILE)
+        .ok()
+        .and_then(|text| serde_json::from_str::<Vec<PresetBank>>(&text).ok())
+        .unwrap_or_default()
+}
+
+/// Remember the preset banks so they still recall on a machine that cannot
+/// reach ShowBuddy.
+pub fn save_preset_cache(banks: &[PresetBank]) {
+    if banks.is_empty() {
+        return;
+    }
+    if let Ok(json) = serde_json::to_string_pretty(banks) {
+        let _ = std::fs::write(PRESET_CACHE_FILE, json);
+    }
 }
 
 /// Parse a .prt preset into (1-based DMX address, value) pairs. Numeric
@@ -467,7 +516,7 @@ pub fn load_preset(path: &Path) -> Result<PresetData> {
 }
 
 /// A loaded .prt preset: static channel snapshot plus oscillator assignments.
-#[derive(Debug, Clone, Default)]
+#[derive(Debug, Clone, Default, Serialize, Deserialize)]
 pub struct PresetData {
     /// 1-based DMX address -> base value.
     pub values: Vec<(u16, u8)>,
@@ -496,7 +545,7 @@ impl PresetData {
 }
 
 /// One channel's oscillation within a preset.
-#[derive(Debug, Clone)]
+#[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct PresetMod {
     /// 1-based DMX address.
     pub addr: u16,

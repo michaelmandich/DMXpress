@@ -337,6 +337,37 @@ fn load_showbuddy(
     }
 }
 
+/// Read ShowBuddy's preset banks, falling back to the local cache when
+/// ShowBuddy is unreachable. A successful read is parsed in full and cached so
+/// the presets keep working elsewhere.
+fn load_banks(log: &mut Vec<String>) -> Vec<PresetBank> {
+    match showbuddy::load_preset_banks() {
+        Ok(mut banks) => {
+            showbuddy::hydrate_presets(&mut banks);
+            showbuddy::save_preset_cache(&banks);
+            log.push(format!(
+                "Loaded {} preset banks ({} presets)",
+                banks.len(),
+                banks.iter().map(|x| x.presets.len()).sum::<usize>()
+            ));
+            banks
+        }
+        Err(e) => {
+            let cached = showbuddy::load_preset_cache();
+            if cached.is_empty() {
+                log.push(format!("preset banks load failed: {e:#}"));
+            } else {
+                log.push(format!(
+                    "ShowBuddy presets unavailable ({e:#}) — using {} cached bank(s) ({} presets)",
+                    cached.len(),
+                    cached.iter().map(|x| x.presets.len()).sum::<usize>()
+                ));
+            }
+            cached
+        }
+    }
+}
+
 impl App {
     pub fn new() -> Self {
         let net = net::spawn().expect("failed to start net thread");
@@ -363,20 +394,7 @@ impl App {
         let mut stage = StageView::new();
         stage.sync(&patch, &settings);
         let banks = if user_patch.include_showbuddy {
-            match showbuddy::load_preset_banks() {
-                Ok(b) => {
-                    log.push(format!(
-                        "Loaded {} preset banks ({} presets)",
-                        b.len(),
-                        b.iter().map(|x| x.presets.len()).sum::<usize>()
-                    ));
-                    b
-                }
-                Err(e) => {
-                    log.push(format!("preset banks load failed: {e:#}"));
-                    Vec::new()
-                }
-            }
+            load_banks(&mut log)
         } else {
             Vec::new()
         };
@@ -541,13 +559,7 @@ impl App {
         self.hold_overrides.clear();
         // ShowBuddy's preset banks follow its patch: no ShowBuddy, no banks.
         if self.include_showbuddy {
-            match showbuddy::load_preset_banks() {
-                Ok(b) => self.banks = b,
-                Err(e) => {
-                    self.log.push(format!("preset banks load failed: {e:#}"));
-                    self.banks.clear();
-                }
-            }
+            self.banks = load_banks(&mut self.log);
         } else {
             self.banks.clear();
         }
@@ -981,12 +993,15 @@ impl App {
         else {
             return;
         };
-        let data = match showbuddy::load_preset(&p.path) {
-            Ok(data) => data,
-            Err(e) => {
-                self.log.push(format!("preset load failed: {e:#}"));
-                return;
-            }
+        let data = match p.data.clone() {
+            Some(data) => data,
+            None => match showbuddy::load_preset(&p.path) {
+                Ok(data) => data,
+                Err(e) => {
+                    self.log.push(format!("preset load failed: {e:#}"));
+                    return;
+                }
+            },
         };
         self.active_preset = Some((bank, idx));
         self.active_user_preset = None;
@@ -1048,6 +1063,9 @@ impl App {
             .get(bank)
             .and_then(|b| b.presets.get(idx))
             .cloned()?;
+        if let Some(data) = &p.data {
+            return Some((Look::from_preset(data), p.name));
+        }
         match showbuddy::load_preset(&p.path) {
             Ok(data) => Some((Look::from_preset(&data), p.name)),
             Err(e) => {
