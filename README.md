@@ -44,7 +44,7 @@ DMXpress currently supports two contiguous DMX universes and sends Art-Net outpu
 
 Prebuilt downloads are available from [GitHub Releases](https://github.com/michaelmandich/DMXpress/releases/latest). No Rust toolchain is required.
 
-- **Windows:** [download the standalone executable](https://github.com/michaelmandich/DMXpress/releases/latest/download/DMXpress-windows-x86_64.exe). It includes the Microsoft runtime and built-in profiles, so it needs no installer, Rust installation, or companion files. Windows may show a SmartScreen prompt until the executable is code-signed.
+- **Windows:** [download the standalone executable](https://github.com/michaelmandich/DMXpress/releases/latest/download/DMXpress-windows-x86_64.exe). It includes the Microsoft runtime and built-in profiles, so it needs no installer, Rust installation, or companion files. If SmartScreen appears on first launch, click **More info**, then **Run anyway** — the executable is not code-signed yet.
 - **macOS:** universal app for Apple Silicon and Intel. The app is not notarized yet, so the first time you open it, right-click the app and choose **Open**.
 - **Linux:** [download the x86_64 archive](https://github.com/michaelmandich/DMXpress/releases/latest/download/DMXpress-linux-x86_64.tar.gz).
 
