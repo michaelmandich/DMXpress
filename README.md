@@ -38,6 +38,16 @@ DMXpress currently supports two contiguous DMX universes and sends Art-Net outpu
 
 ## Getting Started
 
+### Download
+
+Prebuilt executables for Windows and macOS are available on the
+[releases page](https://github.com/michaelmandich/DMXpress/releases/latest) — no Rust toolchain required.
+
+- **Windows:** extract the zip and run `dmxpress.exe`.
+- **macOS:** universal app for Apple Silicon and Intel. The app is not notarized yet, so the first time you open it, right-click the app and choose **Open**.
+
+When launched outside a show directory, DMXpress stores show data in a per-user folder (`%APPDATA%\DMXpress` on Windows, `~/Library/Application Support/DMXpress` on macOS) and seeds it with the sample rigs and stage setups on first run.
+
 ### Requirements
 
 - A current Rust toolchain with Cargo
