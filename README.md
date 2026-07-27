@@ -4,6 +4,8 @@ A native, all-in-one DMX fixture visualizer and live lighting controller built i
 
 DMXpress is intended to make better-than-average light shows approachable without requiring a full-size professional console. It combines fixture patching, programming, reusable looks, effects, cue playback, output, and 3D visualization in one desktop application.
 
+[View releases on GitHub](https://github.com/michaelmandich/DMXpress/releases)
+
 > **Project status:** DMXpress is under active development. Interfaces, file formats, and workflows may change.
 
 ## Showcase
@@ -40,11 +42,11 @@ DMXpress currently supports two contiguous DMX universes and sends Art-Net outpu
 
 ### Download
 
-Prebuilt executables for Windows and macOS are available on the
-[releases page](https://github.com/michaelmandich/DMXpress/releases/latest) — no Rust toolchain required.
+Prebuilt downloads are available from [GitHub Releases](https://github.com/michaelmandich/DMXpress/releases/latest). No Rust toolchain is required.
 
-- **Windows:** extract the zip and run `dmxpress.exe`.
+- **Windows:** [download the standalone executable](https://github.com/michaelmandich/DMXpress/releases/latest/download/DMXpress-windows-x86_64.exe). It includes the Microsoft runtime and built-in profiles, so it needs no installer, Rust installation, or companion files. Windows may show a SmartScreen prompt until the executable is code-signed.
 - **macOS:** universal app for Apple Silicon and Intel. The app is not notarized yet, so the first time you open it, right-click the app and choose **Open**.
+- **Linux:** [download the x86_64 archive](https://github.com/michaelmandich/DMXpress/releases/latest/download/DMXpress-linux-x86_64.tar.gz).
 
 When launched outside a show directory, DMXpress stores show data in a per-user folder (`%APPDATA%\DMXpress` on Windows, `~/Library/Application Support/DMXpress` on macOS) and seeds it with the sample rigs and stage setups on first run.
 
