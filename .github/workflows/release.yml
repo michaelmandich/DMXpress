@@ -25,6 +25,23 @@ jobs:
           name: windows
           path: DMXpress-windows-x86_64.zip
 
+  linux:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: dtolnay/rust-toolchain@stable
+      - uses: Swatinem/rust-cache@v2
+      - name: Install system dependencies
+        run: sudo apt-get update && sudo apt-get install -y libasound2-dev libudev-dev pkg-config
+      - name: Build
+        run: cargo build --release
+      - name: Package
+        run: tar -czf DMXpress-linux-x86_64.tar.gz -C target/release dmxpress
+      - uses: actions/upload-artifact@v4
+        with:
+          name: linux
+          path: DMXpress-linux-x86_64.tar.gz
+
   macos:
     runs-on: macos-latest
     steps:
@@ -84,7 +101,7 @@ jobs:
 
   release:
     if: startsWith(github.ref, 'refs/tags/v')
-    needs: [windows, macos]
+    needs: [windows, linux, macos]
     runs-on: ubuntu-latest
     steps:
       - uses: actions/download-artifact@v4
@@ -92,4 +109,4 @@ jobs:
           merge-multiple: true
       - uses: softprops/action-gh-release@v2
         with:
-          files: DMXpress-*.zip
+          files: DMXpress-*
