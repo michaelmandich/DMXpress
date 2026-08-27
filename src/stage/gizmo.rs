@@ -40,6 +40,7 @@ pub(crate) enum Drag {
     None,
     Move,
     MoveTower,
+    MoveTruss,
     MoveTransitionSphere,
     MoveChaseSphere,
     PanCam,

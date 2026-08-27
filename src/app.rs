@@ -227,6 +227,10 @@ pub(crate) struct App {
     pub show_log: bool,
     /// Floating Oscillator window visible.
     pub show_osc: bool,
+    /// Keys (see [`crate::ui::floating_panel`]) of panels currently popped
+    /// out into their own native OS window instead of docked as a floating
+    /// `egui::Window` inside the main window.
+    pub popped_out: HashSet<&'static str>,
     /// Name field for saving the current stage arrangement as a setup.
     pub setup_name: String,
     /// Fixtures patched in DMXpress on top of the ShowBuddy patch.
@@ -504,6 +508,7 @@ impl App {
             show_views: false,
             show_log: true,
             show_osc: true,
+            popped_out: HashSet::new(),
             setup_name: String::new(),
             user_fixtures: user_patch.fixtures,
             include_showbuddy: user_patch.include_showbuddy,

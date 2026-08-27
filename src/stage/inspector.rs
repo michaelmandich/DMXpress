@@ -1,9 +1,10 @@
-//! Right-hand transform editor for the current selection (lights or a tower).
+//! Right-hand transform editor for the current selection (lights, a tower,
+//! or a truss).
 
 use eframe::egui;
 
 use super::fixture::{classify, Archetype};
-use super::layout::TOWER_SLOTS;
+use super::layout::{TrussKind, TOWER_SLOTS};
 use super::math::V3;
 use super::view::StageView;
 use crate::showbuddy::Patch;
@@ -82,6 +83,123 @@ impl StageView {
                         if dyaw != 0.0 {
                             self.spin_tower_mounts(ti, dyaw);
                         }
+                        self.save(patch);
+                    }
+                    return;
+                }
+            }
+        }
+
+        // Truss editor when a truss is picked and no lights are selected.
+        if self.selection.is_empty() {
+            if let Some(ti) = self.sel_truss {
+                if ti >= self.trusses.len() {
+                    self.sel_truss = None;
+                } else {
+                    let kind = self.trusses[ti].kind;
+                    ui.label(format!(
+                        "{} truss {}",
+                        match kind {
+                            TrussKind::Straight => "F34 straight",
+                            TrussKind::Radius => "Radius",
+                        },
+                        ti + 1
+                    ));
+                    let total_slots = self.trusses[ti].total_slots();
+                    let mounted = self
+                        .instances
+                        .iter()
+                        .filter(|inst| inst.truss_mount.is_some_and(|(t, _)| t == ti))
+                        .count();
+                    ui.weak(format!(
+                        "{mounted}/{total_slots} slots holding lights — drag a light \
+                         near a blue ring to snap it on"
+                    ));
+                    ui.separator();
+                    let mut changed = false;
+                    let old_yaw = self.trusses[ti].yaw_deg;
+                    {
+                        let tr = &mut self.trusses[ti];
+                        egui::Grid::new("truss_xform").num_columns(2).show(ui, |ui| {
+                            ui.label("X");
+                            changed |= ui
+                                .add(egui::DragValue::new(&mut tr.pos.x).speed(0.05))
+                                .changed();
+                            ui.end_row();
+                            ui.label("Z");
+                            changed |= ui
+                                .add(egui::DragValue::new(&mut tr.pos.z).speed(0.05))
+                                .changed();
+                            ui.end_row();
+                            ui.label("Height");
+                            changed |= ui
+                                .add(egui::Slider::new(&mut tr.pos.y, 0.5..=8.0))
+                                .changed();
+                            ui.end_row();
+                            ui.label(match kind {
+                                TrussKind::Straight => "Heading °",
+                                TrussKind::Radius => "Start angle °",
+                            });
+                            changed |= ui
+                                .add(egui::DragValue::new(&mut tr.yaw_deg).speed(0.5))
+                                .changed();
+                            ui.end_row();
+                            ui.label("Pitch °").on_hover_text(
+                                "Tilt the whole truss out of the horizontal plane — \
+                                 0 = flat/hanging overhead, 90 = standing on edge \
+                                 (e.g. a ring stood up against a wall).",
+                            );
+                            changed |= ui
+                                .add(
+                                    egui::DragValue::new(&mut tr.pitch_deg)
+                                        .speed(0.5)
+                                        .range(-180.0..=180.0),
+                                )
+                                .changed();
+                            ui.end_row();
+                            ui.label("Roll °")
+                                .on_hover_text("Which way a pitched truss faces.");
+                            changed |= ui
+                                .add(
+                                    egui::DragValue::new(&mut tr.roll_deg)
+                                        .speed(0.5)
+                                        .range(-180.0..=180.0),
+                                )
+                                .changed();
+                            ui.end_row();
+                            match kind {
+                                TrussKind::Straight => {
+                                    ui.label("Length");
+                                    changed |= ui
+                                        .add(egui::Slider::new(&mut tr.length, 0.5..=6.0))
+                                        .changed();
+                                    ui.end_row();
+                                }
+                                TrussKind::Radius => {
+                                    ui.label("Radius");
+                                    changed |= ui
+                                        .add(egui::Slider::new(&mut tr.radius, 0.5..=8.0))
+                                        .changed();
+                                    ui.end_row();
+                                    ui.label("Arc °");
+                                    changed |= ui
+                                        .add(egui::Slider::new(&mut tr.arc_deg, 15.0..=360.0))
+                                        .changed();
+                                    ui.end_row();
+                                }
+                            }
+                            ui.label("Grounded")
+                                .on_hover_text("Draw support legs down to the floor.");
+                            changed |= ui.checkbox(&mut tr.grounded, "").changed();
+                            ui.end_row();
+                        });
+                    }
+                    ui.add_space(6.0);
+                    if ui.button("🗑 Delete truss").clicked() {
+                        self.delete_truss(patch, ti);
+                    } else if changed {
+                        let dyaw = self.trusses[ti].yaw_deg - old_yaw;
+                        self.spin_truss_mounts(ti, dyaw);
                         self.save(patch);
                     }
                     return;

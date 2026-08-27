@@ -40,6 +40,7 @@ const SETUPS_DIR: &str = "setups";
 // Public API used by the rest of the app.
 pub use fixture::fixture_swatch;
 pub(crate) use layout::LayoutFile;
+pub(crate) use layout::TrussKind;
 pub(crate) use math::{dir_from_angles, v3, V3};
 pub(crate) use math::CameraSnapshot;
 pub use settings::Settings;

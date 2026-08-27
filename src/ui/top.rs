@@ -233,13 +233,16 @@ impl App {
         }
         let screen = ctx.screen_rect();
         let mut open = self.show_log;
-        egui::Window::new("📜 Log")
-            .open(&mut open)
-            .collapsible(true)
-            .resizable(true)
-            .default_size([360.0, 160.0])
-            .default_pos([12.0, screen.bottom() - 200.0])
-            .show(ctx, |ui| {
+        let mut popped = self.popped_out.contains("log");
+        super::floating_panel(
+            ctx,
+            "log",
+            "📜 Log",
+            &mut open,
+            &mut popped,
+            [360.0, 160.0],
+            [12.0, screen.bottom() - 200.0],
+            |ui| {
                 ui.with_layout(egui::Layout::right_to_left(egui::Align::Center), |ui| {
                     zoom_controls(ui, &mut self.zoom.log);
                 });
@@ -252,7 +255,13 @@ impl App {
                             ui.monospace(line);
                         }
                     });
-            });
+            },
+        );
         self.show_log = open;
+        if popped {
+            self.popped_out.insert("log");
+        } else {
+            self.popped_out.remove("log");
+        }
     }
 }

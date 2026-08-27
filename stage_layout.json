@@ -17,7 +17,8 @@
       "mount": [
         3,
         7
-      ]
+      ],
+      "truss_mount": null
     },
     {
       "key": "8 channel par1@9",
@@ -36,7 +37,8 @@
       "mount": [
         3,
         4
-      ]
+      ],
+      "truss_mount": null
     },
     {
       "key": "moving par1@17",
@@ -55,7 +57,8 @@
       "mount": [
         2,
         5
-      ]
+      ],
+      "truss_mount": null
     },
     {
       "key": "moving par2@31",
@@ -74,7 +77,8 @@
       "mount": [
         0,
         5
-      ]
+      ],
+      "truss_mount": null
     },
     {
       "key": "moving par3@45",
@@ -93,7 +97,8 @@
       "mount": [
         1,
         5
-      ]
+      ],
+      "truss_mount": null
     },
     {
       "key": "moving par4@59",
@@ -112,7 +117,8 @@
       "mount": [
         3,
         5
-      ]
+      ],
+      "truss_mount": null
     },
     {
       "key": "80w 17ch spot with circle1@73",
@@ -131,7 +137,8 @@
       "mount": [
         2,
         6
-      ]
+      ],
+      "truss_mount": null
     },
     {
       "key": "120W moving head (mini beam spot LED)1@90",
@@ -150,7 +157,8 @@
       "mount": [
         0,
         7
-      ]
+      ],
+      "truss_mount": null
     },
     {
       "key": "80w 17ch spot with circle1@102",
@@ -169,7 +177,8 @@
       "mount": [
         0,
         6
-      ]
+      ],
+      "truss_mount": null
     },
     {
       "key": "120W moving head (mini beam spot LED)1@119",
@@ -188,7 +197,8 @@
       "mount": [
         0,
         4
-      ]
+      ],
+      "truss_mount": null
     },
     {
       "key": "120W moving head (mini beam spot LED)1@131",
@@ -207,7 +217,8 @@
       "mount": [
         1,
         7
-      ]
+      ],
+      "truss_mount": null
     },
     {
       "key": "80w 17ch spot with circle1@143",
@@ -226,7 +237,8 @@
       "mount": [
         1,
         6
-      ]
+      ],
+      "truss_mount": null
     },
     {
       "key": "120W moving head (mini beam spot LED)1@160",
@@ -245,7 +257,8 @@
       "mount": [
         1,
         4
-      ]
+      ],
+      "truss_mount": null
     },
     {
       "key": "80w 17ch spot with circle1@172",
@@ -264,7 +277,8 @@
       "mount": [
         3,
         6
-      ]
+      ],
+      "truss_mount": null
     },
     {
       "key": "moving par1@189",
@@ -283,7 +297,8 @@
       "mount": [
         2,
         1
-      ]
+      ],
+      "truss_mount": null
     },
     {
       "key": "moving par2@203",
@@ -302,7 +317,8 @@
       "mount": [
         2,
         3
-      ]
+      ],
+      "truss_mount": null
     },
     {
       "key": "moving par3@217",
@@ -321,7 +337,8 @@
       "mount": [
         3,
         3
-      ]
+      ],
+      "truss_mount": null
     },
     {
       "key": "moving par4@231",
@@ -340,7 +357,8 @@
       "mount": [
         3,
         1
-      ]
+      ],
+      "truss_mount": null
     },
     {
       "key": "80w 17ch spot with circle1@245",
@@ -359,7 +377,8 @@
       "mount": [
         2,
         0
-      ]
+      ],
+      "truss_mount": null
     },
     {
       "key": "80w 17ch spot with circle1@262",
@@ -378,7 +397,8 @@
       "mount": [
         2,
         2
-      ]
+      ],
+      "truss_mount": null
     },
     {
       "key": "120W moving head (mini beam spot LED)1@279",
@@ -397,7 +417,8 @@
       "mount": [
         0,
         1
-      ]
+      ],
+      "truss_mount": null
     },
     {
       "key": "120W moving head (mini beam spot LED)2@291",
@@ -416,7 +437,8 @@
       "mount": [
         1,
         1
-      ]
+      ],
+      "truss_mount": null
     },
     {
       "key": "80w 17ch spot with circle1@303",
@@ -435,7 +457,8 @@
       "mount": [
         3,
         2
-      ]
+      ],
+      "truss_mount": null
     },
     {
       "key": "80w 17ch spot with circle2@320",
@@ -454,7 +477,8 @@
       "mount": [
         3,
         0
-      ]
+      ],
+      "truss_mount": null
     },
     {
       "key": "hurricane1@337",
@@ -470,7 +494,8 @@
         "scale": 1.0
       },
       "opacity": 1.0,
-      "mount": null
+      "mount": null,
+      "truss_mount": null
     },
     {
       "key": "8 channel par1@338",
@@ -486,7 +511,8 @@
         "scale": 1.0
       },
       "opacity": 1.0,
-      "mount": null
+      "mount": null,
+      "truss_mount": null
     },
     {
       "key": "8 channel par2@346",
@@ -502,7 +528,8 @@
         "scale": 1.0
       },
       "opacity": 1.0,
-      "mount": null
+      "mount": null,
+      "truss_mount": null
     },
     {
       "key": "8 channel par3@354",
@@ -518,7 +545,8 @@
         "scale": 1.0
       },
       "opacity": 1.0,
-      "mount": null
+      "mount": null,
+      "truss_mount": null
     },
     {
       "key": "8 channel par4@362",
@@ -534,7 +562,8 @@
         "scale": 1.0
       },
       "opacity": 1.0,
-      "mount": null
+      "mount": null,
+      "truss_mount": null
     },
     {
       "key": "8 channel par5@370",
@@ -550,7 +579,8 @@
         "scale": 1.0
       },
       "opacity": 1.0,
-      "mount": null
+      "mount": null,
+      "truss_mount": null
     },
     {
       "key": "zooming wash1@378",
@@ -566,7 +596,8 @@
         "scale": 1.0
       },
       "opacity": 1.0,
-      "mount": null
+      "mount": null,
+      "truss_mount": null
     },
     {
       "key": "zooming wash2@393",
@@ -582,7 +613,8 @@
         "scale": 1.0
       },
       "opacity": 1.0,
-      "mount": null
+      "mount": null,
+      "truss_mount": null
     },
     {
       "key": "150w 11 channel1@456",
@@ -598,7 +630,8 @@
         "scale": 0.42241958
       },
       "opacity": 1.0,
-      "mount": null
+      "mount": null,
+      "truss_mount": null
     },
     {
       "key": "150w 11 channel2@468",
@@ -614,7 +647,8 @@
         "scale": 0.42241958
       },
       "opacity": 1.0,
-      "mount": null
+      "mount": null,
+      "truss_mount": null
     },
     {
       "key": "150w 11 channel3@480",
@@ -630,7 +664,8 @@
         "scale": 0.42241958
       },
       "opacity": 1.0,
-      "mount": null
+      "mount": null,
+      "truss_mount": null
     },
     {
       "key": "150w 11 channel4@492",
@@ -646,7 +681,8 @@
         "scale": 0.42241958
       },
       "opacity": 1.0,
-      "mount": null
+      "mount": null,
+      "truss_mount": null
     },
     {
       "key": "25 ch banger1@513",
@@ -662,7 +698,8 @@
         "scale": 1.0
       },
       "opacity": 1.0,
-      "mount": null
+      "mount": null,
+      "truss_mount": null
     },
     {
       "key": "25 ch banger1@538",
@@ -678,7 +715,8 @@
         "scale": 1.0
       },
       "opacity": 1.0,
-      "mount": null
+      "mount": null,
+      "truss_mount": null
     },
     {
       "key": "25 ch banger1@563",
@@ -694,7 +732,8 @@
         "scale": 1.0
       },
       "opacity": 1.0,
-      "mount": null
+      "mount": null,
+      "truss_mount": null
     },
     {
       "key": "25 ch banger1@588",
@@ -710,7 +749,8 @@
         "scale": 1.0
       },
       "opacity": 1.0,
-      "mount": null
+      "mount": null,
+      "truss_mount": null
     },
     {
       "key": "150w 11 channel1@456",
@@ -726,7 +766,8 @@
         "scale": 0.42241958
       },
       "opacity": 1.0,
-      "mount": null
+      "mount": null,
+      "truss_mount": null
     },
     {
       "key": "150w 11 channel2@468",
@@ -742,7 +783,8 @@
         "scale": 0.42241958
       },
       "opacity": 1.0,
-      "mount": null
+      "mount": null,
+      "truss_mount": null
     },
     {
       "key": "150w 11 channel3@480",
@@ -758,7 +800,8 @@
         "scale": 0.42241958
       },
       "opacity": 1.0,
-      "mount": null
+      "mount": null,
+      "truss_mount": null
     },
     {
       "key": "150w 11 channel4@492",
@@ -774,7 +817,8 @@
         "scale": 0.42241958
       },
       "opacity": 1.0,
-      "mount": null
+      "mount": null,
+      "truss_mount": null
     },
     {
       "key": "8 channel par1@1",
@@ -793,7 +837,8 @@
       "mount": [
         0,
         3
-      ]
+      ],
+      "truss_mount": null
     },
     {
       "key": "8 channel par1@9",
@@ -812,7 +857,8 @@
       "mount": [
         0,
         0
-      ]
+      ],
+      "truss_mount": null
     },
     {
       "key": "8 channel par1@1",
@@ -831,7 +877,8 @@
       "mount": [
         1,
         3
-      ]
+      ],
+      "truss_mount": null
     },
     {
       "key": "8 channel par1@9",
@@ -850,7 +897,8 @@
       "mount": [
         1,
         0
-      ]
+      ],
+      "truss_mount": null
     },
     {
       "key": "8 channel par1@1",
@@ -869,7 +917,8 @@
       "mount": [
         2,
         7
-      ]
+      ],
+      "truss_mount": null
     },
     {
       "key": "8 channel par1@9",
@@ -888,7 +937,8 @@
       "mount": [
         2,
         4
-      ]
+      ],
+      "truss_mount": null
     },
     {
       "key": "disco banger@408",
@@ -904,7 +954,8 @@
         "scale": 1.0
       },
       "opacity": 1.0,
-      "mount": null
+      "mount": null,
+      "truss_mount": null
     }
   ],
   "towers": [
@@ -948,5 +999,6 @@
       "height": 3.2,
       "width": 2.4
     }
-  ]
+  ],
+  "trusses": []
 }

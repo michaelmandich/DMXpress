@@ -76,13 +76,17 @@ impl App {
 
         let screen = ctx.screen_rect();
         let mut open = self.show_beat;
+        let mut popped = self.popped_out.contains("beat");
         let mut do_tap = false;
-        egui::Window::new("🥁 Beat")
-            .open(&mut open)
-            .collapsible(true)
-            .resizable(false)
-            .default_pos([screen.center().x - 140.0, 120.0])
-            .show(ctx, |ui| {
+        super::floating_panel(
+            ctx,
+            "beat",
+            "🥁 Beat",
+            &mut open,
+            &mut popped,
+            [300.0, 220.0],
+            [screen.center().x - 140.0, 120.0],
+            |ui| {
                 ui.horizontal(|ui| {
                     ui.checkbox(&mut self.master_bpm_on, "Master BPM")
                         .on_hover_text(
@@ -164,8 +168,14 @@ impl App {
                 }
                 // Keep the bar indicator animating while the window is open.
                 ctx.request_repaint_after(Duration::from_millis(40));
-            });
+            },
+        );
         self.show_beat = open;
+        if popped {
+            self.popped_out.insert("beat");
+        } else {
+            self.popped_out.remove("beat");
+        }
 
         if do_tap {
             self.beat_tap();

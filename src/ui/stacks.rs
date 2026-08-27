@@ -162,6 +162,7 @@ impl App {
         }
         let screen = ctx.screen_rect();
         let mut open = self.show_stacks;
+        let mut popped = self.popped_out.contains("stacks");
         let mut dirty = false;
         let mut do_new = false;
         let mut do_clear = false;
@@ -171,13 +172,15 @@ impl App {
         let mut do_fire: Option<(usize, usize)> = None;
         let mut do_delete_cue: Option<(usize, usize)> = None;
 
-        egui::Window::new("🎬 Stacks")
-            .open(&mut open)
-            .collapsible(true)
-            .resizable(true)
-            .default_size([400.0, 380.0])
-            .default_pos([screen.left() + 80.0, 120.0])
-            .show(ctx, |ui| {
+        super::floating_panel(
+            ctx,
+            "stacks",
+            "🎬 Stacks",
+            &mut open,
+            &mut popped,
+            [400.0, 380.0],
+            [screen.left() + 80.0, 120.0],
+            |ui| {
                 zoom_controls(ui, &mut self.zoom.stacks);
                 apply_zoom(ui, self.zoom.stacks);
 
@@ -318,8 +321,14 @@ impl App {
                             }
                         });
                 });
-            });
+            },
+        );
         self.show_stacks = open;
+        if popped {
+            self.popped_out.insert("stacks");
+        } else {
+            self.popped_out.remove("stacks");
+        }
 
         if do_new {
             self.new_stack();

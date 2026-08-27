@@ -72,3 +72,96 @@ pub(crate) fn role_color(r: Role) -> egui::Color32 {
         Role::Other => C::from_gray(120),
     }
 }
+
+/// Show a panel either docked in the main window as a floating
+/// [`egui::Window`] (the default), or — once popped out — as its own
+/// native OS window via egui's multi-viewport support.
+///
+/// Both live in the same process/app, so a popped-out panel does not get
+/// its own Dock icon (macOS) or taskbar entry (Windows/Linux) — it's just
+/// another window of DMXpress — but it can be dragged anywhere on screen,
+/// including off the main window and onto another monitor.
+///
+/// `key` must be a short, stable, unique identifier for the panel (used to
+/// derive both the egui `Id` and the viewport's identity across frames).
+pub(crate) fn floating_panel(
+    ctx: &egui::Context,
+    key: &str,
+    title: &str,
+    open: &mut bool,
+    popped: &mut bool,
+    default_size: [f32; 2],
+    default_pos: [f32; 2],
+    add_contents: impl FnOnce(&mut egui::Ui),
+) {
+    if !*open {
+        return;
+    }
+    if *popped {
+        let mut add_contents = Some(add_contents);
+        let mut dock = false;
+        let mut still_open = true;
+        ctx.show_viewport_immediate(
+            egui::ViewportId::from_hash_of(key),
+            egui::ViewportBuilder::default()
+                .with_title(title)
+                .with_inner_size(default_size)
+                .with_min_inner_size([220.0, 160.0]),
+            |ctx, class| {
+                if class == egui::ViewportClass::Embedded {
+                    // This backend doesn't support real multi-viewport
+                    // windows (e.g. some Wayland setups) — fall back to
+                    // docking rather than silently losing the panel.
+                    dock = true;
+                }
+                egui::CentralPanel::default().show(ctx, |ui| {
+                    ui.horizontal(|ui| {
+                        ui.strong(title);
+                        ui.with_layout(egui::Layout::right_to_left(egui::Align::Center), |ui| {
+                            if ui
+                                .small_button("⧉ Dock")
+                                .on_hover_text("Return to the main window")
+                                .clicked()
+                            {
+                                dock = true;
+                            }
+                        });
+                    });
+                    ui.separator();
+                    if let Some(f) = add_contents.take() {
+                        f(ui);
+                    }
+                });
+                if ctx.input(|i| i.viewport().close_requested()) {
+                    still_open = false;
+                }
+            },
+        );
+        if dock {
+            *popped = false;
+        }
+        if !still_open {
+            *open = false;
+            *popped = false;
+        }
+    } else {
+        egui::Window::new(title)
+            .id(egui::Id::new(key))
+            .open(open)
+            .collapsible(true)
+            .resizable(true)
+            .default_size(default_size)
+            .default_pos(default_pos)
+            .show(ctx, |ui| {
+                if ui
+                    .small_button("⧉ Pop out")
+                    .on_hover_text("Open this panel in its own window, draggable outside the main window")
+                    .clicked()
+                {
+                    *popped = true;
+                }
+                ui.separator();
+                add_contents(ui);
+            });
+    }
+}

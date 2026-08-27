@@ -51,15 +51,22 @@ impl App {
         if !self.show_views {
             return;
         }
+        let screen = ctx.screen_rect();
         let mut open = self.show_views;
+        let mut popped = self.popped_out.contains("views");
         let mut do_apply: Option<usize> = None;
         let mut do_delete: Option<usize> = None;
         let mut do_save = false;
 
-        egui::Window::new("🗂 Views")
-            .open(&mut open)
-            .default_width(220.0)
-            .show(ctx, |ui| {
+        super::floating_panel(
+            ctx,
+            "views",
+            "🗂 Views",
+            &mut open,
+            &mut popped,
+            [220.0, 300.0],
+            [screen.left() + 80.0, 300.0],
+            |ui| {
                 zoom_controls(ui, &mut self.zoom.views);
                 apply_zoom(ui, self.zoom.views);
 
@@ -90,9 +97,15 @@ impl App {
                         }
                     });
                 }
-            });
+            },
+        );
 
         self.show_views = open;
+        if popped {
+            self.popped_out.insert("views");
+        } else {
+            self.popped_out.remove("views");
+        }
 
         if do_save {
             let name = if self.view_name.trim().is_empty() {

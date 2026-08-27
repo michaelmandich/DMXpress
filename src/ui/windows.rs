@@ -46,12 +46,17 @@ impl App {
             return;
         }
         let mut open = self.show_settings;
+        let mut popped = self.popped_out.contains("settings");
         let mut changed = false;
-        egui::Window::new("Settings")
-            .open(&mut open)
-            .collapsible(false)
-            .resizable(false)
-            .show(ctx, |ui| {
+        super::floating_panel(
+            ctx,
+            "settings",
+            "Settings",
+            &mut open,
+            &mut popped,
+            [360.0, 460.0],
+            [80.0, 80.0],
+            |ui| {
                 let s = &mut self.settings;
                 ui.heading("Stage");
                 egui::Grid::new("set_stage").num_columns(2).show(ui, |ui| {
@@ -143,11 +148,17 @@ impl App {
                     ui.end_row();
                 });
                 ui.weak("Pitch -90 = down, 90 = up, 0 = toward audience.");
-            });
+            },
+        );
         if changed {
             self.settings.save();
         }
         self.show_settings = open;
+        if popped {
+            self.popped_out.insert("settings");
+        } else {
+            self.popped_out.remove("settings");
+        }
     }
 
     pub(crate) fn transition_window(&mut self, ctx: &egui::Context) {
@@ -158,14 +169,17 @@ impl App {
         let screen = ctx.screen_rect();
         let active_progress = self.transition_run.as_ref().map(|run| run.progress());
         let mut open = self.show_transition;
+        let mut popped = self.popped_out.contains("transition");
         let mut stop_at_current = false;
-        egui::Window::new("⏱ Transition")
-            .open(&mut open)
-            .collapsible(true)
-            .resizable(true)
-            .default_size([340.0, 320.0])
-            .default_pos([screen.right() - 390.0, 430.0])
-            .show(ctx, |ui| {
+        super::floating_panel(
+            ctx,
+            "transition",
+            "⏱ Transition",
+            &mut open,
+            &mut popped,
+            [340.0, 320.0],
+            [screen.right() - 390.0, 430.0],
+            |ui| {
                 zoom_controls(ui, &mut self.zoom.transition);
                 apply_zoom(ui, self.zoom.transition);
 
@@ -261,7 +275,8 @@ impl App {
                 } else {
                     tr.expanded = false;
                 }
-            });
+            },
+        );
         if stop_at_current {
             self.transition_run = None;
             self.chase.enabled = false;
@@ -269,6 +284,11 @@ impl App {
             self.live = Look::from_frame(*self.net.dmx.lock());
         }
         self.show_transition = open;
+        if popped {
+            self.popped_out.insert("transition");
+        } else {
+            self.popped_out.remove("transition");
+        }
         if !self.show_transition || !self.transition.stage_visible() {
             self.transition.selected = false;
         }
@@ -282,13 +302,16 @@ impl App {
         }
         let screen = ctx.screen_rect();
         let mut open = self.show_osc;
-        egui::Window::new("🌊 Oscillator")
-            .open(&mut open)
-            .collapsible(true)
-            .resizable(true)
-            .default_size([320.0, 280.0])
-            .default_pos([screen.right() - 360.0, 120.0])
-            .show(ctx, |ui| {
+        let mut popped = self.popped_out.contains("oscillator");
+        super::floating_panel(
+            ctx,
+            "oscillator",
+            "🌊 Oscillator",
+            &mut open,
+            &mut popped,
+            [320.0, 280.0],
+            [screen.right() - 360.0, 120.0],
+            |ui| {
                 zoom_controls(ui, &mut self.zoom.osc);
                 apply_zoom(ui, self.zoom.osc);
 
@@ -468,8 +491,14 @@ impl App {
                         };
                     }
                 }
-            });
+            },
+        );
         self.show_osc = open;
+        if popped {
+            self.popped_out.insert("oscillator");
+        } else {
+            self.popped_out.remove("oscillator");
+        }
     }
 
     fn custom_waveforms_ui(&mut self, ui: &mut egui::Ui) {

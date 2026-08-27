@@ -62,6 +62,14 @@ pub(crate) fn dir_from_angles(yaw_deg: f32, pitch_deg: f32) -> V3 {
     v3(p.cos() * y.sin(), p.sin(), p.cos() * y.cos())
 }
 
+/// Yaw/pitch (degrees) such that `dir_from_angles(yaw, pitch) ≈ dir` for a
+/// unit `dir`. Inverse of [`dir_from_angles`].
+pub(crate) fn angles_from_dir(dir: V3) -> (f32, f32) {
+    let pitch = dir.y.clamp(-1.0, 1.0).asin();
+    let yaw = dir.x.atan2(dir.z);
+    (yaw.to_degrees(), pitch.to_degrees())
+}
+
 pub(crate) struct Camera {
     pub yaw: f32,
     pub pitch: f32,

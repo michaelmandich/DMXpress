@@ -5,7 +5,8 @@
 use eframe::egui::{self, Color32, Pos2, Rect, Sense};
 
 use super::gizmo::{Drag, GizmoPart};
-use super::math::{rotate_about, v3, V3};
+use super::layout::TrussKind;
+use super::math::{dir_from_angles, rotate_about, seg_dist, v3, V3};
 use super::settings::Settings;
 use super::view::StageView;
 use crate::chase::ChaseConfig;
@@ -127,12 +128,18 @@ impl StageView {
             }
         }
 
-        // Keep tower-mounted lights glued to their slots.
+        // Keep tower/truss-mounted lights glued to their slots.
         for inst in &mut self.instances {
             if let Some((ti, slot)) = inst.mount {
                 match self.towers.get(ti) {
                     Some(tw) => inst.t.pos = tw.slot_pos(slot),
                     None => inst.mount = None,
+                }
+            }
+            if let Some((ti, slot)) = inst.truss_mount {
+                match self.trusses.get(ti) {
+                    Some(tr) => inst.t.pos = tr.slot_pos(slot),
+                    None => inst.truss_mount = None,
                 }
             }
         }
@@ -187,6 +194,46 @@ impl StageView {
             best.map(|(ti, _)| ti)
         };
 
+        // Screen-space polylines (straight run, or arc segments) for truss picking.
+        let truss_segs: Vec<Vec<(Pos2, Pos2)>> = self
+            .trusses
+            .iter()
+            .map(|tr| {
+                let pts: Vec<V3> = match tr.kind {
+                    TrussKind::Straight => {
+                        let dir = dir_from_angles(tr.yaw_deg, 0.0);
+                        vec![tr.pos - dir * (tr.length * 0.5), tr.pos + dir * (tr.length * 0.5)]
+                    }
+                    TrussKind::Radius => {
+                        const N: usize = 12;
+                        (0..=N)
+                            .map(|k| {
+                                let a = tr.yaw_deg + tr.arc_deg * (k as f32 / N as f32);
+                                tr.pos + dir_from_angles(a, 0.0) * tr.radius.max(0.1)
+                            })
+                            .collect()
+                    }
+                };
+                pts.windows(2)
+                    .filter_map(|w| {
+                        Some((self.cam.project(rect, w[0])?.0, self.cam.project(rect, w[1])?.0))
+                    })
+                    .collect()
+            })
+            .collect();
+        let truss_hit = |ptr: Pos2| -> Option<usize> {
+            let mut best: Option<(usize, f32)> = None;
+            for (ti, segs) in truss_segs.iter().enumerate() {
+                for (a, b) in segs {
+                    let d = seg_dist(*a, *b, ptr);
+                    if d < 12.0 && best.map_or(true, |(_, bd)| d < bd) {
+                        best = Some((ti, d));
+                    }
+                }
+            }
+            best.map(|(ti, _)| ti)
+        };
+
         // Stationary clicks (egui reports these separately from drags):
         // plain = select one / clear, ⇧ = toggle, ⌘ = select all of that type.
         if resp.clicked() && !mods.alt {
@@ -208,17 +255,20 @@ impl StageView {
                     select_sphere(&mut transition, &mut chase, true);
                     self.selection.clear();
                     self.sel_tower = None;
+                    self.sel_truss = None;
                     self.sel_stage = false;
                 } else if on_chase {
                     select_sphere(&mut transition, &mut chase, false);
                     self.selection.clear();
                     self.sel_tower = None;
+                    self.sel_truss = None;
                     self.sel_stage = false;
                 } else if on_gizmo {
                     // A click on a gizmo handle must not change the selection.
                 } else if let Some(i) = hit_test(ptr) {
                     deselect_spheres(&mut transition, &mut chase);
                     self.sel_tower = None;
+                    self.sel_truss = None;
                     self.sel_stage = false;
                     let fi = self.instances[i].fixture;
                     if mods.command {
@@ -237,6 +287,13 @@ impl StageView {
                     deselect_spheres(&mut transition, &mut chase);
                     self.selection.clear();
                     self.sel_tower = Some(ti);
+                    self.sel_truss = None;
+                    self.sel_stage = false;
+                } else if let Some(ti) = truss_hit(ptr) {
+                    deselect_spheres(&mut transition, &mut chase);
+                    self.selection.clear();
+                    self.sel_truss = Some(ti);
+                    self.sel_tower = None;
                     self.sel_stage = false;
                 } else if self.sel_stage && self.stage_handle_pick(rect, set, ptr).is_some() {
                     // A click on a stage resize arrow keeps the selection.
@@ -245,11 +302,13 @@ impl StageView {
                     deselect_spheres(&mut transition, &mut chase);
                     self.selection.clear();
                     self.sel_tower = None;
+                    self.sel_truss = None;
                     self.sel_stage = true;
                 } else if !mods.shift && !mods.command {
                     deselect_spheres(&mut transition, &mut chase);
                     self.selection.clear();
                     self.sel_tower = None;
+                    self.sel_truss = None;
                     self.sel_stage = false;
                 }
             }
@@ -275,11 +334,13 @@ impl StageView {
                         select_sphere(&mut transition, &mut chase, true);
                         self.selection.clear();
                         self.sel_tower = None;
+                        self.sel_truss = None;
                         self.drag = Drag::MoveTransitionSphere;
                     } else if on_chase {
                         select_sphere(&mut transition, &mut chase, false);
                         self.selection.clear();
                         self.sel_tower = None;
+                        self.sel_truss = None;
                         self.drag = Drag::MoveChaseSphere;
                     } else if let Some(part) = gizmo {
                         // Grab a gizmo handle: fine, axis-locked manipulation.
@@ -295,11 +356,13 @@ impl StageView {
                         for &j in &self.selection {
                             if let Some(inst) = self.instances.get_mut(j) {
                                 inst.mount = None;
+                                inst.truss_mount = None;
                             }
                         }
                         self.drag = Drag::Gizmo(part);
                     } else if let Some(i) = hit_test(ptr) {
                         self.sel_tower = None;
+                        self.sel_truss = None;
                         self.sel_stage = false;
                         if mods.shift {
                             if !self.selection.insert(i) {
@@ -310,40 +373,53 @@ impl StageView {
                             self.selection.insert(i);
                         }
                         self.last_selected = Some(self.instances[i].fixture);
-                        // Dragging detaches from towers (re-snaps on drop).
+                        // Dragging detaches from towers/trusses (re-snaps on drop).
                         self.push_undo();
                         for &j in &self.selection {
                             if let Some(inst) = self.instances.get_mut(j) {
                                 inst.mount = None;
+                                inst.truss_mount = None;
                             }
                         }
                         self.drag = Drag::Move;
                     } else if let Some(ti) = tower_hit(ptr) {
                         self.selection.clear();
                         self.sel_tower = Some(ti);
+                        self.sel_truss = None;
                         self.sel_stage = false;
                         self.push_undo();
                         self.drag = Drag::MoveTower;
+                    } else if let Some(ti) = truss_hit(ptr) {
+                        self.selection.clear();
+                        self.sel_truss = Some(ti);
+                        self.sel_tower = None;
+                        self.sel_stage = false;
+                        self.push_undo();
+                        self.drag = Drag::MoveTruss;
                     } else if self.sel_stage {
                         if let Some(h) = self.stage_handle_pick(rect, set, ptr) {
                             // Grab a stage resize arrow.
                             self.drag = Drag::StageEdge(h);
                         } else if mods.shift {
                             self.sel_tower = None;
+                            self.sel_truss = None;
                             self.drag = Drag::Marquee(ptr);
                         } else {
                             self.selection.clear();
                             self.sel_tower = None;
+                            self.sel_truss = None;
                             self.drag = Drag::PanCam;
                         }
                     } else if mods.shift {
                         // ⇧+drag on empty space = marquee multi-select.
                         self.sel_tower = None;
+                        self.sel_truss = None;
                         self.drag = Drag::Marquee(ptr);
                     } else {
                         // Plain drag on empty space pans the camera.
                         self.selection.clear();
                         self.sel_tower = None;
+                        self.sel_truss = None;
                         self.drag = Drag::PanCam;
                     }
                 }
@@ -367,10 +443,10 @@ impl StageView {
                             }
                         }
                         // Snap preview: if a light's icon hovers over a free
-                        // tower slot (in screen space), pull it onto the slot.
+                        // tower/truss slot (in screen space), pull it onto the slot.
                         let preview = self.compute_snap(rect);
-                        for (&i, &(ti, slot)) in &preview {
-                            if let Some(pos) = self.towers.get(ti).map(|tw| tw.slot_pos(slot)) {
+                        for (&i, &target) in &preview {
+                            if let Some(pos) = target.pos(self) {
                                 if let Some(inst) = self.instances.get_mut(i) {
                                     inst.t.pos = pos;
                                 }
@@ -388,6 +464,18 @@ impl StageView {
                                 tw.pos =
                                     tw.pos + right * (d.x * wpp) + fwd_xz * (-d.y * wpp);
                                 tw.pos.y = 0.0;
+                            }
+                        }
+                    }
+                    Drag::MoveTruss => {
+                        if let Some(tr) =
+                            self.sel_truss.and_then(|ti| self.trusses.get_mut(ti))
+                        {
+                            if mods.command {
+                                tr.pos.y = (tr.pos.y - d.y * wpp).clamp(0.5, 8.0);
+                            } else {
+                                tr.pos =
+                                    tr.pos + right * (d.x * wpp) + fwd_xz * (-d.y * wpp);
                             }
                         }
                     }
@@ -419,7 +507,6 @@ impl StageView {
                     Drag::Gizmo(part) => {
                         if let Some(origin) = self.selection_centroid() {
                             let arm = self.gizmo_arm(rect);
-                            let sel: Vec<usize> = self.selection.iter().copied().collect();
                             if part.is_rot() {
                                 // Rotate around the picked world axis through
                                 // the selection centre.
@@ -440,20 +527,40 @@ impl StageView {
                                     self.gizmo_last_angle = cur;
                                     let axis = part.axis();
                                     let deg = dth.to_degrees();
-                                    for i in sel {
-                                        let Some(inst) = self.instances.get_mut(i) else {
-                                            continue;
-                                        };
-                                        inst.t.pos =
-                                            origin + rotate_about(inst.t.pos - origin, axis, dth);
-                                        match part {
-                                            GizmoPart::RotY => inst.t.yaw_deg += deg,
-                                            GizmoPart::RotX => inst.t.pitch_deg += deg,
-                                            GizmoPart::RotZ => {
-                                                inst.t.roll_deg =
-                                                    (inst.t.roll_deg + deg).rem_euclid(360.0)
+                                    if let Some(ti) = self.sel_truss {
+                                        if let Some(tr) = self.trusses.get_mut(ti) {
+                                            match part {
+                                                GizmoPart::RotY => tr.yaw_deg += deg,
+                                                GizmoPart::RotX => tr.pitch_deg += deg,
+                                                GizmoPart::RotZ => {
+                                                    tr.roll_deg =
+                                                        (tr.roll_deg + deg).rem_euclid(360.0)
+                                                }
+                                                _ => {}
                                             }
-                                            _ => {}
+                                        }
+                                        if part == GizmoPart::RotY {
+                                            self.spin_truss_mounts(ti, deg);
+                                        } else {
+                                            self.resync_truss_mounts(ti);
+                                        }
+                                    } else {
+                                        let sel: Vec<usize> = self.selection.iter().copied().collect();
+                                        for i in sel {
+                                            let Some(inst) = self.instances.get_mut(i) else {
+                                                continue;
+                                            };
+                                            inst.t.pos = origin
+                                                + rotate_about(inst.t.pos - origin, axis, dth);
+                                            match part {
+                                                GizmoPart::RotY => inst.t.yaw_deg += deg,
+                                                GizmoPart::RotX => inst.t.pitch_deg += deg,
+                                                GizmoPart::RotZ => {
+                                                    inst.t.roll_deg =
+                                                        (inst.t.roll_deg + deg).rem_euclid(360.0)
+                                                }
+                                                _ => {}
+                                            }
                                         }
                                     }
                                 }
@@ -471,9 +578,17 @@ impl StageView {
                                     let amt = d.x * dir.x + d.y * dir.y;
                                     let world = amt * arm / len;
                                     let mv = ax * world;
-                                    for i in sel {
-                                        if let Some(inst) = self.instances.get_mut(i) {
-                                            inst.t.pos = inst.t.pos + mv;
+                                    if let Some(ti) = self.sel_truss {
+                                        if let Some(tr) = self.trusses.get_mut(ti) {
+                                            tr.pos = tr.pos + mv;
+                                        }
+                                        self.resync_truss_mounts(ti);
+                                    } else {
+                                        let sel: Vec<usize> = self.selection.iter().copied().collect();
+                                        for i in sel {
+                                            if let Some(inst) = self.instances.get_mut(i) {
+                                                inst.t.pos = inst.t.pos + mv;
+                                            }
                                         }
                                     }
                                 }
@@ -493,6 +608,7 @@ impl StageView {
                         self.commit_snap(patch);
                     }
                     Drag::MoveTower => self.save(patch),
+                    Drag::MoveTruss => self.save(patch),
                     Drag::Marquee(start) => {
                         if let Some(end) = resp.interact_pointer_pos() {
                             let sel = Rect::from_two_pos(start, end);
@@ -537,6 +653,8 @@ impl StageView {
                     self.delete_selection(patch);
                 } else if let Some(ti) = self.sel_tower.take() {
                     self.delete_tower(patch, ti);
+                } else if let Some(ti) = self.sel_truss.take() {
+                    self.delete_truss(patch, ti);
                 }
             }
         }

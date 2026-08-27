@@ -43,6 +43,7 @@ impl App {
             self.stage.selection.clear();
         }
         self.stage.sel_tower = None;
+        self.stage.sel_truss = None;
         for &fi in &fixtures {
             self.stage.select_fixture(fi, true);
         }
@@ -84,6 +85,7 @@ impl App {
         }
         let screen = ctx.screen_rect();
         let mut open = self.show_groups;
+        let mut popped = self.popped_out.contains("groups");
         // Deferred actions so the pool is never mutated mid-iteration.
         let mut do_store = false;
         let mut do_recall: Option<(usize, bool)> = None;
@@ -91,13 +93,15 @@ impl App {
         let mut do_delete: Option<usize> = None;
         let mut do_mode: Option<(usize, GroupMode)> = None;
 
-        egui::Window::new("👥 Groups")
-            .open(&mut open)
-            .collapsible(true)
-            .resizable(true)
-            .default_size([320.0, 300.0])
-            .default_pos([screen.right() - 360.0, 150.0])
-            .show(ctx, |ui| {
+        super::floating_panel(
+            ctx,
+            "groups",
+            "👥 Groups",
+            &mut open,
+            &mut popped,
+            [320.0, 300.0],
+            [screen.right() - 360.0, 150.0],
+            |ui| {
                 zoom_controls(ui, &mut self.zoom.groups);
                 apply_zoom(ui, self.zoom.groups);
 
@@ -173,8 +177,14 @@ impl App {
                         });
                     }
                 });
-            });
+            },
+        );
         self.show_groups = open;
+        if popped {
+            self.popped_out.insert("groups");
+        } else {
+            self.popped_out.remove("groups");
+        }
 
         if do_store {
             self.store_group();

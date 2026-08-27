@@ -460,6 +460,20 @@ impl App {
                     ).clicked() {
                         self.stage.add_tower(&self.patch);
                     }
+                    ui.horizontal(|ui| {
+                        if ui.button("➕ F34 truss").on_hover_text(
+                            "Straight box-truss run. Drag lights near the blue rings to \
+                             snap them on; edit length in the inspector.",
+                        ).clicked() {
+                            self.stage.add_truss(&self.patch, stage::TrussKind::Straight);
+                        }
+                        if ui.button("➕ Radius truss").on_hover_text(
+                            "Curved truss sweeping an arc. Edit radius and arc angle \
+                             in the inspector.",
+                        ).clicked() {
+                            self.stage.add_truss(&self.patch, stage::TrussKind::Radius);
+                        }
+                    });
                     if ui.button("Reset light positions…").clicked() {
                         self.confirm_reset = true;
                     }
@@ -471,7 +485,7 @@ impl App {
                     ui.weak("• drag empty space: pan camera");
                     ui.weak("• ⇧+drag empty: marquee select");
                     ui.weak("• ⌘D: duplicate · ⌫: remove copy");
-                    ui.weak("• drag light onto tower ring: snap");
+                    ui.weak("• drag light onto tower/truss ring: snap");
                     ui.weak("• right-drag: orbit camera");
                     ui.weak("• middle-drag: pan · scroll: zoom");
                 });

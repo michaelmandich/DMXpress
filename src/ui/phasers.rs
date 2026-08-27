@@ -474,6 +474,7 @@ impl App {
         }
         let screen = ctx.screen_rect();
         let mut open = self.show_phasers;
+        let mut popped = self.popped_out.contains("phasers");
         let mut do_apply = false;
         let mut live_toggled_on = false;
         let mut do_clear = false;
@@ -493,14 +494,15 @@ impl App {
         let edit_before = self.phaser_edit.clone();
         let name_before = self.phaser_name.clone();
 
-        egui::Window::new("🌈 Phasers")
-            .open(&mut open)
-            .collapsible(true)
-            .resizable(true)
-            .default_size([680.0, 760.0])
-            .min_size([560.0, 560.0])
-            .default_pos([screen.right() - 720.0, 90.0])
-            .show(ctx, |ui| {
+        super::floating_panel(
+            ctx,
+            "phasers",
+            "🌈 Phasers",
+            &mut open,
+            &mut popped,
+            [680.0, 760.0],
+            [screen.right() - 720.0, 90.0],
+            |ui| {
                 zoom_controls(ui, &mut self.zoom.phasers);
                 apply_zoom(ui, self.zoom.phasers);
 
@@ -1169,8 +1171,14 @@ impl App {
                         }
                     });
                 });
-            });
+            },
+        );
         self.show_phasers = open;
+        if popped {
+            self.popped_out.insert("phasers");
+        } else {
+            self.popped_out.remove("phasers");
+        }
 
         // Edit mode: write editor changes straight back into the selected
         // pool tile (and rename it from the name field), saving as we go. If

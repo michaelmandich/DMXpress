@@ -36,15 +36,18 @@ impl App {
 
         let screen = ctx.screen_rect();
         let mut open = self.show_chases;
+        let mut popped = self.popped_out.contains("chases");
         let mut do_start = false;
         let mut do_stop = false;
-        egui::Window::new("🌀 Chases")
-            .open(&mut open)
-            .collapsible(true)
-            .resizable(true)
-            .default_size([330.0, 360.0])
-            .default_pos([screen.right() - 380.0, 150.0])
-            .show(ctx, |ui| {
+        super::floating_panel(
+            ctx,
+            "chases",
+            "🌀 Chases",
+            &mut open,
+            &mut popped,
+            [330.0, 360.0],
+            [screen.right() - 380.0, 150.0],
+            |ui| {
                 zoom_controls(ui, &mut self.zoom.transition);
                 apply_zoom(ui, self.zoom.transition);
 
@@ -245,7 +248,8 @@ impl App {
                 } else {
                     ui.weak("Sphere is hidden until the full editor is open.");
                 }
-            });
+            },
+        );
         if do_start {
             self.start_chase();
         }
@@ -253,6 +257,11 @@ impl App {
             self.stop_chase();
         }
         self.show_chases = open;
+        if popped {
+            self.popped_out.insert("chases");
+        } else {
+            self.popped_out.remove("chases");
+        }
         if !self.show_chases || !self.chase.stage_visible() {
             self.chase.selected = false;
         }

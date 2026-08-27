@@ -4,10 +4,11 @@
 use std::collections::{HashMap, HashSet};
 use std::path::PathBuf;
 
+use super::geometry::SnapTarget;
 use super::gizmo::Drag;
 use super::layout::{
     default_transform, layout_key, Instance, LayoutFile, LightTransform, SavedInstance, Tower,
-    TOWER_SLOTS,
+    Truss, TrussKind, TOWER_SLOTS,
 };
 use super::math::{v3, Camera};
 use super::settings::Settings;
@@ -22,19 +23,21 @@ pub struct StageView {
     /// Visual lights; several may reference the same patch fixture.
     pub instances: Vec<Instance>,
     pub towers: Vec<Tower>,
+    pub trusses: Vec<Truss>,
     /// Selected instance indices.
     pub selection: HashSet<usize>,
     pub sel_tower: Option<usize>,
+    pub sel_truss: Option<usize>,
     /// Whether the stage box is selected (shows its resize arrows).
     pub sel_stage: bool,
     /// Most recently picked *fixture* index (drives the channel editor).
     pub last_selected: Option<usize>,
     pub(crate) drag: Drag,
-    /// Layout snapshots (instances, towers) for undo — newest last.
-    pub(crate) undo_stack: Vec<(Vec<Instance>, Vec<Tower>)>,
-    /// While dragging: which tower slot each light is hovering over (instance
-    /// index → (tower, slot)). Drives the live snap preview/highlight.
-    pub(crate) snap_preview: HashMap<usize, (usize, usize)>,
+    /// Layout snapshots (instances, towers, trusses) for undo — newest last.
+    pub(crate) undo_stack: Vec<(Vec<Instance>, Vec<Tower>, Vec<Truss>)>,
+    /// While dragging: which tower/truss slot each light is hovering over
+    /// (instance index → target). Drives the live snap preview/highlight.
+    pub(crate) snap_preview: HashMap<usize, SnapTarget>,
     /// Pointer angle (radians) captured for the active rotation-ring drag.
     pub(crate) gizmo_last_angle: f32,
     pub(crate) layout_path: PathBuf,
@@ -51,8 +54,10 @@ impl StageView {
             fly_speed: 5.0,
             instances: Vec::new(),
             towers: Vec::new(),
+            trusses: Vec::new(),
             selection: HashSet::new(),
             sel_tower: None,
+            sel_truss: None,
             sel_stage: false,
             last_selected: None,
             drag: Drag::None,
@@ -67,7 +72,7 @@ impl StageView {
     /// be undone. Keeps at most `UNDO_DEPTH` steps.
     pub(crate) fn push_undo(&mut self) {
         self.undo_stack
-            .push((self.instances.clone(), self.towers.clone()));
+            .push((self.instances.clone(), self.towers.clone(), self.trusses.clone()));
         if self.undo_stack.len() > UNDO_DEPTH {
             let drop = self.undo_stack.len() - UNDO_DEPTH;
             self.undo_stack.drain(0..drop);
@@ -76,14 +81,18 @@ impl StageView {
 
     /// Restore the most recent pre-edit snapshot (⌘Z).
     pub fn undo(&mut self, patch: &Patch) -> bool {
-        let Some((instances, towers)) = self.undo_stack.pop() else {
+        let Some((instances, towers, trusses)) = self.undo_stack.pop() else {
             return false;
         };
         self.instances = instances;
         self.towers = towers;
+        self.trusses = trusses;
         self.selection.retain(|&i| i < self.instances.len());
         if self.sel_tower.is_some_and(|t| t >= self.towers.len()) {
             self.sel_tower = None;
+        }
+        if self.sel_truss.is_some_and(|t| t >= self.trusses.len()) {
+            self.sel_truss = None;
         }
         self.drag = Drag::None;
         self.save(patch);
@@ -95,7 +104,7 @@ impl StageView {
             return LayoutFile::default();
         };
         if let Ok(lf) = serde_json::from_str::<LayoutFile>(&text) {
-            if !lf.instances.is_empty() || !lf.towers.is_empty() {
+            if !lf.instances.is_empty() || !lf.towers.is_empty() || !lf.trusses.is_empty() {
                 return lf;
             }
         }
@@ -110,9 +119,11 @@ impl StageView {
                     t,
                     opacity: 1.0,
                     mount: None,
+                    truss_mount: None,
                 })
                 .collect(),
             towers: Vec::new(),
+            trusses: Vec::new(),
         }
     }
 
@@ -124,17 +135,22 @@ impl StageView {
             .map(|(i, f)| (layout_key(f), i))
             .collect();
         self.towers = lf.towers;
+        self.trusses = lf.trusses;
         let mut instances: Vec<Instance> = Vec::new();
         for si in lf.instances {
             if let Some(&fi) = key_to_fixture.get(&si.key) {
                 let mount = si
                     .mount
                     .filter(|(ti, s)| *ti < self.towers.len() && *s < TOWER_SLOTS);
+                let truss_mount = si.truss_mount.filter(|(ti, s)| {
+                    self.trusses.get(*ti).is_some_and(|tr| *s < tr.total_slots())
+                });
                 instances.push(Instance {
                     fixture: fi,
                     t: si.t,
                     opacity: si.opacity,
                     mount,
+                    truss_mount,
                 });
             }
         }
@@ -146,12 +162,14 @@ impl StageView {
                     t: default_transform(f, set),
                     opacity: 1.0,
                     mount: None,
+                    truss_mount: None,
                 });
             }
         }
         self.instances = instances;
         self.selection.clear();
         self.sel_tower = None;
+        self.sel_truss = None;
         self.last_selected = None;
         self.drag = Drag::None;
         self.undo_stack.clear();
@@ -175,10 +193,12 @@ impl StageView {
                         t: inst.t.clone(),
                         opacity: inst.opacity,
                         mount: inst.mount,
+                        truss_mount: inst.truss_mount,
                     })
                 })
                 .collect(),
             towers: self.towers.clone(),
+            trusses: self.trusses.clone(),
         }
     }
 
@@ -200,10 +220,11 @@ impl StageView {
     }
 
     /// Discard the saved layout: every light back to its ShowBuddy-derived
-    /// default position, duplicates and towers removed.
+    /// default position, duplicates, towers and trusses removed.
     pub fn reset_layout(&mut self, patch: &Patch, set: &Settings) {
         self.push_undo();
         self.towers.clear();
+        self.trusses.clear();
         self.instances = patch
             .fixtures
             .iter()
@@ -213,10 +234,12 @@ impl StageView {
                 t: default_transform(f, set),
                 opacity: 1.0,
                 mount: None,
+                truss_mount: None,
             })
             .collect();
         self.selection.clear();
         self.sel_tower = None;
+        self.sel_truss = None;
         self.save(patch);
     }
 
@@ -308,6 +331,7 @@ impl StageView {
             }
         }
         self.sel_tower = None;
+        self.sel_truss = None;
         self.last_selected = Some(fi);
     }
 
@@ -348,6 +372,7 @@ impl StageView {
             let Some(src) = self.instances.get(i) else { continue };
             let mut inst = src.clone();
             inst.mount = None;
+            inst.truss_mount = None;
             inst.t.pos = inst.t.pos + v3(0.6, 0.0, 0.0);
             new_sel.insert(self.instances.len());
             self.instances.push(inst);
@@ -400,6 +425,7 @@ impl StageView {
         let mut t = Tower::default();
         t.pos.x = self.towers.len() as f32 * 1.5 - 2.0;
         self.sel_tower = Some(self.towers.len());
+        self.sel_truss = None;
         self.towers.push(t);
         self.selection.clear();
         self.save(patch);
@@ -419,6 +445,40 @@ impl StageView {
             }
         }
         self.sel_tower = None;
+        self.save(patch);
+    }
+
+    // ---- trusses ----
+
+    /// Add a new truss run of `kind` (F34 straight or curved radius).
+    pub fn add_truss(&mut self, patch: &Patch, kind: TrussKind) {
+        self.push_undo();
+        let mut t = match kind {
+            TrussKind::Straight => Truss::straight(),
+            TrussKind::Radius => Truss::radius(),
+        };
+        t.pos.x = self.trusses.len() as f32 * 1.5 - 2.0;
+        self.sel_truss = Some(self.trusses.len());
+        self.sel_tower = None;
+        self.trusses.push(t);
+        self.selection.clear();
+        self.save(patch);
+    }
+
+    pub fn delete_truss(&mut self, patch: &Patch, ti: usize) {
+        if ti >= self.trusses.len() {
+            return;
+        }
+        self.push_undo();
+        self.trusses.remove(ti);
+        for inst in &mut self.instances {
+            match &mut inst.truss_mount {
+                Some((t, _)) if *t == ti => inst.truss_mount = None,
+                Some((t, _)) if *t > ti => *t -= 1,
+                _ => {}
+            }
+        }
+        self.sel_truss = None;
         self.save(patch);
     }
 
@@ -448,6 +508,7 @@ impl StageView {
             }
         }
         self.sel_tower = None;
+        self.sel_truss = None;
         self.last_selected = Some(fi);
     }
 }

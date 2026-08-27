@@ -6,6 +6,7 @@ use std::collections::HashSet;
 use eframe::egui::{self, Align2, Color32, FontId, Pos2, Rect, Shape, Stroke};
 
 use super::fixture::{classify, live_state, vis_curve, Archetype};
+use super::geometry::SnapTarget;
 use super::gizmo::{Drag, GizmoPart, StageHandle};
 use super::layout::TOWER_SLOTS;
 use super::math::{dir_from_angles, v3, V3};
@@ -270,12 +271,13 @@ impl StageView {
         // Surface illumination belongs on the stage/ground, below physical
         // fixture bodies and towers.
         painter.extend(pools);
-        // Towers (drawn with the same depth sort as the lights).
+        // Towers & trusses (drawn with the same depth sort as the lights).
         let occupied: HashSet<(usize, usize)> =
             self.instances.iter().filter_map(|inst| inst.mount).collect();
+        let truss_occupied: HashSet<(usize, usize)> =
+            self.instances.iter().filter_map(|inst| inst.truss_mount).collect();
         // Slots a light is currently hovering over (live snap target).
-        let snap_targets: HashSet<(usize, usize)> =
-            self.snap_preview.values().copied().collect();
+        let snap_targets: HashSet<SnapTarget> = self.snap_preview.values().copied().collect();
         for (ti, tw) in self.towers.iter().enumerate() {
             let selected = self.sel_tower == Some(ti);
             let mut shapes = mesh_shapes(&self.cam, rect, &tw.mesh(selected));
@@ -283,7 +285,7 @@ impl StageView {
             if selected || matches!(self.drag, Drag::Move) {
                 for slot in 0..TOWER_SLOTS {
                     if let Some((sp, _)) = self.cam.project(rect, tw.slot_pos(slot)) {
-                        if snap_targets.contains(&(ti, slot)) {
+                        if snap_targets.contains(&SnapTarget::Tower(ti, slot)) {
                             // Highlighted drop target.
                             shapes.push(Shape::circle_filled(
                                 sp,
@@ -308,6 +310,42 @@ impl StageView {
             }
             items.push(Item {
                 depth: (tw.pos + v3(0.0, tw.height * 0.5, 0.0) - eye).len(),
+                shapes,
+            });
+        }
+        for (ti, tr) in self.trusses.iter().enumerate() {
+            let selected = self.sel_truss == Some(ti);
+            let mut shapes = mesh_shapes(&self.cam, rect, &tr.mesh(selected));
+            let total_slots = tr.total_slots();
+            // Slot markers while placing lights or when the truss is picked.
+            if selected || matches!(self.drag, Drag::Move) {
+                for slot in 0..total_slots {
+                    if let Some((sp, _)) = self.cam.project(rect, tr.slot_pos(slot)) {
+                        if snap_targets.contains(&SnapTarget::Truss(ti, slot)) {
+                            // Highlighted drop target.
+                            shapes.push(Shape::circle_filled(
+                                sp,
+                                7.0,
+                                Color32::from_rgba_unmultiplied(120, 230, 130, 90),
+                            ));
+                            shapes.push(Shape::circle_stroke(
+                                sp,
+                                8.0,
+                                Stroke::new(2.0, Color32::from_rgb(120, 240, 130)),
+                            ));
+                        } else {
+                            let col = if truss_occupied.contains(&(ti, slot)) {
+                                Color32::from_gray(75)
+                            } else {
+                                Color32::from_rgb(90, 170, 255)
+                            };
+                            shapes.push(Shape::circle_stroke(sp, 5.0, Stroke::new(1.5, col)));
+                        }
+                    }
+                }
+            }
+            items.push(Item {
+                depth: (tr.pos - eye).len(),
                 shapes,
             });
         }

@@ -12,12 +12,17 @@ impl App {
             return;
         }
         let mut open = self.show_patch;
-        egui::Window::new("Patch")
-            .open(&mut open)
-            .default_width(380.0)
-            .max_height(520.0)
-            .vscroll(true)
-            .show(ctx, |ui| {
+        let mut popped = self.popped_out.contains("patch");
+        super::floating_panel(
+            ctx,
+            "patch",
+            "Patch",
+            &mut open,
+            &mut popped,
+            [380.0, 520.0],
+            [160.0, 80.0],
+            |ui| {
+                egui::ScrollArea::vertical().show(ui, |ui| {
                 ui.label(
                     "Add fixtures from DMXpress's built-in profiles on top of \
                      the ShowBuddy patch.",
@@ -216,8 +221,15 @@ impl App {
                         }
                     }
                 }
-            });
+                }); // patch scroll area
+            },
+        );
         self.show_patch = open;
+        if popped {
+            self.popped_out.insert("patch");
+        } else {
+            self.popped_out.remove("patch");
+        }
     }
 
     pub(crate) fn configs_window(&mut self, ctx: &egui::Context) {
@@ -225,10 +237,16 @@ impl App {
             return;
         }
         let mut open = self.show_configs;
-        egui::Window::new("Configurations")
-            .open(&mut open)
-            .default_width(360.0)
-            .show(ctx, |ui| {
+        let mut popped = self.popped_out.contains("configs");
+        super::floating_panel(
+            ctx,
+            "configs",
+            "Configurations",
+            &mut open,
+            &mut popped,
+            [360.0, 420.0],
+            [180.0, 100.0],
+            |ui| {
                 ui.label(
                     "A configuration is the whole show: stage settings, light \
                      placement, patched fixtures, groups, palettes, phasers, \
@@ -287,8 +305,14 @@ impl App {
                         ui.label(&name);
                     });
                 }
-            });
+            },
+        );
         self.show_configs = open;
+        if popped {
+            self.popped_out.insert("configs");
+        } else {
+            self.popped_out.remove("configs");
+        }
 
         // Delete confirmation.
         if let Some(name) = self.confirm_delete_config.clone() {

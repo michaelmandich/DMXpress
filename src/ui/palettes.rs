@@ -247,6 +247,7 @@ impl App {
         }
         let screen = ctx.screen_rect();
         let mut open = self.show_palettes;
+        let mut popped = self.popped_out.contains("palettes");
         let mut do_store: Option<Feature> = None;
         let mut do_recall: Option<u32> = None;
         let mut do_update: Option<u32> = None;
@@ -261,13 +262,15 @@ impl App {
         let mut do_folder_add = false;
         let mut do_folder_delete: Option<String> = None;
 
-        egui::Window::new("🎨 Palettes")
-            .open(&mut open)
-            .collapsible(true)
-            .resizable(true)
-            .default_size([360.0, 340.0])
-            .default_pos([screen.right() - 400.0, 180.0])
-            .show(ctx, |ui| {
+        super::floating_panel(
+            ctx,
+            "palettes",
+            "🎨 Palettes",
+            &mut open,
+            &mut popped,
+            [360.0, 340.0],
+            [screen.right() - 400.0, 180.0],
+            |ui| {
                 zoom_controls(ui, &mut self.zoom.palettes);
                 apply_zoom(ui, self.zoom.palettes);
 
@@ -838,8 +841,14 @@ impl App {
                         }
                     });
                 });
-            });
+            },
+        );
         self.show_palettes = open;
+        if popped {
+            self.popped_out.insert("palettes");
+        } else {
+            self.popped_out.remove("palettes");
+        }
 
         if let Some(f) = do_store {
             self.store_palette(f);

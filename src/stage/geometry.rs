@@ -1,5 +1,5 @@
-//! Snap-to-tower logic, selection centroid, and the transform-gizmo geometry
-//! (handle sizing, ring basis, and screen-space picking).
+//! Snap-to-tower/truss logic, selection centroid, and the transform-gizmo
+//! geometry (handle sizing, ring basis, and screen-space picking).
 
 use std::collections::{HashMap, HashSet};
 
@@ -12,21 +12,43 @@ use super::settings::Settings;
 use super::view::StageView;
 use crate::showbuddy::Patch;
 
+/// A mount point a dragged light can snap onto: either a tower slot or a
+/// truss slot.
+#[derive(Debug, Clone, Copy, PartialEq, Eq, Hash)]
+pub(crate) enum SnapTarget {
+    Tower(usize, usize),
+    Truss(usize, usize),
+}
+
+impl SnapTarget {
+    pub(crate) fn pos(self, view: &StageView) -> Option<V3> {
+        match self {
+            SnapTarget::Tower(ti, slot) => view.towers.get(ti).map(|tw| tw.slot_pos(slot)),
+            SnapTarget::Truss(ti, slot) => view.trusses.get(ti).map(|tr| tr.slot_pos(slot)),
+        }
+    }
+}
+
 impl StageView {
-    /// While dragging, work out which free tower slot each selected light is
-    /// hovering over — by *screen* proximity, so you can simply drag a light's
-    /// icon over a bar's slot ring (even though it's up in the air and the
-    /// drag itself only moves along the floor). Each light claims a distinct
-    /// slot. Returns instance index → (tower, slot).
-    pub(crate) fn compute_snap(&self, rect: Rect) -> HashMap<usize, (usize, usize)> {
+    /// While dragging, work out which free tower/truss slot each selected
+    /// light is hovering over — by *screen* proximity, so you can simply
+    /// drag a light's icon over a slot ring (even though it's up in the air
+    /// and the drag itself only moves along the floor). Each light claims a
+    /// distinct slot. Returns instance index → snap target.
+    pub(crate) fn compute_snap(&self, rect: Rect) -> HashMap<usize, SnapTarget> {
         const SNAP_PX: f32 = 34.0;
         // Slots already held by lights that aren't part of this drag.
-        let mut taken: HashSet<(usize, usize)> = self
+        let mut taken: HashSet<SnapTarget> = self
             .instances
             .iter()
             .enumerate()
             .filter(|(i, _)| !self.selection.contains(i))
-            .filter_map(|(_, inst)| inst.mount)
+            .flat_map(|(_, inst)| {
+                inst.mount
+                    .map(|(t, s)| SnapTarget::Tower(t, s))
+                    .into_iter()
+                    .chain(inst.truss_mount.map(|(t, s)| SnapTarget::Truss(t, s)))
+            })
             .collect();
         let mut sel: Vec<usize> = self.selection.iter().copied().collect();
         sel.sort_unstable();
@@ -39,23 +61,38 @@ impl StageView {
             else {
                 continue;
             };
-            let mut best: Option<(usize, usize, f32)> = None;
+            let mut best: Option<(SnapTarget, f32)> = None;
             for (ti, tw) in self.towers.iter().enumerate() {
                 for slot in 0..TOWER_SLOTS {
-                    if taken.contains(&(ti, slot)) {
+                    let target = SnapTarget::Tower(ti, slot);
+                    if taken.contains(&target) {
                         continue;
                     }
                     if let Some((sp, _)) = self.cam.project(rect, tw.slot_pos(slot)) {
                         let d = sp.distance(lp);
-                        if d < SNAP_PX && best.map_or(true, |(_, _, bd)| d < bd) {
-                            best = Some((ti, slot, d));
+                        if d < SNAP_PX && best.map_or(true, |(_, bd)| d < bd) {
+                            best = Some((target, d));
                         }
                     }
                 }
             }
-            if let Some((ti, slot, _)) = best {
-                taken.insert((ti, slot));
-                out.insert(i, (ti, slot));
+            for (ti, tr) in self.trusses.iter().enumerate() {
+                for slot in 0..tr.total_slots() {
+                    let target = SnapTarget::Truss(ti, slot);
+                    if taken.contains(&target) {
+                        continue;
+                    }
+                    if let Some((sp, _)) = self.cam.project(rect, tr.slot_pos(slot)) {
+                        let d = sp.distance(lp);
+                        if d < SNAP_PX && best.map_or(true, |(_, bd)| d < bd) {
+                            best = Some((target, d));
+                        }
+                    }
+                }
+            }
+            if let Some((target, _)) = best {
+                taken.insert(target);
+                out.insert(i, target);
             }
         }
         out
@@ -66,16 +103,28 @@ impl StageView {
     /// preview.
     pub(crate) fn commit_snap(&mut self, patch: &Patch) {
         let preview = std::mem::take(&mut self.snap_preview);
-        for (i, (ti, slot)) in preview {
-            let Some(tw) = self.towers.get(ti) else { continue };
-            let (sp, yaw) = (tw.slot_pos(slot), tw.yaw_deg);
+        for (i, target) in preview {
+            let (pos, yaw, pitch, mount, truss_mount) = match target {
+                SnapTarget::Tower(ti, slot) => {
+                    let Some(tw) = self.towers.get(ti) else { continue };
+                    let pitch = if Tower::slot_points_up(slot) { 90.0 } else { -90.0 };
+                    (tw.slot_pos(slot), tw.yaw_deg, pitch, Some((ti, slot)), None)
+                }
+                SnapTarget::Truss(ti, slot) => {
+                    let Some(tr) = self.trusses.get(ti) else { continue };
+                    let (pos, yaw, pitch) = tr.slot_pos_yaw(slot);
+                    (pos, yaw, pitch, None, Some((ti, slot)))
+                }
+            };
             if let Some(inst) = self.instances.get_mut(i) {
-                inst.mount = Some((ti, slot));
-                inst.t.pos = sp;
-                // Top-face slots point straight up, bottom-face point down.
-                // Spin (roll_deg) is preserved so a base-mounted head keeps
-                // its orientation; rotate par-type lights from the inspector.
-                inst.t.pitch_deg = if Tower::slot_points_up(slot) { 90.0 } else { -90.0 };
+                inst.mount = mount;
+                inst.truss_mount = truss_mount;
+                inst.t.pos = pos;
+                // Top/bottom faces point straight up/down; a straight run's
+                // left/right faces point out sideways instead. Spin
+                // (roll_deg) is preserved so a base-mounted head keeps its
+                // orientation; rotate par-type lights from the inspector.
+                inst.t.pitch_deg = pitch;
                 inst.t.yaw_deg = yaw;
             }
         }
@@ -102,17 +151,77 @@ impl StageView {
         }
     }
 
-    /// Centre of the current light selection (the transform-gizmo origin).
-    pub(crate) fn selection_centroid(&self) -> Option<V3> {
-        let mut c = V3::default();
-        let mut n = 0.0f32;
-        for &i in &self.selection {
-            if let Some(inst) = self.instances.get(i) {
-                c = c + inst.t.pos;
-                n += 1.0;
+    /// Refresh every light mounted on truss `ti`'s position and mount-facing
+    /// orientation (yaw/pitch) from its slot — called whenever the truss's
+    /// pose or shape changes (gizmo drag, inspector edit). Roll (the
+    /// light's own spin) is left untouched.
+    pub(crate) fn resync_truss_mounts(&mut self, ti: usize) {
+        let mounts: Vec<(usize, usize)> = self
+            .instances
+            .iter()
+            .filter_map(|inst| inst.truss_mount.filter(|(t, _)| *t == ti))
+            .collect();
+        for (t, slot) in mounts {
+            let Some(tr) = self.trusses.get(t) else { continue };
+            let (pos, yaw, pitch) = tr.slot_pos_yaw(slot);
+            for inst in &mut self.instances {
+                if inst.truss_mount == Some((t, slot)) {
+                    inst.t.pos = pos;
+                    inst.t.yaw_deg = yaw;
+                    inst.t.pitch_deg = pitch;
+                }
             }
         }
-        (n > 0.0).then(|| c * (1.0 / n))
+    }
+
+    /// Same as [`Self::spin_tower_mounts`] but for lights mounted on truss
+    /// `ti`: re-syncs position/orientation via [`Self::resync_truss_mounts`],
+    /// and additionally spins each mounted light's roll by `dyaw` (sign
+    /// flipped per face) so a yaw-only rotation of the truss doesn't
+    /// visually "reset" a moving head's pan.
+    pub(crate) fn spin_truss_mounts(&mut self, ti: usize, dyaw: f32) {
+        if self.trusses.get(ti).is_none() {
+            return;
+        }
+        self.resync_truss_mounts(ti);
+        if dyaw == 0.0 {
+            return;
+        }
+        let mounts: Vec<(usize, usize)> = self
+            .instances
+            .iter()
+            .filter_map(|inst| inst.truss_mount.filter(|(t, _)| *t == ti))
+            .collect();
+        for (t, slot) in mounts {
+            let Some(tr) = self.trusses.get(t) else { continue };
+            let sign = tr.slot_roll_sign(slot);
+            for inst in &mut self.instances {
+                if inst.truss_mount == Some((t, slot)) {
+                    inst.t.roll_deg = (inst.t.roll_deg + dyaw * sign).rem_euclid(360.0);
+                }
+            }
+        }
+    }
+
+    /// Centre of the current selection (the transform-gizmo origin): the
+    /// average light position, or — if a truss is selected instead — the
+    /// truss's own position.
+    pub(crate) fn selection_centroid(&self) -> Option<V3> {
+        if !self.selection.is_empty() {
+            let mut c = V3::default();
+            let mut n = 0.0f32;
+            for &i in &self.selection {
+                if let Some(inst) = self.instances.get(i) {
+                    c = c + inst.t.pos;
+                    n += 1.0;
+                }
+            }
+            return (n > 0.0).then(|| c * (1.0 / n));
+        }
+        if let Some(ti) = self.sel_truss {
+            return self.trusses.get(ti).map(|tr| tr.pos);
+        }
+        None
     }
 
     /// World length of a gizmo arm so it stays a roughly constant size on

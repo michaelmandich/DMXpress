@@ -13,6 +13,7 @@ impl App {
             return;
         }
         let mut open = self.show_dmx_test;
+        let mut popped = self.popped_out.contains("dmx_test");
 
         // Owner name for each address (for orientation while scrolling).
         let mut owner: Vec<Option<&str>> = vec![None; net::DMX_SLOTS];
@@ -28,11 +29,15 @@ impl App {
         let buf = *self.net.dmx.lock();
         let overrides = &mut self.test_overrides;
 
-        egui::Window::new("🧪 DMX Monitor")
-            .open(&mut open)
-            .resizable(true)
-            .default_size([380.0, 460.0])
-            .show(ctx, |ui| {
+        super::floating_panel(
+            ctx,
+            "dmx_test",
+            "🧪 DMX Monitor",
+            &mut open,
+            &mut popped,
+            [380.0, 460.0],
+            [140.0, 100.0],
+            |ui| {
                 ui.horizontal(|ui| {
                     ui.label(format!(
                         "Live output, channels 1–{} — tick a channel to force it.",
@@ -113,8 +118,14 @@ impl App {
                         }
                     },
                 );
-            });
+            },
+        );
         self.show_dmx_test = open;
+        if popped {
+            self.popped_out.insert("dmx_test");
+        } else {
+            self.popped_out.remove("dmx_test");
+        }
         // Keep the view fresh while it is open (values animate underneath).
         if self.show_dmx_test {
             ctx.request_repaint_after(std::time::Duration::from_millis(50));
