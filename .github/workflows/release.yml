@@ -1,0 +1,130 @@
+name: Release
+
+on:
+  push:
+    tags: ["v*"]
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  windows:
+    runs-on: windows-latest
+    env:
+      # Link the Microsoft C runtime into the binary so a clean Windows
+      # installation does not need a separate Visual C++ redistributable.
+      RUSTFLAGS: -C target-feature=+crt-static
+    steps:
+      - uses: actions/checkout@v4
+      - uses: dtolnay/rust-toolchain@stable
+      - uses: Swatinem/rust-cache@v2
+      - name: Build
+        run: cargo build --release
+      - name: Package
+        shell: pwsh
+        run: |
+          Copy-Item target/release/dmxpress.exe DMXpress-windows-x86_64.exe
+          (Get-FileHash DMXpress-windows-x86_64.exe -Algorithm SHA256).Hash.ToLower() |
+            Set-Content -NoNewline DMXpress-windows-x86_64.exe.sha256
+      - uses: actions/upload-artifact@v4
+        with:
+          name: windows
+          path: |
+            DMXpress-windows-x86_64.exe
+            DMXpress-windows-x86_64.exe.sha256
+
+  linux:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: dtolnay/rust-toolchain@stable
+      - uses: Swatinem/rust-cache@v2
+      - name: Install system dependencies
+        run: sudo apt-get update && sudo apt-get install -y libasound2-dev libudev-dev pkg-config
+      - name: Build
+        run: cargo build --release
+      - name: Package
+        run: tar -czf DMXpress-linux-x86_64.tar.gz -C target/release dmxpress
+      - uses: actions/upload-artifact@v4
+        with:
+          name: linux
+          path: DMXpress-linux-x86_64.tar.gz
+
+  macos:
+    runs-on: macos-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: dtolnay/rust-toolchain@stable
+        with:
+          targets: aarch64-apple-darwin,x86_64-apple-darwin
+      - uses: Swatinem/rust-cache@v2
+      - name: Build (Apple Silicon)
+        run: cargo build --release --target aarch64-apple-darwin
+      - name: Build (Intel)
+        run: cargo build --release --target x86_64-apple-darwin
+      - name: Bundle DMXpress.app
+        run: |
+          set -euo pipefail
+          VERSION="${GITHUB_REF_NAME#v}"
+          case "$VERSION" in v*|main|master|"") VERSION="0.1.0";; esac
+
+          mkdir -p DMXpress.app/Contents/MacOS DMXpress.app/Contents/Resources
+          lipo -create -output DMXpress.app/Contents/MacOS/dmxpress \
+            target/aarch64-apple-darwin/release/dmxpress \
+            target/x86_64-apple-darwin/release/dmxpress
+
+          mkdir AppIcon.iconset
+          for s in 16 32 64 128 256 512; do
+            sips -z "$s" "$s" assets/logo.png --out "AppIcon.iconset/icon_${s}x${s}.png" >/dev/null
+            sips -z "$((s*2))" "$((s*2))" assets/logo.png --out "AppIcon.iconset/icon_${s}x${s}@2x.png" >/dev/null
+          done
+          iconutil -c icns AppIcon.iconset -o DMXpress.app/Contents/Resources/AppIcon.icns
+
+          cat > DMXpress.app/Contents/Info.plist <<EOF
+          <?xml version="1.0" encoding="UTF-8"?>
+          <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+          <plist version="1.0">
+          <dict>
+            <key>CFBundleName</key><string>DMXpress</string>
+            <key>CFBundleDisplayName</key><string>DMXpress</string>
+            <key>CFBundleIdentifier</key><string>com.michaelmandich.dmxpress</string>
+            <key>CFBundleExecutable</key><string>dmxpress</string>
+            <key>CFBundlePackageType</key><string>APPL</string>
+            <key>CFBundleIconFile</key><string>AppIcon</string>
+            <key>CFBundleShortVersionString</key><string>${VERSION}</string>
+            <key>CFBundleVersion</key><string>${VERSION}</string>
+            <key>NSHighResolutionCapable</key><true/>
+            <key>LSMinimumSystemVersion</key><string>11.0</string>
+            <key>NSMicrophoneUsageDescription</key><string>DMXpress uses audio input for sound-reactive lighting triggers.</string>
+          </dict>
+          </plist>
+          EOF
+
+          codesign --force -s - DMXpress.app
+          ditto -c -k --keepParent DMXpress.app DMXpress-macos-universal.zip
+      - uses: actions/upload-artifact@v4
+        with:
+          name: macos
+          path: DMXpress-macos-universal.zip
+
+  release:
+    if: startsWith(github.ref, 'refs/tags/v')
+    needs: [windows, linux, macos]
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/download-artifact@v4
+        with:
+          merge-multiple: true
+      - uses: softprops/action-gh-release@v2
+        with:
+          files: DMXpress-*
+          generate_release_notes: true
+          body: |
+            ## Downloads
+
+            - [Windows standalone executable](https://github.com/${{ github.repository }}/releases/download/${{ github.ref_name }}/DMXpress-windows-x86_64.exe)
+            - [macOS universal app](https://github.com/${{ github.repository }}/releases/download/${{ github.ref_name }}/DMXpress-macos-universal.zip)
+            - [Linux x86_64 archive](https://github.com/${{ github.repository }}/releases/download/${{ github.ref_name }}/DMXpress-linux-x86_64.tar.gz)
+
+            The Windows executable includes its runtime and built-in profiles. No Rust installation, installer, or companion files are required.

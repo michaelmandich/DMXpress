@@ -42,7 +42,7 @@ impl App {
         super::floating_panel(
             ctx,
             "chases",
-            "🌀 Chases",
+            "Chases",
             &mut open,
             &mut popped,
             [330.0, 360.0],
@@ -107,7 +107,7 @@ impl App {
                         if ui
                             .add_enabled(
                                 tr.source.is_some(),
-                                egui::Button::new("💥 Send pulse"),
+                                egui::Button::new("Send pulse"),
                             )
                             .on_hover_text("Fires one sweep — press again to re-fire")
                             .clicked()
@@ -117,16 +117,16 @@ impl App {
                         if tr.enabled {
                             ui.colored_label(
                                 egui::Color32::from_rgb(255, 175, 85),
-                                "● sweeping",
+                                "sweeping",
                             );
                         }
                     } else if tr.enabled {
-                        if ui.button("⏹ Stop chase").clicked() {
+                        if ui.button("Stop chase").clicked() {
                             do_stop = true;
                         }
-                        ui.colored_label(egui::Color32::from_rgb(255, 175, 85), "● running");
+                        ui.colored_label(egui::Color32::from_rgb(255, 175, 85), "running");
                     } else if ui
-                        .add_enabled(tr.source.is_some(), egui::Button::new("▶ Start chase"))
+                        .add_enabled(tr.source.is_some(), egui::Button::new("Start chase"))
                         .clicked()
                     {
                         do_start = true;
@@ -210,7 +210,7 @@ impl App {
 
                 ui.separator();
                 if ui
-                    .button("💥 Throb dimmers")
+                    .button("Throb dimmers")
                     .on_hover_text(
                         "Surge every dimmer to full and decay back over half a \
                          second — mash it with the kicks",

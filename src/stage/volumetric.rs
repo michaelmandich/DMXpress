@@ -11,7 +11,8 @@ use super::fixture::vis_curve;
 use super::math::{Camera, V3};
 
 const MAX_BEAMS: usize = 128;
-const RING_POINTS: usize = 16;
+const RING_POINTS: usize = 24;
+const SLICES: usize = 8;
 
 #[derive(Clone, Copy)]
 pub(crate) struct BeamSpec {
@@ -230,33 +231,44 @@ pub(crate) fn paint_callback(
         let mut min_y = f32::INFINITY;
         let mut max_x = f32::NEG_INFINITY;
         let mut max_y = f32::NEG_INFINITY;
-        for slice in 0..=5 {
-            let frac = slice as f32 / 5.0;
+        // A cone that reaches past the near plane cannot be bounded by
+        // projecting points: the ones behind the camera drop out and the box
+        // closes over live haze, slicing the beam along a hard straight edge.
+        let mut near_clipped = false;
+        for slice in 0..=SLICES {
+            let frac = slice as f32 / SLICES as f32;
             let center = spec.apex + spec.dir * (spec.len * frac);
             let radius = 0.05 + spread * spec.len * frac;
             for k in 0..RING_POINTS {
                 let angle = k as f32 / RING_POINTS as f32 * std::f32::consts::TAU;
                 let point = center + u * (angle.cos() * radius) + v * (angle.sin() * radius);
-                if let Some((p, depth)) = cam.project(rect, point) {
-                    if depth > 0.2 {
+                match cam.project(rect, point) {
+                    Some((p, depth)) if depth > 0.2 => {
                         min_x = min_x.min(p.x);
                         min_y = min_y.min(p.y);
                         max_x = max_x.max(p.x);
                         max_y = max_y.max(p.y);
                     }
+                    _ => near_clipped = true,
                 }
             }
         }
-        if !min_x.is_finite() {
+        if !min_x.is_finite() && !near_clipped {
             continue;
         }
-        let pad = 3.0;
-        let bounds = [
-            ((min_x - pad - rect.left()) / rect.width()).clamp(0.0, 1.0),
-            ((min_y - pad - rect.top()) / rect.height()).clamp(0.0, 1.0),
-            ((max_x + pad - rect.left()) / rect.width()).clamp(0.0, 1.0),
-            ((max_y + pad - rect.top()) / rect.height()).clamp(0.0, 1.0),
-        ];
+        // The box only tracks sampled rings, so leave room for the silhouette
+        // that bulges between them rather than clipping it into a line.
+        let pad = 8.0;
+        let bounds = if near_clipped {
+            [0.0, 0.0, 1.0, 1.0]
+        } else {
+            [
+                ((min_x - pad - rect.left()) / rect.width()).clamp(0.0, 1.0),
+                ((min_y - pad - rect.top()) / rect.height()).clamp(0.0, 1.0),
+                ((max_x + pad - rect.left()) / rect.width()).clamp(0.0, 1.0),
+                ((max_y + pad - rect.top()) / rect.height()).clamp(0.0, 1.0),
+            ]
+        };
         if bounds[2] <= bounds[0] || bounds[3] <= bounds[1] {
             continue;
         }

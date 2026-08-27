@@ -265,7 +265,7 @@ impl App {
         super::floating_panel(
             ctx,
             "palettes",
-            "🎨 Palettes",
+            "Palettes",
             &mut open,
             &mut popped,
             [360.0, 340.0],
@@ -277,7 +277,7 @@ impl App {
                 // Feature tabs.
                 ui.horizontal_wrapped(|ui| {
                     for feat in Feature::ALL {
-                        let label = format!("{} {}", feat.icon(), feat.label());
+                        let label = feat.label().to_string();
                         if ui
                             .selectable_label(self.palette_tab == feat, label)
                             .clicked()
@@ -297,7 +297,7 @@ impl App {
                             .desired_width(120.0),
                     );
                     if ui
-                        .add_enabled(!sel.is_empty(), egui::Button::new(format!("＋ Store {}", feat.label())))
+                        .add_enabled(!sel.is_empty(), egui::Button::new(format!("+ Store {}", feat.label())))
                         .on_hover_text("Store this feature for the selected fixtures")
                         .clicked()
                     {
@@ -343,7 +343,7 @@ impl App {
                 // Palette cycle: pick palettes (⇧click tiles), then rotate
                 // through them on the beat — blue→yellow→blue, or any N.
                 ui.horizontal_wrapped(|ui| {
-                    ui.label("🔁 Cycle:");
+                    ui.label("Cycle:");
                     if self.cycle_ids.is_empty() {
                         ui.weak("⇧click palettes to add…");
                     }
@@ -420,7 +420,7 @@ impl App {
                 }
                 ui.horizontal(|ui| {
                     let can = self.cycle_ids.len() >= 2;
-                    let label = if self.cycle_on { "⏹ Stop cycle" } else { "▶ Cycle" };
+                    let label = if self.cycle_on { "Stop cycle" } else { "Cycle" };
                     if ui
                         .add_enabled(can || self.cycle_on, egui::Button::new(label))
                         .on_hover_text("Rotate all lights through the picked palettes on the beat")
@@ -474,7 +474,7 @@ impl App {
                         .on_hover_text("How the spacing disperses across the rig");
                 });
                 if ui
-                    .checkbox(&mut self.cycle_master_beat, "♪ Follow master beat")
+                    .checkbox(&mut self.cycle_master_beat, "Follow master beat")
                     .on_hover_text(
                         "On: taps and Master BPM gently pull this cycle into sync. \
                          Off: the cycle keeps its current tempo",
@@ -508,7 +508,7 @@ impl App {
 
                 // Saved sequences: a cycle plus its motion, stored by name,
                 // organised into folders like presets.
-                egui::CollapsingHeader::new("🎞 Saved sequences")
+                egui::CollapsingHeader::new("Saved sequences")
                     .default_open(false)
                     .show(ui, |ui| {
                         ui.horizontal(|ui| {
@@ -520,7 +520,7 @@ impl App {
                             if ui
                                 .add_enabled(
                                     self.cycle_ids.len() >= 2,
-                                    egui::Button::new("＋ Save"),
+                                    egui::Button::new("+ Save"),
                                 )
                                 .on_hover_text(
                                     "Save the current cycle — colours, rate, \
@@ -533,14 +533,14 @@ impl App {
                             if ui
                                 .add_enabled(
                                     !self.seq_name.trim().is_empty(),
-                                    egui::Button::new("＋ Folder"),
+                                    egui::Button::new("+ Folder"),
                                 )
                                 .on_hover_text("Create a folder with the typed name")
                                 .clicked()
                             {
                                 do_folder_add = true;
                             }
-                            ui.checkbox(&mut self.seq_drag_mode, "✋ Drag mode")
+                            ui.checkbox(&mut self.seq_drag_mode, "Drag mode")
                                 .on_hover_text(
                                     "On: drag tiles onto folders to move them. \
                                      Off: click tiles to start/stop as usual",
@@ -559,20 +559,20 @@ impl App {
                                         do_del: &mut Option<usize>| {
                             let text = egui::RichText::new(format!(
                                 "{}{}\n{}{} pal · {}",
-                                if running { "▶ " } else { "" },
+                                if running { "> " } else { "" },
                                 s.name,
-                                if s.master_beat { "♪ " } else { "" },
+                                if s.master_beat { "beat " } else { "" },
                                 s.ids.len(),
                                 s.pattern.label()
                             ))
                             .size(11.0);
                             let mut btn = egui::Button::new(text)
-                                .fill(egui::Color32::from_rgb(55, 45, 70))
+                                .fill(super::theme::RAISED)
                                 .min_size([84.0, 40.0].into());
                             if running {
                                 btn = btn.stroke(egui::Stroke::new(
                                     2.0,
-                                    egui::Color32::from_rgb(250, 165, 60),
+                                    super::theme::ACCENT_SOFT,
                                 ));
                             }
                             let resp = if drag_mode {
@@ -648,7 +648,7 @@ impl App {
                         let (root_rect, root_dropped) = ui
                             .dnd_drop_zone::<usize, _>(egui::Frame::none(), |ui| {
                                 if dragging_seq {
-                                    ui.weak("⬇ drop here for (root)");
+                                    ui.weak("drop here for (root)");
                                 }
                                 ui.horizontal_wrapped(|ui| {
                                     for (i, s) in self.seqs.iter().enumerate() {
@@ -678,7 +678,7 @@ impl App {
                             do_seq_move = Some((*dropped, String::new()));
                         }
                         for folder in self.seq_folders.clone() {
-                            let head = egui::CollapsingHeader::new(format!("📁 {folder}"))
+                            let head = egui::CollapsingHeader::new(folder.to_string())
                                 .default_open(false)
                                 .show(ui, |ui| {
                                     ui.horizontal_wrapped(|ui| {
@@ -768,7 +768,7 @@ impl App {
                                 egui::RichText::new(format!(
                                     "{}{}\n{} ch",
                                     p.name,
-                                    if in_cycle { " 🔁" } else { "" },
+                                    if in_cycle { " *" } else { "" },
                                     p.values.len()
                                 ))
                                     .color(text_col)
@@ -810,7 +810,7 @@ impl App {
                                     .button(if in_cycle {
                                         "Remove from cycle"
                                     } else {
-                                        "🔁 Add to cycle"
+                                        "Add to cycle"
                                     })
                                     .clicked()
                                 {

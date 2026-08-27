@@ -4,6 +4,8 @@ A native, all-in-one DMX fixture visualizer and live lighting controller built i
 
 DMXpress is intended to make better-than-average light shows approachable without requiring a full-size professional console. It combines fixture patching, programming, reusable looks, effects, cue playback, output, and 3D visualization in one desktop application.
 
+[View releases on GitHub](https://github.com/michaelmandich/DMXpress/releases)
+
 > **Project status:** DMXpress is under active development. Interfaces, file formats, and workflows may change.
 
 ## Showcase
@@ -37,6 +39,16 @@ The same rig in motion with two phasers active: an intensity phaser and a larger
 DMXpress currently supports two contiguous DMX universes and sends Art-Net output at approximately 40 frames per second.
 
 ## Getting Started
+
+### Download
+
+Prebuilt downloads are available from [GitHub Releases](https://github.com/michaelmandich/DMXpress/releases/latest). No Rust toolchain is required.
+
+- **Windows:** [download the standalone executable](https://github.com/michaelmandich/DMXpress/releases/latest/download/DMXpress-windows-x86_64.exe). It includes the Microsoft runtime and built-in profiles, so it needs no installer, Rust installation, or companion files. If SmartScreen appears on first launch, click **More info**, then **Run anyway** — the executable is not code-signed yet.
+- **macOS:** universal app for Apple Silicon and Intel. The app is not notarized yet: if macOS blocks the first launch, click **Done**, then open **System Settings > Privacy & Security**, scroll to Security, and click **Open Anyway**. On older macOS versions, right-click the app and choose **Open** instead.
+- **Linux:** [download the x86_64 archive](https://github.com/michaelmandich/DMXpress/releases/latest/download/DMXpress-linux-x86_64.tar.gz).
+
+When launched outside a show directory, DMXpress stores show data in a per-user folder (`%APPDATA%\DMXpress` on Windows, `~/Library/Application Support/DMXpress` on macOS) and seeds it with the sample rigs and stage setups on first run.
 
 ### Requirements
 

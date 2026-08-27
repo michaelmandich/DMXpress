@@ -174,7 +174,7 @@ impl App {
         super::floating_panel(
             ctx,
             "transition",
-            "⏱ Transition",
+            "Transition",
             &mut open,
             &mut popped,
             [340.0, 320.0],
@@ -306,7 +306,7 @@ impl App {
         super::floating_panel(
             ctx,
             "oscillator",
-            "🌊 Oscillator",
+            "Oscillator",
             &mut open,
             &mut popped,
             [320.0, 280.0],
@@ -341,7 +341,7 @@ impl App {
                             ui.add(egui::Slider::new(&mut live.speed, 0.0..=1.0));
                             ui.end_row();
                         });
-                    if ui.button("⏹ Stop all").clicked() {
+                    if ui.button("Stop all").clicked() {
                         // Freeze the current animated output as a static look.
                         let frozen = self.live.render();
                         self.live = Look::from_frame(frozen);
@@ -502,11 +502,11 @@ impl App {
     }
 
     fn custom_waveforms_ui(&mut self, ui: &mut egui::Ui) {
-        egui::CollapsingHeader::new("✦ Custom waveforms")
+        egui::CollapsingHeader::new("Custom waveforms")
             .default_open(false)
             .show(ui, |ui| {
                 ui.horizontal_wrapped(|ui| {
-                    if ui.button("＋ New").clicked() {
+                    if ui.button("New").clicked() {
                         let id = self.custom_waveforms.iter().map(|w| w.id).max().unwrap_or(0) + 1;
                         self.waveform_edit = CustomWaveform {
                             id,
@@ -580,12 +580,12 @@ impl App {
                     let x = egui::lerp(rect.x_range(), k as f32 / 4.0);
                     painter.line_segment(
                         [egui::pos2(x, rect.top()), egui::pos2(x, rect.bottom())],
-                        egui::Stroke::new(1.0, egui::Color32::from_gray(35)),
+                        egui::Stroke::new(1.0, super::theme::EDGE),
                     );
                 }
                 painter.line_segment(
                     [egui::pos2(rect.left(), rect.center().y), egui::pos2(rect.right(), rect.center().y)],
-                    egui::Stroke::new(1.5, egui::Color32::from_gray(85)),
+                    egui::Stroke::new(1.5, super::theme::TEXT_DIM),
                 );
                 let to_screen = |x: f32, y: f32| {
                     egui::pos2(
@@ -676,7 +676,7 @@ impl App {
                         }
                     }
                     ui.separator();
-                    if ui.button("＋ Add break here").clicked() {
+                    if ui.button("Add break here").clicked() {
                         let y = custom_wave(x, &self.waveform_edit);
                         self.waveform_edit.points.push(WavePoint {
                             x: x.clamp(0.01, 0.99),

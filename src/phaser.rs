@@ -173,7 +173,7 @@ pub struct Phaser {
     pub mode: PhaserMode,
     /// Fixtures this phaser falls back to when nothing is selected
     /// (`display@from` keys). Recorded from the selection when the phaser is
-    /// stored; 🔗 in the tile menu re-binds it. A live selection always wins.
+    /// stored; Re-bind in the tile menu re-binds it. A live selection always wins.
     #[serde(default)]
     pub fixtures: Vec<String>,
     /// Pool-tile colour (bright when running, darkened when idle).

@@ -97,7 +97,7 @@ impl App {
                     ui.label("Count:");
                     ui.add(egui::DragValue::new(&mut self.patch_count).range(1..=32));
                 });
-                if ui.button("➕ Add").clicked() {
+                if ui.button("Add").clicked() {
                     let span = profile.channel_count() as u16;
                     let base_name = if self.patch_name.trim().is_empty() {
                         profile.name.to_string()
@@ -139,7 +139,7 @@ impl App {
                 let mut remove: Option<usize> = None;
                 for (i, uf) in self.user_fixtures.iter().enumerate() {
                     ui.horizontal(|ui| {
-                        if ui.button("✖").on_hover_text("Unpatch").clicked() {
+                        if ui.button("x").on_hover_text("Unpatch").clicked() {
                             remove = Some(i);
                         }
                         let span = profiles::find(&uf.profile)
@@ -173,7 +173,7 @@ impl App {
                         any = true;
                         ui.horizontal(|ui| {
                             if ui
-                                .button("✖")
+                                .button("x")
                                 .on_hover_text("Remove from the rig (restorable below)")
                                 .clicked()
                             {
@@ -198,7 +198,7 @@ impl App {
                         let mut restore: Option<usize> = None;
                         for (i, key) in self.excluded_fixtures.iter().enumerate() {
                             ui.horizontal(|ui| {
-                                if ui.button("↩").on_hover_text("Restore").clicked() {
+                                if ui.button("Restore").clicked() {
                                     restore = Some(i);
                                 }
                                 ui.small(key.as_str());
@@ -210,7 +210,7 @@ impl App {
                             self.log.push(format!("Restored ShowBuddy fixture '{key}'"));
                             changed = true;
                         }
-                        if ui.button("↩ Restore all").clicked() {
+                        if ui.button("Restore all").clicked() {
                             self.excluded_fixtures.clear();
                             self.log.push("Restored all ShowBuddy fixtures".into());
                             changed = true;
@@ -254,7 +254,7 @@ impl App {
                 );
                 ui.add_space(4.0);
                 if ui
-                    .button("🆕 New show…")
+                    .button("New show…")
                     .on_hover_text(
                         "Clear groups, palettes, phasers, stacks and views to \
                          build a fresh show. Save a configuration first!",
@@ -270,7 +270,7 @@ impl App {
                             .hint_text("configuration name")
                             .desired_width(180.0),
                     );
-                    if ui.button("💾 Save").clicked() && !self.config_name.trim().is_empty() {
+                    if ui.button("Save").clicked() && !self.config_name.trim().is_empty() {
                         let name = self.config_name.trim().to_string();
                         if config::save(&name, &self.snapshot_configuration()) {
                             self.log.push(format!("Saved configuration '{name}'"));
@@ -288,7 +288,7 @@ impl App {
                 }
                 for name in names {
                     ui.horizontal(|ui| {
-                        if ui.button("📂 Load").clicked() {
+                        if ui.button("Load").clicked() {
                             match config::load(&name) {
                                 Some(cfg) => {
                                     self.apply_configuration(cfg);
@@ -299,7 +299,7 @@ impl App {
                                     .push(format!("Failed to load configuration '{name}'")),
                             }
                         }
-                        if ui.button("🗑").on_hover_text("Delete").clicked() {
+                        if ui.button("Delete").clicked() {
                             self.confirm_delete_config = Some(name.clone());
                         }
                         ui.label(&name);

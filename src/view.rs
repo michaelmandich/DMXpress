@@ -25,6 +25,12 @@ pub struct View {
     pub transition: bool,
     pub chases: bool,
     pub groups: bool,
+    #[serde(default)]
+    pub orders: bool,
+    #[serde(default)]
+    pub scenes: bool,
+    #[serde(default)]
+    pub audio: bool,
     pub palettes: bool,
     pub phasers: bool,
     pub stacks: bool,

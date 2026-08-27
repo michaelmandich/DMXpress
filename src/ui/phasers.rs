@@ -6,7 +6,7 @@ use eframe::egui;
 
 use std::collections::HashSet;
 
-use super::{apply_zoom, zoom_controls};
+use super::{apply_zoom, theme, zoom_controls};
 use crate::app::{App, Ramp};
 use crate::group::GroupMode;
 use crate::net;
@@ -14,6 +14,75 @@ use crate::oscillator::{subdiv_label, Osc, SPEED_CHOICES};
 use crate::palette::Feature;
 use crate::phaser::{self, spread_phase, ChannelFilter, ComponentMode, Phaser, PhaserMode};
 use crate::showbuddy::{Band, Role};
+
+/// The "one light or many" row inside the shared-motion frame: how the current
+/// selection breaks into effect units, and a switch to fold the groups it
+/// covers into single super-fixtures.
+fn group_unit_row(
+    ui: &mut egui::Ui,
+    set_mode: &mut Option<GroupMode>,
+    units: usize,
+    order: Option<&str>,
+    covered: &[(String, GroupMode)],
+) {
+    ui.horizontal_wrapped(|ui| {
+        ui.label("Effect units");
+        theme::pill(ui, &units.to_string(), theme::ACCENT_SOFT);
+        ui.label("along");
+        match order {
+            Some(name) => {
+                theme::pill(ui, name, theme::ACCENT_SOFT);
+            }
+            None => {
+                theme::pill(ui, "patch order", theme::TEXT_DIM);
+            }
+        }
+        ui.weak("— pick a route in the Orders window.");
+    });
+    if covered.is_empty() {
+        theme::hint(
+            ui,
+            "Select every light of a group to fold it into one unit from here.",
+        );
+        return;
+    }
+    let as_fixture = covered
+        .iter()
+        .filter(|(_, m)| *m == GroupMode::AsFixture)
+        .count();
+    ui.horizontal_wrapped(|ui| {
+        for (name, mode) in covered {
+            let on = *mode == GroupMode::AsFixture;
+            theme::pill(
+                ui,
+                name,
+                if on { theme::ACCENT_SOFT } else { theme::TEXT_DIM },
+            );
+        }
+    });
+    ui.horizontal_wrapped(|ui| {
+        if ui
+            .add_enabled(
+                as_fixture < covered.len(),
+                egui::Button::new("Fold into one light"),
+            )
+            .on_hover_text(
+                "The whole group takes a single phase slot and moves together, \
+                 and selecting any one of its lights selects all of them",
+            )
+            .clicked()
+        {
+            *set_mode = Some(GroupMode::AsFixture);
+        }
+        if ui
+            .add_enabled(as_fixture > 0, egui::Button::new("Back to individual"))
+            .on_hover_text("Every light in the group gets its own phase again")
+            .clicked()
+        {
+            *set_mode = Some(GroupMode::Individual);
+        }
+    });
+}
 
 impl App {
     /// Arm the phaser's oscillators across every selected fixture's channels of
@@ -30,7 +99,7 @@ impl App {
         }
         // Selection first: applying with fixtures selected targets them.
         // With nothing selected the phaser falls back to the fixtures it was
-        // created with (recorded at store time, re-bindable via 🔗).
+        // created with (recorded at store time, re-bindable from the tile menu).
         let sel = self.stage.selected_fixtures();
         let fixtures: Vec<usize> = if !sel.is_empty() {
             sel
@@ -59,24 +128,7 @@ impl App {
         // Build effect units. Selected groups marked "One fixture" become a
         // single phase slot; all their members receive that slot's phase.
         // Remaining fixtures are one slot each.
-        let selected: HashSet<usize> = fixtures.iter().copied().collect();
-        let mut claimed: HashSet<usize> = HashSet::new();
-        let mut units: Vec<Vec<usize>> = Vec::new();
-        for group in &self.groups {
-            if group.mode == GroupMode::AsFixture
-                && !group.fixtures.is_empty()
-                && group.fixtures.iter().all(|fi| selected.contains(fi))
-                && group.fixtures.iter().all(|fi| !claimed.contains(fi))
-            {
-                claimed.extend(group.fixtures.iter().copied());
-                units.push(group.fixtures.clone());
-            }
-        }
-        for &fi in &fixtures {
-            if claimed.insert(fi) {
-                units.push(vec![fi]);
-            }
-        }
+        let units = self.effect_units(&fixtures);
         let mut fixture_phase = std::collections::HashMap::new();
         for (k, unit) in units.iter().enumerate() {
             let phase = spread_phase(k, units.len(), ph.spread, ph.wings as usize);
@@ -491,13 +543,14 @@ impl App {
         let mut do_bind: Option<usize> = None;
         let mut do_unbind: Option<usize> = None;
         let mut do_master_beat: Option<usize> = None;
+        let mut set_groups_mode: Option<GroupMode> = None;
         let edit_before = self.phaser_edit.clone();
         let name_before = self.phaser_name.clone();
 
         super::floating_panel(
             ctx,
             "phasers",
-            "🌈 Phasers",
+            "Phasers",
             &mut open,
             &mut popped,
             [680.0, 760.0],
@@ -507,6 +560,21 @@ impl App {
                 apply_zoom(ui, self.zoom.phasers);
 
                 let sel = self.stage.selected_fixtures();
+                // How the selection breaks into effect units, and which groups
+                // it covers entirely (only those can be switched wholesale).
+                let unit_count = self.effect_units(&sel).len();
+                let order_name = self
+                    .active_order
+                    .and_then(|i| self.orders.get(i))
+                    .map(|o| o.name.clone());
+                let covered_groups: Vec<(String, GroupMode)> = self
+                    .groups
+                    .iter()
+                    .filter(|g| {
+                        !g.fixtures.is_empty() && g.fixtures.iter().all(|fi| sel.contains(fi))
+                    })
+                    .map(|g| (g.name.clone(), g.mode))
+                    .collect();
                 // Channel-type chips: the same grouping as the collective
                 // channel list — built from the selected fixtures (or the
                 // whole patch when nothing is selected).
@@ -585,12 +653,12 @@ impl App {
                                     .on_hover_text("Phaser card colour");
                             });
                         });
-                        ui.label(egui::RichText::new("Common channels").strong().color(egui::Color32::from_gray(220)));
+                        ui.label(egui::RichText::new("Common channels").strong().color(theme::TEXT));
                         ui.horizontal_wrapped(|ui| {
                             for (key, label) in &easy {
                                 let on = e.components.iter().any(|c| c.target.eq_ignore_ascii_case(key))
                                     || (e.components.is_empty() && e.targets.iter().any(|t| t.eq_ignore_ascii_case(key)));
-                                let text = if on { format!("✓ {label}") } else { format!("＋ {label}") };
+                                let text = if on { format!("on: {label}") } else { format!("add {label}") };
                                 if ui.add_sized([92.0, 30.0], egui::Button::new(text).selected(on)).clicked() {
                                     if on {
                                         e.components.retain(|c| !c.target.eq_ignore_ascii_case(key));
@@ -611,7 +679,7 @@ impl App {
                                 }
                             }
                             egui::ComboBox::from_id_salt("phaser_add_special")
-                                .selected_text("＋ Add special…")
+                                .selected_text("Add special…")
                                 .show_ui(ui, |ui| {
                                     for (key, label) in &special {
                                         let on = e.components.iter().any(|c| c.target.eq_ignore_ascii_case(key));
@@ -647,8 +715,8 @@ impl App {
                 let mut remove_component = None;
                 for (index, component) in e.components.iter_mut().enumerate() {
                     egui::Frame::none()
-                        .fill(egui::Color32::from_rgb(28, 30, 39))
-                        .stroke(egui::Stroke::new(1.0, egui::Color32::from_rgb(62, 67, 86)))
+                        .fill(theme::RAISED)
+                        .stroke(egui::Stroke::new(1.0, theme::EDGE))
                         .rounding(8.0)
                         .inner_margin(10.0)
                         .show(ui, |ui| {
@@ -667,7 +735,7 @@ impl App {
                                         }
                                     });
                                 ui.with_layout(egui::Layout::right_to_left(egui::Align::Center), |ui| {
-                                    if ui.small_button("✕").on_hover_text("Remove component").clicked() {
+                                    if ui.small_button("x").on_hover_text("Remove component").clicked() {
                                         remove_component = Some(index);
                                     }
                                 });
@@ -736,12 +804,13 @@ impl App {
 
                 // Shared motion controls fan all animated components across fixtures.
                 egui::Frame::none()
-                    .fill(egui::Color32::from_rgb(23, 25, 32))
+                    .fill(theme::WELL)
+                    .stroke(egui::Stroke::new(1.0, theme::EDGE))
                     .rounding(7.0)
                     .inner_margin(8.0)
                     .show(ui, |ui| {
                         ui.horizontal_wrapped(|ui| {
-                            ui.checkbox(&mut e.master_beat, "♪ Master beat");
+                            ui.checkbox(&mut e.master_beat, "Master beat");
                             ui.label("Spread");
                             ui.add_sized([120.0, 20.0], egui::Slider::new(&mut e.spread, 0.0..=2.0));
                             ui.label("Wings");
@@ -753,6 +822,14 @@ impl App {
                                 ui.selectable_value(&mut e.mode, PhaserMode::Add, "Flat add");
                             }
                         });
+                        ui.add_space(4.0);
+                        group_unit_row(
+                            ui,
+                            &mut set_groups_mode,
+                            unit_count,
+                            order_name.as_deref(),
+                            &covered_groups,
+                        );
                     });
 
                 ui.separator();
@@ -760,7 +837,7 @@ impl App {
                     let can_apply =
                         !sel.is_empty() || !self.phaser_edit.fixtures.is_empty();
                     if ui
-                        .add_enabled(can_apply, egui::Button::new("▶ Apply"))
+                        .add_enabled(can_apply, egui::Button::new("Apply"))
                         .on_hover_text(
                             "Apply to the selection — or, with nothing selected, \
                              to the fixtures the phaser was stored with",
@@ -816,11 +893,11 @@ impl App {
                             .hint_text("name…")
                             .desired_width(120.0),
                     );
-                    if ui.button("＋ Store").clicked() {
+                    if ui.button("Store").clicked() {
                         do_store = true;
                     }
                     if ui
-                        .add_enabled(!sel.is_empty(), egui::Button::new("📌 Store pose"))
+                        .add_enabled(!sel.is_empty(), egui::Button::new("Store pose"))
                         .on_hover_text(
                             "Save each selected light's current pan/tilt as a static \
                              position tile — clicking it stops movement and recalls the pose",
@@ -830,7 +907,7 @@ impl App {
                         do_store_pose = true;
                     }
                     if ui
-                        .add_enabled(!sel.is_empty(), egui::Button::new("🔒 Store hold"))
+                        .add_enabled(!sel.is_empty(), egui::Button::new("Store hold"))
                         .on_hover_text(
                             "Save the selected fixtures' non-zero channel values as an \
                              always-on tile — it overrides presets, blackouts and the \
@@ -841,7 +918,7 @@ impl App {
                         do_store_hold = true;
                     }
                     if ui
-                        .add_enabled(!sel.is_empty(), egui::Button::new("🔐 Lock fixtures"))
+                        .add_enabled(!sel.is_empty(), egui::Button::new("Lock fixtures"))
                         .on_hover_text(
                             "Freeze the selected fixtures exactly as they look right \
                              now — every channel forced (zeros included) until the \
@@ -855,7 +932,7 @@ impl App {
 
                 // Gobo / prism / effect wheels: drive the selection's slot
                 // channels directly and store combos as FX tiles.
-                egui::CollapsingHeader::new("🎭 Gobos & effects")
+                egui::CollapsingHeader::new("Gobos & effects")
                     .default_open(false)
                     .show(ui, |ui| {
                         if sel.is_empty() {
@@ -945,7 +1022,7 @@ impl App {
                             }
                         }
                         if ui
-                            .button("＋ Store FX tile")
+                            .button("Store FX tile")
                             .on_hover_text(
                                 "Save the selection's gobo/prism/effect values as a \
                                  tile (named from the field above) — e.g. one per \
@@ -959,7 +1036,7 @@ impl App {
                 ui.separator();
                 ui.horizontal(|ui| {
                     if ui
-                        .selectable_label(self.phaser_edit_mode, "✏ Edit mode")
+                        .selectable_label(self.phaser_edit_mode, "Edit mode")
                         .on_hover_text(
                             "Click tiles to load them into the editor and tweak them \
                              in place — without applying or stopping anything",
@@ -988,8 +1065,8 @@ impl App {
 
                 egui::ScrollArea::vertical().show(ui, |ui| {
                     ui.columns(2, |cols| {
-                        cols[0].strong("🔆 Intensity & color");
-                        cols[1].strong("✛ Movement");
+                        cols[0].strong("Intensity & color");
+                        cols[1].strong("Movement");
                         let (mut left, mut right) = (Vec::new(), Vec::new());
                         for (i, ph) in self.phasers.iter().enumerate() {
                             if ph.is_movement() {
@@ -1050,17 +1127,17 @@ impl App {
                                             s.push('…');
                                         }
                                         if ph.mode == PhaserMode::Add {
-                                            format!("＋{s}")
+                                            format!("+{s}")
                                         } else {
                                             s
                                         }
                                     };
-                                    let bound = if ph.fixtures.is_empty() { "" } else { "🔗" };
-                                    let beat = if ph.master_beat { "♪" } else { "" };
+                                    let bound = if ph.fixtures.is_empty() { "" } else { "bound" };
+                                    let beat = if ph.master_beat { "beat" } else { "" };
                                     let label = egui::RichText::new(format!(
                                         "{}\n{}{}{}{}",
                                         ph.name,
-                                        if on { "▶ " } else { "" },
+                                        if on { "> " } else { "" },
                                         bound,
                                         beat,
                                         sub
@@ -1097,7 +1174,7 @@ impl App {
                                     }
                                     resp.context_menu(|ui| {
                                         if ui
-                                            .button("✏ Edit")
+                                            .button("Edit")
                                             .on_hover_text(
                                                 "Load into the editor and tweak in place — \
                                                  without applying or stopping it",
@@ -1130,7 +1207,7 @@ impl App {
                                         if ui
                                             .add_enabled(
                                                 !sel.is_empty(),
-                                                egui::Button::new("🔗 Bind to selection"),
+                                                egui::Button::new("Bind to selection"),
                                             )
                                             .on_hover_text(
                                                 "Remember the selected fixtures: with nothing \
@@ -1178,6 +1255,19 @@ impl App {
             self.popped_out.insert("phasers");
         } else {
             self.popped_out.remove("phasers");
+        }
+
+        if let Some(mode) = set_groups_mode {
+            let n = self.set_covered_groups_mode(mode);
+            if n > 0 {
+                self.log.push(format!(
+                    "{n} group(s) now behave as {}",
+                    match mode {
+                        GroupMode::AsFixture => "one light",
+                        GroupMode::Individual => "individual lights",
+                    }
+                ));
+            }
         }
 
         // Edit mode: write editor changes straight back into the selected

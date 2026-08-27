@@ -32,7 +32,7 @@ impl App {
         super::floating_panel(
             ctx,
             "dmx_test",
-            "🧪 DMX Monitor",
+            "DMX Monitor",
             &mut open,
             &mut popped,
             [380.0, 460.0],
@@ -50,7 +50,7 @@ impl App {
                     } else {
                         ui.colored_label(
                             Color32::from_rgb(235, 160, 70),
-                            format!("⚠ {} override(s) forcing output", overrides.len()),
+                            format!("{} override(s) forcing output", overrides.len()),
                         );
                         if ui.button("Clear all").clicked() {
                             overrides.clear();
@@ -75,7 +75,7 @@ impl App {
                                     egui::vec2(110.0, 11.0),
                                     Sense::hover(),
                                 );
-                                ui.painter().rect_filled(rect, 2.0, Color32::from_gray(28));
+                                ui.painter().rect_filled(rect, 2.0, crate::ui::theme::WELL);
                                 if v > 0 {
                                     let w = rect.width() * v as f32 / 255.0;
                                     let col = if overrides.contains_key(&a) {

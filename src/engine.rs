@@ -7,25 +7,63 @@
 
 use crate::net::Frame;
 
+/// How a layer folds into everything beneath it.
+#[derive(Clone, Copy, PartialEq, Eq, Default)]
+pub(crate) enum Blend {
+    /// Crossfade toward this layer's value by its weight — the layer takes
+    /// over the channel outright at full weight (LTP).
+    #[default]
+    Mix,
+    /// Keep whichever is brighter (HTP), so two layers coexist instead of one
+    /// erasing the other.
+    Max,
+    /// Sum onto what is beneath, clamped at full.
+    Add,
+}
+
 /// One contribution to the final output frame: `frame`'s values blended onto
 /// the channels in `weights` (0..1 each — a weight of 1 fully asserts the
 /// channel, lower weights let lower layers show through, e.g. a stack fader).
 pub(crate) struct Layer {
     frame: Frame,
     weights: Vec<(usize, f32)>,
+    blend: Blend,
 }
 
 impl Layer {
     /// A layer that blends `frame` over everything beneath it on the given
     /// channels only.
     pub fn overlay(frame: Frame, weights: Vec<(usize, f32)>) -> Self {
-        Self { frame, weights }
+        Self {
+            frame,
+            weights,
+            blend: Blend::Mix,
+        }
+    }
+
+    /// Fold this layer in with something other than a straight crossfade.
+    pub fn with_blend(mut self, blend: Blend) -> Self {
+        self.blend = blend;
+        self
     }
 
     /// Merge this layer onto `out`, which already holds everything beneath it.
     fn merge_into(&self, out: &mut Frame) {
         for &(i, w) in &self.weights {
-            out.blend_channel(i, self.frame[i], w);
+            if i >= out.len() {
+                continue;
+            }
+            match self.blend {
+                Blend::Mix => out.blend_channel(i, self.frame[i], w),
+                Blend::Max => {
+                    let v = (self.frame[i] as f32 * w.clamp(0.0, 1.0)).round() as u8;
+                    out[i] = out[i].max(v);
+                }
+                Blend::Add => {
+                    let v = (self.frame[i] as f32 * w.clamp(0.0, 1.0)).round() as u8;
+                    out[i] = out[i].saturating_add(v);
+                }
+            }
         }
     }
 }

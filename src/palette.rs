@@ -59,14 +59,15 @@ impl Feature {
         }
     }
 
-    pub fn icon(self) -> &'static str {
+    /// Compact form for tight controls; always paired with a tooltip.
+    pub fn short(self) -> &'static str {
         match self {
-            Feature::Dimmer => "🔆",
-            Feature::Position => "✛",
-            Feature::Color => "🎨",
-            Feature::Beam => "🔦",
-            Feature::Focus => "🔍",
-            Feature::Control => "⚙",
+            Feature::Dimmer => "Dim",
+            Feature::Position => "Pos",
+            Feature::Color => "Col",
+            Feature::Beam => "Beam",
+            Feature::Focus => "Foc",
+            Feature::Control => "Ctrl",
         }
     }
 }

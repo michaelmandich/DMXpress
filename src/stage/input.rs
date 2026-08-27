@@ -2,7 +2,7 @@
 //! selection, dragging (move / tower / pan / gizmo / marquee), snap preview,
 //! and the edit shortcuts. Delegates all rendering to [`StageView::draw_scene`].
 
-use eframe::egui::{self, Color32, Pos2, Rect, Sense};
+use eframe::egui::{self, Pos2, Rect, Sense};
 
 use super::gizmo::{Drag, GizmoPart};
 use super::layout::TrussKind;
@@ -47,7 +47,7 @@ impl StageView {
             Sense::click_and_drag(),
         );
         let painter = ui.painter_at(rect);
-        painter.rect_filled(rect, 4.0, Color32::from_gray(10));
+        painter.rect_filled(rect, 4.0, crate::ui::BACKDROP);
 
         let mods = ui.input(|i| i.modifiers);
 
