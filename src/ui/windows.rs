@@ -148,6 +148,9 @@ impl App {
                     ui.end_row();
                 });
                 ui.weak("Pitch -90 = down, 90 = up, 0 = toward audience.");
+                ui.add_space(10.0);
+                ui.separator();
+                ui.weak(format!("DMXpress v{}", env!("CARGO_PKG_VERSION")));
             },
         );
         if changed {
