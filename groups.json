@@ -1,1 +1,170 @@
-[]
+[
+  {
+    "name": "top",
+    "fixtures": [
+      0,
+      1,
+      6,
+      7,
+      12,
+      13
+    ],
+    "mode": "Individual"
+  },
+  {
+    "name": "bottom",
+    "fixtures": [
+      2,
+      3,
+      4,
+      5,
+      8,
+      9,
+      10,
+      11
+    ],
+    "mode": "Individual"
+  },
+  {
+    "name": "bee eyes",
+    "fixtures": [
+      3,
+      5,
+      8,
+      10
+    ],
+    "mode": "Individual"
+  },
+  {
+    "name": "mavericks",
+    "fixtures": [
+      1,
+      4,
+      9,
+      12
+    ],
+    "mode": "Individual"
+  },
+  {
+    "name": "intimidator spots",
+    "fixtures": [
+      0,
+      6,
+      7,
+      13
+    ],
+    "mode": "Individual"
+  },
+  {
+    "name": "Trio's",
+    "fixtures": [
+      2,
+      11
+    ],
+    "mode": "Individual"
+  },
+  {
+    "name": "BACK PARS",
+    "fixtures": [
+      14,
+      15,
+      16,
+      17,
+      18,
+      19,
+      20
+    ],
+    "mode": "Individual"
+  },
+  {
+    "name": "VERY TOP PARS",
+    "fixtures": [
+      21,
+      22,
+      23,
+      24,
+      25,
+      26,
+      27
+    ],
+    "mode": "Individual"
+  },
+  {
+    "name": "right side pars",
+    "fixtures": [
+      34,
+      35,
+      36,
+      37,
+      38,
+      39
+    ],
+    "mode": "Individual"
+  },
+  {
+    "name": "Left side pars",
+    "fixtures": [
+      28,
+      29,
+      30,
+      31,
+      32,
+      33
+    ],
+    "mode": "Individual"
+  },
+  {
+    "name": "top front pars",
+    "fixtures": [
+      46,
+      47,
+      48,
+      49,
+      50,
+      51,
+      52,
+      53
+    ],
+    "mode": "Individual"
+  },
+  {
+    "name": "All pars",
+    "fixtures": [
+      14,
+      15,
+      16,
+      17,
+      18,
+      19,
+      20,
+      21,
+      22,
+      23,
+      24,
+      25,
+      26,
+      27,
+      28,
+      29,
+      30,
+      31,
+      32,
+      33,
+      34,
+      35,
+      36,
+      37,
+      38,
+      39,
+      46,
+      47,
+      48,
+      49,
+      50,
+      51,
+      52,
+      53
+    ],
+    "mode": "Individual"
+  }
+]

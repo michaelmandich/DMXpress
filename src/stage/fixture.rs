@@ -97,9 +97,14 @@ pub(crate) struct Live {
 }
 
 pub(crate) fn live_state(f: &Fixture, buf: &[u8; crate::net::DMX_SLOTS]) -> Live {
-    let (mut r, mut g, mut b, mut w) = (0f32, 0f32, 0f32, 0f32);
+    // Additive emitters (RGB, amber, UV) accumulate into `add`; subtractive
+    // CMY flags accumulate into `cmy` and are applied as a filter at the end,
+    // so a CMY moving head tints its white engine the way the real one does.
+    let mut add = [0f32; 3];
+    let mut cmy = [0f32; 3];
+    let mut w = 0f32;
     let mut dim: Option<f32> = None;
-    let mut has_rgb = false;
+    let mut has_emitter = false;
     let (mut pan_raw, mut tilt_raw) = (0u16, 0u16);
     let (mut pan_set, mut tilt_set) = (false, false);
     let mut zoom = 0.5f32;
@@ -114,18 +119,6 @@ pub(crate) fn live_state(f: &Fixture, buf: &[u8; crate::net::DMX_SLOTS]) -> Live
         let v8 = buf[addr - 1];
         let v = v8 as f32 / 255.0;
         match ch.role() {
-            Role::Red => {
-                r = r.max(v);
-                has_rgb = true;
-            }
-            Role::Green => {
-                g = g.max(v);
-                has_rgb = true;
-            }
-            Role::Blue => {
-                b = b.max(v);
-                has_rgb = true;
-            }
             Role::White => w = w.max(v),
             Role::Dimmer => {
                 // Dimmers compressed into a sub-band on the wire (strobe
@@ -158,11 +151,25 @@ pub(crate) fn live_state(f: &Fixture, buf: &[u8; crate::net::DMX_SLOTS]) -> Live
             }
             Role::TiltFine => tilt_raw = (tilt_raw & 0xFF00) | v8 as u16,
             Role::Zoom => zoom = v,
-            Role::Strobe | Role::Speed | Role::Other => {}
+            // Everything else either adds light of some hue, subtracts it, or
+            // doesn't touch colour at all (strobe, gobo, focus, speed…).
+            role => {
+                if let Some(e) = role.emitter_rgb() {
+                    for k in 0..3 {
+                        add[k] = add[k].max(v * e[k]);
+                    }
+                    has_emitter = true;
+                } else if let Some(sub) = role.subtractive_rgb() {
+                    for k in 0..3 {
+                        cmy[k] = cmy[k].max(v * sub[k]);
+                    }
+                }
+            }
         }
     }
 
-    let color = if !has_rgb {
+    let filter = [1.0 - cmy[0], 1.0 - cmy[1], 1.0 - cmy[2]];
+    let color = if !has_emitter {
         let lvl = if w > 0.0 {
             w * dim.unwrap_or(1.0)
         } else {
@@ -170,16 +177,16 @@ pub(crate) fn live_state(f: &Fixture, buf: &[u8; crate::net::DMX_SLOTS]) -> Live
         };
         let tint = wheel.unwrap_or(Color32::from_rgb(255, 255, 217));
         Color32::from_rgb(
-            (tint.r() as f32 * lvl) as u8,
-            (tint.g() as f32 * lvl) as u8,
-            (tint.b() as f32 * lvl) as u8,
+            (tint.r() as f32 * lvl * filter[0]) as u8,
+            (tint.g() as f32 * lvl * filter[1]) as u8,
+            (tint.b() as f32 * lvl * filter[2]) as u8,
         )
     } else {
         let dim = dim.unwrap_or(1.0);
         Color32::from_rgb(
-            ((r + w).min(1.0) * dim * 255.0) as u8,
-            ((g + w).min(1.0) * dim * 255.0) as u8,
-            ((b + w).min(1.0) * dim * 255.0) as u8,
+            ((add[0] + w).min(1.0) * filter[0] * dim * 255.0) as u8,
+            ((add[1] + w).min(1.0) * filter[1] * dim * 255.0) as u8,
+            ((add[2] + w).min(1.0) * filter[2] * dim * 255.0) as u8,
         )
     };
     let brightness = color.r().max(color.g()).max(color.b()) as f32 / 255.0;

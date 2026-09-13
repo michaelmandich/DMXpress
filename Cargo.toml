@@ -21,6 +21,10 @@ image = { version = "0.25", default-features = false, features = ["png"] }
 cpal = "0.15"
 realfft = "3"
 dirs = "5"
+# Elgato Stream Deck hardware control surface (Palettes tab).
+elgato-streamdeck = "0.13"
+# Anti-aliased text on the Stream Deck keys/strip (same crate epaint uses).
+ab_glyph = "0.2"
 
 [profile.release]
 opt-level = 3

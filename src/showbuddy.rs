@@ -23,22 +23,37 @@ pub const CACHE_FILE: &str = "showbuddy_cache.json";
 /// the machine ShowBuddy is installed on.
 pub const PRESET_CACHE_FILE: &str = "showbuddy_presets.json";
 
-/// What a channel most likely controls, inferred from its name/type.
-#[derive(Debug, Clone, Copy, PartialEq, Eq, Hash)]
+/// What a channel most likely controls. Imported library fixtures carry this
+/// explicitly (see [`Channel::role`]); ShowBuddy fixtures and hand-written
+/// profiles have it inferred from the channel's name.
+#[derive(Debug, Clone, Copy, PartialEq, Eq, Hash, Serialize, Deserialize)]
 pub enum Role {
     Dimmer,
     Red,
     Green,
     Blue,
     White,
+    Amber,
+    /// UV / blacklight emitter.
+    Uv,
+    Cyan,
+    Magenta,
+    Yellow,
     /// Color wheel / color-macro slider (non-RGB color control).
     Color,
     Strobe,
+    /// Mechanical shutter, separate from a strobe rate.
+    Shutter,
     Pan,
     PanFine,
     Tilt,
     TiltFine,
     Zoom,
+    Focus,
+    Iris,
+    Gobo,
+    Prism,
+    Frost,
     /// Movement / effect speed.
     Speed,
     Other,
@@ -53,16 +68,51 @@ impl Role {
             Role::Green => "GRN",
             Role::Blue => "BLU",
             Role::White => "WHT",
+            Role::Amber => "AMB",
+            Role::Uv => "UV",
+            Role::Cyan => "CYA",
+            Role::Magenta => "MAG",
+            Role::Yellow => "YEL",
             Role::Color => "COL",
             Role::Strobe => "STRB",
+            Role::Shutter => "SHUT",
             Role::Pan => "PAN",
             Role::PanFine => "PANf",
             Role::Tilt => "TILT",
             Role::TiltFine => "TILTf",
             Role::Zoom => "ZOOM",
+            Role::Focus => "FOC",
+            Role::Iris => "IRIS",
+            Role::Gobo => "GOBO",
+            Role::Prism => "PRSM",
+            Role::Frost => "FRST",
             Role::Speed => "SPD",
             Role::Other => "",
         }
+    }
+
+    /// Roles that emit light of a given hue, and the colour they add to the
+    /// mix. Used by the stage visualiser and by colour-swatch code.
+    pub fn emitter_rgb(self) -> Option<[f32; 3]> {
+        Some(match self {
+            Role::Red => [1.0, 0.0, 0.0],
+            Role::Green => [0.0, 1.0, 0.0],
+            Role::Blue => [0.0, 0.0, 1.0],
+            Role::White => [1.0, 1.0, 1.0],
+            Role::Amber => [1.0, 0.62, 0.0],
+            Role::Uv => [0.42, 0.0, 0.90],
+            _ => return None,
+        })
+    }
+
+    /// Subtractive (CMY) mixing channels, and the hue each one removes.
+    pub fn subtractive_rgb(self) -> Option<[f32; 3]> {
+        Some(match self {
+            Role::Cyan => [1.0, 0.0, 0.0],
+            Role::Magenta => [0.0, 1.0, 0.0],
+            Role::Yellow => [0.0, 0.0, 1.0],
+            _ => return None,
+        })
     }
 }
 
@@ -80,10 +130,21 @@ pub struct Band {
 pub struct Channel {
     pub name: String,
     pub bands: Vec<Band>,
+    /// Set by the fixture library, where the source data says outright what a
+    /// channel does. Absent for ShowBuddy imports and older saves, which fall
+    /// back to guessing from the name.
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub role: Option<Role>,
 }
 
 impl Channel {
+    /// What this channel controls: the library's own answer when it has one,
+    /// otherwise inferred from the name.
     pub fn role(&self) -> Role {
+        self.role.unwrap_or_else(|| self.role_from_name())
+    }
+
+    fn role_from_name(&self) -> Role {
         let n = self.name.to_lowercase();
         // "Pan"/"Pan fine" pairs sometimes share a name and mark fine via the
         // first band label (e.g. `V,0,255,Fine`); "Panf"/"Tiltf" also occur.
@@ -110,6 +171,27 @@ impl Channel {
         if n.contains("zoom") {
             return Role::Zoom;
         }
+        // Beam optics before the colour words: "gobo rotation", "prism spin"
+        // and "iris" would otherwise never be reached, and "frost" must beat
+        // nothing in particular but reads best alongside them.
+        if n.contains("gobo") {
+            return Role::Gobo;
+        }
+        if n.contains("prism") || n.contains("prsm") {
+            return Role::Prism;
+        }
+        if n.contains("iris") {
+            return Role::Iris;
+        }
+        if n.contains("frost") || n.contains("diffus") {
+            return Role::Frost;
+        }
+        if n.contains("focus") {
+            return Role::Focus;
+        }
+        if n.contains("shutter") || n.contains("shut") {
+            return Role::Shutter;
+        }
         if n.contains("red") {
             Role::Red
         } else if n.contains("grn") || n.contains("green") {
@@ -118,6 +200,16 @@ impl Channel {
             Role::Blue
         } else if n.contains("whit") || n.contains("wht") {
             Role::White
+        } else if n.contains("amber") || n.contains("amb") {
+            Role::Amber
+        } else if n.contains("uv") || n.contains("ultra") {
+            Role::Uv
+        } else if n.contains("cyan") {
+            Role::Cyan
+        } else if n.contains("magenta") {
+            Role::Magenta
+        } else if n.contains("yellow") {
+            Role::Yellow
         } else if n.contains("color") || n.contains("colour") || n.contains("clr") {
             Role::Color
         } else if n.contains("dim")
@@ -263,6 +355,7 @@ pub fn load(config: &Path) -> Result<Patch> {
             channels.push(Channel {
                 name: format!("Ch {}", channels.len() + 1),
                 bands: Vec::new(),
+                role: None,
             });
         }
         channels.truncate(span);
@@ -303,6 +396,7 @@ fn parse_fixture_file(path: &Path) -> Result<Vec<Channel>> {
             channels.push(Channel {
                 name: line.to_string(),
                 bands: Vec::new(),
+                role: None,
             });
         }
     }

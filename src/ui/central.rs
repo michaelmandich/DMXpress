@@ -23,6 +23,8 @@ impl App {
                 self.transition_run.as_ref().map(|r| r.progress());
             let chase_head = self.chase_run.as_ref().map(|r| r.head(&self.chase));
             self.chase.active_head = chase_head;
+            self.chase.active_step =
+                self.chase_run.as_ref().map(|r| r.raw_progress(&self.chase));
             let transition = if self.show_transition {
                 Some(&mut self.transition)
             } else {
@@ -30,6 +32,31 @@ impl App {
             };
             let chase = if self.show_chases {
                 Some(&mut self.chase)
+            } else {
+                None
+            };
+            // The figure the phaser being edited would trace, on the lights it
+            // would drive: the current selection, else the ones it's bound to.
+            let trace = if self.show_phasers {
+                let points = self.phaser_edit.path_points(160);
+                (!points.is_empty()).then(|| {
+                    let mut fixtures = self.stage.selected_fixtures();
+                    if fixtures.is_empty() {
+                        fixtures = self
+                            .patch
+                            .fixtures
+                            .iter()
+                            .enumerate()
+                            .filter(|(_, f)| {
+                                self.phaser_edit
+                                    .fixtures
+                                    .contains(&crate::profiles::fixture_key(&f.display, f.from))
+                            })
+                            .map(|(i, _)| i)
+                            .collect();
+                    }
+                    crate::phaser::PhaserTrace { points, fixtures, color: self.phaser_edit.color }
+                })
             } else {
                 None
             };
@@ -41,6 +68,7 @@ impl App {
                 &mut self.settings,
                 transition,
                 chase,
+                trace.as_ref(),
             );
             if let Some(i) = self.stage.last_selected {
                 if self.sel_fixture != Some(i) {
@@ -48,12 +76,35 @@ impl App {
                 }
             }
             ui.separator();
+            let encoder = self.encoder_readout();
+            let encoder_held = self.encoder_layer.len();
+            let mut clear_encoders = false;
             ui.horizontal(|ui| {
                 ui.label("Channel control");
+                if let Some((name, value, n)) = &encoder {
+                    ui.separator();
+                    ui.weak(format!("Knob: {name} = {value} ({n})")).on_hover_text(
+                        "The Stream Deck's programmer knob: twist to nudge this channel \
+                         on every selected light, press to move to the next channel",
+                    );
+                }
+                if encoder_held > 0 {
+                    ui.separator();
+                    ui.label(format!("{encoder_held} encoder ch")).on_hover_text(
+                        "Channels held by the encoder layer — painted over the mix \
+                         until cleared (Clear on the deck, or here)",
+                    );
+                    if ui.small_button("clear").clicked() {
+                        clear_encoders = true;
+                    }
+                }
                 ui.with_layout(egui::Layout::right_to_left(egui::Align::Center), |ui| {
                     zoom_controls(ui, &mut self.zoom.central);
                 });
             });
+            if clear_encoders {
+                self.clear_encoders();
+            }
 
             egui::ScrollArea::vertical()
                 .auto_shrink([false, false])

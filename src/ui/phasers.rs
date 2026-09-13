@@ -12,7 +12,8 @@ use crate::group::GroupMode;
 use crate::net;
 use crate::oscillator::{subdiv_label, Osc, SPEED_CHOICES};
 use crate::palette::Feature;
-use crate::phaser::{self, spread_phase, ChannelFilter, ComponentMode, Phaser, PhaserMode};
+use crate::phaser::{self, spread_phase, ChannelFilter, ComponentMode, PathShape, Phaser, PhaserMode};
+use crate::streamdeck::{KeyIcon, PhaserSlot};
 use crate::showbuddy::{Band, Role};
 
 /// The "one light or many" row inside the shared-motion frame: how the current
@@ -230,20 +231,7 @@ impl App {
                 } else {
                     // A phaser on both axes offsets the tilts a quarter cycle
                     // so pan+tilt trace a circle instead of a diagonal.
-                    let has = |s: &str| {
-                        if ph.components.is_empty() {
-                            ph.targets.iter().any(|t| t.eq_ignore_ascii_case(s))
-                        } else {
-                            ph.components.iter().any(|c| c.target.eq_ignore_ascii_case(s))
-                        }
-                    };
-                    let both_axes = if ph.targets.is_empty() && ph.components.is_empty() {
-                        ph.feature == Feature::Position
-                            && ph.filter == ChannelFilter::All
-                    } else {
-                        (has("PAN") || has("PANf")) && (has("TILT") || has("TILTf"))
-                    };
-                    let extra = if both_axes
+                    let extra = if ph.both_axes()
                         && matches!(role, Role::Tilt | Role::TiltFine)
                     {
                         0.25
@@ -520,6 +508,380 @@ impl App {
         }
     }
 
+    /// Editor for the Stream Deck's Phaser page: a 36-tile grid matching the
+    /// deck's own layout, each tile either empty ("+") or a configured slot
+    /// (a phaser, a colour, and a short symbol). Click a tile to open the
+    /// slot editor below the grid; right-click a filled one to clear it.
+    fn phaser_deck_page_ui(&mut self, ui: &mut egui::Ui) {
+        egui::CollapsingHeader::new("Stream Deck: Phaser page")
+            .default_open(false)
+            .show(ui, |ui| {
+                ui.weak(
+                    "One tile per key on the Phaser page (Mode knob switches the deck \
+                     to it), in pages of 36. The Page knob scrolls pages while the deck \
+                     is in Phaser mode; Select-all, Clear and Tap stay put on every \
+                     page. Click a tile to assign a phaser, colour and symbol; \
+                     right-click a filled tile to clear it.",
+                );
+                let pages = crate::streamdeck::phaser_deck_pages(&self.phaser_deck);
+                self.deck_phaser_page = self.deck_phaser_page.min(pages - 1);
+                let base = self.deck_phaser_page * crate::streamdeck::PHASER_DECK_SLOTS;
+                ui.horizontal(|ui| {
+                    if ui.add_enabled(pages > 1, egui::Button::new("< Prev")).clicked() {
+                        self.step_phaser_deck_page(-1);
+                    }
+                    ui.strong(format!("Page {} / {}", self.deck_phaser_page + 1, pages));
+                    if ui.add_enabled(pages > 1, egui::Button::new("Next >")).clicked() {
+                        self.step_phaser_deck_page(1);
+                    }
+                    if ui
+                        .button("Add page")
+                        .on_hover_text(
+                            "Appends an empty page of 36 slots after the last one and \
+                             jumps to it. Existing pages are left exactly as they are.",
+                        )
+                        .clicked()
+                    {
+                        self.add_phaser_deck_page();
+                    }
+                    let page_empty = self.phaser_deck
+                        [base..base + crate::streamdeck::PHASER_DECK_SLOTS]
+                        .iter()
+                        .all(|s| s.is_none());
+                    if pages > 1
+                        && page_empty
+                        && ui
+                            .button("Remove this page")
+                            .on_hover_text("Only offered while the page is empty")
+                            .clicked()
+                    {
+                        self.remove_phaser_deck_page();
+                    }
+                });
+                // The page bar may have moved us; index the grid off the
+                // page it settled on.
+                let base = self.deck_phaser_page * crate::streamdeck::PHASER_DECK_SLOTS;
+                if ui
+                    .button("Fill rows 1-2 with movement presets")
+                    .on_hover_text(
+                        "Adds Pan (\"back and forth\") and Tilt (\"up and down\") phasers at \
+                         3 speeds x 3 amplitudes each — 18 in all — to the pool if they \
+                         aren't already there, and lays them into this page's first two \
+                         rows (Pan on row 1, Tilt on row 2), Pan in teal and Tilt in green, \
+                         shaded lighter as amplitude increases. Overwrites whatever is \
+                         currently in those two rows.",
+                    )
+                    .clicked()
+                {
+                    self.fill_movement_deck_page();
+                }
+                if ui
+                    .button("Fill row 3 with path shapes")
+                    .on_hover_text(
+                        "Adds one phaser per pan/tilt figure — circle, eight, arc, diamond, \
+                         square, snap-square, line, lift, diagonal, zig-zag, Lissajous — to \
+                         the pool if it isn't there, and lays them in from row 3, coloured \
+                         across the spectrum in that order.",
+                    )
+                    .clicked()
+                {
+                    self.fill_path_deck_page();
+                }
+                let mut open_edit: Option<usize> = None;
+                let mut clear_slot: Option<usize> = None;
+                egui::Grid::new("phaser_deck_grid").spacing([3.0, 3.0]).show(ui, |ui| {
+                    for row in 0..4 {
+                        for col in 0..9 {
+                            // Mirror the device exactly, reserved corners and
+                            // all, so what you arrange here is what you get.
+                            let idx = match crate::streamdeck::phaser_page_key(row * 9 + col, 4, 9) {
+                                crate::streamdeck::PhaserKey::Pad(slot) => base + slot,
+                                reserved => {
+                                    let (label, tint) = match reserved {
+                                        crate::streamdeck::PhaserKey::Tap => {
+                                            ("TAP", egui::Color32::from_rgb(31, 111, 120))
+                                        }
+                                        crate::streamdeck::PhaserKey::Clear => {
+                                            ("CLR", egui::Color32::from_rgb(160, 105, 40))
+                                        }
+                                        _ => ("ALL", egui::Color32::from_rgb(150, 128, 42)),
+                                    };
+                                    ui.add_enabled(
+                                        false,
+                                        egui::Button::new(
+                                            egui::RichText::new(label)
+                                                .color(egui::Color32::from_gray(230))
+                                                .size(11.0),
+                                        )
+                                        .fill(tint)
+                                        .min_size([44.0, 32.0].into()),
+                                    )
+                                    .on_disabled_hover_text(
+                                        "Reserved on every page — select-all, the staged Clear, and beat tap",
+                                    );
+                                    continue;
+                                }
+                            };
+                            let slot = self.phaser_deck.get(idx).cloned().flatten();
+                            let (fill, text, txt_col) = match &slot {
+                                Some(s) => {
+                                    let [r, g, b] = s.color;
+                                    let lum = 0.299 * r as f32 + 0.587 * g as f32 + 0.114 * b as f32;
+                                    let tc = if lum > 140.0 {
+                                        egui::Color32::BLACK
+                                    } else {
+                                        egui::Color32::WHITE
+                                    };
+                                    (egui::Color32::from_rgb(r, g, b), s.label.clone(), tc)
+                                }
+                                None => (theme::RAISED, "+".to_string(), egui::Color32::from_gray(140)),
+                            };
+                            let btn = egui::Button::new(egui::RichText::new(text).color(txt_col).size(11.0))
+                                .fill(fill)
+                                .min_size([44.0, 32.0].into());
+                            let resp = ui.add(btn).on_hover_text(match &slot {
+                                Some(s) => format!("\"{}\" — click to edit, right-click to clear", s.phaser),
+                                None => "Click to assign a phaser here".to_string(),
+                            });
+                            if resp.clicked() {
+                                open_edit = Some(idx);
+                            }
+                            if slot.is_some() {
+                                resp.context_menu(|ui| {
+                                    if ui.button("Clear").clicked() {
+                                        clear_slot = Some(idx);
+                                        ui.close_menu();
+                                    }
+                                });
+                            }
+                        }
+                        ui.end_row();
+                    }
+                });
+
+                if let Some(idx) = clear_slot {
+                    if idx < self.phaser_deck.len() {
+                        self.phaser_deck[idx] = None;
+                        crate::streamdeck::save_phaser_deck(&self.phaser_deck);
+                    }
+                    if self.deck_slot_edit == Some(idx) {
+                        self.deck_slot_edit = None;
+                    }
+                }
+                if let Some(idx) = open_edit {
+                    self.deck_slot_edit = Some(idx);
+                    match self.phaser_deck.get(idx).cloned().flatten() {
+                        Some(s) => {
+                            self.deck_slot_phaser = s.phaser;
+                            self.deck_slot_color = s.color;
+                            self.deck_slot_label = s.label;
+                            self.deck_slot_icon = s.icon;
+                        }
+                        None => {
+                            self.deck_slot_icon = crate::streamdeck::KeyIcon::None;
+                            if let Some(first) = self.phasers.first() {
+                                self.deck_slot_phaser = first.name.clone();
+                                self.deck_slot_color = first.color;
+                                self.deck_slot_label =
+                                    first.name.chars().filter(|c| c.is_alphanumeric()).take(4).collect::<String>().to_uppercase();
+                            } else {
+                                self.deck_slot_phaser.clear();
+                                self.deck_slot_label.clear();
+                            }
+                        }
+                    }
+                }
+
+                if let Some(idx) = self.deck_slot_edit {
+                    ui.separator();
+                    ui.horizontal(|ui| {
+                        ui.label(format!("Slot {}:", idx - base + 1));
+                        egui::ComboBox::from_id_salt("deck_slot_phaser")
+                            .selected_text(if self.deck_slot_phaser.is_empty() {
+                                "(choose a phaser)"
+                            } else {
+                                &self.deck_slot_phaser
+                            })
+                            .show_ui(ui, |ui| {
+                                for p in &self.phasers {
+                                    if ui.selectable_label(self.deck_slot_phaser == p.name, &p.name).clicked() {
+                                        self.deck_slot_phaser = p.name.clone();
+                                        self.deck_slot_color = p.color;
+                                        self.deck_slot_label = p
+                                            .name
+                                            .chars()
+                                            .filter(|c| c.is_alphanumeric())
+                                            .take(4)
+                                            .collect::<String>()
+                                            .to_uppercase();
+                                    }
+                                }
+                            });
+                        ui.color_edit_button_srgb(&mut self.deck_slot_color);
+                        ui.add(
+                            egui::TextEdit::singleline(&mut self.deck_slot_label)
+                                .desired_width(50.0)
+                                .char_limit(4)
+                                .hint_text("symbol"),
+                        );
+                        egui::ComboBox::from_id_salt("deck_slot_icon")
+                            .selected_text(self.deck_slot_icon.label())
+                            .width(110.0)
+                            .show_ui(ui, |ui| {
+                                for icon in crate::streamdeck::KeyIcon::ALL {
+                                    ui.selectable_value(&mut self.deck_slot_icon, icon, icon.label());
+                                }
+                            })
+                            .response
+                            .on_hover_text("Artwork drawn behind the symbol on the key itself");
+                    });
+                    ui.horizontal(|ui| {
+                        let can_save = !self.deck_slot_phaser.is_empty();
+                        if ui.add_enabled(can_save, egui::Button::new("Save")).clicked() {
+                            if idx < self.phaser_deck.len() {
+                                self.phaser_deck[idx] = Some(crate::streamdeck::PhaserSlot {
+                                    phaser: self.deck_slot_phaser.clone(),
+                                    color: self.deck_slot_color,
+                                    label: self.deck_slot_label.clone(),
+                                    icon: self.deck_slot_icon,
+                                });
+                                crate::streamdeck::save_phaser_deck(&self.phaser_deck);
+                            }
+                            self.deck_slot_edit = None;
+                        }
+                        if ui.button("Cancel").clicked() {
+                            self.deck_slot_edit = None;
+                        }
+                    });
+                }
+            });
+    }
+
+    /// Adds the 18 Pan/Tilt movement presets to the pool (skipping any name
+    /// already present) and lays them into the Phaser page's first two rows
+    /// — Pan on row 1, Tilt on row 2 — in generator order (speed blocks of
+    /// 3, amplitude ascending within each), overwriting those 18 slots.
+    fn fill_movement_deck_page(&mut self) {
+        let presets = phaser::movement_variety_phasers();
+        let mut added = 0;
+        for p in &presets {
+            match self.phasers.iter_mut().find(|existing| existing.name == p.name) {
+                // Already there: keep whatever's been tuned, but take the
+                // current palette so the pool matches the deck.
+                Some(existing) => existing.color = p.color,
+                None => {
+                    self.phasers.push(p.clone());
+                    added += 1;
+                }
+            }
+        }
+        phaser::save_phasers(&self.phasers);
+        const SPEED_LETTERS: [&str; 3] = ["S", "M", "F"];
+        let base = self.deck_phaser_page * crate::streamdeck::PHASER_DECK_SLOTS;
+        let n = presets.len().min(crate::streamdeck::PHASER_DECK_SLOTS);
+        for (i, p) in presets.iter().enumerate().take(n) {
+            let speed_idx = (i / 3) % 3;
+            let amp_idx = i % 3;
+            // Row 1 is Pan, row 2 is Tilt, so the arrow matches the axis.
+            let icon = if i < 9 {
+                crate::streamdeck::KeyIcon::LeftRight
+            } else {
+                crate::streamdeck::KeyIcon::UpDown
+            };
+            self.phaser_deck[base + i] = Some(crate::streamdeck::PhaserSlot {
+                phaser: p.name.clone(),
+                color: p.color,
+                label: format!("{}{}", SPEED_LETTERS[speed_idx], amp_idx + 1),
+                icon,
+            });
+        }
+        crate::streamdeck::save_phaser_deck(&self.phaser_deck);
+        self.log.push(format!(
+            "Stream Deck: filled Phaser page {}'s first two rows with movement presets \
+             ({added} newly added to the pool)",
+            self.deck_phaser_page + 1
+        ));
+    }
+
+    /// Appends an empty page of pads after the last one and shows it.
+    fn add_phaser_deck_page(&mut self) {
+        let len = self.phaser_deck.len() + crate::streamdeck::PHASER_DECK_SLOTS;
+        self.phaser_deck.resize(len, None);
+        self.deck_phaser_page = crate::streamdeck::phaser_deck_pages(&self.phaser_deck) - 1;
+        self.deck_slot_edit = None;
+        crate::streamdeck::save_phaser_deck(&self.phaser_deck);
+        self.log.push(format!("Stream Deck: added Phaser page {}", self.deck_phaser_page + 1));
+    }
+
+    /// Drops the page being shown (the editor only offers this while it is
+    /// empty and isn't the last page standing).
+    fn remove_phaser_deck_page(&mut self) {
+        const SLOTS: usize = crate::streamdeck::PHASER_DECK_SLOTS;
+        if crate::streamdeck::phaser_deck_pages(&self.phaser_deck) <= 1 {
+            return;
+        }
+        let base = self.deck_phaser_page * SLOTS;
+        let removed = self.deck_phaser_page + 1;
+        self.phaser_deck.drain(base..base + SLOTS);
+        self.deck_phaser_page = self
+            .deck_phaser_page
+            .min(crate::streamdeck::phaser_deck_pages(&self.phaser_deck) - 1);
+        self.deck_slot_edit = None;
+        crate::streamdeck::save_phaser_deck(&self.phaser_deck);
+        self.log.push(format!("Stream Deck: removed Phaser page {removed}"));
+    }
+
+    /// Adds the path-shape presets to the pool (refreshing colour and figure
+    /// label on any already there) and lays them into the Phaser page from
+    /// the third row on. Eleven shapes overrun a nine-wide row; the slot
+    /// numbering already skips the reserved corner keys, so they simply
+    /// continue into row four.
+    fn fill_path_deck_page(&mut self) {
+        let presets = phaser::path_shape_phasers();
+        let mut added = 0;
+        for p in &presets {
+            match self.phasers.iter_mut().find(|existing| existing.name == p.name) {
+                Some(existing) => {
+                    existing.color = p.color;
+                    existing.path = p.path;
+                }
+                None => {
+                    self.phasers.push(p.clone());
+                    added += 1;
+                }
+            }
+        }
+        phaser::save_phasers(&self.phasers);
+        const THIRD_ROW: usize = 18;
+        let base = self.deck_phaser_page * crate::streamdeck::PHASER_DECK_SLOTS;
+        for (i, p) in presets.iter().enumerate() {
+            let slot = base + THIRD_ROW + i;
+            if slot >= base + crate::streamdeck::PHASER_DECK_SLOTS {
+                break;
+            }
+            let icon = match p.path {
+                Some(PathShape::Circle) => KeyIcon::Ring,
+                Some(PathShape::Eight | PathShape::Arc | PathShape::ZigZag) => KeyIcon::Wave,
+                Some(PathShape::Diamond | PathShape::Lissajous) => KeyIcon::Bullseye,
+                Some(PathShape::Line | PathShape::Diagonal) => KeyIcon::LeftRight,
+                Some(PathShape::Lift) => KeyIcon::UpDown,
+                _ => KeyIcon::None,
+            };
+            self.phaser_deck[slot] = Some(PhaserSlot {
+                phaser: p.name.clone(),
+                color: p.color,
+                label: p.path.map(|s| s.tag().to_string()).unwrap_or_default(),
+                icon,
+            });
+        }
+        crate::streamdeck::save_phaser_deck(&self.phaser_deck);
+        self.log.push(format!(
+            "Stream Deck: laid {} path shapes into Phaser page {} ({added} newly added to the pool)",
+            presets.len(),
+            self.deck_phaser_page + 1
+        ));
+    }
+
     pub(crate) fn phasers_window(&mut self, ctx: &egui::Context) {
         if !self.show_phasers {
             return;
@@ -558,6 +920,9 @@ impl App {
             |ui| {
                 zoom_controls(ui, &mut self.zoom.phasers);
                 apply_zoom(ui, self.zoom.phasers);
+
+                self.phaser_deck_page_ui(ui);
+                ui.separator();
 
                 let sel = self.stage.selected_fixtures();
                 // How the selection breaks into effect units, and which groups
@@ -710,6 +1075,87 @@ impl App {
                             );
                         });
                     });
+
+                // --- Path: the pan/tilt figures other desks ship as position
+                // FX. Picking one rewrites the PAN/TILT components; the preview
+                // is drawn from the components, so it is always what will run.
+                ui.add_space(6.0);
+                let mut pick_path: Option<PathShape> = None;
+                ui.horizontal(|ui| {
+                    ui.label("Path");
+                    egui::ComboBox::from_id_salt("phaser_path_shape")
+                        .selected_text(e.path.map_or("—", |p| p.label()))
+                        .width(150.0)
+                        .show_ui(ui, |ui| {
+                            for shape in PathShape::ALL {
+                                if ui.selectable_label(e.path == Some(shape), shape.label()).clicked() {
+                                    pick_path = Some(shape);
+                                }
+                            }
+                        })
+                        .response
+                        .on_hover_text(
+                            "Replace the PAN/TILT components with a ready-made figure — \
+                             circle, eight, square, zig-zag… Speed and depth carry over \
+                             from the current pan/tilt component.",
+                        );
+                    if e.path.is_some()
+                        && ui
+                            .small_button("✕")
+                            .on_hover_text("Drop the figure label; the components stay as they are")
+                            .clicked()
+                    {
+                        e.path = None;
+                    }
+                });
+                if let Some(shape) = pick_path {
+                    let is_axis = |t: &str| matches!(t.to_ascii_uppercase().as_str(), "PAN" | "PANF" | "TILT" | "TILTF");
+                    let (subdiv, amount) = e
+                        .components
+                        .iter()
+                        .find(|c| is_axis(&c.target))
+                        .map(|c| (c.subdiv.unwrap_or(8.0), c.amount))
+                        .unwrap_or((8.0, 0.3));
+                    e.components.retain(|c| !is_axis(&c.target));
+                    e.components.extend(shape.components(subdiv, amount));
+                    e.path = Some(shape);
+                    e.feature = Feature::Position;
+                }
+                // What one fixture traces: pan across, tilt up, a marker
+                // running round it so the direction reads too.
+                let pts = e.path_points(128);
+                if !pts.is_empty() {
+                    let (rect, _) = ui.allocate_exact_size(egui::vec2(160.0, 104.0), egui::Sense::hover());
+                    let p = ui.painter();
+                    p.rect_filled(rect, 6.0, theme::WELL);
+                    p.rect_stroke(rect, 6.0, egui::Stroke::new(1.0, theme::EDGE));
+                    let c = rect.center();
+                    let axis = egui::Stroke::new(1.0, theme::EDGE);
+                    p.line_segment([egui::pos2(rect.left() + 4.0, c.y), egui::pos2(rect.right() - 4.0, c.y)], axis);
+                    p.line_segment([egui::pos2(c.x, rect.top() + 4.0), egui::pos2(c.x, rect.bottom() - 4.0)], axis);
+                    let (hx, hy) = (rect.width() * 0.5 - 9.0, rect.height() * 0.5 - 9.0);
+                    let poly: Vec<egui::Pos2> =
+                        pts.iter().map(|&(x, y)| egui::pos2(c.x + x * hx, c.y - y * hy)).collect();
+                    let [r, g, b] = e.color;
+                    let col = egui::Color32::from_rgb(r, g, b);
+                    for w in poly.windows(2) {
+                        p.line_segment([w[0], w[1]], egui::Stroke::new(2.0, col));
+                    }
+                    if let (Some(&first), Some(&last)) = (poly.first(), poly.last()) {
+                        p.line_segment([last, first], egui::Stroke::new(2.0, col));
+                    }
+                    let t = ui.input(|i| i.time) as f32;
+                    let head = ((t * 0.3).fract() * poly.len() as f32) as usize % poly.len();
+                    p.circle_filled(poly[head], 4.5, egui::Color32::WHITE);
+                    p.text(
+                        egui::pos2(rect.right() - 4.0, rect.bottom() - 2.0),
+                        egui::Align2::RIGHT_BOTTOM,
+                        "pan → · tilt ↑",
+                        egui::FontId::proportional(9.0),
+                        egui::Color32::from_gray(120),
+                    );
+                    ui.ctx().request_repaint_after(std::time::Duration::from_millis(40));
+                }
 
                 ui.add_space(8.0);
                 let mut remove_component = None;
@@ -1100,7 +1546,9 @@ impl App {
                                     } else {
                                         egui::Color32::from_gray(150)
                                     };
-                                    let sub = if !ph.hold.is_empty() {
+                                    let sub = if let Some(path) = ph.path {
+                                        path.label().to_string()
+                                    } else if !ph.hold.is_empty() {
                                         "Hold".to_string()
                                     } else if !ph.static_pos.is_empty() {
                                         if ph.feature == Feature::Position {
@@ -1323,13 +1771,7 @@ impl App {
             self.apply_phaser(ph, !do_apply);
         }
         if do_clear {
-            self.live.oscs.clear();
-            self.active_phasers.clear();
-            self.hold_overrides.clear();
-            self.add_overrides.clear();
-            self.osc_ramps.clear();
-            self.add_ramps.clear();
-            self.log.push("Cleared effects (reverted to base)".into());
+            self.clear_effects();
         }
         if do_store {
             let mut ph = self.phaser_edit.clone();

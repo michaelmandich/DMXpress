@@ -73,6 +73,10 @@ pub struct UserPreset {
     pub hold_overrides: Vec<(usize, u8)>,
     #[serde(default)]
     pub cycle: Option<SavedCycle>,
+    /// Stacked effect lanes (island name → palette ids): one id holds that
+    /// slot, several step through them on the cycle clock.
+    #[serde(default)]
+    pub lanes: Vec<(String, Vec<u32>)>,
 }
 
 impl UserPreset {

@@ -9,13 +9,11 @@ use crate::app::App;
 use crate::chase::{ChaseKind, ChaseSource};
 
 impl App {
-    pub(crate) fn chases_window(&mut self, ctx: &egui::Context) {
-        if !self.show_chases {
-            self.chase.selected = false;
-            return;
-        }
-        // Flatten native presets + ShowBuddy banks once so the source picker
-        // can borrow freely.
+    /// Every look a chase can inject — native presets first, then the
+    /// ShowBuddy banks — flattened into one ordered list. The Chases window
+    /// and the Stream Deck's preset knob both step through this, so they
+    /// always agree on what "the next preset" means.
+    pub(crate) fn chase_sources(&self) -> Vec<(ChaseSource, String)> {
         let mut sources: Vec<(ChaseSource, String)> = self
             .user_presets
             .iter()
@@ -28,6 +26,26 @@ impl App {
                 .enumerate()
                 .map(move |(pi, p)| (ChaseSource::Bank(bi, pi), p.name.clone()))
         }));
+        sources
+    }
+
+    /// Name of the look the chase is set to inject, if it still exists.
+    pub(crate) fn chase_source_name(&self) -> Option<String> {
+        let source = self.chase.source?;
+        self.chase_sources()
+            .into_iter()
+            .find(|(cs, _)| *cs == source)
+            .map(|(_, n)| n)
+    }
+
+    pub(crate) fn chases_window(&mut self, ctx: &egui::Context) {
+        if !self.show_chases {
+            self.chase.selected = false;
+            return;
+        }
+        // Flatten native presets + ShowBuddy banks once so the source picker
+        // can borrow freely.
+        let sources = self.chase_sources();
         let source_name = self
             .chase
             .source
@@ -83,6 +101,31 @@ impl App {
                     ChaseKind::Pulse => {
                         "One single wave of the preset crosses the rig and stops — \
                          fire it on a hit."
+                    }
+                    ChaseKind::Ripple => {
+                        "Rings spread outward from the sphere like a stone dropped \
+                         in water. Ring count sets how many are in flight at once."
+                    }
+                    ChaseKind::Comet => {
+                        "A bright head races across the rig dragging a fading tail \
+                         behind it — width sets the tail length."
+                    }
+                    ChaseKind::Spiral => {
+                        "A spiral arm sweeps round and outward together. Two or \
+                         three arms turns it into a pinwheel."
+                    }
+                    ChaseKind::Cascade => {
+                        "A wave falls down the rig's height no matter which way the \
+                         sphere is aimed. On a rig hung all at one height it sweeps \
+                         across instead."
+                    }
+                    ChaseKind::Chevron => {
+                        "A mirrored pair of bands opens out from the middle of the \
+                         rig and runs to both ends. Reverse closes them back in."
+                    }
+                    ChaseKind::Checker => {
+                        "The rig splits into banks that flip against each other — \
+                         two banks ping-pong, more banks blink like a blinder wall."
                     }
                 });
                 ui.separator();
@@ -143,7 +186,8 @@ impl App {
                         } else {
                             "Band width"
                         });
-                        ui.add(
+                        ui.add_enabled(
+                            !tr.auto_width,
                             egui::Slider::new(&mut tr.band_deg, 10.0..=90.0)
                                 .suffix("°")
                                 .fixed_decimals(0),
@@ -151,12 +195,32 @@ impl App {
                         .on_hover_text(match tr.kind {
                             ChaseKind::Sphere => "How much of the circle the pulse covers (90° = a quarter sphere).",
                             ChaseKind::Glitter => "How long each sparkle stays lit.",
+                            ChaseKind::Comet => "Tail length — the comet's streak runs about three times this.",
                             _ => "How much of the rig the wave covers at once.",
                         });
                         ui.end_row();
 
-                        if tr.kind == ChaseKind::Stripes {
-                            ui.label("Stripe count");
+                        // Sizing the band by fixture count rather than by angle
+                        // is what makes one chase look right on any rig.
+                        ui.label("Fit to rig");
+                        ui.horizontal(|ui| {
+                            ui.checkbox(&mut tr.auto_width, "Auto")
+                                .on_hover_text(
+                                    "Size the band from how many lights it should cover \
+                                     instead of a fixed angle, so the same chase reads \
+                                     the same on a 4-light bar and a 40-light rig.",
+                                );
+                            ui.add_enabled(
+                                tr.auto_width,
+                                egui::DragValue::new(&mut tr.target_lights)
+                                    .range(1..=24)
+                                    .suffix(" lights"),
+                            );
+                        });
+                        ui.end_row();
+
+                        if let Some(label) = tr.kind.repeat_label() {
+                            ui.label(label);
                             ui.add(egui::DragValue::new(&mut tr.stripe_count).range(2..=32));
                             ui.end_row();
                         }
@@ -221,7 +285,12 @@ impl App {
                 }
 
                 ui.separator();
-                ui.checkbox(&mut tr.expanded, "Full editor (show sphere on stage)");
+                ui.checkbox(&mut tr.expanded, "Full editor (show the shape on stage)")
+                    .on_hover_text(
+                        "Draws this chase's geometry in the 3D view — the travelling \
+                         wall, rings, spiral arms or bank dividers, whichever this \
+                         shape uses — and lets you drag its origin around.",
+                    );
                 if tr.expanded {
                     egui::Grid::new("chase_sphere")
                         .num_columns(2)

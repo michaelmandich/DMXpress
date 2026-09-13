@@ -3,6 +3,7 @@
 //!
 //! Supported verbs (case-insensitive):
 //!   clear            release the programmer
+//!   clr              staged clear: encoders, then effects, then blackout
 //!   black / bo       blackout (release every stack + clear programmer)
 //!   go [n]           advance current stack, or stack n
 //!   off [n]          release current/all stacks, or stack n
@@ -26,13 +27,8 @@ impl App {
         let num = |s: &str| s.parse::<usize>().ok();
         match tok.as_slice() {
             ["clear"] | ["cl"] | ["c"] => self.clear_programmer(),
-            ["black"] | ["blackout"] | ["bo"] => {
-                for st in &mut self.stacks {
-                    st.release();
-                }
-                self.clear_programmer();
-                self.log.push("Blackout — everything released".into());
-            }
+            ["black"] | ["blackout"] | ["bo"] => self.blackout_all(),
+            ["clr"] => self.clear_stage(),
             ["full"] => {
                 self.grand_master = 1.0;
                 self.log.push("Grand master → 100%".into());
@@ -91,7 +87,7 @@ impl App {
                     egui::TextEdit::singleline(&mut self.command)
                         .desired_width(f32::INFINITY)
                         .hint_text(
-                            "clear · go [n] · off [n] · store · cue n · group n · gm n · black",
+                            "clear · clr · go [n] · off [n] · store · cue n · group n · gm n · black",
                         ),
                 );
                 if resp.lost_focus() && ui.input(|i| i.key_pressed(egui::Key::Enter)) {

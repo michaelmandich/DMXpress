@@ -1,66 +1,66 @@
 [
   {
-    "name": "All flash slow",
+    "name": "Dimmer Chase",
     "feature": "Dimmer",
     "filter": "All",
     "targets": [],
-    "components": [
-      {
-        "target": "DIM",
-        "mode": "Oscillation",
-        "static_value": 128,
-        "amount": 1.0,
-        "shape": 0.16,
-        "subdiv": 1.0,
-        "phase": 0.22,
-        "invert": false,
-        "waveform_id": null
-      }
-    ],
+    "components": [],
     "mode": "Wave",
     "fixtures": [
-      "8 channel par1@1",
-      "8 channel par1@9",
-      "moving par1@17",
-      "moving par2@31",
-      "moving par3@45",
-      "moving par4@59",
-      "80w 17ch spot with circle1@73",
-      "120W moving head (mini beam spot LED)1@90",
-      "80w 17ch spot with circle1@102",
-      "120W moving head (mini beam spot LED)1@119",
-      "120W moving head (mini beam spot LED)1@131",
-      "80w 17ch spot with circle1@143",
-      "120W moving head (mini beam spot LED)1@160",
-      "80w 17ch spot with circle1@172",
-      "moving par1@189",
-      "moving par2@203",
-      "moving par3@217",
-      "moving par4@231",
-      "80w 17ch spot with circle1@245",
-      "80w 17ch spot with circle1@262",
-      "120W moving head (mini beam spot LED)1@279",
-      "120W moving head (mini beam spot LED)2@291",
-      "80w 17ch spot with circle1@303",
-      "80w 17ch spot with circle2@320",
-      "8 channel par1@338",
-      "8 channel par2@346",
-      "8 channel par3@354",
-      "8 channel par4@362",
-      "8 channel par5@370",
-      "150w 11 channel1@456",
-      "150w 11 channel2@468",
-      "150w 11 channel3@480",
-      "150w 11 channel4@492",
-      "25 ch banger1@513",
-      "25 ch banger1@538",
-      "25 ch banger1@563",
-      "25 ch banger1@588"
+      "Intimidator Spot 475ZX (16ch)@1",
+      "Maverick MK2 Spot (32ch)@17",
+      "Intimidator Trio (30ch)@49",
+      "SHEHDS Bee Eye 19x40 Ring (31ch)@110",
+      "Maverick MK2 Spot (32ch)@141",
+      "SHEHDS Bee Eye 19x40 Ring (31ch)@173",
+      "Intimidator Spot 475ZX (16ch) 1@235",
+      "Intimidator Spot 475ZX (16ch) 2@251",
+      "SHEHDS Bee Eye 19x40 Ring (31ch)@267",
+      "Maverick MK2 Spot (32ch)@298",
+      "SHEHDS Bee Eye 19x40 Ring (31ch)@330",
+      "Intimidator Trio (30ch)@361",
+      "Maverick MK2 Spot (32ch)@391",
+      "Intimidator Spot 475ZX (16ch)@423",
+      "SlimPAR T12 BT (7ch) 1@513",
+      "SlimPAR T12 BT (7ch) 2@520",
+      "SlimPAR T12 BT (7ch) 3@527",
+      "SlimPAR T12 BT (7ch) 4@534",
+      "SlimPAR T12 BT (7ch) 5@541",
+      "SlimPAR T12 BT (7ch) 6@548",
+      "SlimPAR T12 BT (7ch) 7@555",
+      "SlimPAR Q12 BT (8ch) 1@562",
+      "SlimPAR Q12 BT (8ch) 2@570",
+      "SlimPAR Q12 BT (8ch) 3@578",
+      "SlimPAR Q12 BT (8ch) 4@586",
+      "SlimPAR Q12 BT (8ch) 5@594",
+      "SlimPAR Q12 BT (8ch) 6@602",
+      "SlimPAR Q12 BT (8ch) 7@610",
+      "left side 1@648",
+      "left side 2@655",
+      "left side 3@662",
+      "left side 4@669",
+      "left side 5@676",
+      "left side 6@683",
+      "right side 1@690",
+      "right side 2@697",
+      "right side 3@704",
+      "right side 4@711",
+      "right side 5@718",
+      "right side 6@725",
+      "Fogger (2ch)@470",
+      "SlimPAR T6 BT (7ch) 1@774",
+      "SlimPAR T6 BT (7ch) 2@781",
+      "SlimPAR Q12 BT (8ch) 1@788",
+      "SlimPAR Q12 BT (8ch) 2@796",
+      "SlimPAR T12 BT (7ch) 1@804",
+      "SlimPAR T12 BT (7ch) 2@811",
+      "SlimPAR T12 BT (7ch) 3@818",
+      "SlimPAR T12 BT (7ch) 4@825"
     ],
     "color": [
-      110,
-      120,
-      150
+      235,
+      200,
+      90
     ],
     "amount": 0.5,
     "shape": 0.4,
@@ -68,320 +68,187 @@
     "master_beat": true,
     "speed": 0.357,
     "invert": false,
-    "spread": 1.65,
+    "spread": 1.15,
     "wings": 1,
     "static_pos": [],
     "hold": []
   },
   {
-    "name": "All Pulse slow",
-    "feature": "Dimmer",
-    "filter": "All",
+    "name": "Dimmer Wings",
+    "feature": "Position",
+    "filter": "Pan",
     "targets": [],
-    "components": [
-      {
-        "target": "DIM",
-        "mode": "Oscillation",
-        "static_value": 128,
-        "amount": 1.0,
-        "shape": 0.0,
-        "subdiv": 4.0,
-        "phase": 0.22,
-        "invert": false,
-        "waveform_id": null
-      }
-    ],
+    "components": [],
     "mode": "Wave",
     "fixtures": [
-      "8 channel par1@1",
-      "8 channel par1@9",
-      "moving par1@17",
-      "moving par2@31",
-      "moving par3@45",
-      "moving par4@59",
-      "80w 17ch spot with circle1@73",
-      "120W moving head (mini beam spot LED)1@90",
-      "80w 17ch spot with circle1@102",
-      "120W moving head (mini beam spot LED)1@119",
-      "120W moving head (mini beam spot LED)1@131",
-      "80w 17ch spot with circle1@143",
-      "120W moving head (mini beam spot LED)1@160",
-      "80w 17ch spot with circle1@172",
-      "moving par1@189",
-      "moving par2@203",
-      "moving par3@217",
-      "moving par4@231",
-      "80w 17ch spot with circle1@245",
-      "80w 17ch spot with circle1@262",
-      "120W moving head (mini beam spot LED)1@279",
-      "120W moving head (mini beam spot LED)2@291",
-      "80w 17ch spot with circle1@303",
-      "80w 17ch spot with circle2@320",
-      "8 channel par1@338",
-      "8 channel par2@346",
-      "8 channel par3@354",
-      "8 channel par4@362",
-      "8 channel par5@370",
-      "150w 11 channel1@456",
-      "150w 11 channel2@468",
-      "150w 11 channel3@480",
-      "150w 11 channel4@492",
-      "25 ch banger1@513",
-      "25 ch banger1@538",
-      "25 ch banger1@563",
-      "25 ch banger1@588"
+      "Fogger (2ch)@470"
     ],
     "color": [
-      110,
-      120,
-      150
+      235,
+      160,
+      70
     ],
-    "amount": 0.5,
-    "shape": 0.4,
+    "amount": 0.11,
+    "shape": 0.53,
+    "subdiv": 16.0,
+    "master_beat": true,
+    "speed": 0.357,
+    "invert": false,
+    "spread": 1.0,
+    "wings": 2,
+    "static_pos": [],
+    "hold": []
+  },
+  {
+    "name": "Pan Sweep",
+    "feature": "Position",
+    "filter": "Pan",
+    "targets": [],
+    "components": [],
+    "mode": "Wave",
+    "fixtures": [
+      "Intimidator Spot 475ZX (16ch)@1",
+      "Maverick MK2 Spot (32ch)@17",
+      "Intimidator Trio (30ch)@49",
+      "SHEHDS Bee Eye 19x40 Ring (31ch)@110",
+      "Maverick MK2 Spot (32ch)@141",
+      "SHEHDS Bee Eye 19x40 Ring (31ch)@173",
+      "Intimidator Spot 475ZX (16ch) 1@235",
+      "Intimidator Spot 475ZX (16ch) 2@251",
+      "SHEHDS Bee Eye 19x40 Ring (31ch)@267",
+      "Maverick MK2 Spot (32ch)@298",
+      "SHEHDS Bee Eye 19x40 Ring (31ch)@330",
+      "Intimidator Trio (30ch)@361",
+      "Maverick MK2 Spot (32ch)@391",
+      "Intimidator Spot 475ZX (16ch)@423",
+      "SlimPAR T12 BT (7ch) 1@513",
+      "SlimPAR T12 BT (7ch) 2@520",
+      "SlimPAR T12 BT (7ch) 3@527",
+      "SlimPAR T12 BT (7ch) 4@534",
+      "SlimPAR T12 BT (7ch) 5@541",
+      "SlimPAR T12 BT (7ch) 6@548",
+      "SlimPAR T12 BT (7ch) 7@555",
+      "SlimPAR Q12 BT (8ch) 1@562",
+      "SlimPAR Q12 BT (8ch) 2@570",
+      "SlimPAR Q12 BT (8ch) 3@578",
+      "SlimPAR Q12 BT (8ch) 4@586",
+      "SlimPAR Q12 BT (8ch) 5@594",
+      "SlimPAR Q12 BT (8ch) 6@602",
+      "SlimPAR Q12 BT (8ch) 7@610",
+      "left side 1@648",
+      "left side 2@655",
+      "left side 3@662",
+      "left side 4@669",
+      "left side 5@676",
+      "left side 6@683",
+      "right side 1@690",
+      "right side 2@697",
+      "right side 3@704",
+      "right side 4@711",
+      "right side 5@718",
+      "right side 6@725",
+      "Fogger (2ch)@470",
+      "SlimPAR T6 BT (7ch) 1@774",
+      "SlimPAR T6 BT (7ch) 2@781",
+      "SlimPAR Q12 BT (8ch) 1@788",
+      "SlimPAR Q12 BT (8ch) 2@796",
+      "SlimPAR T12 BT (7ch) 1@804",
+      "SlimPAR T12 BT (7ch) 2@811",
+      "SlimPAR T12 BT (7ch) 3@818",
+      "SlimPAR T12 BT (7ch) 4@825"
+    ],
+    "color": [
+      70,
+      190,
+      190
+    ],
+    "amount": 0.16,
+    "shape": 0.5,
+    "subdiv": 16.0,
+    "master_beat": true,
+    "speed": 0.2,
+    "invert": false,
+    "spread": 1.3,
+    "wings": 1,
+    "static_pos": [],
+    "hold": []
+  },
+  {
+    "name": "Tilt Wave",
+    "feature": "Position",
+    "filter": "Tilt",
+    "targets": [],
+    "components": [],
+    "mode": "Wave",
+    "fixtures": [
+      "Intimidator Spot 475ZX (16ch)@1",
+      "Maverick MK2 Spot (32ch)@17",
+      "Intimidator Trio (30ch)@49",
+      "SHEHDS Bee Eye 19x40 Ring (31ch)@110",
+      "Maverick MK2 Spot (32ch)@141",
+      "SHEHDS Bee Eye 19x40 Ring (31ch)@173",
+      "Intimidator Spot 475ZX (16ch) 1@235",
+      "Intimidator Spot 475ZX (16ch) 2@251",
+      "SHEHDS Bee Eye 19x40 Ring (31ch)@267",
+      "Maverick MK2 Spot (32ch)@298",
+      "SHEHDS Bee Eye 19x40 Ring (31ch)@330",
+      "Intimidator Trio (30ch)@361",
+      "Maverick MK2 Spot (32ch)@391",
+      "Intimidator Spot 475ZX (16ch)@423",
+      "SlimPAR T12 BT (7ch) 1@513",
+      "SlimPAR T12 BT (7ch) 2@520",
+      "SlimPAR T12 BT (7ch) 3@527",
+      "SlimPAR T12 BT (7ch) 4@534",
+      "SlimPAR T12 BT (7ch) 5@541",
+      "SlimPAR T12 BT (7ch) 6@548",
+      "SlimPAR T12 BT (7ch) 7@555",
+      "SlimPAR Q12 BT (8ch) 1@562",
+      "SlimPAR Q12 BT (8ch) 2@570",
+      "SlimPAR Q12 BT (8ch) 3@578",
+      "SlimPAR Q12 BT (8ch) 4@586",
+      "SlimPAR Q12 BT (8ch) 5@594",
+      "SlimPAR Q12 BT (8ch) 6@602",
+      "SlimPAR Q12 BT (8ch) 7@610",
+      "left side 1@648",
+      "left side 2@655",
+      "left side 3@662",
+      "left side 4@669",
+      "left side 5@676",
+      "left side 6@683",
+      "right side 1@690",
+      "right side 2@697",
+      "right side 3@704",
+      "right side 4@711",
+      "right side 5@718",
+      "right side 6@725",
+      "Fogger (2ch)@470",
+      "SlimPAR T6 BT (7ch) 1@774",
+      "SlimPAR T6 BT (7ch) 2@781",
+      "SlimPAR Q12 BT (8ch) 1@788",
+      "SlimPAR Q12 BT (8ch) 2@796",
+      "SlimPAR T12 BT (7ch) 1@804",
+      "SlimPAR T12 BT (7ch) 2@811",
+      "SlimPAR T12 BT (7ch) 3@818",
+      "SlimPAR T12 BT (7ch) 4@825"
+    ],
+    "color": [
+      235,
+      160,
+      70
+    ],
+    "amount": 0.29,
+    "shape": 0.53,
     "subdiv": 4.0,
     "master_beat": true,
     "speed": 0.357,
     "invert": false,
-    "spread": 1.58,
-    "wings": 3,
+    "spread": 0.95,
+    "wings": 2,
     "static_pos": [],
     "hold": []
   },
   {
-    "name": "Fast flash",
-    "feature": "Dimmer",
-    "filter": "All",
-    "targets": [],
-    "components": [
-      {
-        "target": "DIM",
-        "mode": "Oscillation",
-        "static_value": 128,
-        "amount": 0.18,
-        "shape": 0.0,
-        "subdiv": 4.0,
-        "phase": 0.63,
-        "invert": false,
-        "waveform_id": null
-      }
-    ],
-    "mode": "Wave",
-    "fixtures": [
-      "8 channel par1@1",
-      "8 channel par1@9",
-      "moving par1@17",
-      "moving par2@31",
-      "moving par3@45",
-      "moving par4@59",
-      "80w 17ch spot with circle1@73",
-      "120W moving head (mini beam spot LED)1@90",
-      "80w 17ch spot with circle1@102",
-      "120W moving head (mini beam spot LED)1@119",
-      "120W moving head (mini beam spot LED)1@131",
-      "80w 17ch spot with circle1@143",
-      "120W moving head (mini beam spot LED)1@160",
-      "80w 17ch spot with circle1@172",
-      "moving par1@189",
-      "moving par2@203",
-      "moving par3@217",
-      "moving par4@231",
-      "80w 17ch spot with circle1@245",
-      "80w 17ch spot with circle1@262",
-      "120W moving head (mini beam spot LED)1@279",
-      "120W moving head (mini beam spot LED)2@291",
-      "80w 17ch spot with circle1@303",
-      "80w 17ch spot with circle2@320",
-      "hurricane1@337",
-      "8 channel par1@338",
-      "8 channel par2@346",
-      "8 channel par3@354",
-      "8 channel par4@362",
-      "8 channel par5@370",
-      "150w 11 channel1@456",
-      "150w 11 channel2@468",
-      "150w 11 channel3@480",
-      "150w 11 channel4@492",
-      "25 ch banger1@513",
-      "25 ch banger1@538",
-      "25 ch banger1@563",
-      "25 ch banger1@588"
-    ],
-    "color": [
-      110,
-      120,
-      150
-    ],
-    "amount": 0.5,
-    "shape": 0.4,
-    "subdiv": 4.0,
-    "master_beat": true,
-    "speed": 0.357,
-    "invert": false,
-    "spread": 0.85,
-    "wings": 5,
-    "static_pos": [],
-    "hold": []
-  },
-  {
-    "name": "normal tilt",
-    "feature": "Position",
-    "filter": "All",
-    "targets": [],
-    "components": [
-      {
-        "target": "TILT",
-        "mode": "Oscillation",
-        "static_value": 128,
-        "amount": 0.06,
-        "shape": 0.5,
-        "subdiv": 4.0,
-        "phase": 0.0,
-        "invert": false,
-        "waveform_id": null
-      }
-    ],
-    "mode": "Wave",
-    "fixtures": [
-      "8 channel par1@1",
-      "8 channel par1@9",
-      "moving par1@17",
-      "moving par2@31",
-      "moving par3@45",
-      "moving par4@59",
-      "80w 17ch spot with circle1@73",
-      "120W moving head (mini beam spot LED)1@90",
-      "80w 17ch spot with circle1@102",
-      "120W moving head (mini beam spot LED)1@119",
-      "120W moving head (mini beam spot LED)1@131",
-      "80w 17ch spot with circle1@143",
-      "120W moving head (mini beam spot LED)1@160",
-      "80w 17ch spot with circle1@172",
-      "moving par1@189",
-      "moving par2@203",
-      "moving par3@217",
-      "moving par4@231",
-      "80w 17ch spot with circle1@245",
-      "80w 17ch spot with circle1@262",
-      "120W moving head (mini beam spot LED)1@279",
-      "120W moving head (mini beam spot LED)2@291",
-      "80w 17ch spot with circle1@303",
-      "80w 17ch spot with circle2@320",
-      "hurricane1@337",
-      "8 channel par1@338",
-      "8 channel par2@346",
-      "8 channel par3@354",
-      "8 channel par4@362",
-      "8 channel par5@370",
-      "zooming wash1@378",
-      "zooming wash2@393",
-      "15 channel bee eye1@408",
-      "15 channel bee eye2@423",
-      "150w 11 channel1@456",
-      "150w 11 channel2@468",
-      "150w 11 channel3@480",
-      "150w 11 channel4@492",
-      "25 ch banger1@513",
-      "25 ch banger1@538",
-      "25 ch banger1@563",
-      "25 ch banger1@588"
-    ],
-    "color": [
-      110,
-      120,
-      150
-    ],
-    "amount": 0.3,
-    "shape": 0.5,
-    "subdiv": 8.0,
-    "master_beat": true,
-    "speed": 0.2,
-    "invert": false,
-    "spread": 1.4,
-    "wings": 7,
-    "static_pos": [],
-    "hold": []
-  },
-  {
-    "name": "Bigger tilt",
-    "feature": "Position",
-    "filter": "All",
-    "targets": [],
-    "components": [
-      {
-        "target": "TILT",
-        "mode": "Oscillation",
-        "static_value": 128,
-        "amount": 0.37,
-        "shape": 0.5,
-        "subdiv": 4.0,
-        "phase": 0.4,
-        "invert": false,
-        "waveform_id": null
-      }
-    ],
-    "mode": "Wave",
-    "fixtures": [
-      "8 channel par1@1",
-      "8 channel par1@9",
-      "moving par1@17",
-      "moving par2@31",
-      "moving par3@45",
-      "moving par4@59",
-      "80w 17ch spot with circle1@73",
-      "120W moving head (mini beam spot LED)1@90",
-      "80w 17ch spot with circle1@102",
-      "120W moving head (mini beam spot LED)1@119",
-      "120W moving head (mini beam spot LED)1@131",
-      "80w 17ch spot with circle1@143",
-      "120W moving head (mini beam spot LED)1@160",
-      "80w 17ch spot with circle1@172",
-      "moving par1@189",
-      "moving par2@203",
-      "moving par3@217",
-      "moving par4@231",
-      "80w 17ch spot with circle1@245",
-      "80w 17ch spot with circle1@262",
-      "120W moving head (mini beam spot LED)1@279",
-      "120W moving head (mini beam spot LED)2@291",
-      "80w 17ch spot with circle1@303",
-      "80w 17ch spot with circle2@320",
-      "hurricane1@337",
-      "8 channel par1@338",
-      "8 channel par2@346",
-      "8 channel par3@354",
-      "8 channel par4@362",
-      "8 channel par5@370",
-      "zooming wash1@378",
-      "zooming wash2@393",
-      "15 channel bee eye1@408",
-      "15 channel bee eye2@423",
-      "150w 11 channel1@456",
-      "150w 11 channel2@468",
-      "150w 11 channel3@480",
-      "150w 11 channel4@492",
-      "25 ch banger1@513",
-      "25 ch banger1@538",
-      "25 ch banger1@563",
-      "25 ch banger1@588"
-    ],
-    "color": [
-      110,
-      120,
-      150
-    ],
-    "amount": 0.3,
-    "shape": 0.5,
-    "subdiv": 8.0,
-    "master_beat": true,
-    "speed": 0.2,
-    "invert": false,
-    "spread": 1.55,
-    "wings": 7,
-    "static_pos": [],
-    "hold": []
-  },
-  {
-    "name": "medium pan",
+    "name": "Circle",
     "feature": "Position",
     "filter": "All",
     "targets": [],
@@ -390,7 +257,18 @@
         "target": "PAN",
         "mode": "Oscillation",
         "static_value": 128,
-        "amount": 0.26,
+        "amount": 0.3,
+        "shape": 0.5,
+        "subdiv": 8.0,
+        "phase": 0.0,
+        "invert": false,
+        "waveform_id": null
+      },
+      {
+        "target": "TILT",
+        "mode": "Oscillation",
+        "static_value": 128,
+        "amount": 0.3,
         "shape": 0.5,
         "subdiv": 8.0,
         "phase": 0.0,
@@ -400,67 +278,664 @@
     ],
     "mode": "Wave",
     "fixtures": [
-      "8 channel par1@1",
-      "8 channel par1@9",
-      "moving par1@17",
-      "moving par2@31",
-      "moving par3@45",
-      "moving par4@59",
-      "80w 17ch spot with circle1@73",
-      "120W moving head (mini beam spot LED)1@90",
-      "80w 17ch spot with circle1@102",
-      "120W moving head (mini beam spot LED)1@119",
-      "120W moving head (mini beam spot LED)1@131",
-      "80w 17ch spot with circle1@143",
-      "120W moving head (mini beam spot LED)1@160",
-      "80w 17ch spot with circle1@172",
-      "moving par1@189",
-      "moving par2@203",
-      "moving par3@217",
-      "moving par4@231",
-      "80w 17ch spot with circle1@245",
-      "80w 17ch spot with circle1@262",
-      "120W moving head (mini beam spot LED)1@279",
-      "120W moving head (mini beam spot LED)2@291",
-      "80w 17ch spot with circle1@303",
-      "80w 17ch spot with circle2@320",
-      "hurricane1@337",
-      "8 channel par1@338",
-      "8 channel par2@346",
-      "8 channel par3@354",
-      "8 channel par4@362",
-      "8 channel par5@370",
-      "zooming wash1@378",
-      "zooming wash2@393",
-      "15 channel bee eye1@408",
-      "15 channel bee eye2@423",
-      "150w 11 channel1@456",
-      "150w 11 channel2@468",
-      "150w 11 channel3@480",
-      "150w 11 channel4@492",
-      "25 ch banger1@513",
-      "25 ch banger1@538",
-      "25 ch banger1@563",
-      "25 ch banger1@588"
+      "Intimidator Spot 475ZX (16ch)@1",
+      "Maverick MK2 Spot (32ch)@17",
+      "Intimidator Trio (30ch)@49",
+      "SHEHDS Bee Eye 19x40 Ring (31ch)@110",
+      "Maverick MK2 Spot (32ch)@141",
+      "SHEHDS Bee Eye 19x40 Ring (31ch)@173",
+      "Intimidator Spot 475ZX (16ch) 1@235",
+      "Intimidator Spot 475ZX (16ch) 2@251",
+      "SHEHDS Bee Eye 19x40 Ring (31ch)@267",
+      "Maverick MK2 Spot (32ch)@298",
+      "SHEHDS Bee Eye 19x40 Ring (31ch)@330",
+      "Intimidator Trio (30ch)@361",
+      "Maverick MK2 Spot (32ch)@391",
+      "Intimidator Spot 475ZX (16ch)@423",
+      "SlimPAR T12 BT (7ch) 1@513",
+      "SlimPAR T12 BT (7ch) 2@520",
+      "SlimPAR T12 BT (7ch) 3@527",
+      "SlimPAR T12 BT (7ch) 4@534",
+      "SlimPAR T12 BT (7ch) 5@541",
+      "SlimPAR T12 BT (7ch) 6@548",
+      "SlimPAR T12 BT (7ch) 7@555",
+      "SlimPAR Q12 BT (8ch) 1@562",
+      "SlimPAR Q12 BT (8ch) 2@570",
+      "SlimPAR Q12 BT (8ch) 3@578",
+      "SlimPAR Q12 BT (8ch) 4@586",
+      "SlimPAR Q12 BT (8ch) 5@594",
+      "SlimPAR Q12 BT (8ch) 6@602",
+      "SlimPAR Q12 BT (8ch) 7@610",
+      "left side 1@648",
+      "left side 2@655",
+      "left side 3@662",
+      "left side 4@669",
+      "left side 5@676",
+      "left side 6@683",
+      "right side 1@690",
+      "right side 2@697",
+      "right side 3@704",
+      "right side 4@711",
+      "right side 5@718",
+      "right side 6@725",
+      "Fogger (2ch)@470",
+      "SlimPAR T6 BT (7ch) 1@774",
+      "SlimPAR T6 BT (7ch) 2@781",
+      "SlimPAR Q12 BT (8ch) 1@788",
+      "SlimPAR Q12 BT (8ch) 2@796",
+      "SlimPAR T12 BT (7ch) 1@804",
+      "SlimPAR T12 BT (7ch) 2@811",
+      "SlimPAR T12 BT (7ch) 3@818",
+      "SlimPAR T12 BT (7ch) 4@825"
+    ],
+    "path": "Circle",
+    "color": [
+      242,
+      48,
+      48
+    ],
+    "amount": 0.25,
+    "shape": 0.5,
+    "subdiv": null,
+    "master_beat": true,
+    "speed": 0.0,
+    "invert": false,
+    "spread": 0.25,
+    "wings": 1,
+    "static_pos": [],
+    "hold": []
+  },
+  {
+    "name": "Pan",
+    "feature": "Position",
+    "filter": "Pan",
+    "targets": [
+      "PAN"
+    ],
+    "components": [],
+    "mode": "Wave",
+    "fixtures": [
+      "Intimidator Spot 475ZX (16ch)@1",
+      "Maverick MK2 Spot (32ch)@17",
+      "Intimidator Trio (30ch)@49",
+      "SHEHDS Bee Eye 19x40 Ring (31ch)@110",
+      "Maverick MK2 Spot (32ch)@141",
+      "SHEHDS Bee Eye 19x40 Ring (31ch)@173",
+      "Intimidator Spot 475ZX (16ch) 1@235",
+      "Intimidator Spot 475ZX (16ch) 2@251",
+      "SHEHDS Bee Eye 19x40 Ring (31ch)@267",
+      "Maverick MK2 Spot (32ch)@298",
+      "SHEHDS Bee Eye 19x40 Ring (31ch)@330",
+      "Intimidator Trio (30ch)@361",
+      "Maverick MK2 Spot (32ch)@391",
+      "Intimidator Spot 475ZX (16ch)@423",
+      "SlimPAR T12 BT (7ch) 1@513",
+      "SlimPAR T12 BT (7ch) 2@520",
+      "SlimPAR T12 BT (7ch) 3@527",
+      "SlimPAR T12 BT (7ch) 4@534",
+      "SlimPAR T12 BT (7ch) 5@541",
+      "SlimPAR T12 BT (7ch) 6@548",
+      "SlimPAR T12 BT (7ch) 7@555",
+      "SlimPAR Q12 BT (8ch) 1@562",
+      "SlimPAR Q12 BT (8ch) 2@570",
+      "SlimPAR Q12 BT (8ch) 3@578",
+      "SlimPAR Q12 BT (8ch) 4@586",
+      "SlimPAR Q12 BT (8ch) 5@594",
+      "SlimPAR Q12 BT (8ch) 6@602",
+      "SlimPAR Q12 BT (8ch) 7@610",
+      "left side 1@648",
+      "left side 2@655",
+      "left side 3@662",
+      "left side 4@669",
+      "left side 5@676",
+      "left side 6@683",
+      "right side 1@690",
+      "right side 2@697",
+      "right side 3@704",
+      "right side 4@711",
+      "right side 5@718",
+      "right side 6@725",
+      "Fogger (2ch)@470",
+      "SlimPAR T6 BT (7ch) 1@774",
+      "SlimPAR T6 BT (7ch) 2@781",
+      "SlimPAR Q12 BT (8ch) 1@788",
+      "SlimPAR Q12 BT (8ch) 2@796",
+      "SlimPAR T12 BT (7ch) 1@804",
+      "SlimPAR T12 BT (7ch) 2@811",
+      "SlimPAR T12 BT (7ch) 3@818",
+      "SlimPAR T12 BT (7ch) 4@825"
     ],
     "color": [
-      110,
-      120,
-      150
+      235,
+      160,
+      70
     ],
-    "amount": 0.3,
+    "amount": 0.05,
+    "shape": 0.53,
+    "subdiv": 2.0,
+    "master_beat": true,
+    "speed": 0.357,
+    "invert": false,
+    "spread": 0.42,
+    "wings": 2,
+    "static_pos": [],
+    "hold": []
+  },
+  {
+    "name": "Fast oscilate",
+    "feature": "Position",
+    "filter": "All",
+    "targets": [],
+    "components": [],
+    "mode": "Wave",
+    "fixtures": [
+      "Intimidator Spot 475ZX (16ch)@1",
+      "Maverick MK2 Spot (32ch)@17",
+      "Intimidator Trio (30ch)@49",
+      "SHEHDS Bee Eye 19x40 Ring (31ch)@110",
+      "Maverick MK2 Spot (32ch)@141",
+      "SHEHDS Bee Eye 19x40 Ring (31ch)@173",
+      "Intimidator Spot 475ZX (16ch) 1@235",
+      "Intimidator Spot 475ZX (16ch) 2@251",
+      "SHEHDS Bee Eye 19x40 Ring (31ch)@267",
+      "Maverick MK2 Spot (32ch)@298",
+      "SHEHDS Bee Eye 19x40 Ring (31ch)@330",
+      "Intimidator Trio (30ch)@361",
+      "Maverick MK2 Spot (32ch)@391",
+      "Intimidator Spot 475ZX (16ch)@423",
+      "SlimPAR T12 BT (7ch) 1@513",
+      "SlimPAR T12 BT (7ch) 2@520",
+      "SlimPAR T12 BT (7ch) 3@527",
+      "SlimPAR T12 BT (7ch) 4@534",
+      "SlimPAR T12 BT (7ch) 5@541",
+      "SlimPAR T12 BT (7ch) 6@548",
+      "SlimPAR T12 BT (7ch) 7@555",
+      "SlimPAR Q12 BT (8ch) 1@562",
+      "SlimPAR Q12 BT (8ch) 2@570",
+      "SlimPAR Q12 BT (8ch) 3@578",
+      "SlimPAR Q12 BT (8ch) 4@586",
+      "SlimPAR Q12 BT (8ch) 5@594",
+      "SlimPAR Q12 BT (8ch) 6@602",
+      "SlimPAR Q12 BT (8ch) 7@610",
+      "left side 1@648",
+      "left side 2@655",
+      "left side 3@662",
+      "left side 4@669",
+      "left side 5@676",
+      "left side 6@683",
+      "right side 1@690",
+      "right side 2@697",
+      "right side 3@704",
+      "right side 4@711",
+      "right side 5@718",
+      "right side 6@725",
+      "Fogger (2ch)@470",
+      "SlimPAR T6 BT (7ch) 1@774",
+      "SlimPAR T6 BT (7ch) 2@781",
+      "SlimPAR Q12 BT (8ch) 1@788",
+      "SlimPAR Q12 BT (8ch) 2@796",
+      "SlimPAR T12 BT (7ch) 1@804",
+      "SlimPAR T12 BT (7ch) 2@811",
+      "SlimPAR T12 BT (7ch) 3@818",
+      "SlimPAR T12 BT (7ch) 4@825"
+    ],
+    "color": [
+      210,
+      130,
+      220
+    ],
+    "amount": 0.25,
     "shape": 0.5,
-    "subdiv": 8.0,
+    "subdiv": 16.0,
     "master_beat": true,
     "speed": 0.2,
     "invert": false,
-    "spread": 1.51,
+    "spread": 0.25,
+    "wings": 1,
+    "static_pos": [],
+    "hold": []
+  },
+  {
+    "name": "FOG ON",
+    "feature": "Position",
+    "filter": "Pan",
+    "targets": [],
+    "components": [],
+    "mode": "Wave",
+    "fixtures": [],
+    "color": [
+      235,
+      160,
+      70
+    ],
+    "amount": 0.11,
+    "shape": 0.53,
+    "subdiv": 16.0,
+    "master_beat": true,
+    "speed": 0.357,
+    "invert": false,
+    "spread": 1.0,
+    "wings": 2,
+    "static_pos": [],
+    "hold": [
+      [
+        "Fogger (2ch)@470",
+        [
+          [
+            0,
+            255
+          ],
+          [
+            1,
+            255
+          ]
+        ]
+      ]
+    ]
+  },
+  {
+    "name": "Fast Pulse",
+    "feature": "Dimmer",
+    "filter": "All",
+    "targets": [],
+    "components": [],
+    "mode": "Wave",
+    "fixtures": [
+      "Intimidator Spot 475ZX (16ch)@1",
+      "Maverick MK2 Spot (32ch)@17",
+      "Intimidator Trio (30ch)@49",
+      "SHEHDS Bee Eye 19x40 Ring (31ch)@110",
+      "Maverick MK2 Spot (32ch)@141",
+      "SHEHDS Bee Eye 19x40 Ring (31ch)@173",
+      "Intimidator Spot 475ZX (16ch) 1@235",
+      "Intimidator Spot 475ZX (16ch) 2@251",
+      "SHEHDS Bee Eye 19x40 Ring (31ch)@267",
+      "Maverick MK2 Spot (32ch)@298",
+      "SHEHDS Bee Eye 19x40 Ring (31ch)@330",
+      "Intimidator Trio (30ch)@361",
+      "Maverick MK2 Spot (32ch)@391",
+      "Intimidator Spot 475ZX (16ch)@423",
+      "SlimPAR T12 BT (7ch) 1@513",
+      "SlimPAR T12 BT (7ch) 2@520",
+      "SlimPAR T12 BT (7ch) 3@527",
+      "SlimPAR T12 BT (7ch) 4@534",
+      "SlimPAR T12 BT (7ch) 5@541",
+      "SlimPAR T12 BT (7ch) 6@548",
+      "SlimPAR T12 BT (7ch) 7@555",
+      "SlimPAR Q12 BT (8ch) 1@562",
+      "SlimPAR Q12 BT (8ch) 2@570",
+      "SlimPAR Q12 BT (8ch) 3@578",
+      "SlimPAR Q12 BT (8ch) 4@586",
+      "SlimPAR Q12 BT (8ch) 5@594",
+      "SlimPAR Q12 BT (8ch) 6@602",
+      "SlimPAR Q12 BT (8ch) 7@610",
+      "left side 1@648",
+      "left side 2@655",
+      "left side 3@662",
+      "left side 4@669",
+      "left side 5@676",
+      "left side 6@683",
+      "right side 1@690",
+      "right side 2@697",
+      "right side 3@704",
+      "right side 4@711",
+      "right side 5@718",
+      "right side 6@725",
+      "SlimPAR T6 BT (7ch) 1@774",
+      "SlimPAR T6 BT (7ch) 2@781",
+      "SlimPAR Q12 BT (8ch) 1@788",
+      "SlimPAR Q12 BT (8ch) 2@796",
+      "SlimPAR T12 BT (7ch) 1@804",
+      "SlimPAR T12 BT (7ch) 2@811",
+      "SlimPAR T12 BT (7ch) 3@818",
+      "SlimPAR T12 BT (7ch) 4@825"
+    ],
+    "color": [
+      235,
+      200,
+      90
+    ],
+    "amount": 0.95,
+    "shape": 0.4,
+    "subdiv": 4.0,
+    "master_beat": true,
+    "speed": 0.357,
+    "invert": false,
+    "spread": 1.0,
     "wings": 7,
     "static_pos": [],
     "hold": []
   },
   {
-    "name": "big pan",
+    "name": "Lock 10",
+    "feature": "Color",
+    "filter": "All",
+    "targets": [],
+    "components": [],
+    "mode": "Wave",
+    "fixtures": [],
+    "color": [
+      235,
+      160,
+      70
+    ],
+    "amount": 1.0,
+    "shape": 0.53,
+    "subdiv": 16.0,
+    "master_beat": true,
+    "speed": 0.357,
+    "invert": false,
+    "spread": 1.0,
+    "wings": 2,
+    "static_pos": [],
+    "hold": [
+      [
+        "SlimPAR T6 BT (7ch) 1@774",
+        [
+          [
+            0,
+            255
+          ],
+          [
+            1,
+            255
+          ],
+          [
+            2,
+            42
+          ],
+          [
+            3,
+            0
+          ],
+          [
+            4,
+            0
+          ],
+          [
+            5,
+            0
+          ],
+          [
+            6,
+            118
+          ]
+        ]
+      ],
+      [
+        "SlimPAR T6 BT (7ch) 2@781",
+        [
+          [
+            0,
+            255
+          ],
+          [
+            1,
+            255
+          ],
+          [
+            2,
+            42
+          ],
+          [
+            3,
+            0
+          ],
+          [
+            4,
+            0
+          ],
+          [
+            5,
+            0
+          ],
+          [
+            6,
+            118
+          ]
+        ]
+      ],
+      [
+        "SlimPAR Q12 BT (8ch) 1@788",
+        [
+          [
+            0,
+            255
+          ],
+          [
+            1,
+            255
+          ],
+          [
+            2,
+            42
+          ],
+          [
+            3,
+            0
+          ],
+          [
+            4,
+            0
+          ],
+          [
+            5,
+            0
+          ],
+          [
+            6,
+            0
+          ],
+          [
+            7,
+            118
+          ]
+        ]
+      ],
+      [
+        "SlimPAR Q12 BT (8ch) 2@796",
+        [
+          [
+            0,
+            255
+          ],
+          [
+            1,
+            255
+          ],
+          [
+            2,
+            42
+          ],
+          [
+            3,
+            0
+          ],
+          [
+            4,
+            0
+          ],
+          [
+            5,
+            0
+          ],
+          [
+            6,
+            0
+          ],
+          [
+            7,
+            118
+          ]
+        ]
+      ],
+      [
+        "SlimPAR T12 BT (7ch) 1@804",
+        [
+          [
+            0,
+            255
+          ],
+          [
+            1,
+            255
+          ],
+          [
+            2,
+            42
+          ],
+          [
+            3,
+            0
+          ],
+          [
+            4,
+            0
+          ],
+          [
+            5,
+            0
+          ],
+          [
+            6,
+            118
+          ]
+        ]
+      ],
+      [
+        "SlimPAR T12 BT (7ch) 2@811",
+        [
+          [
+            0,
+            255
+          ],
+          [
+            1,
+            255
+          ],
+          [
+            2,
+            42
+          ],
+          [
+            3,
+            0
+          ],
+          [
+            4,
+            0
+          ],
+          [
+            5,
+            0
+          ],
+          [
+            6,
+            118
+          ]
+        ]
+      ],
+      [
+        "SlimPAR T12 BT (7ch) 3@818",
+        [
+          [
+            0,
+            255
+          ],
+          [
+            1,
+            255
+          ],
+          [
+            2,
+            42
+          ],
+          [
+            3,
+            0
+          ],
+          [
+            4,
+            0
+          ],
+          [
+            5,
+            0
+          ],
+          [
+            6,
+            118
+          ]
+        ]
+      ],
+      [
+        "SlimPAR T12 BT (7ch) 4@825",
+        [
+          [
+            0,
+            255
+          ],
+          [
+            1,
+            255
+          ],
+          [
+            2,
+            42
+          ],
+          [
+            3,
+            0
+          ],
+          [
+            4,
+            0
+          ],
+          [
+            5,
+            0
+          ],
+          [
+            6,
+            118
+          ]
+        ]
+      ]
+    ]
+  },
+  {
+    "name": "Phaser 11",
+    "feature": "Control",
+    "filter": "All",
+    "targets": [
+      "Barrel roll"
+    ],
+    "components": [],
+    "mode": "Add",
+    "fixtures": [
+      "SHEHDS Bee Eye 19x40 Ring (31ch)@110",
+      "SHEHDS Bee Eye 19x40 Ring (31ch)@173",
+      "SHEHDS Bee Eye 19x40 Ring (31ch)@267",
+      "SHEHDS Bee Eye 19x40 Ring (31ch)@330"
+    ],
+    "color": [
+      235,
+      200,
+      90
+    ],
+    "amount": 1.0,
+    "shape": 0.47,
+    "subdiv": 4.0,
+    "master_beat": true,
+    "speed": 0.357,
+    "invert": false,
+    "spread": 1.0,
+    "wings": 1,
+    "static_pos": [],
+    "hold": []
+  },
+  {
+    "name": "Eight",
     "feature": "Position",
     "filter": "All",
     "targets": [],
@@ -469,86 +944,66 @@
         "target": "PAN",
         "mode": "Oscillation",
         "static_value": 128,
-        "amount": 0.57,
+        "amount": 0.3,
+        "shape": 0.5,
+        "subdiv": 8.0,
+        "phase": 0.0,
+        "invert": false,
+        "waveform_id": null
+      },
+      {
+        "target": "TILT",
+        "mode": "Oscillation",
+        "static_value": 128,
+        "amount": 0.21000001,
         "shape": 0.5,
         "subdiv": 4.0,
-        "phase": 0.63,
+        "phase": -0.25,
         "invert": false,
         "waveform_id": null
       }
     ],
     "mode": "Wave",
-    "fixtures": [
-      "8 channel par1@1",
-      "8 channel par1@9",
-      "moving par1@17",
-      "moving par2@31",
-      "moving par3@45",
-      "moving par4@59",
-      "80w 17ch spot with circle1@73",
-      "120W moving head (mini beam spot LED)1@90",
-      "80w 17ch spot with circle1@102",
-      "120W moving head (mini beam spot LED)1@119",
-      "120W moving head (mini beam spot LED)1@131",
-      "80w 17ch spot with circle1@143",
-      "120W moving head (mini beam spot LED)1@160",
-      "80w 17ch spot with circle1@172",
-      "moving par1@189",
-      "moving par2@203",
-      "moving par3@217",
-      "moving par4@231",
-      "80w 17ch spot with circle1@245",
-      "80w 17ch spot with circle1@262",
-      "120W moving head (mini beam spot LED)1@279",
-      "120W moving head (mini beam spot LED)2@291",
-      "80w 17ch spot with circle1@303",
-      "80w 17ch spot with circle2@320",
-      "hurricane1@337",
-      "8 channel par1@338",
-      "8 channel par2@346",
-      "8 channel par3@354",
-      "8 channel par4@362",
-      "8 channel par5@370",
-      "zooming wash1@378",
-      "zooming wash2@393",
-      "15 channel bee eye1@408",
-      "15 channel bee eye2@423",
-      "150w 11 channel1@456",
-      "150w 11 channel2@468",
-      "150w 11 channel3@480",
-      "150w 11 channel4@492",
-      "25 ch banger1@513",
-      "25 ch banger1@538",
-      "25 ch banger1@563",
-      "25 ch banger1@588"
-    ],
+    "fixtures": [],
+    "path": "Eight",
     "color": [
-      110,
-      120,
-      150
+      242,
+      145,
+      48
     ],
-    "amount": 0.3,
+    "amount": 0.5,
     "shape": 0.5,
-    "subdiv": 8.0,
+    "subdiv": 4.0,
     "master_beat": true,
-    "speed": 0.2,
+    "speed": 0.357,
     "invert": false,
-    "spread": 1.67,
-    "wings": 4,
+    "spread": 0.0,
+    "wings": 1,
     "static_pos": [],
     "hold": []
   },
   {
-    "name": "All 100",
-    "feature": "Dimmer",
+    "name": "Arc",
+    "feature": "Position",
     "filter": "All",
     "targets": [],
     "components": [
       {
-        "target": "DIM",
-        "mode": "Static",
-        "static_value": 255,
-        "amount": 0.5,
+        "target": "PAN",
+        "mode": "Oscillation",
+        "static_value": 128,
+        "amount": 0.3,
+        "shape": 0.5,
+        "subdiv": 8.0,
+        "phase": 0.0,
+        "invert": false,
+        "waveform_id": null
+      },
+      {
+        "target": "TILT",
+        "mode": "Oscillation",
+        "static_value": 128,
+        "amount": 0.135,
         "shape": 0.5,
         "subdiv": 4.0,
         "phase": 0.0,
@@ -557,238 +1012,6164 @@
       }
     ],
     "mode": "Wave",
-    "fixtures": [
-      "8 channel par1@1",
-      "8 channel par1@9",
-      "moving par1@17",
-      "moving par2@31",
-      "moving par3@45",
-      "moving par4@59",
-      "80w 17ch spot with circle1@73",
-      "120W moving head (mini beam spot LED)1@90",
-      "80w 17ch spot with circle1@102",
-      "120W moving head (mini beam spot LED)1@119",
-      "120W moving head (mini beam spot LED)1@131",
-      "80w 17ch spot with circle1@143",
-      "120W moving head (mini beam spot LED)1@160",
-      "80w 17ch spot with circle1@172",
-      "moving par1@189",
-      "moving par2@203",
-      "moving par3@217",
-      "moving par4@231",
-      "80w 17ch spot with circle1@245",
-      "80w 17ch spot with circle1@262",
-      "120W moving head (mini beam spot LED)1@279",
-      "120W moving head (mini beam spot LED)2@291",
-      "80w 17ch spot with circle1@303",
-      "80w 17ch spot with circle2@320",
-      "hurricane1@337",
-      "8 channel par1@338",
-      "8 channel par2@346",
-      "8 channel par3@354",
-      "8 channel par4@362",
-      "8 channel par5@370",
-      "zooming wash1@378",
-      "zooming wash2@393",
-      "15 channel bee eye1@408",
-      "15 channel bee eye2@423",
-      "150w 11 channel1@456",
-      "150w 11 channel2@468",
-      "150w 11 channel3@480",
-      "150w 11 channel4@492",
-      "25 ch banger1@513",
-      "25 ch banger1@538",
-      "25 ch banger1@563",
-      "25 ch banger1@588"
-    ],
+    "fixtures": [],
+    "path": "Arc",
     "color": [
-      110,
-      120,
-      150
+      242,
+      242,
+      48
     ],
     "amount": 0.5,
-    "shape": 0.4,
+    "shape": 0.5,
     "subdiv": 4.0,
     "master_beat": true,
     "speed": 0.357,
     "invert": false,
-    "spread": 1.92,
-    "wings": 3,
+    "spread": 0.0,
+    "wings": 1,
     "static_pos": [],
     "hold": []
   },
   {
-    "name": "Fast pulse",
-    "feature": "Dimmer",
+    "name": "Diamond",
+    "feature": "Position",
     "filter": "All",
     "targets": [],
     "components": [
       {
-        "target": "DIM",
+        "target": "PAN",
         "mode": "Oscillation",
         "static_value": 128,
-        "amount": 1.0,
+        "amount": 0.3,
         "shape": 0.0,
-        "subdiv": 1.0,
-        "phase": 0.22,
+        "subdiv": 8.0,
+        "phase": 0.0,
+        "invert": false,
+        "waveform_id": null
+      },
+      {
+        "target": "TILT",
+        "mode": "Oscillation",
+        "static_value": 128,
+        "amount": 0.3,
+        "shape": 0.0,
+        "subdiv": 8.0,
+        "phase": 0.0,
         "invert": false,
         "waveform_id": null
       }
     ],
     "mode": "Wave",
-    "fixtures": [
-      "8 channel par1@1",
-      "8 channel par1@9",
-      "moving par1@17",
-      "moving par2@31",
-      "moving par3@45",
-      "moving par4@59",
-      "80w 17ch spot with circle1@73",
-      "120W moving head (mini beam spot LED)1@90",
-      "80w 17ch spot with circle1@102",
-      "120W moving head (mini beam spot LED)1@119",
-      "120W moving head (mini beam spot LED)1@131",
-      "80w 17ch spot with circle1@143",
-      "120W moving head (mini beam spot LED)1@160",
-      "80w 17ch spot with circle1@172",
-      "moving par1@189",
-      "moving par2@203",
-      "moving par3@217",
-      "moving par4@231",
-      "80w 17ch spot with circle1@245",
-      "80w 17ch spot with circle1@262",
-      "120W moving head (mini beam spot LED)1@279",
-      "120W moving head (mini beam spot LED)2@291",
-      "80w 17ch spot with circle1@303",
-      "80w 17ch spot with circle2@320",
-      "8 channel par1@338",
-      "8 channel par2@346",
-      "8 channel par3@354",
-      "8 channel par4@362",
-      "8 channel par5@370",
-      "zooming wash1@378",
-      "zooming wash2@393",
-      "150w 11 channel1@456",
-      "150w 11 channel2@468",
-      "150w 11 channel3@480",
-      "150w 11 channel4@492",
-      "25 ch banger1@513",
-      "25 ch banger1@538",
-      "25 ch banger1@563",
-      "25 ch banger1@588"
-    ],
+    "fixtures": [],
+    "path": "Diamond",
     "color": [
-      110,
-      120,
-      150
+      145,
+      242,
+      48
     ],
     "amount": 0.5,
-    "shape": 0.4,
+    "shape": 0.5,
     "subdiv": 4.0,
     "master_beat": true,
     "speed": 0.357,
     "invert": false,
-    "spread": 1.92,
-    "wings": 3,
+    "spread": 0.0,
+    "wings": 1,
     "static_pos": [],
     "hold": []
   },
   {
-    "name": "Hold 11",
-    "feature": "Dimmer",
+    "name": "Square",
+    "feature": "Position",
     "filter": "All",
     "targets": [],
     "components": [
       {
-        "target": "DIM",
+        "target": "PAN",
         "mode": "Oscillation",
         "static_value": 128,
-        "amount": 0.18,
-        "shape": 1.0,
-        "subdiv": 4.0,
-        "phase": 0.63,
+        "amount": 0.3,
+        "shape": 0.8,
+        "subdiv": 8.0,
+        "phase": 0.0,
+        "invert": false,
+        "waveform_id": null
+      },
+      {
+        "target": "TILT",
+        "mode": "Oscillation",
+        "static_value": 128,
+        "amount": 0.3,
+        "shape": 0.8,
+        "subdiv": 8.0,
+        "phase": 0.0,
         "invert": false,
         "waveform_id": null
       }
     ],
     "mode": "Wave",
-    "fixtures": [
-      "8 channel par1@1",
-      "8 channel par1@9",
-      "moving par1@17",
-      "moving par2@31",
-      "moving par3@45",
-      "moving par4@59",
-      "80w 17ch spot with circle1@73",
-      "120W moving head (mini beam spot LED)1@90",
-      "80w 17ch spot with circle1@102",
-      "120W moving head (mini beam spot LED)1@119",
-      "120W moving head (mini beam spot LED)1@131",
-      "80w 17ch spot with circle1@143",
-      "120W moving head (mini beam spot LED)1@160",
-      "80w 17ch spot with circle1@172",
-      "moving par1@189",
-      "moving par2@203",
-      "moving par3@217",
-      "moving par4@231",
-      "80w 17ch spot with circle1@245",
-      "80w 17ch spot with circle1@262",
-      "120W moving head (mini beam spot LED)1@279",
-      "120W moving head (mini beam spot LED)2@291",
-      "80w 17ch spot with circle1@303",
-      "80w 17ch spot with circle2@320",
-      "hurricane1@337",
-      "8 channel par1@338",
-      "8 channel par2@346",
-      "8 channel par3@354",
-      "8 channel par4@362",
-      "8 channel par5@370",
-      "150w 11 channel1@456",
-      "150w 11 channel2@468",
-      "150w 11 channel3@480",
-      "150w 11 channel4@492",
-      "25 ch banger1@513",
-      "25 ch banger1@538",
-      "25 ch banger1@563",
-      "25 ch banger1@588"
+    "fixtures": [],
+    "path": "Square",
+    "color": [
+      48,
+      242,
+      48
     ],
+    "amount": 0.5,
+    "shape": 0.5,
+    "subdiv": 4.0,
+    "master_beat": true,
+    "speed": 0.357,
+    "invert": false,
+    "spread": 0.0,
+    "wings": 1,
+    "static_pos": [],
+    "hold": []
+  },
+  {
+    "name": "Square (snap)",
+    "feature": "Position",
+    "filter": "All",
+    "targets": [],
+    "components": [
+      {
+        "target": "PAN",
+        "mode": "Oscillation",
+        "static_value": 128,
+        "amount": 0.3,
+        "shape": 1.0,
+        "subdiv": 8.0,
+        "phase": 0.0,
+        "invert": false,
+        "waveform_id": null
+      },
+      {
+        "target": "TILT",
+        "mode": "Oscillation",
+        "static_value": 128,
+        "amount": 0.3,
+        "shape": 1.0,
+        "subdiv": 8.0,
+        "phase": 0.0,
+        "invert": false,
+        "waveform_id": null
+      }
+    ],
+    "mode": "Wave",
+    "fixtures": [],
+    "path": "SquareSnap",
+    "color": [
+      48,
+      242,
+      145
+    ],
+    "amount": 0.5,
+    "shape": 0.5,
+    "subdiv": 4.0,
+    "master_beat": true,
+    "speed": 0.357,
+    "invert": false,
+    "spread": 0.0,
+    "wings": 1,
+    "static_pos": [],
+    "hold": []
+  },
+  {
+    "name": "Line",
+    "feature": "Position",
+    "filter": "All",
+    "targets": [],
+    "components": [
+      {
+        "target": "PAN",
+        "mode": "Oscillation",
+        "static_value": 128,
+        "amount": 0.3,
+        "shape": 0.5,
+        "subdiv": 8.0,
+        "phase": 0.0,
+        "invert": false,
+        "waveform_id": null
+      }
+    ],
+    "mode": "Wave",
+    "fixtures": [],
+    "path": "Line",
+    "color": [
+      48,
+      242,
+      242
+    ],
+    "amount": 0.5,
+    "shape": 0.5,
+    "subdiv": 4.0,
+    "master_beat": true,
+    "speed": 0.357,
+    "invert": false,
+    "spread": 0.0,
+    "wings": 1,
+    "static_pos": [],
+    "hold": []
+  },
+  {
+    "name": "Lift",
+    "feature": "Position",
+    "filter": "All",
+    "targets": [],
+    "components": [
+      {
+        "target": "TILT",
+        "mode": "Oscillation",
+        "static_value": 128,
+        "amount": 0.3,
+        "shape": 0.5,
+        "subdiv": 8.0,
+        "phase": 0.0,
+        "invert": false,
+        "waveform_id": null
+      }
+    ],
+    "mode": "Wave",
+    "fixtures": [],
+    "path": "Lift",
+    "color": [
+      48,
+      145,
+      242
+    ],
+    "amount": 0.5,
+    "shape": 0.5,
+    "subdiv": 4.0,
+    "master_beat": true,
+    "speed": 0.357,
+    "invert": false,
+    "spread": 0.0,
+    "wings": 1,
+    "static_pos": [],
+    "hold": []
+  },
+  {
+    "name": "Diagonal",
+    "feature": "Position",
+    "filter": "All",
+    "targets": [],
+    "components": [
+      {
+        "target": "PAN",
+        "mode": "Oscillation",
+        "static_value": 128,
+        "amount": 0.3,
+        "shape": 0.5,
+        "subdiv": 8.0,
+        "phase": 0.0,
+        "invert": false,
+        "waveform_id": null
+      },
+      {
+        "target": "TILT",
+        "mode": "Oscillation",
+        "static_value": 128,
+        "amount": 0.3,
+        "shape": 0.5,
+        "subdiv": 8.0,
+        "phase": -0.25,
+        "invert": false,
+        "waveform_id": null
+      }
+    ],
+    "mode": "Wave",
+    "fixtures": [],
+    "path": "Diagonal",
+    "color": [
+      48,
+      48,
+      242
+    ],
+    "amount": 0.5,
+    "shape": 0.5,
+    "subdiv": 4.0,
+    "master_beat": true,
+    "speed": 0.357,
+    "invert": false,
+    "spread": 0.0,
+    "wings": 1,
+    "static_pos": [],
+    "hold": []
+  },
+  {
+    "name": "Zig-zag",
+    "feature": "Position",
+    "filter": "All",
+    "targets": [],
+    "components": [
+      {
+        "target": "PAN",
+        "mode": "Oscillation",
+        "static_value": 128,
+        "amount": 0.3,
+        "shape": 0.0,
+        "subdiv": 2.0,
+        "phase": 0.0,
+        "invert": false,
+        "waveform_id": null
+      },
+      {
+        "target": "TILT",
+        "mode": "Oscillation",
+        "static_value": 128,
+        "amount": 0.3,
+        "shape": 0.0,
+        "subdiv": 8.0,
+        "phase": -0.25,
+        "invert": false,
+        "waveform_id": null
+      }
+    ],
+    "mode": "Wave",
+    "fixtures": [],
+    "path": "ZigZag",
+    "color": [
+      145,
+      48,
+      242
+    ],
+    "amount": 0.5,
+    "shape": 0.5,
+    "subdiv": 4.0,
+    "master_beat": true,
+    "speed": 0.357,
+    "invert": false,
+    "spread": 0.0,
+    "wings": 1,
+    "static_pos": [],
+    "hold": []
+  },
+  {
+    "name": "Lissajous 3:2",
+    "feature": "Position",
+    "filter": "All",
+    "targets": [],
+    "components": [
+      {
+        "target": "PAN",
+        "mode": "Oscillation",
+        "static_value": 128,
+        "amount": 0.3,
+        "shape": 0.5,
+        "subdiv": 2.6666667,
+        "phase": 0.0,
+        "invert": false,
+        "waveform_id": null
+      },
+      {
+        "target": "TILT",
+        "mode": "Oscillation",
+        "static_value": 128,
+        "amount": 0.3,
+        "shape": 0.5,
+        "subdiv": 4.0,
+        "phase": 0.0,
+        "invert": false,
+        "waveform_id": null
+      }
+    ],
+    "mode": "Wave",
+    "fixtures": [],
+    "path": "Lissajous",
+    "color": [
+      242,
+      48,
+      242
+    ],
+    "amount": 0.5,
+    "shape": 0.5,
+    "subdiv": 4.0,
+    "master_beat": true,
+    "speed": 0.357,
+    "invert": false,
+    "spread": 0.0,
+    "wings": 1,
+    "static_pos": [],
+    "hold": []
+  },
+  {
+    "name": "Pan Slow Small",
+    "feature": "Position",
+    "filter": "Pan",
+    "targets": [],
+    "components": [],
+    "mode": "Wave",
+    "fixtures": [],
+    "color": [
+      242,
+      36,
+      36
+    ],
+    "amount": 0.25,
+    "shape": 0.5,
+    "subdiv": 16.0,
+    "master_beat": true,
+    "speed": 0.357,
+    "invert": false,
+    "spread": 0.5,
+    "wings": 1,
+    "static_pos": [],
+    "hold": []
+  },
+  {
+    "name": "Pan Slow Mid",
+    "feature": "Position",
+    "filter": "Pan",
+    "targets": [],
+    "components": [],
+    "mode": "Wave",
+    "fixtures": [],
+    "color": [
+      242,
+      162,
+      36
+    ],
+    "amount": 0.5,
+    "shape": 0.5,
+    "subdiv": 16.0,
+    "master_beat": true,
+    "speed": 0.357,
+    "invert": false,
+    "spread": 0.5,
+    "wings": 1,
+    "static_pos": [],
+    "hold": []
+  },
+  {
+    "name": "Pan Slow Big",
+    "feature": "Position",
+    "filter": "Pan",
+    "targets": [],
+    "components": [],
+    "mode": "Wave",
+    "fixtures": [
+      "SlimPAR T12 BT (7ch) 1@513",
+      "SlimPAR T12 BT (7ch) 2@520",
+      "SlimPAR T12 BT (7ch) 3@527",
+      "SlimPAR T12 BT (7ch) 4@534",
+      "SlimPAR T12 BT (7ch) 5@541",
+      "SlimPAR T12 BT (7ch) 6@548",
+      "SlimPAR T12 BT (7ch) 7@555",
+      "SlimPAR Q12 BT (8ch) 1@562",
+      "SlimPAR Q12 BT (8ch) 2@570",
+      "SlimPAR Q12 BT (8ch) 3@578",
+      "SlimPAR Q12 BT (8ch) 4@586",
+      "SlimPAR Q12 BT (8ch) 5@594",
+      "SlimPAR Q12 BT (8ch) 6@602",
+      "SlimPAR Q12 BT (8ch) 7@610",
+      "Fogger (2ch)@470",
+      "Maverick MK2 Spot (24ch) 1@1",
+      "Maverick MK2 Spot (24ch) 2@25",
+      "Maverick MK2 Spot (24ch) 3@49",
+      "Maverick MK2 Spot (24ch) 4@73",
+      "Intimidator Spot 475Z (16ch) 1@97",
+      "Intimidator Spot 475Z (16ch) 2@113",
+      "Intimidator Spot 475Z (16ch) 3@129",
+      "Intimidator Spot 475Z (16ch) 4@145",
+      "Intimidator Trio (15ch) 1@161",
+      "Intimidator Trio (15ch) 2@176",
+      "Rogue R1 Wash (14ch) 1@191",
+      "Rogue R1 Wash (14ch) 2@205",
+      "Rogue R1 Wash (14ch) 3@219",
+      "Rogue R1 Wash (14ch) 4@233",
+      "Betopper LF2405 Matrix Strobe (11ch) 1@247",
+      "Betopper LF2405 Matrix Strobe (11ch) 2@258",
+      "Betopper LF2405 Matrix Strobe (11ch) 3@269",
+      "Betopper LF2405 Matrix Strobe (11ch) 4@280",
+      "Fogger (2ch)@291",
+      "Intimidator Spot 375Z IRC (15ch) 1@293",
+      "Intimidator Spot 375Z IRC (15ch) 2@308",
+      "Intimidator Spot 375Z IRC (15ch) 3@323",
+      "Intimidator Spot 375Z IRC (15ch) 4@338",
+      "SHEHDS Bee Eye 19x40 Ring (31ch) 1@353",
+      "SHEHDS Bee Eye 19x40 Ring (31ch) 2@384",
+      "SHEHDS Bee Eye 19x40 Ring (31ch)@415",
+      "top trio on ring@618",
+      "back left and right pyxis 1@648",
+      "back left and right pyxis 2@674",
+      "back left and right pyxis 3@700",
+      "back left and right pyxis 4@726",
+      "back left and right pyxis 5@752",
+      "back left and right pyxis 6@778",
+      "back left and right pyxis 7@804",
+      "back left and right pyxis 8@830",
+      "front line 1 1@856",
+      "front line 1 2@863",
+      "front line 2 1@870",
+      "front line 2 2@878",
+      "front line 2 1@886",
+      "front line 2 2@893",
+      "front line 2 3@900",
+      "front line 2@907"
+    ],
+    "color": [
+      196,
+      242,
+      36
+    ],
+    "amount": 0.9,
+    "shape": 0.5,
+    "subdiv": 16.0,
+    "master_beat": true,
+    "speed": 0.357,
+    "invert": false,
+    "spread": 0.5,
+    "wings": 1,
+    "static_pos": [],
+    "hold": []
+  },
+  {
+    "name": "Pan Med Small",
+    "feature": "Position",
+    "filter": "Pan",
+    "targets": [],
+    "components": [],
+    "mode": "Wave",
+    "fixtures": [],
+    "color": [
+      70,
+      242,
+      36
+    ],
+    "amount": 0.25,
+    "shape": 0.5,
+    "subdiv": 8.0,
+    "master_beat": true,
+    "speed": 0.357,
+    "invert": false,
+    "spread": 0.5,
+    "wings": 1,
+    "static_pos": [],
+    "hold": []
+  },
+  {
+    "name": "Pan Med Mid",
+    "feature": "Position",
+    "filter": "Pan",
+    "targets": [],
+    "components": [],
+    "mode": "Wave",
+    "fixtures": [],
+    "color": [
+      36,
+      242,
+      127
+    ],
+    "amount": 0.5,
+    "shape": 0.5,
+    "subdiv": 8.0,
+    "master_beat": true,
+    "speed": 0.357,
+    "invert": false,
+    "spread": 0.5,
+    "wings": 1,
+    "static_pos": [],
+    "hold": []
+  },
+  {
+    "name": "Pan Med Big",
+    "feature": "Position",
+    "filter": "Pan",
+    "targets": [],
+    "components": [],
+    "mode": "Wave",
+    "fixtures": [],
+    "color": [
+      36,
+      230,
+      242
+    ],
+    "amount": 0.9,
+    "shape": 0.5,
+    "subdiv": 8.0,
+    "master_beat": true,
+    "speed": 0.357,
+    "invert": false,
+    "spread": 0.5,
+    "wings": 1,
+    "static_pos": [],
+    "hold": []
+  },
+  {
+    "name": "Pan Fast Small",
+    "feature": "Position",
+    "filter": "Pan",
+    "targets": [],
+    "components": [],
+    "mode": "Wave",
+    "fixtures": [],
+    "color": [
+      36,
+      104,
+      242
+    ],
+    "amount": 0.25,
+    "shape": 0.5,
+    "subdiv": 4.0,
+    "master_beat": true,
+    "speed": 0.357,
+    "invert": false,
+    "spread": 0.5,
+    "wings": 1,
+    "static_pos": [],
+    "hold": []
+  },
+  {
+    "name": "Pan Fast Mid",
+    "feature": "Position",
+    "filter": "Pan",
+    "targets": [],
+    "components": [],
+    "mode": "Wave",
+    "fixtures": [],
+    "color": [
+      93,
+      36,
+      242
+    ],
+    "amount": 0.5,
+    "shape": 0.5,
+    "subdiv": 4.0,
+    "master_beat": true,
+    "speed": 0.357,
+    "invert": false,
+    "spread": 0.5,
+    "wings": 1,
+    "static_pos": [],
+    "hold": []
+  },
+  {
+    "name": "Pan Fast Big",
+    "feature": "Position",
+    "filter": "Pan",
+    "targets": [],
+    "components": [],
+    "mode": "Wave",
+    "fixtures": [],
+    "color": [
+      219,
+      36,
+      242
+    ],
+    "amount": 0.9,
+    "shape": 0.5,
+    "subdiv": 4.0,
+    "master_beat": true,
+    "speed": 0.357,
+    "invert": false,
+    "spread": 0.5,
+    "wings": 1,
+    "static_pos": [],
+    "hold": []
+  },
+  {
+    "name": "Tilt Slow Small",
+    "feature": "Position",
+    "filter": "Tilt",
+    "targets": [],
+    "components": [],
+    "mode": "Wave",
+    "fixtures": [],
+    "color": [
+      242,
+      99,
+      36
+    ],
+    "amount": 0.25,
+    "shape": 0.5,
+    "subdiv": 16.0,
+    "master_beat": true,
+    "speed": 0.357,
+    "invert": false,
+    "spread": 0.5,
+    "wings": 1,
+    "static_pos": [],
+    "hold": []
+  },
+  {
+    "name": "Tilt Slow Mid",
+    "feature": "Position",
+    "filter": "Tilt",
+    "targets": [],
+    "components": [],
+    "mode": "Wave",
+    "fixtures": [],
+    "color": [
+      242,
+      225,
+      36
+    ],
+    "amount": 0.5,
+    "shape": 0.5,
+    "subdiv": 16.0,
+    "master_beat": true,
+    "speed": 0.357,
+    "invert": false,
+    "spread": 0.5,
+    "wings": 1,
+    "static_pos": [],
+    "hold": []
+  },
+  {
+    "name": "Tilt Slow Big",
+    "feature": "Position",
+    "filter": "Tilt",
+    "targets": [],
+    "components": [],
+    "mode": "Wave",
+    "fixtures": [],
+    "color": [
+      133,
+      242,
+      36
+    ],
+    "amount": 0.9,
+    "shape": 0.5,
+    "subdiv": 16.0,
+    "master_beat": true,
+    "speed": 0.357,
+    "invert": false,
+    "spread": 0.5,
+    "wings": 1,
+    "static_pos": [],
+    "hold": []
+  },
+  {
+    "name": "Tilt Med Small",
+    "feature": "Position",
+    "filter": "Tilt",
+    "targets": [],
+    "components": [],
+    "mode": "Wave",
+    "fixtures": [],
+    "color": [
+      36,
+      242,
+      64
+    ],
+    "amount": 0.25,
+    "shape": 0.5,
+    "subdiv": 8.0,
+    "master_beat": true,
+    "speed": 0.357,
+    "invert": false,
+    "spread": 0.5,
+    "wings": 1,
+    "static_pos": [],
+    "hold": []
+  },
+  {
+    "name": "Tilt Med Mid",
+    "feature": "Position",
+    "filter": "Tilt",
+    "targets": [],
+    "components": [],
+    "mode": "Wave",
+    "fixtures": [],
+    "color": [
+      36,
+      242,
+      190
+    ],
+    "amount": 0.5,
+    "shape": 0.5,
+    "subdiv": 8.0,
+    "master_beat": true,
+    "speed": 0.357,
+    "invert": false,
+    "spread": 0.5,
+    "wings": 1,
+    "static_pos": [],
+    "hold": []
+  },
+  {
+    "name": "Tilt Med Big",
+    "feature": "Position",
+    "filter": "Tilt",
+    "targets": [],
+    "components": [],
+    "mode": "Wave",
+    "fixtures": [],
+    "color": [
+      36,
+      167,
+      242
+    ],
+    "amount": 0.9,
+    "shape": 0.5,
+    "subdiv": 8.0,
+    "master_beat": true,
+    "speed": 0.357,
+    "invert": false,
+    "spread": 0.5,
+    "wings": 1,
+    "static_pos": [],
+    "hold": []
+  },
+  {
+    "name": "Tilt Fast Small",
+    "feature": "Position",
+    "filter": "Tilt",
+    "targets": [],
+    "components": [],
+    "mode": "Wave",
+    "fixtures": [],
+    "color": [
+      36,
+      42,
+      242
+    ],
+    "amount": 0.25,
+    "shape": 0.5,
+    "subdiv": 4.0,
+    "master_beat": true,
+    "speed": 0.357,
+    "invert": false,
+    "spread": 0.5,
+    "wings": 1,
+    "static_pos": [],
+    "hold": []
+  },
+  {
+    "name": "Tilt Fast Mid",
+    "feature": "Position",
+    "filter": "Tilt",
+    "targets": [],
+    "components": [],
+    "mode": "Wave",
+    "fixtures": [],
+    "color": [
+      156,
+      36,
+      242
+    ],
+    "amount": 0.5,
+    "shape": 0.5,
+    "subdiv": 4.0,
+    "master_beat": true,
+    "speed": 0.357,
+    "invert": false,
+    "spread": 0.5,
+    "wings": 1,
+    "static_pos": [],
+    "hold": []
+  },
+  {
+    "name": "Tilt Fast Big",
+    "feature": "Position",
+    "filter": "Tilt",
+    "targets": [],
+    "components": [],
+    "mode": "Wave",
+    "fixtures": [],
+    "color": [
+      242,
+      36,
+      202
+    ],
+    "amount": 0.9,
+    "shape": 0.5,
+    "subdiv": 4.0,
+    "master_beat": true,
+    "speed": 0.357,
+    "invert": false,
+    "spread": 0.5,
+    "wings": 1,
+    "static_pos": [],
+    "hold": []
+  },
+  {
+    "name": "Fog on",
+    "feature": "Dimmer",
+    "filter": "All",
+    "targets": [],
+    "components": [],
+    "mode": "Wave",
+    "fixtures": [],
     "color": [
       110,
       120,
       150
     ],
     "amount": 0.5,
-    "shape": 0.4,
+    "shape": 0.5,
     "subdiv": 4.0,
     "master_beat": true,
     "speed": 0.357,
     "invert": false,
-    "spread": 0.85,
-    "wings": 5,
+    "spread": 1.0,
+    "wings": 1,
     "static_pos": [],
     "hold": [
       [
-        "disco banger@408",
+        "Fogger (2ch)@291",
         [
           [
             0,
-            133
+            205
+          ],
+          [
+            1,
+            130
+          ]
+        ]
+      ]
+    ]
+  },
+  {
+    "name": "Flow",
+    "feature": "Dimmer",
+    "filter": "All",
+    "targets": [],
+    "components": [],
+    "mode": "Wave",
+    "fixtures": [],
+    "color": [
+      110,
+      120,
+      150
+    ],
+    "amount": 0.5,
+    "shape": 0.5,
+    "subdiv": 4.0,
+    "master_beat": true,
+    "speed": 0.357,
+    "invert": false,
+    "spread": 1.0,
+    "wings": 1,
+    "static_pos": [],
+    "hold": [
+      [
+        "Fogger (2ch)@291",
+        [
+          [
+            0,
+            212
+          ],
+          [
+            1,
+            50
+          ]
+        ]
+      ]
+    ]
+  },
+  {
+    "name": "Front lights",
+    "feature": "Dimmer",
+    "filter": "All",
+    "targets": [],
+    "components": [],
+    "mode": "Wave",
+    "fixtures": [],
+    "color": [
+      110,
+      120,
+      150
+    ],
+    "amount": 0.5,
+    "shape": 0.5,
+    "subdiv": 4.0,
+    "master_beat": true,
+    "speed": 0.357,
+    "invert": false,
+    "spread": 1.0,
+    "wings": 1,
+    "static_pos": [],
+    "hold": [
+      [
+        "front line 1 1@856",
+        [
+          [
+            0,
+            255
+          ],
+          [
+            1,
+            255
           ],
           [
             2,
-            115
+            90
+          ],
+          [
+            3,
+            0
+          ],
+          [
+            4,
+            0
           ],
           [
             5,
+            0
+          ],
+          [
+            6,
+            97
+          ]
+        ]
+      ],
+      [
+        "front line 1 2@863",
+        [
+          [
+            0,
             255
+          ],
+          [
+            1,
+            255
+          ],
+          [
+            2,
+            90
+          ],
+          [
+            3,
+            0
+          ],
+          [
+            4,
+            0
+          ],
+          [
+            5,
+            0
+          ],
+          [
+            6,
+            97
+          ]
+        ]
+      ],
+      [
+        "front line 2 1@870",
+        [
+          [
+            0,
+            255
+          ],
+          [
+            1,
+            255
+          ],
+          [
+            2,
+            90
+          ],
+          [
+            3,
+            0
+          ],
+          [
+            4,
+            0
+          ],
+          [
+            5,
+            0
+          ],
+          [
+            6,
+            0
+          ],
+          [
+            7,
+            97
+          ]
+        ]
+      ],
+      [
+        "front line 2 2@878",
+        [
+          [
+            0,
+            255
+          ],
+          [
+            1,
+            255
+          ],
+          [
+            2,
+            90
+          ],
+          [
+            3,
+            0
+          ],
+          [
+            4,
+            0
+          ],
+          [
+            5,
+            0
+          ],
+          [
+            6,
+            0
+          ],
+          [
+            7,
+            97
+          ]
+        ]
+      ],
+      [
+        "front line 2 1@886",
+        [
+          [
+            0,
+            255
+          ],
+          [
+            1,
+            255
+          ],
+          [
+            2,
+            90
+          ],
+          [
+            3,
+            0
+          ],
+          [
+            4,
+            0
+          ],
+          [
+            5,
+            0
+          ],
+          [
+            6,
+            97
+          ]
+        ]
+      ],
+      [
+        "front line 2 2@893",
+        [
+          [
+            0,
+            255
+          ],
+          [
+            1,
+            255
+          ],
+          [
+            2,
+            90
+          ],
+          [
+            3,
+            0
+          ],
+          [
+            4,
+            0
+          ],
+          [
+            5,
+            0
+          ],
+          [
+            6,
+            97
+          ]
+        ]
+      ],
+      [
+        "front line 2 3@900",
+        [
+          [
+            0,
+            255
+          ],
+          [
+            1,
+            255
+          ],
+          [
+            2,
+            90
+          ],
+          [
+            3,
+            0
+          ],
+          [
+            4,
+            0
+          ],
+          [
+            5,
+            0
+          ],
+          [
+            6,
+            97
+          ]
+        ]
+      ],
+      [
+        "front line 2@907",
+        [
+          [
+            0,
+            255
+          ],
+          [
+            1,
+            255
+          ],
+          [
+            2,
+            90
+          ],
+          [
+            3,
+            0
+          ],
+          [
+            4,
+            0
+          ],
+          [
+            5,
+            0
+          ],
+          [
+            6,
+            97
+          ]
+        ]
+      ]
+    ]
+  },
+  {
+    "name": "Dim Breathe Slow Together",
+    "feature": "Dimmer",
+    "filter": "All",
+    "targets": [],
+    "components": [],
+    "mode": "Wave",
+    "fixtures": [
+      "SlimPAR T12 BT (7ch) 1@513",
+      "SlimPAR T12 BT (7ch) 2@520",
+      "SlimPAR T12 BT (7ch) 3@527",
+      "SlimPAR T12 BT (7ch) 4@534",
+      "SlimPAR T12 BT (7ch) 5@541",
+      "SlimPAR T12 BT (7ch) 6@548",
+      "SlimPAR T12 BT (7ch) 7@555",
+      "SlimPAR Q12 BT (8ch) 1@562",
+      "SlimPAR Q12 BT (8ch) 2@570",
+      "SlimPAR Q12 BT (8ch) 3@578",
+      "SlimPAR Q12 BT (8ch) 4@586",
+      "SlimPAR Q12 BT (8ch) 5@594",
+      "SlimPAR Q12 BT (8ch) 6@602",
+      "SlimPAR Q12 BT (8ch) 7@610",
+      "Fogger (2ch)@470",
+      "Maverick MK2 Spot (24ch) 1@1",
+      "Maverick MK2 Spot (24ch) 2@25",
+      "Maverick MK2 Spot (24ch) 3@49",
+      "Maverick MK2 Spot (24ch) 4@73",
+      "Intimidator Spot 475Z (16ch) 1@97",
+      "Intimidator Spot 475Z (16ch) 2@113",
+      "Intimidator Spot 475Z (16ch) 3@129",
+      "Intimidator Spot 475Z (16ch) 4@145",
+      "Intimidator Trio (15ch) 1@161",
+      "Intimidator Trio (15ch) 2@176",
+      "Rogue R1 Wash (14ch) 1@191",
+      "Rogue R1 Wash (14ch) 2@205",
+      "Rogue R1 Wash (14ch) 3@219",
+      "Rogue R1 Wash (14ch) 4@233",
+      "Betopper LF2405 Matrix Strobe (11ch) 1@247",
+      "Betopper LF2405 Matrix Strobe (11ch) 2@258",
+      "Betopper LF2405 Matrix Strobe (11ch) 3@269",
+      "Betopper LF2405 Matrix Strobe (11ch) 4@280",
+      "Fogger (2ch)@291",
+      "Intimidator Spot 375Z IRC (15ch) 1@293",
+      "Intimidator Spot 375Z IRC (15ch) 2@308",
+      "Intimidator Spot 375Z IRC (15ch) 3@323",
+      "Intimidator Spot 375Z IRC (15ch) 4@338",
+      "SHEHDS Bee Eye 19x40 Ring (31ch) 1@353",
+      "SHEHDS Bee Eye 19x40 Ring (31ch) 2@384",
+      "SHEHDS Bee Eye 19x40 Ring (31ch)@415",
+      "top trio on ring@618",
+      "back left and right pyxis 1@648",
+      "back left and right pyxis 2@674",
+      "back left and right pyxis 3@700",
+      "back left and right pyxis 4@726",
+      "back left and right pyxis 5@752",
+      "back left and right pyxis 6@778",
+      "back left and right pyxis 7@804",
+      "back left and right pyxis 8@830",
+      "front line 1 1@856",
+      "front line 1 2@863",
+      "front line 2 1@870",
+      "front line 2 2@878",
+      "front line 2 1@886",
+      "front line 2 2@893",
+      "front line 2 3@900",
+      "front line 2@907"
+    ],
+    "color": [
+      242,
+      36,
+      36
+    ],
+    "amount": 0.5,
+    "shape": 0.5,
+    "subdiv": 16.0,
+    "master_beat": true,
+    "speed": 0.357,
+    "invert": false,
+    "spread": 0.0,
+    "wings": 1,
+    "static_pos": [],
+    "hold": []
+  },
+  {
+    "name": "Dim Breathe Slow Half",
+    "feature": "Dimmer",
+    "filter": "All",
+    "targets": [],
+    "components": [],
+    "mode": "Wave",
+    "fixtures": [
+      "SlimPAR T12 BT (7ch) 1@513",
+      "SlimPAR T12 BT (7ch) 2@520",
+      "SlimPAR T12 BT (7ch) 3@527",
+      "SlimPAR T12 BT (7ch) 4@534",
+      "SlimPAR T12 BT (7ch) 5@541",
+      "SlimPAR T12 BT (7ch) 6@548",
+      "SlimPAR T12 BT (7ch) 7@555",
+      "SlimPAR Q12 BT (8ch) 1@562",
+      "SlimPAR Q12 BT (8ch) 2@570",
+      "SlimPAR Q12 BT (8ch) 3@578",
+      "SlimPAR Q12 BT (8ch) 4@586",
+      "SlimPAR Q12 BT (8ch) 5@594",
+      "SlimPAR Q12 BT (8ch) 6@602",
+      "SlimPAR Q12 BT (8ch) 7@610",
+      "Fogger (2ch)@470",
+      "Maverick MK2 Spot (24ch) 1@1",
+      "Maverick MK2 Spot (24ch) 2@25",
+      "Maverick MK2 Spot (24ch) 3@49",
+      "Maverick MK2 Spot (24ch) 4@73",
+      "Intimidator Spot 475Z (16ch) 1@97",
+      "Intimidator Spot 475Z (16ch) 2@113",
+      "Intimidator Spot 475Z (16ch) 3@129",
+      "Intimidator Spot 475Z (16ch) 4@145",
+      "Intimidator Trio (15ch) 1@161",
+      "Intimidator Trio (15ch) 2@176",
+      "Rogue R1 Wash (14ch) 1@191",
+      "Rogue R1 Wash (14ch) 2@205",
+      "Rogue R1 Wash (14ch) 3@219",
+      "Rogue R1 Wash (14ch) 4@233",
+      "Betopper LF2405 Matrix Strobe (11ch) 1@247",
+      "Betopper LF2405 Matrix Strobe (11ch) 2@258",
+      "Betopper LF2405 Matrix Strobe (11ch) 3@269",
+      "Betopper LF2405 Matrix Strobe (11ch) 4@280",
+      "Fogger (2ch)@291",
+      "Intimidator Spot 375Z IRC (15ch) 1@293",
+      "Intimidator Spot 375Z IRC (15ch) 2@308",
+      "Intimidator Spot 375Z IRC (15ch) 3@323",
+      "Intimidator Spot 375Z IRC (15ch) 4@338",
+      "SHEHDS Bee Eye 19x40 Ring (31ch) 1@353",
+      "SHEHDS Bee Eye 19x40 Ring (31ch) 2@384",
+      "SHEHDS Bee Eye 19x40 Ring (31ch)@415",
+      "top trio on ring@618",
+      "back left and right pyxis 1@648",
+      "back left and right pyxis 2@674",
+      "back left and right pyxis 3@700",
+      "back left and right pyxis 4@726",
+      "back left and right pyxis 5@752",
+      "back left and right pyxis 6@778",
+      "back left and right pyxis 7@804",
+      "back left and right pyxis 8@830",
+      "front line 1 1@856",
+      "front line 1 2@863",
+      "front line 2 1@870",
+      "front line 2 2@878",
+      "front line 2 1@886",
+      "front line 2 2@893",
+      "front line 2 3@900",
+      "front line 2@907"
+    ],
+    "color": [
+      242,
+      162,
+      36
+    ],
+    "amount": 0.5,
+    "shape": 0.5,
+    "subdiv": 16.0,
+    "master_beat": true,
+    "speed": 0.357,
+    "invert": false,
+    "spread": 0.5,
+    "wings": 1,
+    "static_pos": [],
+    "hold": []
+  },
+  {
+    "name": "Dim Breathe Slow Wrap",
+    "feature": "Dimmer",
+    "filter": "All",
+    "targets": [],
+    "components": [],
+    "mode": "Wave",
+    "fixtures": [
+      "SlimPAR T12 BT (7ch) 1@513",
+      "SlimPAR T12 BT (7ch) 2@520",
+      "SlimPAR T12 BT (7ch) 3@527",
+      "SlimPAR T12 BT (7ch) 4@534",
+      "SlimPAR T12 BT (7ch) 5@541",
+      "SlimPAR T12 BT (7ch) 6@548",
+      "SlimPAR T12 BT (7ch) 7@555",
+      "SlimPAR Q12 BT (8ch) 1@562",
+      "SlimPAR Q12 BT (8ch) 2@570",
+      "SlimPAR Q12 BT (8ch) 3@578",
+      "SlimPAR Q12 BT (8ch) 4@586",
+      "SlimPAR Q12 BT (8ch) 5@594",
+      "SlimPAR Q12 BT (8ch) 6@602",
+      "SlimPAR Q12 BT (8ch) 7@610",
+      "Fogger (2ch)@470",
+      "Maverick MK2 Spot (24ch) 1@1",
+      "Maverick MK2 Spot (24ch) 2@25",
+      "Maverick MK2 Spot (24ch) 3@49",
+      "Maverick MK2 Spot (24ch) 4@73",
+      "Intimidator Spot 475Z (16ch) 1@97",
+      "Intimidator Spot 475Z (16ch) 2@113",
+      "Intimidator Spot 475Z (16ch) 3@129",
+      "Intimidator Spot 475Z (16ch) 4@145",
+      "Intimidator Trio (15ch) 1@161",
+      "Intimidator Trio (15ch) 2@176",
+      "Rogue R1 Wash (14ch) 1@191",
+      "Rogue R1 Wash (14ch) 2@205",
+      "Rogue R1 Wash (14ch) 3@219",
+      "Rogue R1 Wash (14ch) 4@233",
+      "Betopper LF2405 Matrix Strobe (11ch) 1@247",
+      "Betopper LF2405 Matrix Strobe (11ch) 2@258",
+      "Betopper LF2405 Matrix Strobe (11ch) 3@269",
+      "Betopper LF2405 Matrix Strobe (11ch) 4@280",
+      "Fogger (2ch)@291",
+      "Intimidator Spot 375Z IRC (15ch) 1@293",
+      "Intimidator Spot 375Z IRC (15ch) 2@308",
+      "Intimidator Spot 375Z IRC (15ch) 3@323",
+      "Intimidator Spot 375Z IRC (15ch) 4@338",
+      "SHEHDS Bee Eye 19x40 Ring (31ch) 1@353",
+      "SHEHDS Bee Eye 19x40 Ring (31ch) 2@384",
+      "SHEHDS Bee Eye 19x40 Ring (31ch)@415",
+      "top trio on ring@618",
+      "back left and right pyxis 1@648",
+      "back left and right pyxis 2@674",
+      "back left and right pyxis 3@700",
+      "back left and right pyxis 4@726",
+      "back left and right pyxis 5@752",
+      "back left and right pyxis 6@778",
+      "back left and right pyxis 7@804",
+      "back left and right pyxis 8@830",
+      "front line 1 1@856",
+      "front line 1 2@863",
+      "front line 2 1@870",
+      "front line 2 2@878",
+      "front line 2 1@886",
+      "front line 2 2@893",
+      "front line 2 3@900",
+      "front line 2@907"
+    ],
+    "color": [
+      196,
+      242,
+      36
+    ],
+    "amount": 0.5,
+    "shape": 0.5,
+    "subdiv": 16.0,
+    "master_beat": true,
+    "speed": 0.357,
+    "invert": false,
+    "spread": 1.0,
+    "wings": 1,
+    "static_pos": [],
+    "hold": []
+  },
+  {
+    "name": "Dim Breathe Med Together",
+    "feature": "Dimmer",
+    "filter": "All",
+    "targets": [],
+    "components": [],
+    "mode": "Wave",
+    "fixtures": [
+      "SlimPAR T12 BT (7ch) 1@513",
+      "SlimPAR T12 BT (7ch) 2@520",
+      "SlimPAR T12 BT (7ch) 3@527",
+      "SlimPAR T12 BT (7ch) 4@534",
+      "SlimPAR T12 BT (7ch) 5@541",
+      "SlimPAR T12 BT (7ch) 6@548",
+      "SlimPAR T12 BT (7ch) 7@555",
+      "SlimPAR Q12 BT (8ch) 1@562",
+      "SlimPAR Q12 BT (8ch) 2@570",
+      "SlimPAR Q12 BT (8ch) 3@578",
+      "SlimPAR Q12 BT (8ch) 4@586",
+      "SlimPAR Q12 BT (8ch) 5@594",
+      "SlimPAR Q12 BT (8ch) 6@602",
+      "SlimPAR Q12 BT (8ch) 7@610",
+      "Fogger (2ch)@470",
+      "Maverick MK2 Spot (24ch) 1@1",
+      "Maverick MK2 Spot (24ch) 2@25",
+      "Maverick MK2 Spot (24ch) 3@49",
+      "Maverick MK2 Spot (24ch) 4@73",
+      "Intimidator Spot 475Z (16ch) 1@97",
+      "Intimidator Spot 475Z (16ch) 2@113",
+      "Intimidator Spot 475Z (16ch) 3@129",
+      "Intimidator Spot 475Z (16ch) 4@145",
+      "Intimidator Trio (15ch) 1@161",
+      "Intimidator Trio (15ch) 2@176",
+      "Rogue R1 Wash (14ch) 1@191",
+      "Rogue R1 Wash (14ch) 2@205",
+      "Rogue R1 Wash (14ch) 3@219",
+      "Rogue R1 Wash (14ch) 4@233",
+      "Betopper LF2405 Matrix Strobe (11ch) 1@247",
+      "Betopper LF2405 Matrix Strobe (11ch) 2@258",
+      "Betopper LF2405 Matrix Strobe (11ch) 3@269",
+      "Betopper LF2405 Matrix Strobe (11ch) 4@280",
+      "Fogger (2ch)@291",
+      "Intimidator Spot 375Z IRC (15ch) 1@293",
+      "Intimidator Spot 375Z IRC (15ch) 2@308",
+      "Intimidator Spot 375Z IRC (15ch) 3@323",
+      "Intimidator Spot 375Z IRC (15ch) 4@338",
+      "SHEHDS Bee Eye 19x40 Ring (31ch) 1@353",
+      "SHEHDS Bee Eye 19x40 Ring (31ch) 2@384",
+      "SHEHDS Bee Eye 19x40 Ring (31ch)@415",
+      "top trio on ring@618",
+      "back left and right pyxis 1@648",
+      "back left and right pyxis 2@674",
+      "back left and right pyxis 3@700",
+      "back left and right pyxis 4@726",
+      "back left and right pyxis 5@752",
+      "back left and right pyxis 6@778",
+      "back left and right pyxis 7@804",
+      "back left and right pyxis 8@830",
+      "front line 1 1@856",
+      "front line 1 2@863",
+      "front line 2 1@870",
+      "front line 2 2@878",
+      "front line 2 1@886",
+      "front line 2 2@893",
+      "front line 2 3@900",
+      "front line 2@907"
+    ],
+    "color": [
+      70,
+      242,
+      36
+    ],
+    "amount": 0.5,
+    "shape": 0.5,
+    "subdiv": 8.0,
+    "master_beat": true,
+    "speed": 0.357,
+    "invert": false,
+    "spread": 0.0,
+    "wings": 1,
+    "static_pos": [],
+    "hold": []
+  },
+  {
+    "name": "Dim Breathe Med Half",
+    "feature": "Dimmer",
+    "filter": "All",
+    "targets": [],
+    "components": [],
+    "mode": "Wave",
+    "fixtures": [
+      "SlimPAR T12 BT (7ch) 1@513",
+      "SlimPAR T12 BT (7ch) 2@520",
+      "SlimPAR T12 BT (7ch) 3@527",
+      "SlimPAR T12 BT (7ch) 4@534",
+      "SlimPAR T12 BT (7ch) 5@541",
+      "SlimPAR T12 BT (7ch) 6@548",
+      "SlimPAR T12 BT (7ch) 7@555",
+      "SlimPAR Q12 BT (8ch) 1@562",
+      "SlimPAR Q12 BT (8ch) 2@570",
+      "SlimPAR Q12 BT (8ch) 3@578",
+      "SlimPAR Q12 BT (8ch) 4@586",
+      "SlimPAR Q12 BT (8ch) 5@594",
+      "SlimPAR Q12 BT (8ch) 6@602",
+      "SlimPAR Q12 BT (8ch) 7@610",
+      "Fogger (2ch)@470",
+      "Maverick MK2 Spot (24ch) 1@1",
+      "Maverick MK2 Spot (24ch) 2@25",
+      "Maverick MK2 Spot (24ch) 3@49",
+      "Maverick MK2 Spot (24ch) 4@73",
+      "Intimidator Spot 475Z (16ch) 1@97",
+      "Intimidator Spot 475Z (16ch) 2@113",
+      "Intimidator Spot 475Z (16ch) 3@129",
+      "Intimidator Spot 475Z (16ch) 4@145",
+      "Intimidator Trio (15ch) 1@161",
+      "Intimidator Trio (15ch) 2@176",
+      "Rogue R1 Wash (14ch) 1@191",
+      "Rogue R1 Wash (14ch) 2@205",
+      "Rogue R1 Wash (14ch) 3@219",
+      "Rogue R1 Wash (14ch) 4@233",
+      "Betopper LF2405 Matrix Strobe (11ch) 1@247",
+      "Betopper LF2405 Matrix Strobe (11ch) 2@258",
+      "Betopper LF2405 Matrix Strobe (11ch) 3@269",
+      "Betopper LF2405 Matrix Strobe (11ch) 4@280",
+      "Fogger (2ch)@291",
+      "Intimidator Spot 375Z IRC (15ch) 1@293",
+      "Intimidator Spot 375Z IRC (15ch) 2@308",
+      "Intimidator Spot 375Z IRC (15ch) 3@323",
+      "Intimidator Spot 375Z IRC (15ch) 4@338",
+      "SHEHDS Bee Eye 19x40 Ring (31ch) 1@353",
+      "SHEHDS Bee Eye 19x40 Ring (31ch) 2@384",
+      "SHEHDS Bee Eye 19x40 Ring (31ch)@415",
+      "top trio on ring@618",
+      "back left and right pyxis 1@648",
+      "back left and right pyxis 2@674",
+      "back left and right pyxis 3@700",
+      "back left and right pyxis 4@726",
+      "back left and right pyxis 5@752",
+      "back left and right pyxis 6@778",
+      "back left and right pyxis 7@804",
+      "back left and right pyxis 8@830",
+      "front line 1 1@856",
+      "front line 1 2@863",
+      "front line 2 1@870",
+      "front line 2 2@878",
+      "front line 2 1@886",
+      "front line 2 2@893",
+      "front line 2 3@900",
+      "front line 2@907"
+    ],
+    "color": [
+      36,
+      242,
+      127
+    ],
+    "amount": 0.5,
+    "shape": 0.5,
+    "subdiv": 8.0,
+    "master_beat": true,
+    "speed": 0.357,
+    "invert": false,
+    "spread": 0.5,
+    "wings": 1,
+    "static_pos": [],
+    "hold": []
+  },
+  {
+    "name": "Dim Breathe Med Wrap",
+    "feature": "Dimmer",
+    "filter": "All",
+    "targets": [],
+    "components": [],
+    "mode": "Wave",
+    "fixtures": [
+      "SlimPAR T12 BT (7ch) 1@513",
+      "SlimPAR T12 BT (7ch) 2@520",
+      "SlimPAR T12 BT (7ch) 3@527",
+      "SlimPAR T12 BT (7ch) 4@534",
+      "SlimPAR T12 BT (7ch) 5@541",
+      "SlimPAR T12 BT (7ch) 6@548",
+      "SlimPAR T12 BT (7ch) 7@555",
+      "SlimPAR Q12 BT (8ch) 1@562",
+      "SlimPAR Q12 BT (8ch) 2@570",
+      "SlimPAR Q12 BT (8ch) 3@578",
+      "SlimPAR Q12 BT (8ch) 4@586",
+      "SlimPAR Q12 BT (8ch) 5@594",
+      "SlimPAR Q12 BT (8ch) 6@602",
+      "SlimPAR Q12 BT (8ch) 7@610",
+      "Fogger (2ch)@470",
+      "Maverick MK2 Spot (24ch) 1@1",
+      "Maverick MK2 Spot (24ch) 2@25",
+      "Maverick MK2 Spot (24ch) 3@49",
+      "Maverick MK2 Spot (24ch) 4@73",
+      "Intimidator Spot 475Z (16ch) 1@97",
+      "Intimidator Spot 475Z (16ch) 2@113",
+      "Intimidator Spot 475Z (16ch) 3@129",
+      "Intimidator Spot 475Z (16ch) 4@145",
+      "Intimidator Trio (15ch) 1@161",
+      "Intimidator Trio (15ch) 2@176",
+      "Rogue R1 Wash (14ch) 1@191",
+      "Rogue R1 Wash (14ch) 2@205",
+      "Rogue R1 Wash (14ch) 3@219",
+      "Rogue R1 Wash (14ch) 4@233",
+      "Betopper LF2405 Matrix Strobe (11ch) 1@247",
+      "Betopper LF2405 Matrix Strobe (11ch) 2@258",
+      "Betopper LF2405 Matrix Strobe (11ch) 3@269",
+      "Betopper LF2405 Matrix Strobe (11ch) 4@280",
+      "Fogger (2ch)@291",
+      "Intimidator Spot 375Z IRC (15ch) 1@293",
+      "Intimidator Spot 375Z IRC (15ch) 2@308",
+      "Intimidator Spot 375Z IRC (15ch) 3@323",
+      "Intimidator Spot 375Z IRC (15ch) 4@338",
+      "SHEHDS Bee Eye 19x40 Ring (31ch) 1@353",
+      "SHEHDS Bee Eye 19x40 Ring (31ch) 2@384",
+      "SHEHDS Bee Eye 19x40 Ring (31ch)@415",
+      "top trio on ring@618",
+      "back left and right pyxis 1@648",
+      "back left and right pyxis 2@674",
+      "back left and right pyxis 3@700",
+      "back left and right pyxis 4@726",
+      "back left and right pyxis 5@752",
+      "back left and right pyxis 6@778",
+      "back left and right pyxis 7@804",
+      "back left and right pyxis 8@830",
+      "front line 1 1@856",
+      "front line 1 2@863",
+      "front line 2 1@870",
+      "front line 2 2@878",
+      "front line 2 1@886",
+      "front line 2 2@893",
+      "front line 2 3@900",
+      "front line 2@907"
+    ],
+    "color": [
+      36,
+      230,
+      242
+    ],
+    "amount": 0.5,
+    "shape": 0.5,
+    "subdiv": 8.0,
+    "master_beat": true,
+    "speed": 0.357,
+    "invert": false,
+    "spread": 1.0,
+    "wings": 1,
+    "static_pos": [],
+    "hold": []
+  },
+  {
+    "name": "Dim Breathe Fast Together",
+    "feature": "Dimmer",
+    "filter": "All",
+    "targets": [],
+    "components": [],
+    "mode": "Wave",
+    "fixtures": [
+      "SlimPAR T12 BT (7ch) 1@513",
+      "SlimPAR T12 BT (7ch) 2@520",
+      "SlimPAR T12 BT (7ch) 3@527",
+      "SlimPAR T12 BT (7ch) 4@534",
+      "SlimPAR T12 BT (7ch) 5@541",
+      "SlimPAR T12 BT (7ch) 6@548",
+      "SlimPAR T12 BT (7ch) 7@555",
+      "SlimPAR Q12 BT (8ch) 1@562",
+      "SlimPAR Q12 BT (8ch) 2@570",
+      "SlimPAR Q12 BT (8ch) 3@578",
+      "SlimPAR Q12 BT (8ch) 4@586",
+      "SlimPAR Q12 BT (8ch) 5@594",
+      "SlimPAR Q12 BT (8ch) 6@602",
+      "SlimPAR Q12 BT (8ch) 7@610",
+      "Fogger (2ch)@470",
+      "Maverick MK2 Spot (24ch) 1@1",
+      "Maverick MK2 Spot (24ch) 2@25",
+      "Maverick MK2 Spot (24ch) 3@49",
+      "Maverick MK2 Spot (24ch) 4@73",
+      "Intimidator Spot 475Z (16ch) 1@97",
+      "Intimidator Spot 475Z (16ch) 2@113",
+      "Intimidator Spot 475Z (16ch) 3@129",
+      "Intimidator Spot 475Z (16ch) 4@145",
+      "Intimidator Trio (15ch) 1@161",
+      "Intimidator Trio (15ch) 2@176",
+      "Rogue R1 Wash (14ch) 1@191",
+      "Rogue R1 Wash (14ch) 2@205",
+      "Rogue R1 Wash (14ch) 3@219",
+      "Rogue R1 Wash (14ch) 4@233",
+      "Betopper LF2405 Matrix Strobe (11ch) 1@247",
+      "Betopper LF2405 Matrix Strobe (11ch) 2@258",
+      "Betopper LF2405 Matrix Strobe (11ch) 3@269",
+      "Betopper LF2405 Matrix Strobe (11ch) 4@280",
+      "Fogger (2ch)@291",
+      "Intimidator Spot 375Z IRC (15ch) 1@293",
+      "Intimidator Spot 375Z IRC (15ch) 2@308",
+      "Intimidator Spot 375Z IRC (15ch) 3@323",
+      "Intimidator Spot 375Z IRC (15ch) 4@338",
+      "SHEHDS Bee Eye 19x40 Ring (31ch) 1@353",
+      "SHEHDS Bee Eye 19x40 Ring (31ch) 2@384",
+      "SHEHDS Bee Eye 19x40 Ring (31ch)@415",
+      "top trio on ring@618",
+      "back left and right pyxis 1@648",
+      "back left and right pyxis 2@674",
+      "back left and right pyxis 3@700",
+      "back left and right pyxis 4@726",
+      "back left and right pyxis 5@752",
+      "back left and right pyxis 6@778",
+      "back left and right pyxis 7@804",
+      "back left and right pyxis 8@830",
+      "front line 1 1@856",
+      "front line 1 2@863",
+      "front line 2 1@870",
+      "front line 2 2@878",
+      "front line 2 1@886",
+      "front line 2 2@893",
+      "front line 2 3@900",
+      "front line 2@907"
+    ],
+    "color": [
+      36,
+      104,
+      242
+    ],
+    "amount": 0.5,
+    "shape": 0.5,
+    "subdiv": 4.0,
+    "master_beat": true,
+    "speed": 0.357,
+    "invert": false,
+    "spread": 0.0,
+    "wings": 1,
+    "static_pos": [],
+    "hold": []
+  },
+  {
+    "name": "Dim Breathe Fast Half",
+    "feature": "Dimmer",
+    "filter": "All",
+    "targets": [],
+    "components": [],
+    "mode": "Wave",
+    "fixtures": [
+      "SlimPAR T12 BT (7ch) 1@513",
+      "SlimPAR T12 BT (7ch) 2@520",
+      "SlimPAR T12 BT (7ch) 3@527",
+      "SlimPAR T12 BT (7ch) 4@534",
+      "SlimPAR T12 BT (7ch) 5@541",
+      "SlimPAR T12 BT (7ch) 6@548",
+      "SlimPAR T12 BT (7ch) 7@555",
+      "SlimPAR Q12 BT (8ch) 1@562",
+      "SlimPAR Q12 BT (8ch) 2@570",
+      "SlimPAR Q12 BT (8ch) 3@578",
+      "SlimPAR Q12 BT (8ch) 4@586",
+      "SlimPAR Q12 BT (8ch) 5@594",
+      "SlimPAR Q12 BT (8ch) 6@602",
+      "SlimPAR Q12 BT (8ch) 7@610",
+      "Fogger (2ch)@470",
+      "Maverick MK2 Spot (24ch) 1@1",
+      "Maverick MK2 Spot (24ch) 2@25",
+      "Maverick MK2 Spot (24ch) 3@49",
+      "Maverick MK2 Spot (24ch) 4@73",
+      "Intimidator Spot 475Z (16ch) 1@97",
+      "Intimidator Spot 475Z (16ch) 2@113",
+      "Intimidator Spot 475Z (16ch) 3@129",
+      "Intimidator Spot 475Z (16ch) 4@145",
+      "Intimidator Trio (15ch) 1@161",
+      "Intimidator Trio (15ch) 2@176",
+      "Rogue R1 Wash (14ch) 1@191",
+      "Rogue R1 Wash (14ch) 2@205",
+      "Rogue R1 Wash (14ch) 3@219",
+      "Rogue R1 Wash (14ch) 4@233",
+      "Betopper LF2405 Matrix Strobe (11ch) 1@247",
+      "Betopper LF2405 Matrix Strobe (11ch) 2@258",
+      "Betopper LF2405 Matrix Strobe (11ch) 3@269",
+      "Betopper LF2405 Matrix Strobe (11ch) 4@280",
+      "Fogger (2ch)@291",
+      "Intimidator Spot 375Z IRC (15ch) 1@293",
+      "Intimidator Spot 375Z IRC (15ch) 2@308",
+      "Intimidator Spot 375Z IRC (15ch) 3@323",
+      "Intimidator Spot 375Z IRC (15ch) 4@338",
+      "SHEHDS Bee Eye 19x40 Ring (31ch) 1@353",
+      "SHEHDS Bee Eye 19x40 Ring (31ch) 2@384",
+      "SHEHDS Bee Eye 19x40 Ring (31ch)@415",
+      "top trio on ring@618",
+      "back left and right pyxis 1@648",
+      "back left and right pyxis 2@674",
+      "back left and right pyxis 3@700",
+      "back left and right pyxis 4@726",
+      "back left and right pyxis 5@752",
+      "back left and right pyxis 6@778",
+      "back left and right pyxis 7@804",
+      "back left and right pyxis 8@830",
+      "front line 1 1@856",
+      "front line 1 2@863",
+      "front line 2 1@870",
+      "front line 2 2@878",
+      "front line 2 1@886",
+      "front line 2 2@893",
+      "front line 2 3@900",
+      "front line 2@907"
+    ],
+    "color": [
+      93,
+      36,
+      242
+    ],
+    "amount": 0.5,
+    "shape": 0.5,
+    "subdiv": 4.0,
+    "master_beat": true,
+    "speed": 0.357,
+    "invert": false,
+    "spread": 0.5,
+    "wings": 1,
+    "static_pos": [],
+    "hold": []
+  },
+  {
+    "name": "Dim Breathe Fast Wrap",
+    "feature": "Dimmer",
+    "filter": "All",
+    "targets": [],
+    "components": [],
+    "mode": "Wave",
+    "fixtures": [
+      "SlimPAR T12 BT (7ch) 1@513",
+      "SlimPAR T12 BT (7ch) 2@520",
+      "SlimPAR T12 BT (7ch) 3@527",
+      "SlimPAR T12 BT (7ch) 4@534",
+      "SlimPAR T12 BT (7ch) 5@541",
+      "SlimPAR T12 BT (7ch) 6@548",
+      "SlimPAR T12 BT (7ch) 7@555",
+      "SlimPAR Q12 BT (8ch) 1@562",
+      "SlimPAR Q12 BT (8ch) 2@570",
+      "SlimPAR Q12 BT (8ch) 3@578",
+      "SlimPAR Q12 BT (8ch) 4@586",
+      "SlimPAR Q12 BT (8ch) 5@594",
+      "SlimPAR Q12 BT (8ch) 6@602",
+      "SlimPAR Q12 BT (8ch) 7@610",
+      "Fogger (2ch)@470",
+      "Maverick MK2 Spot (24ch) 1@1",
+      "Maverick MK2 Spot (24ch) 2@25",
+      "Maverick MK2 Spot (24ch) 3@49",
+      "Maverick MK2 Spot (24ch) 4@73",
+      "Intimidator Spot 475Z (16ch) 1@97",
+      "Intimidator Spot 475Z (16ch) 2@113",
+      "Intimidator Spot 475Z (16ch) 3@129",
+      "Intimidator Spot 475Z (16ch) 4@145",
+      "Intimidator Trio (15ch) 1@161",
+      "Intimidator Trio (15ch) 2@176",
+      "Rogue R1 Wash (14ch) 1@191",
+      "Rogue R1 Wash (14ch) 2@205",
+      "Rogue R1 Wash (14ch) 3@219",
+      "Rogue R1 Wash (14ch) 4@233",
+      "Betopper LF2405 Matrix Strobe (11ch) 1@247",
+      "Betopper LF2405 Matrix Strobe (11ch) 2@258",
+      "Betopper LF2405 Matrix Strobe (11ch) 3@269",
+      "Betopper LF2405 Matrix Strobe (11ch) 4@280",
+      "Fogger (2ch)@291",
+      "Intimidator Spot 375Z IRC (15ch) 1@293",
+      "Intimidator Spot 375Z IRC (15ch) 2@308",
+      "Intimidator Spot 375Z IRC (15ch) 3@323",
+      "Intimidator Spot 375Z IRC (15ch) 4@338",
+      "SHEHDS Bee Eye 19x40 Ring (31ch) 1@353",
+      "SHEHDS Bee Eye 19x40 Ring (31ch) 2@384",
+      "SHEHDS Bee Eye 19x40 Ring (31ch)@415",
+      "top trio on ring@618",
+      "back left and right pyxis 1@648",
+      "back left and right pyxis 2@674",
+      "back left and right pyxis 3@700",
+      "back left and right pyxis 4@726",
+      "back left and right pyxis 5@752",
+      "back left and right pyxis 6@778",
+      "back left and right pyxis 7@804",
+      "back left and right pyxis 8@830",
+      "front line 1 1@856",
+      "front line 1 2@863",
+      "front line 2 1@870",
+      "front line 2 2@878",
+      "front line 2 1@886",
+      "front line 2 2@893",
+      "front line 2 3@900",
+      "front line 2@907"
+    ],
+    "color": [
+      219,
+      36,
+      242
+    ],
+    "amount": 0.5,
+    "shape": 0.5,
+    "subdiv": 4.0,
+    "master_beat": true,
+    "speed": 0.357,
+    "invert": false,
+    "spread": 1.0,
+    "wings": 1,
+    "static_pos": [],
+    "hold": []
+  },
+  {
+    "name": "Dim Blink Slow Together",
+    "feature": "Dimmer",
+    "filter": "All",
+    "targets": [],
+    "components": [],
+    "mode": "Wave",
+    "fixtures": [
+      "SlimPAR T12 BT (7ch) 1@513",
+      "SlimPAR T12 BT (7ch) 2@520",
+      "SlimPAR T12 BT (7ch) 3@527",
+      "SlimPAR T12 BT (7ch) 4@534",
+      "SlimPAR T12 BT (7ch) 5@541",
+      "SlimPAR T12 BT (7ch) 6@548",
+      "SlimPAR T12 BT (7ch) 7@555",
+      "SlimPAR Q12 BT (8ch) 1@562",
+      "SlimPAR Q12 BT (8ch) 2@570",
+      "SlimPAR Q12 BT (8ch) 3@578",
+      "SlimPAR Q12 BT (8ch) 4@586",
+      "SlimPAR Q12 BT (8ch) 5@594",
+      "SlimPAR Q12 BT (8ch) 6@602",
+      "SlimPAR Q12 BT (8ch) 7@610",
+      "Fogger (2ch)@470",
+      "Maverick MK2 Spot (24ch) 1@1",
+      "Maverick MK2 Spot (24ch) 2@25",
+      "Maverick MK2 Spot (24ch) 3@49",
+      "Maverick MK2 Spot (24ch) 4@73",
+      "Intimidator Spot 475Z (16ch) 1@97",
+      "Intimidator Spot 475Z (16ch) 2@113",
+      "Intimidator Spot 475Z (16ch) 3@129",
+      "Intimidator Spot 475Z (16ch) 4@145",
+      "Intimidator Trio (15ch) 1@161",
+      "Intimidator Trio (15ch) 2@176",
+      "Rogue R1 Wash (14ch) 1@191",
+      "Rogue R1 Wash (14ch) 2@205",
+      "Rogue R1 Wash (14ch) 3@219",
+      "Rogue R1 Wash (14ch) 4@233",
+      "Betopper LF2405 Matrix Strobe (11ch) 1@247",
+      "Betopper LF2405 Matrix Strobe (11ch) 2@258",
+      "Betopper LF2405 Matrix Strobe (11ch) 3@269",
+      "Betopper LF2405 Matrix Strobe (11ch) 4@280",
+      "Fogger (2ch)@291",
+      "Intimidator Spot 375Z IRC (15ch) 1@293",
+      "Intimidator Spot 375Z IRC (15ch) 2@308",
+      "Intimidator Spot 375Z IRC (15ch) 3@323",
+      "Intimidator Spot 375Z IRC (15ch) 4@338",
+      "SHEHDS Bee Eye 19x40 Ring (31ch) 1@353",
+      "SHEHDS Bee Eye 19x40 Ring (31ch) 2@384",
+      "SHEHDS Bee Eye 19x40 Ring (31ch)@415",
+      "top trio on ring@618",
+      "back left and right pyxis 1@648",
+      "back left and right pyxis 2@674",
+      "back left and right pyxis 3@700",
+      "back left and right pyxis 4@726",
+      "back left and right pyxis 5@752",
+      "back left and right pyxis 6@778",
+      "back left and right pyxis 7@804",
+      "back left and right pyxis 8@830",
+      "front line 1 1@856",
+      "front line 1 2@863",
+      "front line 2 1@870",
+      "front line 2 2@878",
+      "front line 2 1@886",
+      "front line 2 2@893",
+      "front line 2 3@900",
+      "front line 2@907"
+    ],
+    "color": [
+      242,
+      99,
+      36
+    ],
+    "amount": 1.0,
+    "shape": 1.0,
+    "subdiv": 16.0,
+    "master_beat": true,
+    "speed": 0.357,
+    "invert": false,
+    "spread": 0.0,
+    "wings": 1,
+    "static_pos": [],
+    "hold": []
+  },
+  {
+    "name": "Dim Blink Slow Half",
+    "feature": "Dimmer",
+    "filter": "All",
+    "targets": [],
+    "components": [],
+    "mode": "Wave",
+    "fixtures": [
+      "SlimPAR T12 BT (7ch) 1@513",
+      "SlimPAR T12 BT (7ch) 2@520",
+      "SlimPAR T12 BT (7ch) 3@527",
+      "SlimPAR T12 BT (7ch) 4@534",
+      "SlimPAR T12 BT (7ch) 5@541",
+      "SlimPAR T12 BT (7ch) 6@548",
+      "SlimPAR T12 BT (7ch) 7@555",
+      "SlimPAR Q12 BT (8ch) 1@562",
+      "SlimPAR Q12 BT (8ch) 2@570",
+      "SlimPAR Q12 BT (8ch) 3@578",
+      "SlimPAR Q12 BT (8ch) 4@586",
+      "SlimPAR Q12 BT (8ch) 5@594",
+      "SlimPAR Q12 BT (8ch) 6@602",
+      "SlimPAR Q12 BT (8ch) 7@610",
+      "Fogger (2ch)@470",
+      "Maverick MK2 Spot (24ch) 1@1",
+      "Maverick MK2 Spot (24ch) 2@25",
+      "Maverick MK2 Spot (24ch) 3@49",
+      "Maverick MK2 Spot (24ch) 4@73",
+      "Intimidator Spot 475Z (16ch) 1@97",
+      "Intimidator Spot 475Z (16ch) 2@113",
+      "Intimidator Spot 475Z (16ch) 3@129",
+      "Intimidator Spot 475Z (16ch) 4@145",
+      "Intimidator Trio (15ch) 1@161",
+      "Intimidator Trio (15ch) 2@176",
+      "Rogue R1 Wash (14ch) 1@191",
+      "Rogue R1 Wash (14ch) 2@205",
+      "Rogue R1 Wash (14ch) 3@219",
+      "Rogue R1 Wash (14ch) 4@233",
+      "Betopper LF2405 Matrix Strobe (11ch) 1@247",
+      "Betopper LF2405 Matrix Strobe (11ch) 2@258",
+      "Betopper LF2405 Matrix Strobe (11ch) 3@269",
+      "Betopper LF2405 Matrix Strobe (11ch) 4@280",
+      "Fogger (2ch)@291",
+      "Intimidator Spot 375Z IRC (15ch) 1@293",
+      "Intimidator Spot 375Z IRC (15ch) 2@308",
+      "Intimidator Spot 375Z IRC (15ch) 3@323",
+      "Intimidator Spot 375Z IRC (15ch) 4@338",
+      "SHEHDS Bee Eye 19x40 Ring (31ch) 1@353",
+      "SHEHDS Bee Eye 19x40 Ring (31ch) 2@384",
+      "SHEHDS Bee Eye 19x40 Ring (31ch)@415",
+      "top trio on ring@618",
+      "back left and right pyxis 1@648",
+      "back left and right pyxis 2@674",
+      "back left and right pyxis 3@700",
+      "back left and right pyxis 4@726",
+      "back left and right pyxis 5@752",
+      "back left and right pyxis 6@778",
+      "back left and right pyxis 7@804",
+      "back left and right pyxis 8@830",
+      "front line 1 1@856",
+      "front line 1 2@863",
+      "front line 2 1@870",
+      "front line 2 2@878",
+      "front line 2 1@886",
+      "front line 2 2@893",
+      "front line 2 3@900",
+      "front line 2@907"
+    ],
+    "color": [
+      242,
+      225,
+      36
+    ],
+    "amount": 1.0,
+    "shape": 1.0,
+    "subdiv": 16.0,
+    "master_beat": true,
+    "speed": 0.357,
+    "invert": false,
+    "spread": 0.5,
+    "wings": 1,
+    "static_pos": [],
+    "hold": []
+  },
+  {
+    "name": "Dim Blink Slow Wrap",
+    "feature": "Dimmer",
+    "filter": "All",
+    "targets": [],
+    "components": [],
+    "mode": "Wave",
+    "fixtures": [
+      "SlimPAR T12 BT (7ch) 1@513",
+      "SlimPAR T12 BT (7ch) 2@520",
+      "SlimPAR T12 BT (7ch) 3@527",
+      "SlimPAR T12 BT (7ch) 4@534",
+      "SlimPAR T12 BT (7ch) 5@541",
+      "SlimPAR T12 BT (7ch) 6@548",
+      "SlimPAR T12 BT (7ch) 7@555",
+      "SlimPAR Q12 BT (8ch) 1@562",
+      "SlimPAR Q12 BT (8ch) 2@570",
+      "SlimPAR Q12 BT (8ch) 3@578",
+      "SlimPAR Q12 BT (8ch) 4@586",
+      "SlimPAR Q12 BT (8ch) 5@594",
+      "SlimPAR Q12 BT (8ch) 6@602",
+      "SlimPAR Q12 BT (8ch) 7@610",
+      "Fogger (2ch)@470",
+      "Maverick MK2 Spot (24ch) 1@1",
+      "Maverick MK2 Spot (24ch) 2@25",
+      "Maverick MK2 Spot (24ch) 3@49",
+      "Maverick MK2 Spot (24ch) 4@73",
+      "Intimidator Spot 475Z (16ch) 1@97",
+      "Intimidator Spot 475Z (16ch) 2@113",
+      "Intimidator Spot 475Z (16ch) 3@129",
+      "Intimidator Spot 475Z (16ch) 4@145",
+      "Intimidator Trio (15ch) 1@161",
+      "Intimidator Trio (15ch) 2@176",
+      "Rogue R1 Wash (14ch) 1@191",
+      "Rogue R1 Wash (14ch) 2@205",
+      "Rogue R1 Wash (14ch) 3@219",
+      "Rogue R1 Wash (14ch) 4@233",
+      "Betopper LF2405 Matrix Strobe (11ch) 1@247",
+      "Betopper LF2405 Matrix Strobe (11ch) 2@258",
+      "Betopper LF2405 Matrix Strobe (11ch) 3@269",
+      "Betopper LF2405 Matrix Strobe (11ch) 4@280",
+      "Fogger (2ch)@291",
+      "Intimidator Spot 375Z IRC (15ch) 1@293",
+      "Intimidator Spot 375Z IRC (15ch) 2@308",
+      "Intimidator Spot 375Z IRC (15ch) 3@323",
+      "Intimidator Spot 375Z IRC (15ch) 4@338",
+      "SHEHDS Bee Eye 19x40 Ring (31ch) 1@353",
+      "SHEHDS Bee Eye 19x40 Ring (31ch) 2@384",
+      "SHEHDS Bee Eye 19x40 Ring (31ch)@415",
+      "top trio on ring@618",
+      "back left and right pyxis 1@648",
+      "back left and right pyxis 2@674",
+      "back left and right pyxis 3@700",
+      "back left and right pyxis 4@726",
+      "back left and right pyxis 5@752",
+      "back left and right pyxis 6@778",
+      "back left and right pyxis 7@804",
+      "back left and right pyxis 8@830",
+      "front line 1 1@856",
+      "front line 1 2@863",
+      "front line 2 1@870",
+      "front line 2 2@878",
+      "front line 2 1@886",
+      "front line 2 2@893",
+      "front line 2 3@900",
+      "front line 2@907"
+    ],
+    "color": [
+      133,
+      242,
+      36
+    ],
+    "amount": 1.0,
+    "shape": 1.0,
+    "subdiv": 16.0,
+    "master_beat": true,
+    "speed": 0.357,
+    "invert": false,
+    "spread": 1.0,
+    "wings": 1,
+    "static_pos": [],
+    "hold": []
+  },
+  {
+    "name": "Dim Blink Med Together",
+    "feature": "Dimmer",
+    "filter": "All",
+    "targets": [],
+    "components": [],
+    "mode": "Wave",
+    "fixtures": [
+      "SlimPAR T12 BT (7ch) 1@513",
+      "SlimPAR T12 BT (7ch) 2@520",
+      "SlimPAR T12 BT (7ch) 3@527",
+      "SlimPAR T12 BT (7ch) 4@534",
+      "SlimPAR T12 BT (7ch) 5@541",
+      "SlimPAR T12 BT (7ch) 6@548",
+      "SlimPAR T12 BT (7ch) 7@555",
+      "SlimPAR Q12 BT (8ch) 1@562",
+      "SlimPAR Q12 BT (8ch) 2@570",
+      "SlimPAR Q12 BT (8ch) 3@578",
+      "SlimPAR Q12 BT (8ch) 4@586",
+      "SlimPAR Q12 BT (8ch) 5@594",
+      "SlimPAR Q12 BT (8ch) 6@602",
+      "SlimPAR Q12 BT (8ch) 7@610",
+      "Fogger (2ch)@470",
+      "Maverick MK2 Spot (24ch) 1@1",
+      "Maverick MK2 Spot (24ch) 2@25",
+      "Maverick MK2 Spot (24ch) 3@49",
+      "Maverick MK2 Spot (24ch) 4@73",
+      "Intimidator Spot 475Z (16ch) 1@97",
+      "Intimidator Spot 475Z (16ch) 2@113",
+      "Intimidator Spot 475Z (16ch) 3@129",
+      "Intimidator Spot 475Z (16ch) 4@145",
+      "Intimidator Trio (15ch) 1@161",
+      "Intimidator Trio (15ch) 2@176",
+      "Rogue R1 Wash (14ch) 1@191",
+      "Rogue R1 Wash (14ch) 2@205",
+      "Rogue R1 Wash (14ch) 3@219",
+      "Rogue R1 Wash (14ch) 4@233",
+      "Betopper LF2405 Matrix Strobe (11ch) 1@247",
+      "Betopper LF2405 Matrix Strobe (11ch) 2@258",
+      "Betopper LF2405 Matrix Strobe (11ch) 3@269",
+      "Betopper LF2405 Matrix Strobe (11ch) 4@280",
+      "Fogger (2ch)@291",
+      "Intimidator Spot 375Z IRC (15ch) 1@293",
+      "Intimidator Spot 375Z IRC (15ch) 2@308",
+      "Intimidator Spot 375Z IRC (15ch) 3@323",
+      "Intimidator Spot 375Z IRC (15ch) 4@338",
+      "SHEHDS Bee Eye 19x40 Ring (31ch) 1@353",
+      "SHEHDS Bee Eye 19x40 Ring (31ch) 2@384",
+      "SHEHDS Bee Eye 19x40 Ring (31ch)@415",
+      "top trio on ring@618",
+      "back left and right pyxis 1@648",
+      "back left and right pyxis 2@674",
+      "back left and right pyxis 3@700",
+      "back left and right pyxis 4@726",
+      "back left and right pyxis 5@752",
+      "back left and right pyxis 6@778",
+      "back left and right pyxis 7@804",
+      "back left and right pyxis 8@830",
+      "front line 1 1@856",
+      "front line 1 2@863",
+      "front line 2 1@870",
+      "front line 2 2@878",
+      "front line 2 1@886",
+      "front line 2 2@893",
+      "front line 2 3@900",
+      "front line 2@907"
+    ],
+    "color": [
+      36,
+      242,
+      64
+    ],
+    "amount": 1.0,
+    "shape": 1.0,
+    "subdiv": 8.0,
+    "master_beat": true,
+    "speed": 0.357,
+    "invert": false,
+    "spread": 0.0,
+    "wings": 1,
+    "static_pos": [],
+    "hold": []
+  },
+  {
+    "name": "Dim Blink Med Half",
+    "feature": "Dimmer",
+    "filter": "All",
+    "targets": [],
+    "components": [],
+    "mode": "Wave",
+    "fixtures": [
+      "SlimPAR T12 BT (7ch) 1@513",
+      "SlimPAR T12 BT (7ch) 2@520",
+      "SlimPAR T12 BT (7ch) 3@527",
+      "SlimPAR T12 BT (7ch) 4@534",
+      "SlimPAR T12 BT (7ch) 5@541",
+      "SlimPAR T12 BT (7ch) 6@548",
+      "SlimPAR T12 BT (7ch) 7@555",
+      "SlimPAR Q12 BT (8ch) 1@562",
+      "SlimPAR Q12 BT (8ch) 2@570",
+      "SlimPAR Q12 BT (8ch) 3@578",
+      "SlimPAR Q12 BT (8ch) 4@586",
+      "SlimPAR Q12 BT (8ch) 5@594",
+      "SlimPAR Q12 BT (8ch) 6@602",
+      "SlimPAR Q12 BT (8ch) 7@610",
+      "Fogger (2ch)@470",
+      "Maverick MK2 Spot (24ch) 1@1",
+      "Maverick MK2 Spot (24ch) 2@25",
+      "Maverick MK2 Spot (24ch) 3@49",
+      "Maverick MK2 Spot (24ch) 4@73",
+      "Intimidator Spot 475Z (16ch) 1@97",
+      "Intimidator Spot 475Z (16ch) 2@113",
+      "Intimidator Spot 475Z (16ch) 3@129",
+      "Intimidator Spot 475Z (16ch) 4@145",
+      "Intimidator Trio (15ch) 1@161",
+      "Intimidator Trio (15ch) 2@176",
+      "Rogue R1 Wash (14ch) 1@191",
+      "Rogue R1 Wash (14ch) 2@205",
+      "Rogue R1 Wash (14ch) 3@219",
+      "Rogue R1 Wash (14ch) 4@233",
+      "Betopper LF2405 Matrix Strobe (11ch) 1@247",
+      "Betopper LF2405 Matrix Strobe (11ch) 2@258",
+      "Betopper LF2405 Matrix Strobe (11ch) 3@269",
+      "Betopper LF2405 Matrix Strobe (11ch) 4@280",
+      "Fogger (2ch)@291",
+      "Intimidator Spot 375Z IRC (15ch) 1@293",
+      "Intimidator Spot 375Z IRC (15ch) 2@308",
+      "Intimidator Spot 375Z IRC (15ch) 3@323",
+      "Intimidator Spot 375Z IRC (15ch) 4@338",
+      "SHEHDS Bee Eye 19x40 Ring (31ch) 1@353",
+      "SHEHDS Bee Eye 19x40 Ring (31ch) 2@384",
+      "SHEHDS Bee Eye 19x40 Ring (31ch)@415",
+      "top trio on ring@618",
+      "back left and right pyxis 1@648",
+      "back left and right pyxis 2@674",
+      "back left and right pyxis 3@700",
+      "back left and right pyxis 4@726",
+      "back left and right pyxis 5@752",
+      "back left and right pyxis 6@778",
+      "back left and right pyxis 7@804",
+      "back left and right pyxis 8@830",
+      "front line 1 1@856",
+      "front line 1 2@863",
+      "front line 2 1@870",
+      "front line 2 2@878",
+      "front line 2 1@886",
+      "front line 2 2@893",
+      "front line 2 3@900",
+      "front line 2@907"
+    ],
+    "color": [
+      36,
+      242,
+      190
+    ],
+    "amount": 1.0,
+    "shape": 1.0,
+    "subdiv": 8.0,
+    "master_beat": true,
+    "speed": 0.357,
+    "invert": false,
+    "spread": 0.5,
+    "wings": 1,
+    "static_pos": [],
+    "hold": []
+  },
+  {
+    "name": "Dim Blink Med Wrap",
+    "feature": "Dimmer",
+    "filter": "All",
+    "targets": [],
+    "components": [],
+    "mode": "Wave",
+    "fixtures": [
+      "SlimPAR T12 BT (7ch) 1@513",
+      "SlimPAR T12 BT (7ch) 2@520",
+      "SlimPAR T12 BT (7ch) 3@527",
+      "SlimPAR T12 BT (7ch) 4@534",
+      "SlimPAR T12 BT (7ch) 5@541",
+      "SlimPAR T12 BT (7ch) 6@548",
+      "SlimPAR T12 BT (7ch) 7@555",
+      "SlimPAR Q12 BT (8ch) 1@562",
+      "SlimPAR Q12 BT (8ch) 2@570",
+      "SlimPAR Q12 BT (8ch) 3@578",
+      "SlimPAR Q12 BT (8ch) 4@586",
+      "SlimPAR Q12 BT (8ch) 5@594",
+      "SlimPAR Q12 BT (8ch) 6@602",
+      "SlimPAR Q12 BT (8ch) 7@610",
+      "Fogger (2ch)@470",
+      "Maverick MK2 Spot (24ch) 1@1",
+      "Maverick MK2 Spot (24ch) 2@25",
+      "Maverick MK2 Spot (24ch) 3@49",
+      "Maverick MK2 Spot (24ch) 4@73",
+      "Intimidator Spot 475Z (16ch) 1@97",
+      "Intimidator Spot 475Z (16ch) 2@113",
+      "Intimidator Spot 475Z (16ch) 3@129",
+      "Intimidator Spot 475Z (16ch) 4@145",
+      "Intimidator Trio (15ch) 1@161",
+      "Intimidator Trio (15ch) 2@176",
+      "Rogue R1 Wash (14ch) 1@191",
+      "Rogue R1 Wash (14ch) 2@205",
+      "Rogue R1 Wash (14ch) 3@219",
+      "Rogue R1 Wash (14ch) 4@233",
+      "Betopper LF2405 Matrix Strobe (11ch) 1@247",
+      "Betopper LF2405 Matrix Strobe (11ch) 2@258",
+      "Betopper LF2405 Matrix Strobe (11ch) 3@269",
+      "Betopper LF2405 Matrix Strobe (11ch) 4@280",
+      "Fogger (2ch)@291",
+      "Intimidator Spot 375Z IRC (15ch) 1@293",
+      "Intimidator Spot 375Z IRC (15ch) 2@308",
+      "Intimidator Spot 375Z IRC (15ch) 3@323",
+      "Intimidator Spot 375Z IRC (15ch) 4@338",
+      "SHEHDS Bee Eye 19x40 Ring (31ch) 1@353",
+      "SHEHDS Bee Eye 19x40 Ring (31ch) 2@384",
+      "SHEHDS Bee Eye 19x40 Ring (31ch)@415",
+      "top trio on ring@618",
+      "back left and right pyxis 1@648",
+      "back left and right pyxis 2@674",
+      "back left and right pyxis 3@700",
+      "back left and right pyxis 4@726",
+      "back left and right pyxis 5@752",
+      "back left and right pyxis 6@778",
+      "back left and right pyxis 7@804",
+      "back left and right pyxis 8@830",
+      "front line 1 1@856",
+      "front line 1 2@863",
+      "front line 2 1@870",
+      "front line 2 2@878",
+      "front line 2 1@886",
+      "front line 2 2@893",
+      "front line 2 3@900",
+      "front line 2@907"
+    ],
+    "color": [
+      36,
+      167,
+      242
+    ],
+    "amount": 1.0,
+    "shape": 1.0,
+    "subdiv": 8.0,
+    "master_beat": true,
+    "speed": 0.357,
+    "invert": false,
+    "spread": 1.0,
+    "wings": 1,
+    "static_pos": [],
+    "hold": []
+  },
+  {
+    "name": "Dim Blink Fast Together",
+    "feature": "Dimmer",
+    "filter": "All",
+    "targets": [],
+    "components": [],
+    "mode": "Wave",
+    "fixtures": [
+      "SlimPAR T12 BT (7ch) 1@513",
+      "SlimPAR T12 BT (7ch) 2@520",
+      "SlimPAR T12 BT (7ch) 3@527",
+      "SlimPAR T12 BT (7ch) 4@534",
+      "SlimPAR T12 BT (7ch) 5@541",
+      "SlimPAR T12 BT (7ch) 6@548",
+      "SlimPAR T12 BT (7ch) 7@555",
+      "SlimPAR Q12 BT (8ch) 1@562",
+      "SlimPAR Q12 BT (8ch) 2@570",
+      "SlimPAR Q12 BT (8ch) 3@578",
+      "SlimPAR Q12 BT (8ch) 4@586",
+      "SlimPAR Q12 BT (8ch) 5@594",
+      "SlimPAR Q12 BT (8ch) 6@602",
+      "SlimPAR Q12 BT (8ch) 7@610",
+      "Fogger (2ch)@470",
+      "Maverick MK2 Spot (24ch) 1@1",
+      "Maverick MK2 Spot (24ch) 2@25",
+      "Maverick MK2 Spot (24ch) 3@49",
+      "Maverick MK2 Spot (24ch) 4@73",
+      "Intimidator Spot 475Z (16ch) 1@97",
+      "Intimidator Spot 475Z (16ch) 2@113",
+      "Intimidator Spot 475Z (16ch) 3@129",
+      "Intimidator Spot 475Z (16ch) 4@145",
+      "Intimidator Trio (15ch) 1@161",
+      "Intimidator Trio (15ch) 2@176",
+      "Rogue R1 Wash (14ch) 1@191",
+      "Rogue R1 Wash (14ch) 2@205",
+      "Rogue R1 Wash (14ch) 3@219",
+      "Rogue R1 Wash (14ch) 4@233",
+      "Betopper LF2405 Matrix Strobe (11ch) 1@247",
+      "Betopper LF2405 Matrix Strobe (11ch) 2@258",
+      "Betopper LF2405 Matrix Strobe (11ch) 3@269",
+      "Betopper LF2405 Matrix Strobe (11ch) 4@280",
+      "Fogger (2ch)@291",
+      "Intimidator Spot 375Z IRC (15ch) 1@293",
+      "Intimidator Spot 375Z IRC (15ch) 2@308",
+      "Intimidator Spot 375Z IRC (15ch) 3@323",
+      "Intimidator Spot 375Z IRC (15ch) 4@338",
+      "SHEHDS Bee Eye 19x40 Ring (31ch) 1@353",
+      "SHEHDS Bee Eye 19x40 Ring (31ch) 2@384",
+      "SHEHDS Bee Eye 19x40 Ring (31ch)@415",
+      "top trio on ring@618",
+      "back left and right pyxis 1@648",
+      "back left and right pyxis 2@674",
+      "back left and right pyxis 3@700",
+      "back left and right pyxis 4@726",
+      "back left and right pyxis 5@752",
+      "back left and right pyxis 6@778",
+      "back left and right pyxis 7@804",
+      "back left and right pyxis 8@830",
+      "front line 1 1@856",
+      "front line 1 2@863",
+      "front line 2 1@870",
+      "front line 2 2@878",
+      "front line 2 1@886",
+      "front line 2 2@893",
+      "front line 2 3@900",
+      "front line 2@907"
+    ],
+    "color": [
+      36,
+      42,
+      242
+    ],
+    "amount": 1.0,
+    "shape": 1.0,
+    "subdiv": 4.0,
+    "master_beat": true,
+    "speed": 0.357,
+    "invert": false,
+    "spread": 0.0,
+    "wings": 1,
+    "static_pos": [],
+    "hold": []
+  },
+  {
+    "name": "Dim Blink Fast Half",
+    "feature": "Dimmer",
+    "filter": "All",
+    "targets": [],
+    "components": [],
+    "mode": "Wave",
+    "fixtures": [
+      "SlimPAR T12 BT (7ch) 1@513",
+      "SlimPAR T12 BT (7ch) 2@520",
+      "SlimPAR T12 BT (7ch) 3@527",
+      "SlimPAR T12 BT (7ch) 4@534",
+      "SlimPAR T12 BT (7ch) 5@541",
+      "SlimPAR T12 BT (7ch) 6@548",
+      "SlimPAR T12 BT (7ch) 7@555",
+      "SlimPAR Q12 BT (8ch) 1@562",
+      "SlimPAR Q12 BT (8ch) 2@570",
+      "SlimPAR Q12 BT (8ch) 3@578",
+      "SlimPAR Q12 BT (8ch) 4@586",
+      "SlimPAR Q12 BT (8ch) 5@594",
+      "SlimPAR Q12 BT (8ch) 6@602",
+      "SlimPAR Q12 BT (8ch) 7@610",
+      "Fogger (2ch)@470",
+      "Maverick MK2 Spot (24ch) 1@1",
+      "Maverick MK2 Spot (24ch) 2@25",
+      "Maverick MK2 Spot (24ch) 3@49",
+      "Maverick MK2 Spot (24ch) 4@73",
+      "Intimidator Spot 475Z (16ch) 1@97",
+      "Intimidator Spot 475Z (16ch) 2@113",
+      "Intimidator Spot 475Z (16ch) 3@129",
+      "Intimidator Spot 475Z (16ch) 4@145",
+      "Intimidator Trio (15ch) 1@161",
+      "Intimidator Trio (15ch) 2@176",
+      "Rogue R1 Wash (14ch) 1@191",
+      "Rogue R1 Wash (14ch) 2@205",
+      "Rogue R1 Wash (14ch) 3@219",
+      "Rogue R1 Wash (14ch) 4@233",
+      "Betopper LF2405 Matrix Strobe (11ch) 1@247",
+      "Betopper LF2405 Matrix Strobe (11ch) 2@258",
+      "Betopper LF2405 Matrix Strobe (11ch) 3@269",
+      "Betopper LF2405 Matrix Strobe (11ch) 4@280",
+      "Fogger (2ch)@291",
+      "Intimidator Spot 375Z IRC (15ch) 1@293",
+      "Intimidator Spot 375Z IRC (15ch) 2@308",
+      "Intimidator Spot 375Z IRC (15ch) 3@323",
+      "Intimidator Spot 375Z IRC (15ch) 4@338",
+      "SHEHDS Bee Eye 19x40 Ring (31ch) 1@353",
+      "SHEHDS Bee Eye 19x40 Ring (31ch) 2@384",
+      "SHEHDS Bee Eye 19x40 Ring (31ch)@415",
+      "top trio on ring@618",
+      "back left and right pyxis 1@648",
+      "back left and right pyxis 2@674",
+      "back left and right pyxis 3@700",
+      "back left and right pyxis 4@726",
+      "back left and right pyxis 5@752",
+      "back left and right pyxis 6@778",
+      "back left and right pyxis 7@804",
+      "back left and right pyxis 8@830",
+      "front line 1 1@856",
+      "front line 1 2@863",
+      "front line 2 1@870",
+      "front line 2 2@878",
+      "front line 2 1@886",
+      "front line 2 2@893",
+      "front line 2 3@900",
+      "front line 2@907"
+    ],
+    "color": [
+      156,
+      36,
+      242
+    ],
+    "amount": 1.0,
+    "shape": 1.0,
+    "subdiv": 4.0,
+    "master_beat": true,
+    "speed": 0.357,
+    "invert": false,
+    "spread": 0.5,
+    "wings": 1,
+    "static_pos": [],
+    "hold": []
+  },
+  {
+    "name": "Dim Blink Fast Wrap",
+    "feature": "Dimmer",
+    "filter": "All",
+    "targets": [],
+    "components": [],
+    "mode": "Wave",
+    "fixtures": [
+      "SlimPAR T12 BT (7ch) 1@513",
+      "SlimPAR T12 BT (7ch) 2@520",
+      "SlimPAR T12 BT (7ch) 3@527",
+      "SlimPAR T12 BT (7ch) 4@534",
+      "SlimPAR T12 BT (7ch) 5@541",
+      "SlimPAR T12 BT (7ch) 6@548",
+      "SlimPAR T12 BT (7ch) 7@555",
+      "SlimPAR Q12 BT (8ch) 1@562",
+      "SlimPAR Q12 BT (8ch) 2@570",
+      "SlimPAR Q12 BT (8ch) 3@578",
+      "SlimPAR Q12 BT (8ch) 4@586",
+      "SlimPAR Q12 BT (8ch) 5@594",
+      "SlimPAR Q12 BT (8ch) 6@602",
+      "SlimPAR Q12 BT (8ch) 7@610",
+      "Fogger (2ch)@470",
+      "Maverick MK2 Spot (24ch) 1@1",
+      "Maverick MK2 Spot (24ch) 2@25",
+      "Maverick MK2 Spot (24ch) 3@49",
+      "Maverick MK2 Spot (24ch) 4@73",
+      "Intimidator Spot 475Z (16ch) 1@97",
+      "Intimidator Spot 475Z (16ch) 2@113",
+      "Intimidator Spot 475Z (16ch) 3@129",
+      "Intimidator Spot 475Z (16ch) 4@145",
+      "Intimidator Trio (15ch) 1@161",
+      "Intimidator Trio (15ch) 2@176",
+      "Rogue R1 Wash (14ch) 1@191",
+      "Rogue R1 Wash (14ch) 2@205",
+      "Rogue R1 Wash (14ch) 3@219",
+      "Rogue R1 Wash (14ch) 4@233",
+      "Betopper LF2405 Matrix Strobe (11ch) 1@247",
+      "Betopper LF2405 Matrix Strobe (11ch) 2@258",
+      "Betopper LF2405 Matrix Strobe (11ch) 3@269",
+      "Betopper LF2405 Matrix Strobe (11ch) 4@280",
+      "Fogger (2ch)@291",
+      "Intimidator Spot 375Z IRC (15ch) 1@293",
+      "Intimidator Spot 375Z IRC (15ch) 2@308",
+      "Intimidator Spot 375Z IRC (15ch) 3@323",
+      "Intimidator Spot 375Z IRC (15ch) 4@338",
+      "SHEHDS Bee Eye 19x40 Ring (31ch) 1@353",
+      "SHEHDS Bee Eye 19x40 Ring (31ch) 2@384",
+      "SHEHDS Bee Eye 19x40 Ring (31ch)@415",
+      "top trio on ring@618",
+      "back left and right pyxis 1@648",
+      "back left and right pyxis 2@674",
+      "back left and right pyxis 3@700",
+      "back left and right pyxis 4@726",
+      "back left and right pyxis 5@752",
+      "back left and right pyxis 6@778",
+      "back left and right pyxis 7@804",
+      "back left and right pyxis 8@830",
+      "front line 1 1@856",
+      "front line 1 2@863",
+      "front line 2 1@870",
+      "front line 2 2@878",
+      "front line 2 1@886",
+      "front line 2 2@893",
+      "front line 2 3@900",
+      "front line 2@907"
+    ],
+    "color": [
+      242,
+      36,
+      202
+    ],
+    "amount": 1.0,
+    "shape": 1.0,
+    "subdiv": 4.0,
+    "master_beat": true,
+    "speed": 0.357,
+    "invert": false,
+    "spread": 1.0,
+    "wings": 1,
+    "static_pos": [],
+    "hold": []
+  },
+  {
+    "name": "Mav gobos open",
+    "feature": "Beam",
+    "filter": "All",
+    "targets": [],
+    "components": [],
+    "mode": "Wave",
+    "fixtures": [],
+    "color": [
+      235,
+      232,
+      215
+    ],
+    "amount": 0.5,
+    "shape": 0.5,
+    "subdiv": 4.0,
+    "master_beat": true,
+    "speed": 0.357,
+    "invert": false,
+    "spread": 1.0,
+    "wings": 1,
+    "static_pos": [],
+    "hold": [
+      [
+        "Maverick MK2 Spot (24ch) 1@1",
+        [
+          [
+            13,
+            4
+          ],
+          [
+            15,
+            4
+          ]
+        ]
+      ],
+      [
+        "Maverick MK2 Spot (24ch) 2@25",
+        [
+          [
+            13,
+            4
+          ],
+          [
+            15,
+            4
+          ]
+        ]
+      ],
+      [
+        "Maverick MK2 Spot (24ch) 3@49",
+        [
+          [
+            13,
+            4
+          ],
+          [
+            15,
+            4
+          ]
+        ]
+      ],
+      [
+        "Maverick MK2 Spot (24ch) 4@73",
+        [
+          [
+            13,
+            4
+          ],
+          [
+            15,
+            4
+          ]
+        ]
+      ]
+    ]
+  },
+  {
+    "name": "Mav W1 Circuits",
+    "feature": "Beam",
+    "filter": "All",
+    "targets": [],
+    "components": [],
+    "mode": "Wave",
+    "fixtures": [],
+    "color": [
+      242,
+      145,
+      48
+    ],
+    "amount": 0.5,
+    "shape": 0.5,
+    "subdiv": 4.0,
+    "master_beat": true,
+    "speed": 0.357,
+    "invert": false,
+    "spread": 1.0,
+    "wings": 1,
+    "static_pos": [],
+    "hold": [
+      [
+        "Maverick MK2 Spot (24ch) 1@1",
+        [
+          [
+            13,
+            13
+          ],
+          [
+            15,
+            4
+          ]
+        ]
+      ],
+      [
+        "Maverick MK2 Spot (24ch) 2@25",
+        [
+          [
+            13,
+            13
+          ],
+          [
+            15,
+            4
+          ]
+        ]
+      ],
+      [
+        "Maverick MK2 Spot (24ch) 3@49",
+        [
+          [
+            13,
+            13
+          ],
+          [
+            15,
+            4
+          ]
+        ]
+      ],
+      [
+        "Maverick MK2 Spot (24ch) 4@73",
+        [
+          [
+            13,
+            13
+          ],
+          [
+            15,
+            4
+          ]
+        ]
+      ]
+    ]
+  },
+  {
+    "name": "Mav W1 Ring of rings",
+    "feature": "Beam",
+    "filter": "All",
+    "targets": [],
+    "components": [],
+    "mode": "Wave",
+    "fixtures": [],
+    "color": [
+      242,
+      161,
+      48
+    ],
+    "amount": 0.5,
+    "shape": 0.5,
+    "subdiv": 4.0,
+    "master_beat": true,
+    "speed": 0.357,
+    "invert": false,
+    "spread": 1.0,
+    "wings": 1,
+    "static_pos": [],
+    "hold": [
+      [
+        "Maverick MK2 Spot (24ch) 1@1",
+        [
+          [
+            13,
+            22
+          ],
+          [
+            15,
+            4
+          ]
+        ]
+      ],
+      [
+        "Maverick MK2 Spot (24ch) 2@25",
+        [
+          [
+            13,
+            22
+          ],
+          [
+            15,
+            4
+          ]
+        ]
+      ],
+      [
+        "Maverick MK2 Spot (24ch) 3@49",
+        [
+          [
+            13,
+            22
+          ],
+          [
+            15,
+            4
+          ]
+        ]
+      ],
+      [
+        "Maverick MK2 Spot (24ch) 4@73",
+        [
+          [
+            13,
+            22
+          ],
+          [
+            15,
+            4
+          ]
+        ]
+      ]
+    ]
+  },
+  {
+    "name": "Mav W1 Checker vortex",
+    "feature": "Beam",
+    "filter": "All",
+    "targets": [],
+    "components": [],
+    "mode": "Wave",
+    "fixtures": [],
+    "color": [
+      242,
+      177,
+      48
+    ],
+    "amount": 0.5,
+    "shape": 0.5,
+    "subdiv": 4.0,
+    "master_beat": true,
+    "speed": 0.357,
+    "invert": false,
+    "spread": 1.0,
+    "wings": 1,
+    "static_pos": [],
+    "hold": [
+      [
+        "Maverick MK2 Spot (24ch) 1@1",
+        [
+          [
+            13,
+            31
+          ],
+          [
+            15,
+            4
+          ]
+        ]
+      ],
+      [
+        "Maverick MK2 Spot (24ch) 2@25",
+        [
+          [
+            13,
+            31
+          ],
+          [
+            15,
+            4
+          ]
+        ]
+      ],
+      [
+        "Maverick MK2 Spot (24ch) 3@49",
+        [
+          [
+            13,
+            31
+          ],
+          [
+            15,
+            4
+          ]
+        ]
+      ],
+      [
+        "Maverick MK2 Spot (24ch) 4@73",
+        [
+          [
+            13,
+            31
+          ],
+          [
+            15,
+            4
+          ]
+        ]
+      ]
+    ]
+  },
+  {
+    "name": "Mav W1 Triangle",
+    "feature": "Beam",
+    "filter": "All",
+    "targets": [],
+    "components": [],
+    "mode": "Wave",
+    "fixtures": [],
+    "color": [
+      242,
+      193,
+      48
+    ],
+    "amount": 0.5,
+    "shape": 0.5,
+    "subdiv": 4.0,
+    "master_beat": true,
+    "speed": 0.357,
+    "invert": false,
+    "spread": 1.0,
+    "wings": 1,
+    "static_pos": [],
+    "hold": [
+      [
+        "Maverick MK2 Spot (24ch) 1@1",
+        [
+          [
+            13,
+            40
+          ],
+          [
+            15,
+            4
+          ]
+        ]
+      ],
+      [
+        "Maverick MK2 Spot (24ch) 2@25",
+        [
+          [
+            13,
+            40
+          ],
+          [
+            15,
+            4
+          ]
+        ]
+      ],
+      [
+        "Maverick MK2 Spot (24ch) 3@49",
+        [
+          [
+            13,
+            40
+          ],
+          [
+            15,
+            4
+          ]
+        ]
+      ],
+      [
+        "Maverick MK2 Spot (24ch) 4@73",
+        [
+          [
+            13,
+            40
+          ],
+          [
+            15,
+            4
+          ]
+        ]
+      ]
+    ]
+  },
+  {
+    "name": "Mav W1 Star field",
+    "feature": "Beam",
+    "filter": "All",
+    "targets": [],
+    "components": [],
+    "mode": "Wave",
+    "fixtures": [],
+    "color": [
+      242,
+      209,
+      48
+    ],
+    "amount": 0.5,
+    "shape": 0.5,
+    "subdiv": 4.0,
+    "master_beat": true,
+    "speed": 0.357,
+    "invert": false,
+    "spread": 1.0,
+    "wings": 1,
+    "static_pos": [],
+    "hold": [
+      [
+        "Maverick MK2 Spot (24ch) 1@1",
+        [
+          [
+            13,
+            49
+          ],
+          [
+            15,
+            4
+          ]
+        ]
+      ],
+      [
+        "Maverick MK2 Spot (24ch) 2@25",
+        [
+          [
+            13,
+            49
+          ],
+          [
+            15,
+            4
+          ]
+        ]
+      ],
+      [
+        "Maverick MK2 Spot (24ch) 3@49",
+        [
+          [
+            13,
+            49
+          ],
+          [
+            15,
+            4
+          ]
+        ]
+      ],
+      [
+        "Maverick MK2 Spot (24ch) 4@73",
+        [
+          [
+            13,
+            49
+          ],
+          [
+            15,
+            4
+          ]
+        ]
+      ]
+    ]
+  },
+  {
+    "name": "Mav W1 Lenticular glass",
+    "feature": "Beam",
+    "filter": "All",
+    "targets": [],
+    "components": [],
+    "mode": "Wave",
+    "fixtures": [],
+    "color": [
+      242,
+      226,
+      48
+    ],
+    "amount": 0.5,
+    "shape": 0.5,
+    "subdiv": 4.0,
+    "master_beat": true,
+    "speed": 0.357,
+    "invert": false,
+    "spread": 1.0,
+    "wings": 1,
+    "static_pos": [],
+    "hold": [
+      [
+        "Maverick MK2 Spot (24ch) 1@1",
+        [
+          [
+            13,
+            58
+          ],
+          [
+            15,
+            4
+          ]
+        ]
+      ],
+      [
+        "Maverick MK2 Spot (24ch) 2@25",
+        [
+          [
+            13,
+            58
+          ],
+          [
+            15,
+            4
+          ]
+        ]
+      ],
+      [
+        "Maverick MK2 Spot (24ch) 3@49",
+        [
+          [
+            13,
+            58
+          ],
+          [
+            15,
+            4
+          ]
+        ]
+      ],
+      [
+        "Maverick MK2 Spot (24ch) 4@73",
+        [
+          [
+            13,
+            58
+          ],
+          [
+            15,
+            4
+          ]
+        ]
+      ]
+    ]
+  },
+  {
+    "name": "Mav W2 Spiral",
+    "feature": "Beam",
+    "filter": "All",
+    "targets": [],
+    "components": [],
+    "mode": "Wave",
+    "fixtures": [],
+    "color": [
+      48,
+      226,
+      242
+    ],
+    "amount": 0.5,
+    "shape": 0.5,
+    "subdiv": 4.0,
+    "master_beat": true,
+    "speed": 0.357,
+    "invert": false,
+    "spread": 1.0,
+    "wings": 1,
+    "static_pos": [],
+    "hold": [
+      [
+        "Maverick MK2 Spot (24ch) 1@1",
+        [
+          [
+            13,
+            4
+          ],
+          [
+            15,
+            13
+          ]
+        ]
+      ],
+      [
+        "Maverick MK2 Spot (24ch) 2@25",
+        [
+          [
+            13,
+            4
+          ],
+          [
+            15,
+            13
+          ]
+        ]
+      ],
+      [
+        "Maverick MK2 Spot (24ch) 3@49",
+        [
+          [
+            13,
+            4
+          ],
+          [
+            15,
+            13
+          ]
+        ]
+      ],
+      [
+        "Maverick MK2 Spot (24ch) 4@73",
+        [
+          [
+            13,
+            4
+          ],
+          [
+            15,
+            13
+          ]
+        ]
+      ]
+    ]
+  },
+  {
+    "name": "Mav W2 Dot chiclets",
+    "feature": "Beam",
+    "filter": "All",
+    "targets": [],
+    "components": [],
+    "mode": "Wave",
+    "fixtures": [],
+    "color": [
+      48,
+      209,
+      242
+    ],
+    "amount": 0.5,
+    "shape": 0.5,
+    "subdiv": 4.0,
+    "master_beat": true,
+    "speed": 0.357,
+    "invert": false,
+    "spread": 1.0,
+    "wings": 1,
+    "static_pos": [],
+    "hold": [
+      [
+        "Maverick MK2 Spot (24ch) 1@1",
+        [
+          [
+            13,
+            4
+          ],
+          [
+            15,
+            22
+          ]
+        ]
+      ],
+      [
+        "Maverick MK2 Spot (24ch) 2@25",
+        [
+          [
+            13,
+            4
+          ],
+          [
+            15,
+            22
+          ]
+        ]
+      ],
+      [
+        "Maverick MK2 Spot (24ch) 3@49",
+        [
+          [
+            13,
+            4
+          ],
+          [
+            15,
+            22
+          ]
+        ]
+      ],
+      [
+        "Maverick MK2 Spot (24ch) 4@73",
+        [
+          [
+            13,
+            4
+          ],
+          [
+            15,
+            22
+          ]
+        ]
+      ]
+    ]
+  },
+  {
+    "name": "Mav W2 Splat breakup",
+    "feature": "Beam",
+    "filter": "All",
+    "targets": [],
+    "components": [],
+    "mode": "Wave",
+    "fixtures": [],
+    "color": [
+      48,
+      193,
+      242
+    ],
+    "amount": 0.5,
+    "shape": 0.5,
+    "subdiv": 4.0,
+    "master_beat": true,
+    "speed": 0.357,
+    "invert": false,
+    "spread": 1.0,
+    "wings": 1,
+    "static_pos": [],
+    "hold": [
+      [
+        "Maverick MK2 Spot (24ch) 1@1",
+        [
+          [
+            13,
+            4
+          ],
+          [
+            15,
+            31
+          ]
+        ]
+      ],
+      [
+        "Maverick MK2 Spot (24ch) 2@25",
+        [
+          [
+            13,
+            4
+          ],
+          [
+            15,
+            31
+          ]
+        ]
+      ],
+      [
+        "Maverick MK2 Spot (24ch) 3@49",
+        [
+          [
+            13,
+            4
+          ],
+          [
+            15,
+            31
+          ]
+        ]
+      ],
+      [
+        "Maverick MK2 Spot (24ch) 4@73",
+        [
+          [
+            13,
+            4
+          ],
+          [
+            15,
+            31
+          ]
+        ]
+      ]
+    ]
+  },
+  {
+    "name": "Mav W2 Wavy bar",
+    "feature": "Beam",
+    "filter": "All",
+    "targets": [],
+    "components": [],
+    "mode": "Wave",
+    "fixtures": [],
+    "color": [
+      48,
+      177,
+      242
+    ],
+    "amount": 0.5,
+    "shape": 0.5,
+    "subdiv": 4.0,
+    "master_beat": true,
+    "speed": 0.357,
+    "invert": false,
+    "spread": 1.0,
+    "wings": 1,
+    "static_pos": [],
+    "hold": [
+      [
+        "Maverick MK2 Spot (24ch) 1@1",
+        [
+          [
+            13,
+            4
+          ],
+          [
+            15,
+            40
+          ]
+        ]
+      ],
+      [
+        "Maverick MK2 Spot (24ch) 2@25",
+        [
+          [
+            13,
+            4
+          ],
+          [
+            15,
+            40
+          ]
+        ]
+      ],
+      [
+        "Maverick MK2 Spot (24ch) 3@49",
+        [
+          [
+            13,
+            4
+          ],
+          [
+            15,
+            40
+          ]
+        ]
+      ],
+      [
+        "Maverick MK2 Spot (24ch) 4@73",
+        [
+          [
+            13,
+            4
+          ],
+          [
+            15,
+            40
+          ]
+        ]
+      ]
+    ]
+  },
+  {
+    "name": "Mav W2 Shower glass",
+    "feature": "Beam",
+    "filter": "All",
+    "targets": [],
+    "components": [],
+    "mode": "Wave",
+    "fixtures": [],
+    "color": [
+      48,
+      161,
+      242
+    ],
+    "amount": 0.5,
+    "shape": 0.5,
+    "subdiv": 4.0,
+    "master_beat": true,
+    "speed": 0.357,
+    "invert": false,
+    "spread": 1.0,
+    "wings": 1,
+    "static_pos": [],
+    "hold": [
+      [
+        "Maverick MK2 Spot (24ch) 1@1",
+        [
+          [
+            13,
+            4
+          ],
+          [
+            15,
+            49
+          ]
+        ]
+      ],
+      [
+        "Maverick MK2 Spot (24ch) 2@25",
+        [
+          [
+            13,
+            4
+          ],
+          [
+            15,
+            49
+          ]
+        ]
+      ],
+      [
+        "Maverick MK2 Spot (24ch) 3@49",
+        [
+          [
+            13,
+            4
+          ],
+          [
+            15,
+            49
+          ]
+        ]
+      ],
+      [
+        "Maverick MK2 Spot (24ch) 4@73",
+        [
+          [
+            13,
+            4
+          ],
+          [
+            15,
+            49
+          ]
+        ]
+      ]
+    ]
+  },
+  {
+    "name": "Mav W2 Lenticular glass",
+    "feature": "Beam",
+    "filter": "All",
+    "targets": [],
+    "components": [],
+    "mode": "Wave",
+    "fixtures": [],
+    "color": [
+      48,
+      145,
+      242
+    ],
+    "amount": 0.5,
+    "shape": 0.5,
+    "subdiv": 4.0,
+    "master_beat": true,
+    "speed": 0.357,
+    "invert": false,
+    "spread": 1.0,
+    "wings": 1,
+    "static_pos": [],
+    "hold": [
+      [
+        "Maverick MK2 Spot (24ch) 1@1",
+        [
+          [
+            13,
+            4
+          ],
+          [
+            15,
+            58
+          ]
+        ]
+      ],
+      [
+        "Maverick MK2 Spot (24ch) 2@25",
+        [
+          [
+            13,
+            4
+          ],
+          [
+            15,
+            58
+          ]
+        ]
+      ],
+      [
+        "Maverick MK2 Spot (24ch) 3@49",
+        [
+          [
+            13,
+            4
+          ],
+          [
+            15,
+            58
+          ]
+        ]
+      ],
+      [
+        "Maverick MK2 Spot (24ch) 4@73",
+        [
+          [
+            13,
+            4
+          ],
+          [
+            15,
+            58
+          ]
+        ]
+      ]
+    ]
+  },
+  {
+    "name": "375Z gobos open",
+    "feature": "Beam",
+    "filter": "All",
+    "targets": [],
+    "components": [],
+    "mode": "Wave",
+    "fixtures": [],
+    "color": [
+      235,
+      232,
+      215
+    ],
+    "amount": 0.5,
+    "shape": 0.5,
+    "subdiv": 4.0,
+    "master_beat": true,
+    "speed": 0.357,
+    "invert": false,
+    "spread": 1.0,
+    "wings": 1,
+    "static_pos": [],
+    "hold": [
+      [
+        "Intimidator Spot 375Z IRC (15ch) 1@293",
+        [
+          [
+            6,
+            3
+          ]
+        ]
+      ],
+      [
+        "Intimidator Spot 375Z IRC (15ch) 2@308",
+        [
+          [
+            6,
+            3
+          ]
+        ]
+      ],
+      [
+        "Intimidator Spot 375Z IRC (15ch) 3@323",
+        [
+          [
+            6,
+            3
+          ]
+        ]
+      ],
+      [
+        "Intimidator Spot 375Z IRC (15ch) 4@338",
+        [
+          [
+            6,
+            3
+          ]
+        ]
+      ]
+    ]
+  },
+  {
+    "name": "375Z Gobo 1",
+    "feature": "Beam",
+    "filter": "All",
+    "targets": [],
+    "components": [],
+    "mode": "Wave",
+    "fixtures": [],
+    "color": [
+      242,
+      48,
+      193
+    ],
+    "amount": 0.5,
+    "shape": 0.5,
+    "subdiv": 4.0,
+    "master_beat": true,
+    "speed": 0.357,
+    "invert": false,
+    "spread": 1.0,
+    "wings": 1,
+    "static_pos": [],
+    "hold": [
+      [
+        "Intimidator Spot 375Z IRC (15ch) 1@293",
+        [
+          [
+            6,
+            11
+          ]
+        ]
+      ],
+      [
+        "Intimidator Spot 375Z IRC (15ch) 2@308",
+        [
+          [
+            6,
+            11
+          ]
+        ]
+      ],
+      [
+        "Intimidator Spot 375Z IRC (15ch) 3@323",
+        [
+          [
+            6,
+            11
+          ]
+        ]
+      ],
+      [
+        "Intimidator Spot 375Z IRC (15ch) 4@338",
+        [
+          [
+            6,
+            11
+          ]
+        ]
+      ]
+    ]
+  },
+  {
+    "name": "375Z Gobo 2",
+    "feature": "Beam",
+    "filter": "All",
+    "targets": [],
+    "components": [],
+    "mode": "Wave",
+    "fixtures": [],
+    "color": [
+      242,
+      48,
+      177
+    ],
+    "amount": 0.5,
+    "shape": 0.5,
+    "subdiv": 4.0,
+    "master_beat": true,
+    "speed": 0.357,
+    "invert": false,
+    "spread": 1.0,
+    "wings": 1,
+    "static_pos": [],
+    "hold": [
+      [
+        "Intimidator Spot 375Z IRC (15ch) 1@293",
+        [
+          [
+            6,
+            19
+          ]
+        ]
+      ],
+      [
+        "Intimidator Spot 375Z IRC (15ch) 2@308",
+        [
+          [
+            6,
+            19
+          ]
+        ]
+      ],
+      [
+        "Intimidator Spot 375Z IRC (15ch) 3@323",
+        [
+          [
+            6,
+            19
+          ]
+        ]
+      ],
+      [
+        "Intimidator Spot 375Z IRC (15ch) 4@338",
+        [
+          [
+            6,
+            19
+          ]
+        ]
+      ]
+    ]
+  },
+  {
+    "name": "375Z Gobo 3",
+    "feature": "Beam",
+    "filter": "All",
+    "targets": [],
+    "components": [],
+    "mode": "Wave",
+    "fixtures": [],
+    "color": [
+      242,
+      48,
+      161
+    ],
+    "amount": 0.5,
+    "shape": 0.5,
+    "subdiv": 4.0,
+    "master_beat": true,
+    "speed": 0.357,
+    "invert": false,
+    "spread": 1.0,
+    "wings": 1,
+    "static_pos": [],
+    "hold": [
+      [
+        "Intimidator Spot 375Z IRC (15ch) 1@293",
+        [
+          [
+            6,
+            27
+          ]
+        ]
+      ],
+      [
+        "Intimidator Spot 375Z IRC (15ch) 2@308",
+        [
+          [
+            6,
+            27
+          ]
+        ]
+      ],
+      [
+        "Intimidator Spot 375Z IRC (15ch) 3@323",
+        [
+          [
+            6,
+            27
+          ]
+        ]
+      ],
+      [
+        "Intimidator Spot 375Z IRC (15ch) 4@338",
+        [
+          [
+            6,
+            27
+          ]
+        ]
+      ]
+    ]
+  },
+  {
+    "name": "375Z Gobo 4",
+    "feature": "Beam",
+    "filter": "All",
+    "targets": [],
+    "components": [],
+    "mode": "Wave",
+    "fixtures": [],
+    "color": [
+      242,
+      48,
+      145
+    ],
+    "amount": 0.5,
+    "shape": 0.5,
+    "subdiv": 4.0,
+    "master_beat": true,
+    "speed": 0.357,
+    "invert": false,
+    "spread": 1.0,
+    "wings": 1,
+    "static_pos": [],
+    "hold": [
+      [
+        "Intimidator Spot 375Z IRC (15ch) 1@293",
+        [
+          [
+            6,
+            35
+          ]
+        ]
+      ],
+      [
+        "Intimidator Spot 375Z IRC (15ch) 2@308",
+        [
+          [
+            6,
+            35
+          ]
+        ]
+      ],
+      [
+        "Intimidator Spot 375Z IRC (15ch) 3@323",
+        [
+          [
+            6,
+            35
+          ]
+        ]
+      ],
+      [
+        "Intimidator Spot 375Z IRC (15ch) 4@338",
+        [
+          [
+            6,
+            35
+          ]
+        ]
+      ]
+    ]
+  },
+  {
+    "name": "375Z Gobo 5",
+    "feature": "Beam",
+    "filter": "All",
+    "targets": [],
+    "components": [],
+    "mode": "Wave",
+    "fixtures": [],
+    "color": [
+      242,
+      48,
+      129
+    ],
+    "amount": 0.5,
+    "shape": 0.5,
+    "subdiv": 4.0,
+    "master_beat": true,
+    "speed": 0.357,
+    "invert": false,
+    "spread": 1.0,
+    "wings": 1,
+    "static_pos": [],
+    "hold": [
+      [
+        "Intimidator Spot 375Z IRC (15ch) 1@293",
+        [
+          [
+            6,
+            43
+          ]
+        ]
+      ],
+      [
+        "Intimidator Spot 375Z IRC (15ch) 2@308",
+        [
+          [
+            6,
+            43
+          ]
+        ]
+      ],
+      [
+        "Intimidator Spot 375Z IRC (15ch) 3@323",
+        [
+          [
+            6,
+            43
+          ]
+        ]
+      ],
+      [
+        "Intimidator Spot 375Z IRC (15ch) 4@338",
+        [
+          [
+            6,
+            43
+          ]
+        ]
+      ]
+    ]
+  },
+  {
+    "name": "375Z Gobo 6",
+    "feature": "Beam",
+    "filter": "All",
+    "targets": [],
+    "components": [],
+    "mode": "Wave",
+    "fixtures": [],
+    "color": [
+      242,
+      48,
+      113
+    ],
+    "amount": 0.5,
+    "shape": 0.5,
+    "subdiv": 4.0,
+    "master_beat": true,
+    "speed": 0.357,
+    "invert": false,
+    "spread": 1.0,
+    "wings": 1,
+    "static_pos": [],
+    "hold": [
+      [
+        "Intimidator Spot 375Z IRC (15ch) 1@293",
+        [
+          [
+            6,
+            51
+          ]
+        ]
+      ],
+      [
+        "Intimidator Spot 375Z IRC (15ch) 2@308",
+        [
+          [
+            6,
+            51
+          ]
+        ]
+      ],
+      [
+        "Intimidator Spot 375Z IRC (15ch) 3@323",
+        [
+          [
+            6,
+            51
+          ]
+        ]
+      ],
+      [
+        "Intimidator Spot 375Z IRC (15ch) 4@338",
+        [
+          [
+            6,
+            51
+          ]
+        ]
+      ]
+    ]
+  },
+  {
+    "name": "375Z Gobo 7",
+    "feature": "Beam",
+    "filter": "All",
+    "targets": [],
+    "components": [],
+    "mode": "Wave",
+    "fixtures": [],
+    "color": [
+      242,
+      48,
+      96
+    ],
+    "amount": 0.5,
+    "shape": 0.5,
+    "subdiv": 4.0,
+    "master_beat": true,
+    "speed": 0.357,
+    "invert": false,
+    "spread": 1.0,
+    "wings": 1,
+    "static_pos": [],
+    "hold": [
+      [
+        "Intimidator Spot 375Z IRC (15ch) 1@293",
+        [
+          [
+            6,
+            59
+          ]
+        ]
+      ],
+      [
+        "Intimidator Spot 375Z IRC (15ch) 2@308",
+        [
+          [
+            6,
+            59
+          ]
+        ]
+      ],
+      [
+        "Intimidator Spot 375Z IRC (15ch) 3@323",
+        [
+          [
+            6,
+            59
+          ]
+        ]
+      ],
+      [
+        "Intimidator Spot 375Z IRC (15ch) 4@338",
+        [
+          [
+            6,
+            59
+          ]
+        ]
+      ]
+    ]
+  },
+  {
+    "name": "475Z gobos open",
+    "feature": "Beam",
+    "filter": "All",
+    "targets": [],
+    "components": [],
+    "mode": "Wave",
+    "fixtures": [],
+    "color": [
+      235,
+      232,
+      215
+    ],
+    "amount": 0.5,
+    "shape": 0.5,
+    "subdiv": 4.0,
+    "master_beat": true,
+    "speed": 0.357,
+    "invert": false,
+    "spread": 1.0,
+    "wings": 1,
+    "static_pos": [],
+    "hold": [
+      [
+        "Intimidator Spot 475Z (16ch) 1@97",
+        [
+          [
+            6,
+            3
+          ],
+          [
+            8,
+            3
+          ]
+        ]
+      ],
+      [
+        "Intimidator Spot 475Z (16ch) 2@113",
+        [
+          [
+            6,
+            3
+          ],
+          [
+            8,
+            3
+          ]
+        ]
+      ],
+      [
+        "Intimidator Spot 475Z (16ch) 3@129",
+        [
+          [
+            6,
+            3
+          ],
+          [
+            8,
+            3
+          ]
+        ]
+      ],
+      [
+        "Intimidator Spot 475Z (16ch) 4@145",
+        [
+          [
+            6,
+            3
+          ],
+          [
+            8,
+            3
+          ]
+        ]
+      ]
+    ]
+  },
+  {
+    "name": "475Z Rot Gobo 1",
+    "feature": "Beam",
+    "filter": "All",
+    "targets": [],
+    "components": [],
+    "mode": "Wave",
+    "fixtures": [],
+    "color": [
+      129,
+      48,
+      242
+    ],
+    "amount": 0.5,
+    "shape": 0.5,
+    "subdiv": 4.0,
+    "master_beat": true,
+    "speed": 0.357,
+    "invert": false,
+    "spread": 1.0,
+    "wings": 1,
+    "static_pos": [],
+    "hold": [
+      [
+        "Intimidator Spot 475Z (16ch) 1@97",
+        [
+          [
+            6,
+            11
+          ],
+          [
+            8,
+            3
+          ]
+        ]
+      ],
+      [
+        "Intimidator Spot 475Z (16ch) 2@113",
+        [
+          [
+            6,
+            11
+          ],
+          [
+            8,
+            3
+          ]
+        ]
+      ],
+      [
+        "Intimidator Spot 475Z (16ch) 3@129",
+        [
+          [
+            6,
+            11
+          ],
+          [
+            8,
+            3
+          ]
+        ]
+      ],
+      [
+        "Intimidator Spot 475Z (16ch) 4@145",
+        [
+          [
+            6,
+            11
+          ],
+          [
+            8,
+            3
+          ]
+        ]
+      ]
+    ]
+  },
+  {
+    "name": "475Z Rot Gobo 2",
+    "feature": "Beam",
+    "filter": "All",
+    "targets": [],
+    "components": [],
+    "mode": "Wave",
+    "fixtures": [],
+    "color": [
+      145,
+      48,
+      242
+    ],
+    "amount": 0.5,
+    "shape": 0.5,
+    "subdiv": 4.0,
+    "master_beat": true,
+    "speed": 0.357,
+    "invert": false,
+    "spread": 1.0,
+    "wings": 1,
+    "static_pos": [],
+    "hold": [
+      [
+        "Intimidator Spot 475Z (16ch) 1@97",
+        [
+          [
+            6,
+            19
+          ],
+          [
+            8,
+            3
+          ]
+        ]
+      ],
+      [
+        "Intimidator Spot 475Z (16ch) 2@113",
+        [
+          [
+            6,
+            19
+          ],
+          [
+            8,
+            3
+          ]
+        ]
+      ],
+      [
+        "Intimidator Spot 475Z (16ch) 3@129",
+        [
+          [
+            6,
+            19
+          ],
+          [
+            8,
+            3
+          ]
+        ]
+      ],
+      [
+        "Intimidator Spot 475Z (16ch) 4@145",
+        [
+          [
+            6,
+            19
+          ],
+          [
+            8,
+            3
+          ]
+        ]
+      ]
+    ]
+  },
+  {
+    "name": "475Z Rot Gobo 3",
+    "feature": "Beam",
+    "filter": "All",
+    "targets": [],
+    "components": [],
+    "mode": "Wave",
+    "fixtures": [],
+    "color": [
+      161,
+      48,
+      242
+    ],
+    "amount": 0.5,
+    "shape": 0.5,
+    "subdiv": 4.0,
+    "master_beat": true,
+    "speed": 0.357,
+    "invert": false,
+    "spread": 1.0,
+    "wings": 1,
+    "static_pos": [],
+    "hold": [
+      [
+        "Intimidator Spot 475Z (16ch) 1@97",
+        [
+          [
+            6,
+            27
+          ],
+          [
+            8,
+            3
+          ]
+        ]
+      ],
+      [
+        "Intimidator Spot 475Z (16ch) 2@113",
+        [
+          [
+            6,
+            27
+          ],
+          [
+            8,
+            3
+          ]
+        ]
+      ],
+      [
+        "Intimidator Spot 475Z (16ch) 3@129",
+        [
+          [
+            6,
+            27
+          ],
+          [
+            8,
+            3
+          ]
+        ]
+      ],
+      [
+        "Intimidator Spot 475Z (16ch) 4@145",
+        [
+          [
+            6,
+            27
+          ],
+          [
+            8,
+            3
+          ]
+        ]
+      ]
+    ]
+  },
+  {
+    "name": "475Z Rot Gobo 4",
+    "feature": "Beam",
+    "filter": "All",
+    "targets": [],
+    "components": [],
+    "mode": "Wave",
+    "fixtures": [],
+    "color": [
+      177,
+      48,
+      242
+    ],
+    "amount": 0.5,
+    "shape": 0.5,
+    "subdiv": 4.0,
+    "master_beat": true,
+    "speed": 0.357,
+    "invert": false,
+    "spread": 1.0,
+    "wings": 1,
+    "static_pos": [],
+    "hold": [
+      [
+        "Intimidator Spot 475Z (16ch) 1@97",
+        [
+          [
+            6,
+            35
+          ],
+          [
+            8,
+            3
+          ]
+        ]
+      ],
+      [
+        "Intimidator Spot 475Z (16ch) 2@113",
+        [
+          [
+            6,
+            35
+          ],
+          [
+            8,
+            3
+          ]
+        ]
+      ],
+      [
+        "Intimidator Spot 475Z (16ch) 3@129",
+        [
+          [
+            6,
+            35
+          ],
+          [
+            8,
+            3
+          ]
+        ]
+      ],
+      [
+        "Intimidator Spot 475Z (16ch) 4@145",
+        [
+          [
+            6,
+            35
+          ],
+          [
+            8,
+            3
+          ]
+        ]
+      ]
+    ]
+  },
+  {
+    "name": "475Z Rot Gobo 5",
+    "feature": "Beam",
+    "filter": "All",
+    "targets": [],
+    "components": [],
+    "mode": "Wave",
+    "fixtures": [],
+    "color": [
+      193,
+      48,
+      242
+    ],
+    "amount": 0.5,
+    "shape": 0.5,
+    "subdiv": 4.0,
+    "master_beat": true,
+    "speed": 0.357,
+    "invert": false,
+    "spread": 1.0,
+    "wings": 1,
+    "static_pos": [],
+    "hold": [
+      [
+        "Intimidator Spot 475Z (16ch) 1@97",
+        [
+          [
+            6,
+            43
+          ],
+          [
+            8,
+            3
+          ]
+        ]
+      ],
+      [
+        "Intimidator Spot 475Z (16ch) 2@113",
+        [
+          [
+            6,
+            43
+          ],
+          [
+            8,
+            3
+          ]
+        ]
+      ],
+      [
+        "Intimidator Spot 475Z (16ch) 3@129",
+        [
+          [
+            6,
+            43
+          ],
+          [
+            8,
+            3
+          ]
+        ]
+      ],
+      [
+        "Intimidator Spot 475Z (16ch) 4@145",
+        [
+          [
+            6,
+            43
+          ],
+          [
+            8,
+            3
+          ]
+        ]
+      ]
+    ]
+  },
+  {
+    "name": "475Z Rot Gobo 6",
+    "feature": "Beam",
+    "filter": "All",
+    "targets": [],
+    "components": [],
+    "mode": "Wave",
+    "fixtures": [],
+    "color": [
+      209,
+      48,
+      242
+    ],
+    "amount": 0.5,
+    "shape": 0.5,
+    "subdiv": 4.0,
+    "master_beat": true,
+    "speed": 0.357,
+    "invert": false,
+    "spread": 1.0,
+    "wings": 1,
+    "static_pos": [],
+    "hold": [
+      [
+        "Intimidator Spot 475Z (16ch) 1@97",
+        [
+          [
+            6,
+            51
+          ],
+          [
+            8,
+            3
+          ]
+        ]
+      ],
+      [
+        "Intimidator Spot 475Z (16ch) 2@113",
+        [
+          [
+            6,
+            51
+          ],
+          [
+            8,
+            3
+          ]
+        ]
+      ],
+      [
+        "Intimidator Spot 475Z (16ch) 3@129",
+        [
+          [
+            6,
+            51
+          ],
+          [
+            8,
+            3
+          ]
+        ]
+      ],
+      [
+        "Intimidator Spot 475Z (16ch) 4@145",
+        [
+          [
+            6,
+            51
+          ],
+          [
+            8,
+            3
+          ]
+        ]
+      ]
+    ]
+  },
+  {
+    "name": "475Z Rot Gobo 7",
+    "feature": "Beam",
+    "filter": "All",
+    "targets": [],
+    "components": [],
+    "mode": "Wave",
+    "fixtures": [],
+    "color": [
+      226,
+      48,
+      242
+    ],
+    "amount": 0.5,
+    "shape": 0.5,
+    "subdiv": 4.0,
+    "master_beat": true,
+    "speed": 0.357,
+    "invert": false,
+    "spread": 1.0,
+    "wings": 1,
+    "static_pos": [],
+    "hold": [
+      [
+        "Intimidator Spot 475Z (16ch) 1@97",
+        [
+          [
+            6,
+            59
+          ],
+          [
+            8,
+            3
+          ]
+        ]
+      ],
+      [
+        "Intimidator Spot 475Z (16ch) 2@113",
+        [
+          [
+            6,
+            59
+          ],
+          [
+            8,
+            3
+          ]
+        ]
+      ],
+      [
+        "Intimidator Spot 475Z (16ch) 3@129",
+        [
+          [
+            6,
+            59
+          ],
+          [
+            8,
+            3
+          ]
+        ]
+      ],
+      [
+        "Intimidator Spot 475Z (16ch) 4@145",
+        [
+          [
+            6,
+            59
+          ],
+          [
+            8,
+            3
+          ]
+        ]
+      ]
+    ]
+  },
+  {
+    "name": "475Z Static Gobo 1",
+    "feature": "Beam",
+    "filter": "All",
+    "targets": [],
+    "components": [],
+    "mode": "Wave",
+    "fixtures": [],
+    "color": [
+      80,
+      242,
+      48
+    ],
+    "amount": 0.5,
+    "shape": 0.5,
+    "subdiv": 4.0,
+    "master_beat": true,
+    "speed": 0.357,
+    "invert": false,
+    "spread": 1.0,
+    "wings": 1,
+    "static_pos": [],
+    "hold": [
+      [
+        "Intimidator Spot 475Z (16ch) 1@97",
+        [
+          [
+            6,
+            3
+          ],
+          [
+            8,
+            10
+          ]
+        ]
+      ],
+      [
+        "Intimidator Spot 475Z (16ch) 2@113",
+        [
+          [
+            6,
+            3
+          ],
+          [
+            8,
+            10
+          ]
+        ]
+      ],
+      [
+        "Intimidator Spot 475Z (16ch) 3@129",
+        [
+          [
+            6,
+            3
+          ],
+          [
+            8,
+            10
+          ]
+        ]
+      ],
+      [
+        "Intimidator Spot 475Z (16ch) 4@145",
+        [
+          [
+            6,
+            3
+          ],
+          [
+            8,
+            10
+          ]
+        ]
+      ]
+    ]
+  },
+  {
+    "name": "475Z Static Gobo 2",
+    "feature": "Beam",
+    "filter": "All",
+    "targets": [],
+    "components": [],
+    "mode": "Wave",
+    "fixtures": [],
+    "color": [
+      64,
+      242,
+      48
+    ],
+    "amount": 0.5,
+    "shape": 0.5,
+    "subdiv": 4.0,
+    "master_beat": true,
+    "speed": 0.357,
+    "invert": false,
+    "spread": 1.0,
+    "wings": 1,
+    "static_pos": [],
+    "hold": [
+      [
+        "Intimidator Spot 475Z (16ch) 1@97",
+        [
+          [
+            6,
+            3
+          ],
+          [
+            8,
+            17
+          ]
+        ]
+      ],
+      [
+        "Intimidator Spot 475Z (16ch) 2@113",
+        [
+          [
+            6,
+            3
+          ],
+          [
+            8,
+            17
+          ]
+        ]
+      ],
+      [
+        "Intimidator Spot 475Z (16ch) 3@129",
+        [
+          [
+            6,
+            3
+          ],
+          [
+            8,
+            17
+          ]
+        ]
+      ],
+      [
+        "Intimidator Spot 475Z (16ch) 4@145",
+        [
+          [
+            6,
+            3
+          ],
+          [
+            8,
+            17
+          ]
+        ]
+      ]
+    ]
+  },
+  {
+    "name": "475Z Static Gobo 3",
+    "feature": "Beam",
+    "filter": "All",
+    "targets": [],
+    "components": [],
+    "mode": "Wave",
+    "fixtures": [],
+    "color": [
+      48,
+      242,
+      48
+    ],
+    "amount": 0.5,
+    "shape": 0.5,
+    "subdiv": 4.0,
+    "master_beat": true,
+    "speed": 0.357,
+    "invert": false,
+    "spread": 1.0,
+    "wings": 1,
+    "static_pos": [],
+    "hold": [
+      [
+        "Intimidator Spot 475Z (16ch) 1@97",
+        [
+          [
+            6,
+            3
+          ],
+          [
+            8,
+            24
+          ]
+        ]
+      ],
+      [
+        "Intimidator Spot 475Z (16ch) 2@113",
+        [
+          [
+            6,
+            3
+          ],
+          [
+            8,
+            24
+          ]
+        ]
+      ],
+      [
+        "Intimidator Spot 475Z (16ch) 3@129",
+        [
+          [
+            6,
+            3
+          ],
+          [
+            8,
+            24
+          ]
+        ]
+      ],
+      [
+        "Intimidator Spot 475Z (16ch) 4@145",
+        [
+          [
+            6,
+            3
+          ],
+          [
+            8,
+            24
+          ]
+        ]
+      ]
+    ]
+  },
+  {
+    "name": "475Z Static Gobo 4",
+    "feature": "Beam",
+    "filter": "All",
+    "targets": [],
+    "components": [],
+    "mode": "Wave",
+    "fixtures": [],
+    "color": [
+      48,
+      242,
+      64
+    ],
+    "amount": 0.5,
+    "shape": 0.5,
+    "subdiv": 4.0,
+    "master_beat": true,
+    "speed": 0.357,
+    "invert": false,
+    "spread": 1.0,
+    "wings": 1,
+    "static_pos": [],
+    "hold": [
+      [
+        "Intimidator Spot 475Z (16ch) 1@97",
+        [
+          [
+            6,
+            3
+          ],
+          [
+            8,
+            31
+          ]
+        ]
+      ],
+      [
+        "Intimidator Spot 475Z (16ch) 2@113",
+        [
+          [
+            6,
+            3
+          ],
+          [
+            8,
+            31
+          ]
+        ]
+      ],
+      [
+        "Intimidator Spot 475Z (16ch) 3@129",
+        [
+          [
+            6,
+            3
+          ],
+          [
+            8,
+            31
+          ]
+        ]
+      ],
+      [
+        "Intimidator Spot 475Z (16ch) 4@145",
+        [
+          [
+            6,
+            3
+          ],
+          [
+            8,
+            31
+          ]
+        ]
+      ]
+    ]
+  },
+  {
+    "name": "475Z Static Gobo 5",
+    "feature": "Beam",
+    "filter": "All",
+    "targets": [],
+    "components": [],
+    "mode": "Wave",
+    "fixtures": [],
+    "color": [
+      48,
+      242,
+      80
+    ],
+    "amount": 0.5,
+    "shape": 0.5,
+    "subdiv": 4.0,
+    "master_beat": true,
+    "speed": 0.357,
+    "invert": false,
+    "spread": 1.0,
+    "wings": 1,
+    "static_pos": [],
+    "hold": [
+      [
+        "Intimidator Spot 475Z (16ch) 1@97",
+        [
+          [
+            6,
+            3
+          ],
+          [
+            8,
+            38
+          ]
+        ]
+      ],
+      [
+        "Intimidator Spot 475Z (16ch) 2@113",
+        [
+          [
+            6,
+            3
+          ],
+          [
+            8,
+            38
+          ]
+        ]
+      ],
+      [
+        "Intimidator Spot 475Z (16ch) 3@129",
+        [
+          [
+            6,
+            3
+          ],
+          [
+            8,
+            38
+          ]
+        ]
+      ],
+      [
+        "Intimidator Spot 475Z (16ch) 4@145",
+        [
+          [
+            6,
+            3
+          ],
+          [
+            8,
+            38
+          ]
+        ]
+      ]
+    ]
+  },
+  {
+    "name": "475Z Static Gobo 6",
+    "feature": "Beam",
+    "filter": "All",
+    "targets": [],
+    "components": [],
+    "mode": "Wave",
+    "fixtures": [],
+    "color": [
+      48,
+      242,
+      96
+    ],
+    "amount": 0.5,
+    "shape": 0.5,
+    "subdiv": 4.0,
+    "master_beat": true,
+    "speed": 0.357,
+    "invert": false,
+    "spread": 1.0,
+    "wings": 1,
+    "static_pos": [],
+    "hold": [
+      [
+        "Intimidator Spot 475Z (16ch) 1@97",
+        [
+          [
+            6,
+            3
+          ],
+          [
+            8,
+            45
+          ]
+        ]
+      ],
+      [
+        "Intimidator Spot 475Z (16ch) 2@113",
+        [
+          [
+            6,
+            3
+          ],
+          [
+            8,
+            45
+          ]
+        ]
+      ],
+      [
+        "Intimidator Spot 475Z (16ch) 3@129",
+        [
+          [
+            6,
+            3
+          ],
+          [
+            8,
+            45
+          ]
+        ]
+      ],
+      [
+        "Intimidator Spot 475Z (16ch) 4@145",
+        [
+          [
+            6,
+            3
+          ],
+          [
+            8,
+            45
+          ]
+        ]
+      ]
+    ]
+  },
+  {
+    "name": "475Z Static Gobo 7",
+    "feature": "Beam",
+    "filter": "All",
+    "targets": [],
+    "components": [],
+    "mode": "Wave",
+    "fixtures": [],
+    "color": [
+      48,
+      242,
+      113
+    ],
+    "amount": 0.5,
+    "shape": 0.5,
+    "subdiv": 4.0,
+    "master_beat": true,
+    "speed": 0.357,
+    "invert": false,
+    "spread": 1.0,
+    "wings": 1,
+    "static_pos": [],
+    "hold": [
+      [
+        "Intimidator Spot 475Z (16ch) 1@97",
+        [
+          [
+            6,
+            3
+          ],
+          [
+            8,
+            52
+          ]
+        ]
+      ],
+      [
+        "Intimidator Spot 475Z (16ch) 2@113",
+        [
+          [
+            6,
+            3
+          ],
+          [
+            8,
+            52
+          ]
+        ]
+      ],
+      [
+        "Intimidator Spot 475Z (16ch) 3@129",
+        [
+          [
+            6,
+            3
+          ],
+          [
+            8,
+            52
+          ]
+        ]
+      ],
+      [
+        "Intimidator Spot 475Z (16ch) 4@145",
+        [
+          [
+            6,
+            3
+          ],
+          [
+            8,
+            52
+          ]
+        ]
+      ]
+    ]
+  },
+  {
+    "name": "475Z Static Gobo 8",
+    "feature": "Beam",
+    "filter": "All",
+    "targets": [],
+    "components": [],
+    "mode": "Wave",
+    "fixtures": [],
+    "color": [
+      48,
+      242,
+      129
+    ],
+    "amount": 0.5,
+    "shape": 0.5,
+    "subdiv": 4.0,
+    "master_beat": true,
+    "speed": 0.357,
+    "invert": false,
+    "spread": 1.0,
+    "wings": 1,
+    "static_pos": [],
+    "hold": [
+      [
+        "Intimidator Spot 475Z (16ch) 1@97",
+        [
+          [
+            6,
+            3
+          ],
+          [
+            8,
+            59
+          ]
+        ]
+      ],
+      [
+        "Intimidator Spot 475Z (16ch) 2@113",
+        [
+          [
+            6,
+            3
+          ],
+          [
+            8,
+            59
+          ]
+        ]
+      ],
+      [
+        "Intimidator Spot 475Z (16ch) 3@129",
+        [
+          [
+            6,
+            3
+          ],
+          [
+            8,
+            59
+          ]
+        ]
+      ],
+      [
+        "Intimidator Spot 475Z (16ch) 4@145",
+        [
+          [
+            6,
+            3
+          ],
+          [
+            8,
+            59
+          ]
+        ]
+      ]
+    ]
+  },
+  {
+    "name": "White disco",
+    "feature": "Dimmer",
+    "filter": "All",
+    "targets": [],
+    "components": [],
+    "mode": "Wave",
+    "fixtures": [],
+    "color": [
+      110,
+      120,
+      150
+    ],
+    "amount": 0.5,
+    "shape": 0.5,
+    "subdiv": 4.0,
+    "master_beat": true,
+    "speed": 0.357,
+    "invert": false,
+    "spread": 1.0,
+    "wings": 1,
+    "static_pos": [],
+    "hold": [
+      [
+        "top trio on ring@618",
+        [
+          [
+            0,
+            178
+          ],
+          [
+            1,
+            0
+          ],
+          [
+            2,
+            22
+          ],
+          [
+            3,
+            0
+          ],
+          [
+            4,
+            0
+          ],
+          [
+            5,
+            0
           ],
           [
             6,
             255
           ],
           [
+            7,
+            255
+          ],
+          [
+            8,
+            252
+          ],
+          [
+            9,
+            255
+          ],
+          [
+            10,
+            255
+          ],
+          [
+            11,
+            255
+          ],
+          [
+            12,
+            255
+          ],
+          [
             13,
             255
+          ],
+          [
+            14,
+            255
+          ],
+          [
+            15,
+            255
+          ],
+          [
+            16,
+            255
+          ],
+          [
+            17,
+            0
+          ],
+          [
+            18,
+            0
+          ],
+          [
+            19,
+            0
+          ],
+          [
+            20,
+            0
+          ],
+          [
+            21,
+            0
+          ],
+          [
+            22,
+            0
+          ],
+          [
+            23,
+            0
+          ],
+          [
+            24,
+            194
+          ],
+          [
+            25,
+            255
+          ],
+          [
+            26,
+            0
+          ],
+          [
+            27,
+            0
+          ],
+          [
+            28,
+            0
+          ],
+          [
+            29,
+            0
+          ]
+        ]
+      ]
+    ]
+  },
+  {
+    "name": "DISCO WHITE",
+    "feature": "Dimmer",
+    "filter": "All",
+    "targets": [],
+    "components": [],
+    "mode": "Wave",
+    "fixtures": [],
+    "color": [
+      110,
+      120,
+      150
+    ],
+    "amount": 0.5,
+    "shape": 0.5,
+    "subdiv": 4.0,
+    "master_beat": true,
+    "speed": 0.357,
+    "invert": false,
+    "spread": 1.0,
+    "wings": 1,
+    "static_pos": [],
+    "hold": [
+      [
+        "Maverick MK2 Spot (24ch) 1@1",
+        [
+          [
+            0,
+            167
+          ],
+          [
+            1,
+            0
+          ],
+          [
+            2,
+            50
+          ],
+          [
+            3,
+            0
+          ],
+          [
+            4,
+            0
+          ],
+          [
+            5,
+            194
+          ],
+          [
+            6,
+            255
+          ],
+          [
+            7,
+            0
+          ],
+          [
+            8,
+            0
+          ],
+          [
+            9,
+            0
+          ],
+          [
+            10,
+            0
+          ],
+          [
+            11,
+            0
+          ],
+          [
+            12,
+            0
+          ],
+          [
+            13,
+            0
+          ],
+          [
+            14,
+            0
+          ],
+          [
+            15,
+            0
+          ],
+          [
+            16,
+            0
+          ],
+          [
+            17,
+            0
+          ],
+          [
+            18,
+            255
+          ],
+          [
+            19,
+            0
+          ],
+          [
+            20,
+            0
+          ],
+          [
+            21,
+            0
+          ],
+          [
+            22,
+            0
+          ],
+          [
+            23,
+            0
+          ]
+        ]
+      ],
+      [
+        "Maverick MK2 Spot (24ch) 2@25",
+        [
+          [
+            0,
+            190
+          ],
+          [
+            1,
+            122
+          ],
+          [
+            2,
+            58
+          ],
+          [
+            3,
+            0
+          ],
+          [
+            4,
+            0
+          ],
+          [
+            5,
+            194
+          ],
+          [
+            6,
+            255
+          ],
+          [
+            7,
+            0
+          ],
+          [
+            8,
+            0
+          ],
+          [
+            9,
+            0
+          ],
+          [
+            10,
+            0
+          ],
+          [
+            11,
+            0
+          ],
+          [
+            12,
+            0
+          ],
+          [
+            13,
+            0
+          ],
+          [
+            14,
+            0
+          ],
+          [
+            15,
+            0
+          ],
+          [
+            16,
+            0
+          ],
+          [
+            17,
+            0
+          ],
+          [
+            18,
+            255
+          ],
+          [
+            19,
+            0
+          ],
+          [
+            20,
+            0
+          ],
+          [
+            21,
+            0
+          ],
+          [
+            22,
+            0
+          ],
+          [
+            23,
+            0
+          ]
+        ]
+      ],
+      [
+        "Maverick MK2 Spot (24ch) 3@49",
+        [
+          [
+            0,
+            198
+          ],
+          [
+            1,
+            0
+          ],
+          [
+            2,
+            65
+          ],
+          [
+            3,
+            0
+          ],
+          [
+            4,
+            0
+          ],
+          [
+            5,
+            194
+          ],
+          [
+            6,
+            255
+          ],
+          [
+            7,
+            0
+          ],
+          [
+            8,
+            0
+          ],
+          [
+            9,
+            0
+          ],
+          [
+            10,
+            0
+          ],
+          [
+            11,
+            0
+          ],
+          [
+            12,
+            0
+          ],
+          [
+            13,
+            0
+          ],
+          [
+            14,
+            0
+          ],
+          [
+            15,
+            0
+          ],
+          [
+            16,
+            0
+          ],
+          [
+            17,
+            0
+          ],
+          [
+            18,
+            255
+          ],
+          [
+            19,
+            0
+          ],
+          [
+            20,
+            0
+          ],
+          [
+            21,
+            0
+          ],
+          [
+            22,
+            0
+          ],
+          [
+            23,
+            0
+          ]
+        ]
+      ],
+      [
+        "Maverick MK2 Spot (24ch) 4@73",
+        [
+          [
+            0,
+            168
+          ],
+          [
+            1,
+            255
+          ],
+          [
+            2,
+            50
+          ],
+          [
+            3,
+            0
+          ],
+          [
+            4,
+            0
+          ],
+          [
+            5,
+            194
+          ],
+          [
+            6,
+            255
+          ],
+          [
+            7,
+            0
+          ],
+          [
+            8,
+            0
+          ],
+          [
+            9,
+            0
+          ],
+          [
+            10,
+            0
+          ],
+          [
+            11,
+            0
+          ],
+          [
+            12,
+            0
+          ],
+          [
+            13,
+            0
+          ],
+          [
+            14,
+            0
+          ],
+          [
+            15,
+            0
+          ],
+          [
+            16,
+            0
+          ],
+          [
+            17,
+            0
+          ],
+          [
+            18,
+            255
+          ],
+          [
+            19,
+            0
+          ],
+          [
+            20,
+            0
+          ],
+          [
+            21,
+            0
+          ],
+          [
+            22,
+            0
+          ],
+          [
+            23,
+            0
+          ]
+        ]
+      ],
+      [
+        "top trio on ring@618",
+        [
+          [
+            0,
+            178
+          ],
+          [
+            1,
+            0
+          ],
+          [
+            2,
+            22
+          ],
+          [
+            3,
+            0
+          ],
+          [
+            4,
+            0
+          ],
+          [
+            5,
+            0
+          ],
+          [
+            6,
+            255
+          ],
+          [
+            7,
+            255
+          ],
+          [
+            8,
+            252
+          ],
+          [
+            9,
+            255
+          ],
+          [
+            10,
+            255
+          ],
+          [
+            11,
+            255
+          ],
+          [
+            12,
+            255
+          ],
+          [
+            13,
+            255
+          ],
+          [
+            14,
+            255
+          ],
+          [
+            15,
+            255
+          ],
+          [
+            16,
+            255
+          ],
+          [
+            17,
+            0
+          ],
+          [
+            18,
+            0
+          ],
+          [
+            19,
+            0
+          ],
+          [
+            20,
+            0
+          ],
+          [
+            21,
+            0
+          ],
+          [
+            22,
+            0
+          ],
+          [
+            23,
+            0
+          ],
+          [
+            24,
+            194
+          ],
+          [
+            25,
+            255
+          ],
+          [
+            26,
+            0
+          ],
+          [
+            27,
+            0
+          ],
+          [
+            28,
+            0
+          ],
+          [
+            29,
+            0
           ]
         ]
       ]

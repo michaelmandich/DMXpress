@@ -15,6 +15,7 @@ use super::settings::Settings;
 use super::view::StageView;
 use super::volumetric::{paint_callback, BeamSpec};
 use crate::chase::ChaseConfig;
+use crate::phaser::PhaserTrace;
 use crate::showbuddy::Patch;
 use crate::transition::TransitionConfig;
 
@@ -33,6 +34,7 @@ impl StageView {
         proj: &[Option<(Pos2, f32)>],
         transition: Option<&TransitionConfig>,
         chase: Option<&ChaseConfig>,
+        trace: Option<&PhaserTrace>,
     ) {
         // ---- static scene ----
         self.draw_grid(painter, rect);
@@ -504,6 +506,7 @@ impl StageView {
         );
         self.draw_transition_overlay(painter, rect, transition);
         self.draw_chase_overlay(painter, rect, chase);
+        self.draw_phaser_paths(painter, rect, patch, buf, trace);
     }
 
     fn line3(&self, painter: &egui::Painter, rect: Rect, a: V3, b: V3, stroke: Stroke) {

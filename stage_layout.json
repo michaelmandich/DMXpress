@@ -1,495 +1,100 @@
 {
   "instances": [
     {
-      "key": "8 channel par1@1",
+      "key": "SlimPAR T12 BT (7ch) 1@513",
       "t": {
         "pos": {
-          "x": -5.2027874,
-          "y": 3.0,
-          "z": 1.3871088
+          "x": 0.8318514,
+          "y": 2.9022057,
+          "z": -6.8584466
         },
-        "yaw_deg": -110.0,
-        "pitch_deg": -140.0,
+        "yaw_deg": 64.0768,
+        "pitch_deg": -29.7375,
+        "roll_deg": 114.533394,
+        "scale": 1.0
+      },
+      "opacity": 1.0,
+      "mount": null,
+      "truss_mount": null
+    },
+    {
+      "key": "SlimPAR T12 BT (7ch) 2@520",
+      "t": {
+        "pos": {
+          "x": -1.0565617,
+          "y": 2.7156584,
+          "z": -6.38475
+        },
+        "yaw_deg": 0.0,
+        "pitch_deg": -91.07489,
         "roll_deg": 0.0,
         "scale": 1.0
       },
       "opacity": 1.0,
-      "mount": [
-        3,
-        7
-      ],
+      "mount": null,
       "truss_mount": null
     },
     {
-      "key": "8 channel par1@9",
+      "key": "SlimPAR T12 BT (7ch) 3@527",
       "t": {
         "pos": {
-          "x": -6.474594,
-          "y": 3.0,
-          "z": -0.6482067
+          "x": 0.23318614,
+          "y": 5.18867,
+          "z": -6.518143
         },
-        "yaw_deg": -42.0,
-        "pitch_deg": -145.0,
+        "yaw_deg": 0.0,
+        "pitch_deg": 90.96354,
         "roll_deg": 0.0,
         "scale": 1.0
       },
       "opacity": 1.0,
-      "mount": [
-        3,
-        4
-      ],
+      "mount": null,
       "truss_mount": null
     },
     {
-      "key": "moving par1@17",
+      "key": "SlimPAR T12 BT (7ch) 4@534",
       "t": {
         "pos": {
-          "x": 6.179161,
-          "y": 3.0,
-          "z": 0.09468824
-        },
-        "yaw_deg": 251.0,
-        "pitch_deg": -90.0,
-        "roll_deg": 203.0,
-        "scale": 1.0
-      },
-      "opacity": 1.0,
-      "mount": [
-        2,
-        5
-      ],
-      "truss_mount": null
-    },
-    {
-      "key": "moving par2@31",
-      "t": {
-        "pos": {
-          "x": -2.2992551,
-          "y": 5.0,
-          "z": 3.7608283
+          "x": 0.07459386,
+          "y": 2.7327268,
+          "z": -6.1919327
         },
         "yaw_deg": 0.0,
-        "pitch_deg": -90.0,
-        "roll_deg": 269.0,
-        "scale": 1.0
-      },
-      "opacity": 1.0,
-      "mount": [
-        0,
-        5
-      ],
-      "truss_mount": null
-    },
-    {
-      "key": "moving par3@45",
-      "t": {
-        "pos": {
-          "x": 2.5662763,
-          "y": 5.0,
-          "z": 4.557143
-        },
-        "yaw_deg": 0.0,
-        "pitch_deg": -90.0,
-        "roll_deg": 270.0,
-        "scale": 1.0
-      },
-      "opacity": 1.0,
-      "mount": [
-        1,
-        5
-      ],
-      "truss_mount": null
-    },
-    {
-      "key": "moving par4@59",
-      "t": {
-        "pos": {
-          "x": -6.050658,
-          "y": 3.0,
-          "z": 0.030231804
-        },
-        "yaw_deg": -58.0,
         "pitch_deg": -90.0,
         "roll_deg": 0.0,
         "scale": 1.0
       },
       "opacity": 1.0,
-      "mount": [
-        3,
-        5
-      ],
+      "mount": null,
       "truss_mount": null
     },
     {
-      "key": "80w 17ch spot with circle1@73",
+      "key": "SlimPAR T12 BT (7ch) 5@541",
       "t": {
         "pos": {
-          "x": 5.918707,
-          "y": 3.0,
-          "z": 0.8511031
-        },
-        "yaw_deg": 251.0,
-        "pitch_deg": -90.0,
-        "roll_deg": 195.0,
-        "scale": 1.0
-      },
-      "opacity": 1.0,
-      "mount": [
-        2,
-        6
-      ],
-      "truss_mount": null
-    },
-    {
-      "key": "120W moving head (mini beam spot LED)1@90",
-      "t": {
-        "pos": {
-          "x": -0.699255,
-          "y": 5.0,
-          "z": 3.7608283
-        },
-        "yaw_deg": 0.0,
-        "pitch_deg": -90.0,
-        "roll_deg": 263.0,
-        "scale": 1.0
-      },
-      "opacity": 1.0,
-      "mount": [
-        0,
-        7
-      ],
-      "truss_mount": null
-    },
-    {
-      "key": "80w 17ch spot with circle1@102",
-      "t": {
-        "pos": {
-          "x": -1.4992551,
-          "y": 5.0,
-          "z": 3.7608283
-        },
-        "yaw_deg": 0.0,
-        "pitch_deg": -90.0,
-        "roll_deg": 263.0,
-        "scale": 0.86
-      },
-      "opacity": 1.0,
-      "mount": [
-        0,
-        6
-      ],
-      "truss_mount": null
-    },
-    {
-      "key": "120W moving head (mini beam spot LED)1@119",
-      "t": {
-        "pos": {
-          "x": -3.099255,
-          "y": 5.0,
-          "z": 3.7608283
-        },
-        "yaw_deg": 0.0,
-        "pitch_deg": -90.0,
-        "roll_deg": 263.0,
-        "scale": 1.0
-      },
-      "opacity": 1.0,
-      "mount": [
-        0,
-        4
-      ],
-      "truss_mount": null
-    },
-    {
-      "key": "120W moving head (mini beam spot LED)1@131",
-      "t": {
-        "pos": {
-          "x": 4.1662765,
-          "y": 5.0,
-          "z": 4.557143
-        },
-        "yaw_deg": 0.0,
-        "pitch_deg": -90.0,
-        "roll_deg": 265.0,
-        "scale": 1.0
-      },
-      "opacity": 1.0,
-      "mount": [
-        1,
-        7
-      ],
-      "truss_mount": null
-    },
-    {
-      "key": "80w 17ch spot with circle1@143",
-      "t": {
-        "pos": {
-          "x": 3.3662765,
-          "y": 5.0,
-          "z": 4.557143
-        },
-        "yaw_deg": 0.0,
-        "pitch_deg": -90.0,
-        "roll_deg": 265.0,
-        "scale": 1.0
-      },
-      "opacity": 1.0,
-      "mount": [
-        1,
-        6
-      ],
-      "truss_mount": null
-    },
-    {
-      "key": "120W moving head (mini beam spot LED)1@160",
-      "t": {
-        "pos": {
-          "x": 1.7662764,
-          "y": 5.0,
-          "z": 4.557143
-        },
-        "yaw_deg": 0.0,
-        "pitch_deg": -90.0,
-        "roll_deg": 265.0,
-        "scale": 1.0
-      },
-      "opacity": 1.0,
-      "mount": [
-        1,
-        4
-      ],
-      "truss_mount": null
-    },
-    {
-      "key": "80w 17ch spot with circle1@172",
-      "t": {
-        "pos": {
-          "x": -5.6267233,
-          "y": 3.0,
-          "z": 0.70867026
-        },
-        "yaw_deg": -58.0,
-        "pitch_deg": -90.0,
-        "roll_deg": 0.30857086,
-        "scale": 1.0
-      },
-      "opacity": 1.0,
-      "mount": [
-        3,
-        6
-      ],
-      "truss_mount": null
-    },
-    {
-      "key": "moving par1@189",
-      "t": {
-        "pos": {
-          "x": 6.179161,
-          "y": 3.4,
-          "z": 0.09468824
-        },
-        "yaw_deg": 251.0,
-        "pitch_deg": 90.0,
-        "roll_deg": 327.0,
-        "scale": 1.0
-      },
-      "opacity": 1.0,
-      "mount": [
-        2,
-        1
-      ],
-      "truss_mount": null
-    },
-    {
-      "key": "moving par2@203",
-      "t": {
-        "pos": {
-          "x": 5.6582522,
-          "y": 3.4,
-          "z": 1.607518
-        },
-        "yaw_deg": 251.0,
-        "pitch_deg": 90.0,
-        "roll_deg": 316.44067,
-        "scale": 1.0
-      },
-      "opacity": 1.0,
-      "mount": [
-        2,
-        3
-      ],
-      "truss_mount": null
-    },
-    {
-      "key": "moving par3@217",
-      "t": {
-        "pos": {
-          "x": -5.2027874,
-          "y": 3.4,
-          "z": 1.3871088
-        },
-        "yaw_deg": -58.0,
-        "pitch_deg": 90.0,
-        "roll_deg": 0.0,
-        "scale": 1.0
-      },
-      "opacity": 1.0,
-      "mount": [
-        3,
-        3
-      ],
-      "truss_mount": null
-    },
-    {
-      "key": "moving par4@231",
-      "t": {
-        "pos": {
-          "x": -6.050658,
-          "y": 3.4,
-          "z": 0.030231804
-        },
-        "yaw_deg": -58.0,
-        "pitch_deg": 90.0,
-        "roll_deg": 0.0,
-        "scale": 1.0
-      },
-      "opacity": 1.0,
-      "mount": [
-        3,
-        1
-      ],
-      "truss_mount": null
-    },
-    {
-      "key": "80w 17ch spot with circle1@245",
-      "t": {
-        "pos": {
-          "x": 6.4396157,
-          "y": 3.4,
-          "z": -0.66172665
-        },
-        "yaw_deg": 251.0,
-        "pitch_deg": 90.0,
-        "roll_deg": 327.55823,
-        "scale": 1.0
-      },
-      "opacity": 1.0,
-      "mount": [
-        2,
-        0
-      ],
-      "truss_mount": null
-    },
-    {
-      "key": "80w 17ch spot with circle1@262",
-      "t": {
-        "pos": {
-          "x": 5.918707,
-          "y": 3.4,
-          "z": 0.8511031
-        },
-        "yaw_deg": 251.0,
-        "pitch_deg": 90.0,
-        "roll_deg": 327.0,
-        "scale": 1.0
-      },
-      "opacity": 1.0,
-      "mount": [
-        2,
-        2
-      ],
-      "truss_mount": null
-    },
-    {
-      "key": "120W moving head (mini beam spot LED)1@279",
-      "t": {
-        "pos": {
-          "x": -2.2992551,
-          "y": 5.3999996,
-          "z": 3.7608283
-        },
-        "yaw_deg": 0.0,
-        "pitch_deg": 90.0,
-        "roll_deg": 270.0,
-        "scale": 1.0
-      },
-      "opacity": 1.0,
-      "mount": [
-        0,
-        1
-      ],
-      "truss_mount": null
-    },
-    {
-      "key": "120W moving head (mini beam spot LED)2@291",
-      "t": {
-        "pos": {
-          "x": 2.5662763,
-          "y": 5.3999996,
-          "z": 4.557143
-        },
-        "yaw_deg": 0.0,
-        "pitch_deg": 90.0,
-        "roll_deg": 270.0,
-        "scale": 1.0
-      },
-      "opacity": 1.0,
-      "mount": [
-        1,
-        1
-      ],
-      "truss_mount": null
-    },
-    {
-      "key": "80w 17ch spot with circle1@303",
-      "t": {
-        "pos": {
-          "x": -5.6267233,
-          "y": 3.4,
-          "z": 0.70867026
-        },
-        "yaw_deg": -58.0,
-        "pitch_deg": 90.0,
-        "roll_deg": 0.0,
-        "scale": 1.0
-      },
-      "opacity": 1.0,
-      "mount": [
-        3,
-        2
-      ],
-      "truss_mount": null
-    },
-    {
-      "key": "80w 17ch spot with circle2@320",
-      "t": {
-        "pos": {
-          "x": -6.474594,
-          "y": 3.4,
-          "z": -0.6482067
-        },
-        "yaw_deg": -58.0,
-        "pitch_deg": 90.0,
-        "roll_deg": 0.0,
-        "scale": 1.0
-      },
-      "opacity": 1.0,
-      "mount": [
-        3,
-        0
-      ],
-      "truss_mount": null
-    },
-    {
-      "key": "hurricane1@337",
-      "t": {
-        "pos": {
-          "x": 9.170544,
+          "x": 0.86177117,
           "y": 4.0,
-          "z": -3.6821384
+          "z": -6.9026027
         },
-        "yaw_deg": 0.0,
-        "pitch_deg": -90.0,
+        "yaw_deg": -323.84583,
+        "pitch_deg": -310.6921,
+        "roll_deg": 17.395489,
+        "scale": 1.0
+      },
+      "opacity": 1.0,
+      "mount": null,
+      "truss_mount": null
+    },
+    {
+      "key": "SlimPAR T12 BT (7ch) 6@548",
+      "t": {
+        "pos": {
+          "x": -0.7791478,
+          "y": 5.0812926,
+          "z": -6.174298
+        },
+        "yaw_deg": 189.29959,
+        "pitch_deg": -270.45538,
         "roll_deg": 0.0,
         "scale": 1.0
       },
@@ -498,97 +103,131 @@
       "truss_mount": null
     },
     {
-      "key": "8 channel par1@338",
+      "key": "SlimPAR T12 BT (7ch) 7@555",
       "t": {
         "pos": {
-          "x": -3.5932486,
-          "y": 0.90000093,
-          "z": -2.8327127
-        },
-        "yaw_deg": 0.0,
-        "pitch_deg": 51.0,
-        "roll_deg": 0.0,
-        "scale": 1.0
-      },
-      "opacity": 1.0,
-      "mount": null,
-      "truss_mount": null
-    },
-    {
-      "key": "8 channel par2@346",
-      "t": {
-        "pos": {
-          "x": -1.8112077,
-          "y": 0.90000093,
-          "z": -2.8017068
-        },
-        "yaw_deg": 0.0,
-        "pitch_deg": 51.0,
-        "roll_deg": 0.0,
-        "scale": 1.0
-      },
-      "opacity": 1.0,
-      "mount": null,
-      "truss_mount": null
-    },
-    {
-      "key": "8 channel par3@354",
-      "t": {
-        "pos": {
-          "x": -0.18,
-          "y": 0.90000093,
-          "z": -2.7190273
-        },
-        "yaw_deg": 0.0,
-        "pitch_deg": 51.0,
-        "roll_deg": 0.0,
-        "scale": 1.0
-      },
-      "opacity": 1.0,
-      "mount": null,
-      "truss_mount": null
-    },
-    {
-      "key": "8 channel par4@362",
-      "t": {
-        "pos": {
-          "x": 1.619795,
-          "y": 0.90000093,
-          "z": -2.7106872
-        },
-        "yaw_deg": 0.0,
-        "pitch_deg": 51.0,
-        "roll_deg": 0.0,
-        "scale": 1.0
-      },
-      "opacity": 1.0,
-      "mount": null,
-      "truss_mount": null
-    },
-    {
-      "key": "8 channel par5@370",
-      "t": {
-        "pos": {
-          "x": 3.1991825,
-          "y": 0.90000093,
-          "z": -2.6561162
-        },
-        "yaw_deg": 0.0,
-        "pitch_deg": 51.0,
-        "roll_deg": 0.0,
-        "scale": 1.0
-      },
-      "opacity": 1.0,
-      "mount": null,
-      "truss_mount": null
-    },
-    {
-      "key": "zooming wash1@378",
-      "t": {
-        "pos": {
-          "x": -11.7471285,
+          "x": -1.523639,
           "y": 4.0,
-          "z": 1.5612309
+          "z": -6.317526
+        },
+        "yaw_deg": -33.420776,
+        "pitch_deg": 26.95829,
+        "roll_deg": 10.807614,
+        "scale": 1.0
+      },
+      "opacity": 1.0,
+      "mount": null,
+      "truss_mount": null
+    },
+    {
+      "key": "SlimPAR Q12 BT (8ch) 1@562",
+      "t": {
+        "pos": {
+          "x": -1.078008,
+          "y": 5.5999565,
+          "z": -0.8195755
+        },
+        "yaw_deg": 0.0,
+        "pitch_deg": -90.0,
+        "roll_deg": 335.55075,
+        "scale": 1.0
+      },
+      "opacity": 1.0,
+      "mount": null,
+      "truss_mount": null
+    },
+    {
+      "key": "SlimPAR Q12 BT (8ch) 2@570",
+      "t": {
+        "pos": {
+          "x": -0.29937765,
+          "y": 5.5880046,
+          "z": -1.032219
+        },
+        "yaw_deg": 0.0,
+        "pitch_deg": -90.05095,
+        "roll_deg": 0.0,
+        "scale": 1.0
+      },
+      "opacity": 1.0,
+      "mount": null,
+      "truss_mount": null
+    },
+    {
+      "key": "SlimPAR Q12 BT (8ch) 3@578",
+      "t": {
+        "pos": {
+          "x": 0.45976105,
+          "y": 5.5880046,
+          "z": -1.0243614
+        },
+        "yaw_deg": 0.0,
+        "pitch_deg": -90.0,
+        "roll_deg": 1.0416412,
+        "scale": 1.0
+      },
+      "opacity": 1.0,
+      "mount": null,
+      "truss_mount": null
+    },
+    {
+      "key": "SlimPAR Q12 BT (8ch) 4@586",
+      "t": {
+        "pos": {
+          "x": -0.8532521,
+          "y": 5.5880046,
+          "z": 1.0813736
+        },
+        "yaw_deg": 0.0,
+        "pitch_deg": -90.0,
+        "roll_deg": 6.9179163,
+        "scale": 1.0
+      },
+      "opacity": 1.0,
+      "mount": null,
+      "truss_mount": null
+    },
+    {
+      "key": "SlimPAR Q12 BT (8ch) 5@594",
+      "t": {
+        "pos": {
+          "x": 0.84548205,
+          "y": 5.5880046,
+          "z": -0.14439769
+        },
+        "yaw_deg": 0.0,
+        "pitch_deg": -90.0,
+        "roll_deg": 7.717001,
+        "scale": 1.0
+      },
+      "opacity": 1.0,
+      "mount": null,
+      "truss_mount": null
+    },
+    {
+      "key": "SlimPAR Q12 BT (8ch) 6@602",
+      "t": {
+        "pos": {
+          "x": 0.7500489,
+          "y": 5.5880046,
+          "z": 0.9183819
+        },
+        "yaw_deg": 0.0,
+        "pitch_deg": -78.03871,
+        "roll_deg": 21.1362,
+        "scale": 1.0
+      },
+      "opacity": 1.0,
+      "mount": null,
+      "truss_mount": null
+    },
+    {
+      "key": "SlimPAR Q12 BT (8ch) 7@610",
+      "t": {
+        "pos": {
+          "x": -1.5409553,
+          "y": 5.5880046,
+          "z": 0.24662894
         },
         "yaw_deg": 0.0,
         "pitch_deg": -90.0,
@@ -600,12 +239,12 @@
       "truss_mount": null
     },
     {
-      "key": "zooming wash2@393",
+      "key": "Fogger (2ch)@470",
       "t": {
         "pos": {
-          "x": -11.240609,
-          "y": 4.0,
-          "z": 2.7405462
+          "x": -10.768207,
+          "y": 3.9,
+          "z": 0.99136466
         },
         "yaw_deg": 0.0,
         "pitch_deg": -90.0,
@@ -617,84 +256,16 @@
       "truss_mount": null
     },
     {
-      "key": "150w 11 channel1@456",
+      "key": "Maverick MK2 Spot (24ch) 1@1",
       "t": {
         "pos": {
-          "x": 0.41463232,
-          "y": 0.9955207,
-          "z": -2.7810493
-        },
-        "yaw_deg": 846.0,
-        "pitch_deg": 453.0,
-        "roll_deg": 89.0,
-        "scale": 0.42241958
-      },
-      "opacity": 1.0,
-      "mount": null,
-      "truss_mount": null
-    },
-    {
-      "key": "150w 11 channel2@468",
-      "t": {
-        "pos": {
-          "x": 0.9468225,
-          "y": 0.97850406,
-          "z": -2.7810493
-        },
-        "yaw_deg": 846.0,
-        "pitch_deg": 453.0,
-        "roll_deg": 89.0,
-        "scale": 0.42241958
-      },
-      "opacity": 1.0,
-      "mount": null,
-      "truss_mount": null
-    },
-    {
-      "key": "150w 11 channel3@480",
-      "t": {
-        "pos": {
-          "x": 2.265728,
-          "y": 1.0000001,
-          "z": -2.742559
-        },
-        "yaw_deg": 846.0,
-        "pitch_deg": 453.0,
-        "roll_deg": 89.0,
-        "scale": 0.42241958
-      },
-      "opacity": 1.0,
-      "mount": null,
-      "truss_mount": null
-    },
-    {
-      "key": "150w 11 channel4@492",
-      "t": {
-        "pos": {
-          "x": 2.8046465,
-          "y": 0.9779353,
-          "z": -2.7276497
-        },
-        "yaw_deg": 846.0,
-        "pitch_deg": 453.0,
-        "roll_deg": 89.0,
-        "scale": 0.42241958
-      },
-      "opacity": 1.0,
-      "mount": null,
-      "truss_mount": null
-    },
-    {
-      "key": "25 ch banger1@513",
-      "t": {
-        "pos": {
-          "x": 4.7357864,
-          "y": 0.0923098,
-          "z": -2.7338033
+          "x": -10.851355,
+          "y": 3.5,
+          "z": -3.7506793
         },
         "yaw_deg": 0.0,
-        "pitch_deg": 73.81142,
-        "roll_deg": 80.0,
+        "pitch_deg": -90.0,
+        "roll_deg": 0.0,
         "scale": 1.0
       },
       "opacity": 1.0,
@@ -702,155 +273,16 @@
       "truss_mount": null
     },
     {
-      "key": "25 ch banger1@538",
+      "key": "Maverick MK2 Spot (24ch) 2@25",
       "t": {
         "pos": {
-          "x": 4.96453,
-          "y": 0.17259465,
-          "z": 3.449409
-        },
-        "yaw_deg": 0.0,
-        "pitch_deg": -264.45822,
-        "roll_deg": 88.0,
-        "scale": 1.0
-      },
-      "opacity": 1.0,
-      "mount": null,
-      "truss_mount": null
-    },
-    {
-      "key": "25 ch banger1@563",
-      "t": {
-        "pos": {
-          "x": -4.0241423,
-          "y": -0.15555096,
-          "z": 3.0066423
-        },
-        "yaw_deg": 0.0,
-        "pitch_deg": 92.16874,
-        "roll_deg": 101.0,
-        "scale": 1.0
-      },
-      "opacity": 1.0,
-      "mount": null,
-      "truss_mount": null
-    },
-    {
-      "key": "25 ch banger1@588",
-      "t": {
-        "pos": {
-          "x": -5.0708966,
-          "y": 0.23494594,
-          "z": -2.168931
-        },
-        "yaw_deg": 0.0,
-        "pitch_deg": 91.0787,
-        "roll_deg": 101.0,
-        "scale": 1.0
-      },
-      "opacity": 1.0,
-      "mount": null,
-      "truss_mount": null
-    },
-    {
-      "key": "150w 11 channel1@456",
-      "t": {
-        "pos": {
-          "x": -2.8986552,
-          "y": 1.061006,
-          "z": -2.981763
-        },
-        "yaw_deg": 846.0,
-        "pitch_deg": 453.0,
-        "roll_deg": 89.0,
-        "scale": 0.42241958
-      },
-      "opacity": 1.0,
-      "mount": null,
-      "truss_mount": null
-    },
-    {
-      "key": "150w 11 channel2@468",
-      "t": {
-        "pos": {
-          "x": -2.366463,
-          "y": 1.061006,
-          "z": -2.981763
-        },
-        "yaw_deg": 846.0,
-        "pitch_deg": 453.0,
-        "roll_deg": 89.0,
-        "scale": 0.42241958
-      },
-      "opacity": 1.0,
-      "mount": null,
-      "truss_mount": null
-    },
-    {
-      "key": "150w 11 channel3@480",
-      "t": {
-        "pos": {
-          "x": -1.2227849,
-          "y": 1.0797799,
-          "z": -2.814381
-        },
-        "yaw_deg": 846.0,
-        "pitch_deg": 453.0,
-        "roll_deg": 89.0,
-        "scale": 0.42241958
-      },
-      "opacity": 1.0,
-      "mount": null,
-      "truss_mount": null
-    },
-    {
-      "key": "150w 11 channel4@492",
-      "t": {
-        "pos": {
-          "x": -0.6905961,
-          "y": 1.0797799,
-          "z": -2.814381
-        },
-        "yaw_deg": 846.0,
-        "pitch_deg": 453.0,
-        "roll_deg": 89.0,
-        "scale": 0.42241958
-      },
-      "opacity": 1.0,
-      "mount": null,
-      "truss_mount": null
-    },
-    {
-      "key": "8 channel par1@1",
-      "t": {
-        "pos": {
-          "x": -0.699255,
-          "y": 5.3999996,
-          "z": 3.7608283
-        },
-        "yaw_deg": 0.0,
-        "pitch_deg": 135.0,
-        "roll_deg": 321.8582,
-        "scale": 1.0
-      },
-      "opacity": 1.0,
-      "mount": [
-        0,
-        3
-      ],
-      "truss_mount": null
-    },
-    {
-      "key": "8 channel par1@9",
-      "t": {
-        "pos": {
-          "x": -3.099255,
-          "y": 5.3999996,
-          "z": 3.7608283
+          "x": -5.953535,
+          "y": 3.9,
+          "z": -3.9698303
         },
         "yaw_deg": 0.0,
         "pitch_deg": 90.0,
-        "roll_deg": 345.22833,
+        "roll_deg": 0.0,
         "scale": 1.0
       },
       "opacity": 1.0,
@@ -861,95 +293,701 @@
       "truss_mount": null
     },
     {
-      "key": "8 channel par1@1",
+      "key": "Maverick MK2 Spot (24ch) 3@49",
       "t": {
         "pos": {
-          "x": 4.1662765,
-          "y": 5.3999996,
-          "z": 4.557143
+          "x": 1.2314222,
+          "y": 4.0,
+          "z": -4.1617775
+        },
+        "yaw_deg": 0.0,
+        "pitch_deg": -90.0,
+        "roll_deg": 359.3158,
+        "scale": 1.0
+      },
+      "opacity": 1.0,
+      "mount": null,
+      "truss_mount": null
+    },
+    {
+      "key": "Maverick MK2 Spot (24ch) 4@73",
+      "t": {
+        "pos": {
+          "x": 8.253292,
+          "y": 4.5772247,
+          "z": -2.0894315
+        },
+        "yaw_deg": -32.554317,
+        "pitch_deg": -254.0086,
+        "roll_deg": 154.2136,
+        "scale": 1.0
+      },
+      "opacity": 1.0,
+      "mount": null,
+      "truss_mount": null
+    },
+    {
+      "key": "Intimidator Spot 475Z (16ch) 1@97",
+      "t": {
+        "pos": {
+          "x": -11.380429,
+          "y": 4.0,
+          "z": -1.1995175
+        },
+        "yaw_deg": 0.0,
+        "pitch_deg": -90.0,
+        "roll_deg": 0.0,
+        "scale": 1.0
+      },
+      "opacity": 1.0,
+      "mount": null,
+      "truss_mount": null
+    },
+    {
+      "key": "Intimidator Spot 475Z (16ch) 2@113",
+      "t": {
+        "pos": {
+          "x": -7.697201,
+          "y": 4.0,
+          "z": -3.1485093
+        },
+        "yaw_deg": 0.0,
+        "pitch_deg": -90.0,
+        "roll_deg": 0.0,
+        "scale": 1.0
+      },
+      "opacity": 1.0,
+      "mount": null,
+      "truss_mount": null
+    },
+    {
+      "key": "Intimidator Spot 475Z (16ch) 3@129",
+      "t": {
+        "pos": {
+          "x": 2.5082035,
+          "y": 4.0,
+          "z": -5.4224052
+        },
+        "yaw_deg": 0.0,
+        "pitch_deg": -90.0,
+        "roll_deg": 0.0,
+        "scale": 1.0
+      },
+      "opacity": 1.0,
+      "mount": null,
+      "truss_mount": null
+    },
+    {
+      "key": "Intimidator Spot 475Z (16ch) 4@145",
+      "t": {
+        "pos": {
+          "x": 8.9903345,
+          "y": 4.0,
+          "z": -2.003838
+        },
+        "yaw_deg": 0.0,
+        "pitch_deg": -90.0,
+        "roll_deg": 249.56647,
+        "scale": 1.0
+      },
+      "opacity": 1.0,
+      "mount": null,
+      "truss_mount": null
+    },
+    {
+      "key": "Intimidator Trio (15ch) 1@161",
+      "t": {
+        "pos": {
+          "x": -8.765421,
+          "y": 4.0,
+          "z": -2.3076365
+        },
+        "yaw_deg": 0.0,
+        "pitch_deg": -90.0,
+        "roll_deg": 0.0,
+        "scale": 1.0
+      },
+      "opacity": 1.0,
+      "mount": null,
+      "truss_mount": null
+    },
+    {
+      "key": "Intimidator Trio (15ch) 2@176",
+      "t": {
+        "pos": {
+          "x": 9.898708,
+          "y": 4.0,
+          "z": -0.48343378
+        },
+        "yaw_deg": -70.1386,
+        "pitch_deg": -273.0488,
+        "roll_deg": 161.7948,
+        "scale": 1.0
+      },
+      "opacity": 1.0,
+      "mount": null,
+      "truss_mount": null
+    },
+    {
+      "key": "Rogue R1 Wash (14ch) 1@191",
+      "t": {
+        "pos": {
+          "x": -8.833619,
+          "y": 4.0,
+          "z": -3.061003
+        },
+        "yaw_deg": 0.0,
+        "pitch_deg": -90.0,
+        "roll_deg": 0.0,
+        "scale": 1.0
+      },
+      "opacity": 1.0,
+      "mount": null,
+      "truss_mount": null
+    },
+    {
+      "key": "Rogue R1 Wash (14ch) 2@205",
+      "t": {
+        "pos": {
+          "x": -3.9176826,
+          "y": 4.0,
+          "z": -4.865513
+        },
+        "yaw_deg": 0.0,
+        "pitch_deg": -90.0,
+        "roll_deg": 0.0,
+        "scale": 1.0
+      },
+      "opacity": 1.0,
+      "mount": null,
+      "truss_mount": null
+    },
+    {
+      "key": "Rogue R1 Wash (14ch) 3@219",
+      "t": {
+        "pos": {
+          "x": 6.041564,
+          "y": 4.0,
+          "z": -3.061003
+        },
+        "yaw_deg": 0.0,
+        "pitch_deg": -90.0,
+        "roll_deg": 0.0,
+        "scale": 1.0
+      },
+      "opacity": 1.0,
+      "mount": null,
+      "truss_mount": null
+    },
+    {
+      "key": "Rogue R1 Wash (14ch) 4@233",
+      "t": {
+        "pos": {
+          "x": 10.634049,
+          "y": 5.07,
+          "z": 1.3810844
         },
         "yaw_deg": -38.0,
-        "pitch_deg": 123.0,
-        "roll_deg": 0.0,
+        "pitch_deg": -90.0,
+        "roll_deg": 277.35135,
         "scale": 1.0
       },
       "opacity": 1.0,
       "mount": [
-        1,
-        3
-      ],
-      "truss_mount": null
-    },
-    {
-      "key": "8 channel par1@9",
-      "t": {
-        "pos": {
-          "x": 1.7662764,
-          "y": 5.3999996,
-          "z": 4.557143
-        },
-        "yaw_deg": 23.0,
-        "pitch_deg": 123.0,
-        "roll_deg": 0.0,
-        "scale": 1.0
-      },
-      "opacity": 1.0,
-      "mount": [
-        1,
-        0
-      ],
-      "truss_mount": null
-    },
-    {
-      "key": "8 channel par1@1",
-      "t": {
-        "pos": {
-          "x": 5.6582522,
-          "y": 3.0,
-          "z": 1.607518
-        },
-        "yaw_deg": 251.0,
-        "pitch_deg": -38.0,
-        "roll_deg": 143.0,
-        "scale": 1.0
-      },
-      "opacity": 1.0,
-      "mount": [
-        2,
-        7
-      ],
-      "truss_mount": null
-    },
-    {
-      "key": "8 channel par1@9",
-      "t": {
-        "pos": {
-          "x": 6.4396157,
-          "y": 3.0,
-          "z": -0.66172665
-        },
-        "yaw_deg": 251.0,
-        "pitch_deg": -30.0,
-        "roll_deg": 143.0,
-        "scale": 1.0
-      },
-      "opacity": 1.0,
-      "mount": [
-        2,
+        3,
         4
       ],
       "truss_mount": null
     },
     {
-      "key": "disco banger@408",
+      "key": "Betopper LF2405 Matrix Strobe (11ch) 1@247",
       "t": {
         "pos": {
-          "x": -9.93621,
-          "y": 4.0074863,
-          "z": -2.6881745
+          "x": -8.580047,
+          "y": 1.5646086,
+          "z": -1.8057815
         },
         "yaw_deg": 0.0,
-        "pitch_deg": -90.7931,
+        "pitch_deg": 1.7146196,
+        "roll_deg": 82.1977,
+        "scale": 1.0
+      },
+      "opacity": 1.0,
+      "mount": null,
+      "truss_mount": null
+    },
+    {
+      "key": "Betopper LF2405 Matrix Strobe (11ch) 2@258",
+      "t": {
+        "pos": {
+          "x": -6.147158,
+          "y": 1.2975981,
+          "z": -3.5284402
+        },
+        "yaw_deg": 1.897007,
+        "pitch_deg": 26.250357,
+        "roll_deg": 0.0,
+        "scale": 1.0
+      },
+      "opacity": 1.0,
+      "mount": null,
+      "truss_mount": null
+    },
+    {
+      "key": "Betopper LF2405 Matrix Strobe (11ch) 3@269",
+      "t": {
+        "pos": {
+          "x": 3.3819654,
+          "y": 4.0,
+          "z": -3.0412414
+        },
+        "yaw_deg": 0.0,
+        "pitch_deg": -15.890132,
+        "roll_deg": 0.0,
+        "scale": 1.0
+      },
+      "opacity": 1.0,
+      "mount": null,
+      "truss_mount": null
+    },
+    {
+      "key": "Betopper LF2405 Matrix Strobe (11ch) 4@280",
+      "t": {
+        "pos": {
+          "x": 7.742544,
+          "y": 1.957327,
+          "z": -0.4999582
+        },
+        "yaw_deg": 0.0,
+        "pitch_deg": 5.3404064,
+        "roll_deg": 0.0,
+        "scale": 1.0
+      },
+      "opacity": 1.0,
+      "mount": null,
+      "truss_mount": null
+    },
+    {
+      "key": "Fogger (2ch)@291",
+      "t": {
+        "pos": {
+          "x": -6.141776,
+          "y": 4.0,
+          "z": 3.952926
+        },
+        "yaw_deg": 0.0,
+        "pitch_deg": -90.0,
+        "roll_deg": 0.0,
+        "scale": 1.0
+      },
+      "opacity": 1.0,
+      "mount": null,
+      "truss_mount": null
+    },
+    {
+      "key": "Intimidator Spot 375Z IRC (15ch) 1@293",
+      "t": {
+        "pos": {
+          "x": -9.478711,
+          "y": 4.0,
+          "z": 0.0
+        },
+        "yaw_deg": 0.0,
+        "pitch_deg": -90.0,
+        "roll_deg": 0.0,
+        "scale": 1.0
+      },
+      "opacity": 1.0,
+      "mount": null,
+      "truss_mount": null
+    },
+    {
+      "key": "Intimidator Spot 375Z IRC (15ch) 2@308",
+      "t": {
+        "pos": {
+          "x": -5.047279,
+          "y": 4.0,
+          "z": -3.4586835
+        },
+        "yaw_deg": 0.0,
+        "pitch_deg": -90.0,
+        "roll_deg": 0.0,
+        "scale": 1.0
+      },
+      "opacity": 1.0,
+      "mount": null,
+      "truss_mount": null
+    },
+    {
+      "key": "Intimidator Spot 375Z IRC (15ch) 3@323",
+      "t": {
+        "pos": {
+          "x": 4.291727,
+          "y": 4.0,
+          "z": -2.4912877
+        },
+        "yaw_deg": 0.0,
+        "pitch_deg": -90.0,
+        "roll_deg": 0.0,
+        "scale": 1.0
+      },
+      "opacity": 1.0,
+      "mount": null,
+      "truss_mount": null
+    },
+    {
+      "key": "Intimidator Spot 375Z IRC (15ch) 4@338",
+      "t": {
+        "pos": {
+          "x": 12.525275,
+          "y": 5.07,
+          "z": 2.8586721
+        },
+        "yaw_deg": -38.0,
+        "pitch_deg": -90.0,
+        "roll_deg": 311.83624,
+        "scale": 1.0
+      },
+      "opacity": 1.0,
+      "mount": [
+        3,
+        7
+      ],
+      "truss_mount": null
+    },
+    {
+      "key": "SHEHDS Bee Eye 19x40 Ring (31ch) 1@353",
+      "t": {
+        "pos": {
+          "x": -8.592513,
+          "y": 4.0,
+          "z": 0.0
+        },
+        "yaw_deg": 0.0,
+        "pitch_deg": -90.0,
+        "roll_deg": 0.0,
+        "scale": 1.0
+      },
+      "opacity": 1.0,
+      "mount": null,
+      "truss_mount": null
+    },
+    {
+      "key": "SHEHDS Bee Eye 19x40 Ring (31ch) 2@384",
+      "t": {
+        "pos": {
+          "x": -3.4675596,
+          "y": 4.1635885,
+          "z": -2.9096675
+        },
+        "yaw_deg": 0.0,
+        "pitch_deg": -234.25056,
+        "roll_deg": 246.09619,
+        "scale": 1.0
+      },
+      "opacity": 1.0,
+      "mount": null,
+      "truss_mount": null
+    },
+    {
+      "key": "SHEHDS Bee Eye 19x40 Ring (31ch)@415",
+      "t": {
+        "pos": {
+          "x": 5.2213254,
+          "y": 1.3512111,
+          "z": -3.5516233
+        },
+        "yaw_deg": 25.432514,
+        "pitch_deg": 87.66185,
+        "roll_deg": 236.35812,
+        "scale": 1.0
+      },
+      "opacity": 1.0,
+      "mount": null,
+      "truss_mount": null
+    },
+    {
+      "key": "top trio on ring@618",
+      "t": {
+        "pos": {
+          "x": 0.0,
+          "y": 5.427314,
+          "z": 1.1077511
+        },
+        "yaw_deg": 91.44649,
+        "pitch_deg": -80.47918,
+        "roll_deg": 54.682102,
+        "scale": 1.0
+      },
+      "opacity": 1.0,
+      "mount": null,
+      "truss_mount": null
+    },
+    {
+      "key": "back left and right pyxis 1@648",
+      "t": {
+        "pos": {
+          "x": -9.528258,
+          "y": 5.646883,
+          "z": -8.605202
+        },
+        "yaw_deg": 0.0,
+        "pitch_deg": -90.0,
+        "roll_deg": 0.0,
+        "scale": 1.0
+      },
+      "opacity": 1.0,
+      "mount": null,
+      "truss_mount": null
+    },
+    {
+      "key": "back left and right pyxis 2@674",
+      "t": {
+        "pos": {
+          "x": -8.552538,
+          "y": 5.646883,
+          "z": -9.189634
+        },
+        "yaw_deg": 0.0,
+        "pitch_deg": -90.0,
+        "roll_deg": 0.0,
+        "scale": 1.0
+      },
+      "opacity": 1.0,
+      "mount": null,
+      "truss_mount": null
+    },
+    {
+      "key": "back left and right pyxis 3@700",
+      "t": {
+        "pos": {
+          "x": -7.1021023,
+          "y": 5.646883,
+          "z": -9.189634
+        },
+        "yaw_deg": 0.0,
+        "pitch_deg": -90.0,
+        "roll_deg": 0.0,
+        "scale": 1.0
+      },
+      "opacity": 1.0,
+      "mount": null,
+      "truss_mount": null
+    },
+    {
+      "key": "back left and right pyxis 4@726",
+      "t": {
+        "pos": {
+          "x": -5.61991,
+          "y": 5.646883,
+          "z": -9.189634
+        },
+        "yaw_deg": 0.0,
+        "pitch_deg": -90.0,
+        "roll_deg": 0.0,
+        "scale": 1.0
+      },
+      "opacity": 1.0,
+      "mount": null,
+      "truss_mount": null
+    },
+    {
+      "key": "back left and right pyxis 5@752",
+      "t": {
+        "pos": {
+          "x": 1.8267345,
+          "y": 5.2776194,
+          "z": -8.830432
+        },
+        "yaw_deg": 0.0,
+        "pitch_deg": -90.0,
+        "roll_deg": 0.0,
+        "scale": 1.0
+      },
+      "opacity": 1.0,
+      "mount": null,
+      "truss_mount": null
+    },
+    {
+      "key": "back left and right pyxis 6@778",
+      "t": {
+        "pos": {
+          "x": 2.6705718,
+          "y": 5.2776194,
+          "z": -8.830432
+        },
+        "yaw_deg": 0.0,
+        "pitch_deg": -90.0,
+        "roll_deg": 0.0,
+        "scale": 1.0
+      },
+      "opacity": 1.0,
+      "mount": null,
+      "truss_mount": null
+    },
+    {
+      "key": "back left and right pyxis 7@804",
+      "t": {
+        "pos": {
+          "x": 3.6195872,
+          "y": 5.2776194,
+          "z": -8.830432
+        },
+        "yaw_deg": 0.0,
+        "pitch_deg": -90.0,
+        "roll_deg": 0.0,
+        "scale": 1.0
+      },
+      "opacity": 1.0,
+      "mount": null,
+      "truss_mount": null
+    },
+    {
+      "key": "back left and right pyxis 8@830",
+      "t": {
+        "pos": {
+          "x": 4.5157948,
+          "y": 5.2776194,
+          "z": -8.830432
+        },
+        "yaw_deg": 0.0,
+        "pitch_deg": -90.0,
+        "roll_deg": 0.0,
+        "scale": 1.0
+      },
+      "opacity": 1.0,
+      "mount": null,
+      "truss_mount": null
+    },
+    {
+      "key": "front line 1 1@856",
+      "t": {
+        "pos": {
+          "x": -2.8823278,
+          "y": 6.035313,
+          "z": 3.873833
+        },
+        "yaw_deg": 0.0,
+        "pitch_deg": -107.201294,
+        "roll_deg": 0.0,
+        "scale": 1.0
+      },
+      "opacity": 1.0,
+      "mount": null,
+      "truss_mount": null
+    },
+    {
+      "key": "front line 1 2@863",
+      "t": {
+        "pos": {
+          "x": -2.1735673,
+          "y": 6.035313,
+          "z": 3.873833
+        },
+        "yaw_deg": 0.0,
+        "pitch_deg": -107.201294,
+        "roll_deg": 0.0,
+        "scale": 1.0
+      },
+      "opacity": 1.0,
+      "mount": null,
+      "truss_mount": null
+    },
+    {
+      "key": "front line 2 1@870",
+      "t": {
+        "pos": {
+          "x": -1.4591507,
+          "y": 6.035313,
+          "z": 3.873833
+        },
+        "yaw_deg": 0.0,
+        "pitch_deg": -122.540535,
+        "roll_deg": 0.0,
+        "scale": 1.0
+      },
+      "opacity": 1.0,
+      "mount": null,
+      "truss_mount": null
+    },
+    {
+      "key": "front line 2 2@878",
+      "t": {
+        "pos": {
+          "x": -0.781425,
+          "y": 6.035313,
+          "z": 3.873833
+        },
+        "yaw_deg": 0.0,
+        "pitch_deg": -107.201294,
+        "roll_deg": 0.0,
+        "scale": 1.0
+      },
+      "opacity": 1.0,
+      "mount": null,
+      "truss_mount": null
+    },
+    {
+      "key": "front line 2 1@886",
+      "t": {
+        "pos": {
+          "x": 0.0,
+          "y": 6.035313,
+          "z": 3.873833
+        },
+        "yaw_deg": 0.0,
+        "pitch_deg": -107.201294,
+        "roll_deg": 0.0,
+        "scale": 1.0
+      },
+      "opacity": 1.0,
+      "mount": null,
+      "truss_mount": null
+    },
+    {
+      "key": "front line 2 2@893",
+      "t": {
+        "pos": {
+          "x": 0.8225032,
+          "y": 6.035313,
+          "z": 3.873833
+        },
+        "yaw_deg": 0.0,
+        "pitch_deg": -107.201294,
+        "roll_deg": 0.0,
+        "scale": 1.0
+      },
+      "opacity": 1.0,
+      "mount": null,
+      "truss_mount": null
+    },
+    {
+      "key": "front line 2 3@900",
+      "t": {
+        "pos": {
+          "x": 1.6393404,
+          "y": 6.035313,
+          "z": 3.873833
+        },
+        "yaw_deg": 0.0,
+        "pitch_deg": -107.201294,
+        "roll_deg": 0.0,
+        "scale": 1.0
+      },
+      "opacity": 1.0,
+      "mount": null,
+      "truss_mount": null
+    },
+    {
+      "key": "front line 2@907",
+      "t": {
+        "pos": {
+          "x": 2.500013,
+          "y": 6.035313,
+          "z": 3.873833
+        },
+        "yaw_deg": 0.0,
+        "pitch_deg": -107.201294,
         "roll_deg": 0.0,
         "scale": 1.0
       },
@@ -961,42 +999,42 @@
   "towers": [
     {
       "pos": {
-        "x": -1.899255,
+        "x": -4.7535353,
         "y": 0.0,
-        "z": 3.7608283
+        "z": -3.9698303
       },
       "yaw_deg": 0.0,
-      "height": 5.2,
+      "height": 3.7,
       "width": 2.4
     },
     {
       "pos": {
-        "x": 2.9662764,
+        "x": 6.9377747,
         "y": 0.0,
-        "z": 4.557143
+        "z": -3.9532237
       },
       "yaw_deg": 0.0,
-      "height": 5.2,
+      "height": 3.65,
       "width": 2.4
     },
     {
       "pos": {
-        "x": 6.048934,
+        "x": 0.31469077,
         "y": 0.0,
-        "z": 0.47289568
+        "z": -4.1132016
       },
-      "yaw_deg": 251.0,
-      "height": 3.2,
+      "yaw_deg": 0.0,
+      "height": 3.6,
       "width": 2.4
     },
     {
       "pos": {
-        "x": -5.8386908,
+        "x": 11.579662,
         "y": 0.0,
-        "z": 0.36945105
+        "z": 2.1198783
       },
-      "yaw_deg": -58.0,
-      "height": 3.2,
+      "yaw_deg": -38.0,
+      "height": 5.27,
       "width": 2.4
     }
   ],

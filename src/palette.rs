@@ -12,6 +12,24 @@ use crate::showbuddy::Role;
 
 const PALETTES_FILE: &str = "palettes.json";
 
+/// HSV → RGB, hue in degrees. Shared by the preset generators and the deck
+/// artwork so a "rainbow" means the same thing everywhere.
+pub fn hsv(h: f32, s: f32, v: f32) -> [u8; 3] {
+    let h = h.rem_euclid(360.0) / 60.0;
+    let i = h.floor();
+    let f = h - i;
+    let (p, q, t) = (v * (1.0 - s), v * (1.0 - s * f), v * (1.0 - s * (1.0 - f)));
+    let (r, g, b) = match i as i32 {
+        0 => (v, t, p),
+        1 => (q, v, p),
+        2 => (p, v, t),
+        3 => (p, q, v),
+        4 => (t, p, v),
+        _ => (v, p, q),
+    };
+    [(r * 255.0) as u8, (g * 255.0) as u8, (b * 255.0) as u8]
+}
+
 /// The attribute family a palette (or channel) belongs to. Channels are sorted
 /// into exactly one feature so palettes stay focused (a Color palette never
 /// disturbs Position, etc.).
@@ -40,10 +58,19 @@ impl Feature {
     pub fn of(role: Role) -> Feature {
         match role {
             Role::Dimmer => Feature::Dimmer,
-            Role::Red | Role::Green | Role::Blue | Role::White | Role::Color => Feature::Color,
+            Role::Red
+            | Role::Green
+            | Role::Blue
+            | Role::White
+            | Role::Amber
+            | Role::Uv
+            | Role::Cyan
+            | Role::Magenta
+            | Role::Yellow
+            | Role::Color => Feature::Color,
             Role::Pan | Role::PanFine | Role::Tilt | Role::TiltFine => Feature::Position,
-            Role::Zoom => Feature::Focus,
-            Role::Strobe => Feature::Beam,
+            Role::Zoom | Role::Focus | Role::Iris => Feature::Focus,
+            Role::Strobe | Role::Shutter | Role::Gobo | Role::Prism | Role::Frost => Feature::Beam,
             Role::Speed | Role::Other => Feature::Control,
         }
     }

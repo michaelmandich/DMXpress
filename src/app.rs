@@ -1,12 +1,13 @@
 //! Application state and the top-level eframe update loop. The actual panel
 //! rendering lives in the `ui` module; `update` just dispatches to it.
 
-use std::collections::{HashMap, HashSet};
+use std::collections::{BTreeMap, HashMap, HashSet};
 use std::time::Instant;
 use std::net::Ipv4Addr;
 
 use eframe::egui;
 
+use crate::fixturedb;
 use crate::net::{self, DiscoveredNode, NetCmd, NetEvent, NetHandle};
 use crate::audio::{self, AudioEngine, AudioTrigger};
 use crate::order::{self, Order};
@@ -57,6 +58,14 @@ impl Ramp {
         };
         (v, k >= 1.0)
     }
+}
+
+/// A palette-cycle fade in flight: the cycle's overlay weight ramps from 0
+/// to 1 (or back) over `dur` seconds from `start`.
+pub(crate) struct CycleFade {
+    pub start: Instant,
+    pub dur: f32,
+    pub out: bool,
 }
 
 pub(crate) struct App {
@@ -140,6 +149,14 @@ pub(crate) struct App {
     /// Which saved sequence the running cycle was loaded from, so two
     /// sequences sharing the same palette set light up independently.
     pub cycle_seq: Option<usize>,
+    /// Fade in or out of the cycle in progress, if any (see `start_cycle`).
+    pub cycle_fade: Option<CycleFade>,
+    /// Stacked effect lanes, one per island (Gobo, Prism, Light ring…):
+    /// the palette ids picked on the deck's wheel pages. One id holds that
+    /// slot on every light that has it; two or more step through them on
+    /// the cycle clock. Each lane is its own mixer layer, so they stack on
+    /// the colour cycle and on each other (see `wheels.rs`).
+    pub effect_lanes: BTreeMap<String, Vec<u32>>,
     /// Sequence pool: drag tiles to folders (true) or click to select (false).
     pub seq_drag_mode: bool,
     /// Saved palette sequences (colours + motion), with their folders.
@@ -157,6 +174,15 @@ pub(crate) struct App {
     /// DMX test window: forced channel values (0-based addr → value), applied
     /// on top of everything right before output.
     pub test_overrides: HashMap<usize, u8>,
+    /// Encoder layer (0-based addr → value): channels dialled in with the
+    /// Stream Deck's programmer knob, painted over the mix (under the grand
+    /// master) until Clear drops them (see `encoder.rs`).
+    pub encoder_layer: HashMap<usize, u8>,
+    /// Channel-type key the programmer knob is on (see `encoder_channels`).
+    pub encoder_key: Option<String>,
+    /// The mixer's output this frame, before masters and overrides — what
+    /// the encoder starts nudging from.
+    pub mixed: net::Frame,
     /// Hold-phaser overrides (0-based addr → value): forced onto the output
     /// every frame until the phaser is stopped (e.g. smoke machine on).
     pub hold_overrides: HashMap<usize, u8>,
@@ -235,6 +261,37 @@ pub(crate) struct App {
     pub scene_chain: bool,
     /// Live audio capture and analysis (spectrum, beat tracker).
     pub audio: AudioEngine,
+    /// Elgato Stream Deck control surface (see `streamdeck.rs`).
+    pub deck: crate::streamdeck::DeckEngine,
+    /// Whether the Stream Deck mirrors the app. On by default: a control
+    /// surface that needs switching on before it does anything is a control
+    /// surface you forget to switch on.
+    pub send_to_deck: bool,
+    /// Tracks the previous frame's `send_to_deck`, so the deck is cleared
+    /// exactly once when the checkbox is switched off.
+    pub deck_active: bool,
+    /// Non-destructive output override (Stream Deck Master Dimmer press):
+    /// forces the wire to black without touching the programmer/stacks, so
+    /// lifting it picks the show back up exactly where it was.
+    pub blackout: bool,
+    /// Which deck page is showing — flipped by the Mode knob.
+    pub deck_page: crate::streamdeck::DeckPage,
+    /// Which of the Palettes page's sub-pages (colours, gobos, prisms) the
+    /// deck shows — flipped by the Page knob.
+    pub palette_sub: crate::streamdeck::PaletteSub,
+    /// The Phaser page's slots (phaser name, colour, symbol), 36 per page and
+    /// as many pages as you add, edited from the Phasers window and
+    /// persisted to `phaser_deck.json`.
+    pub phaser_deck: Vec<Option<crate::streamdeck::PhaserSlot>>,
+    /// Which page of `phaser_deck` the deck (and the editor) is showing —
+    /// scrolled by the Page knob while in Phaser mode.
+    pub deck_phaser_page: usize,
+    /// Slot index currently open in the Phaser page editor, if any.
+    pub deck_slot_edit: Option<usize>,
+    pub deck_slot_phaser: String,
+    pub deck_slot_color: [u8; 3],
+    pub deck_slot_label: String,
+    pub deck_slot_icon: crate::streamdeck::KeyIcon,
     /// Band-threshold rules painting looks over the show (see `audio.rs`).
     pub audio_triggers: Vec<AudioTrigger>,
     /// Detected beats press the TAP button automatically.
@@ -310,6 +367,14 @@ pub(crate) struct App {
     pub patch_addr: u16,
     /// How many copies to add at once in the Patch window.
     pub patch_count: u16,
+    /// The bundled fixture library, loaded on demand (see `fixturedb.rs`).
+    pub library: fixturedb::Library,
+    /// Search box in the Patch window's fixture browser.
+    pub patch_search: String,
+    /// Manufacturer the browser is narrowed to, if any.
+    pub patch_manufacturer: Option<String>,
+    /// Library id picked in the browser, ready to patch.
+    pub patch_library_sel: Option<String>,
     /// Configurations window visible.
     pub show_configs: bool,
     pub show_dmx_test: bool,
@@ -452,7 +517,15 @@ impl App {
             log.push("ShowBuddy patch disabled — DMXpress fixtures only".into());
             Patch::default()
         };
-        profiles::extend_patch(&mut patch, &user_patch);
+        // The library is a few MB, so it only loads when something actually
+        // needs it: a patched `lib:` fixture now, or the patch browser later.
+        let library = if user_patch.fixtures.iter().any(|f| fixturedb::library_id(&f.profile).is_some())
+        {
+            fixturedb::Library::load()
+        } else {
+            fixturedb::Library::default()
+        };
+        profiles::extend_patch(&mut patch, &user_patch, &library);
         if !user_patch.fixtures.is_empty() {
             log.push(format!("Patched {} DMXpress fixtures", user_patch.fixtures.len()));
         }
@@ -511,6 +584,8 @@ impl App {
             cycle_weights: Vec::new(),
             advanced_palette_mode: false,
             cycle_seq: None,
+            cycle_fade: None,
+            effect_lanes: BTreeMap::new(),
             seq_drag_mode: false,
             cycle_on: false,
             cycle_beats_per: 4.0,
@@ -530,6 +605,9 @@ impl App {
             phasers: phaser::load_phasers(),
             active_phasers: HashMap::new(),
             test_overrides: HashMap::new(),
+            encoder_layer: HashMap::new(),
+            encoder_key: None,
+            mixed: net::Frame::black(),
             hold_overrides: HashMap::new(),
             add_overrides: HashMap::new(),
             base_fades: HashMap::new(),
@@ -570,6 +648,19 @@ impl App {
             scene_name: String::new(),
             scene_chain: false,
             audio: AudioEngine::new(),
+            deck: crate::streamdeck::DeckEngine::new(),
+            send_to_deck: true,
+            deck_active: false,
+            blackout: false,
+            deck_page: crate::streamdeck::DeckPage::default(),
+            palette_sub: crate::streamdeck::PaletteSub::default(),
+            phaser_deck: crate::streamdeck::load_phaser_deck(),
+            deck_phaser_page: 0,
+            deck_slot_edit: None,
+            deck_slot_phaser: String::new(),
+            deck_slot_color: [110, 120, 150],
+            deck_slot_label: String::new(),
+            deck_slot_icon: crate::streamdeck::KeyIcon::None,
             audio_triggers: audio_file.triggers,
             audio_follow_beat: audio_file.follow_beat,
             audio_beat_seen: 0,
@@ -614,6 +705,10 @@ impl App {
             patch_name: String::new(),
             patch_addr: 1,
             patch_count: 1,
+            library,
+            patch_search: String::new(),
+            patch_manufacturer: None,
+            patch_library_sel: None,
             show_configs: false,
             show_dmx_test: false,
             config_name: String::new(),
@@ -641,7 +736,7 @@ impl App {
             self.showbuddy_patch = cache;
             Patch::default()
         };
-        profiles::extend_patch(&mut patch, &self.current_user_patch());
+        profiles::extend_patch(&mut patch, &self.current_user_patch(), &self.library);
         for w in &patch.warnings {
             self.log.push(format!("patch warning: {w}"));
         }
@@ -658,6 +753,8 @@ impl App {
         self.live_active.clear();
         self.active_phasers.clear();
         self.hold_overrides.clear();
+        self.encoder_layer.clear();
+        self.effect_lanes.clear();
         // ShowBuddy's preset banks follow its patch: no ShowBuddy, no banks.
         if self.include_showbuddy {
             self.banks = load_banks(&mut self.log);
@@ -709,6 +806,8 @@ impl App {
         self.live_active.clear();
         self.active_phasers.clear();
         self.hold_overrides.clear();
+        self.encoder_layer.clear();
+        self.effect_lanes.clear();
         self.transition_run = None;
         self.chase_run = None;
         self.active_preset = None;
@@ -821,6 +920,8 @@ impl App {
         self.live = Look::black();
         self.active_phasers.clear();
         self.hold_overrides.clear();
+        self.encoder_layer.clear();
+        self.effect_lanes.clear();
         self.transition_run = None;
         self.chase_run = None;
         self.active_preset = None;
@@ -1108,14 +1209,14 @@ impl App {
             .transition_run
             .as_ref()
             .map_or_else(|| self.live.clone(), |run| run.pending().clone());
-        let values: Vec<(usize, u8)> = source
+        let mut values: Vec<(usize, u8)> = source
             .base
             .iter()
             .enumerate()
             .filter(|&(_, &v)| v != 0)
             .map(|(a, &v)| (a, v))
             .collect();
-        let oscs: Vec<(usize, SavedOsc)> = source
+        let mut oscs: Vec<(usize, SavedOsc)> = source
             .oscs
             .iter()
             .filter(|(_, o)| o.enabled)
@@ -1136,10 +1237,29 @@ impl App {
                 )
             })
             .collect();
+        // Channels dialled in on the encoder are what you actually see, so
+        // they go in as base values — replacing whatever the programmer held
+        // there and dropping any wave the knob was overriding.
+        let from_encoders = self.encoder_layer.len();
+        if from_encoders > 0 {
+            values.retain(|(a, _)| !self.encoder_layer.contains_key(a));
+            oscs.retain(|(a, _)| !self.encoder_layer.contains_key(a));
+            values.extend(
+                self.encoder_layer
+                    .iter()
+                    .filter(|(_, &v)| v != 0)
+                    .map(|(&a, &v)| (a, v)),
+            );
+            values.sort_unstable_by_key(|(a, _)| *a);
+        }
         if values.is_empty() && oscs.is_empty() {
             self.log
                 .push("Preset: programmer is empty — nothing to store".into());
             return;
+        }
+        if from_encoders > 0 {
+            self.log
+                .push(format!("Preset: baked in {from_encoders} encoder channel(s)"));
         }
         self.log.push(format!(
             "Stored preset \"{}\" ({} values, {} oscillators)",
@@ -1162,6 +1282,7 @@ impl App {
                 .collect(),
             add_overrides: self.add_overrides.iter().map(|(&a, &v)| (a, v)).collect(),
             hold_overrides: self.hold_overrides.iter().map(|(&a, &v)| (a, v)).collect(),
+            lanes: self.effect_lanes.iter().map(|(k, v)| (k.clone(), v.clone())).collect(),
             cycle: self.cycle_on.then(|| SavedCycle {
                 ids: self.cycle_ids.clone(),
                 weights: self.cycle_weights.clone(),
@@ -1256,6 +1377,9 @@ impl App {
                 self.cycle_on = cycle.ids.len() >= 2;
             }
         }
+        // The stacked effect lanes come with the look, replacing whatever
+        // was stacked before.
+        self.effect_lanes = p.lanes.iter().cloned().collect();
 
         if self.transition.duration <= 0.0 {
             self.transition_run = None;
@@ -1398,12 +1522,9 @@ impl App {
                 self.chase_run = Some(ChaseRun::new(look));
                 self.chase.enabled = true;
                 let what = match self.chase.kind {
-                    crate::chase::ChaseKind::Sphere => "Spherical chase started",
-                    crate::chase::ChaseKind::Linear => "Linear chase started",
-                    crate::chase::ChaseKind::Boomerang => "Boomerang chase started",
-                    crate::chase::ChaseKind::Stripes => "Stripe chase started",
-                    crate::chase::ChaseKind::Glitter => "Glitter started",
-                    crate::chase::ChaseKind::Pulse => "Pulse sent",
+                    crate::chase::ChaseKind::Glitter => "Glitter started".to_string(),
+                    crate::chase::ChaseKind::Pulse => "Pulse sent".to_string(),
+                    k => format!("{} chase started", k.label()),
                 };
                 self.log.push(format!("{what}: injecting {name}"));
             }
@@ -1477,15 +1598,43 @@ impl App {
     /// crossfade (0) to a hard snap (1). Stepped channels (colour wheels)
     /// always snap rather than sweeping through every slot.
     fn cycle_layer(&self) -> Option<Layer> {
-        let entries: Vec<(&Palette, f32)> = self
-            .cycle_ids
+        self.cycle_layer_of(&self.cycle_ids, &self.cycle_weights, self.cycle_fade_k())
+    }
+
+    /// One island's lane: a single pick holds that palette on every light
+    /// it covers; two or more step through them on the cycle clock, with
+    /// the cycle's own rate, pattern and spacing.
+    fn lane_layer(&self, ids: &[u32]) -> Option<Layer> {
+        match ids {
+            [] => None,
+            [id] => {
+                let p = self.palettes.iter().find(|p| p.id == *id)?;
+                let mut frame = net::Frame::black();
+                let mut weights = Vec::with_capacity(p.values.len());
+                for &(a, v) in &p.values {
+                    if a < net::DMX_SLOTS {
+                        frame[a] = v;
+                        weights.push((a, 1.0));
+                    }
+                }
+                (!weights.is_empty()).then(|| Layer::overlay(frame, weights))
+            }
+            _ => self.cycle_layer_of(ids, &[], 1.0),
+        }
+    }
+
+    /// The cycle machinery over any list of palettes: `ids` in order, each
+    /// holding for its `weights_in` share of a step (1.0 where missing),
+    /// the whole overlay scaled by `fade_k`.
+    fn cycle_layer_of(&self, ids: &[u32], weights_in: &[f32], fade_k: f32) -> Option<Layer> {
+        let entries: Vec<(&Palette, f32)> = ids
             .iter()
             .enumerate()
             .filter_map(|(i, id)| {
                 self.palettes
                     .iter()
                     .find(|p| p.id == *id)
-                    .map(|p| (p, self.cycle_weights.get(i).copied().unwrap_or(1.0).max(0.05)))
+                    .map(|p| (p, weights_in.get(i).copied().unwrap_or(1.0).max(0.05)))
             })
             .collect();
         if entries.len() < 2 {
@@ -1588,7 +1737,7 @@ impl App {
                     va + (vb - va) * b
                 };
                 frame[a] = v.round().clamp(0.0, 255.0) as u8;
-                weights.push((a, 1.0));
+                weights.push((a, fade_k));
             }
         }
         Some(Layer::overlay(frame, weights))
@@ -1625,6 +1774,12 @@ impl eframe::App for App {
         // Keep super-fixtures whole before anything reads the selection.
         self.sync_selection_units();
 
+        // Elgato Stream Deck: drain presses/encoder turns and republish key
+        // images before the possible early return below, so a knob (e.g.
+        // the Master Beat press that un-freezes) stays responsive even
+        // while frozen.
+        self.sync_deck();
+
         // A true sample-and-hold: no renderer is called because renderers own
         // their clocks. Art-Net keeps transmitting the unchanged DMX buffer.
         if self.frozen {
@@ -1656,8 +1811,9 @@ impl eframe::App for App {
             Vec::new()
         };
 
-        // Advance the palette-cycle beat clock from the live tempo.
-        if self.cycle_on {
+        // Advance the palette-cycle beat clock from the live tempo — the
+        // colour cycle and any stepping effect lane share it.
+        if self.cycle_on || self.lanes_cycling() {
             let now = Instant::now();
             let dt = self
                 .cycle_last
@@ -1752,11 +1908,25 @@ impl eframe::App for App {
             self.mixer.push(Layer::overlay(prog_frame, weights));
         }
         // The palette cycle overlays its colour steps above the programmer.
+        self.settle_cycle_fade();
         if self.cycle_on {
             if let Some(layer) = self.cycle_layer() {
                 self.mixer.push(layer);
                 repaint_ms = repaint_ms.min(25);
             }
+        }
+        // Effect lanes stack above the cycle: an island with one pick holds
+        // it, with two or more steps through them on the same clock.
+        let lanes: Vec<Layer> = self
+            .effect_lanes
+            .values()
+            .filter_map(|ids| self.lane_layer(ids))
+            .collect();
+        if self.lanes_cycling() {
+            repaint_ms = repaint_ms.min(25);
+        }
+        for layer in lanes {
+            self.mixer.push(layer);
         }
         // Audio triggers: band-threshold flashes ride above the cycle so
         // whatever the music does stays visible over the settled look.
@@ -1803,16 +1973,37 @@ impl eframe::App for App {
         } else {
             self.audio_last_eval = None;
         }
+        if self.send_to_deck {
+            repaint_ms = repaint_ms.min(100);
+        }
         // The chase overlays on top of everything.
         if let Some(layer) = chase_layer {
             self.mixer.push(layer);
         }
-        *self.net.dmx.lock() = self.mixer.render();
+        // Compose the whole output frame locally and publish it with one
+        // write at the end. The Art-Net sender snapshots the shared buffer on
+        // its own clock, so staging the mix and then patching the grand
+        // master, holds and overrides onto it under separate locks let it
+        // catch a half-built frame — one packet of the bare palette colour
+        // showing through a lock/hold phaser every second or so.
+        let mixed = self.mixer.render();
+        self.mixed = mixed;
+        let mut out = mixed;
+
+        // Encoder layer: channels dialled in on the programmer knob override
+        // the mix outright, but sit under the grand master so a dimmer set
+        // by hand still fades with the rig.
+        if !self.encoder_layer.is_empty() {
+            for (&a, &v) in &self.encoder_layer {
+                if a < out.len() {
+                    out[a] = v;
+                }
+            }
+        }
 
         // Grand master: scale every dimmer channel in the rig.
         if self.grand_master < 0.999 {
             let gm = self.grand_master.clamp(0.0, 1.0);
-            let mut out = self.net.dmx.lock();
             for fx in &self.patch.fixtures {
                 let base = fx.from.saturating_sub(1) as usize;
                 for (ci, ch) in fx.channels.iter().enumerate() {
@@ -1834,7 +2025,6 @@ impl eframe::App for App {
                 self.throb_at = None;
             } else {
                 let boost = (255.0 * (1.0 - t).powf(1.6)) as u8;
-                let mut out = self.net.dmx.lock();
                 for fx in &self.patch.fixtures {
                     let base = fx.from.saturating_sub(1) as usize;
                     for (ci, ch) in fx.channels.iter().enumerate() {
@@ -1857,7 +2047,6 @@ impl eframe::App for App {
         // and stay raw — that's the deliberate way in to the strobe bands.
         let mut dim_caps: HashMap<usize, u8> = HashMap::new();
         {
-            let mut out = self.net.dmx.lock();
             for fx in &self.patch.fixtures {
                 let base = fx.from.saturating_sub(1) as usize;
                 for (ci, ch) in fx.channels.iter().enumerate() {
@@ -1880,7 +2069,6 @@ impl eframe::App for App {
         // Flat-add phasers ride on top of the mix (and the grand master),
         // adding or subtracting a constant level until stopped.
         if !self.add_overrides.is_empty() {
-            let mut out = self.net.dmx.lock();
             for (&a, &v) in &self.add_overrides {
                 if a < out.len() {
                     let hi = dim_caps.get(&a).copied().unwrap_or(255);
@@ -1892,7 +2080,6 @@ impl eframe::App for App {
         // Hold phasers (e.g. smoke on) sit on top of everything — presets,
         // blackout fades and the grand master — except the DMX test window.
         if !self.hold_overrides.is_empty() {
-            let mut out = self.net.dmx.lock();
             for (&a, &v) in &self.hold_overrides {
                 if a < out.len() {
                     out[a] = v;
@@ -1902,13 +2089,20 @@ impl eframe::App for App {
 
         // DMX test overrides beat everything — they are the wire truth.
         if !self.test_overrides.is_empty() {
-            let mut out = self.net.dmx.lock();
             for (&a, &v) in &self.test_overrides {
                 if a < out.len() {
                     out[a] = v;
                 }
             }
         }
+
+        // Blackout (Stream Deck Master Dimmer press) wins over everything,
+        // including DMX test overrides — a non-destructive override, not a
+        // clear, so the show picks back up untouched once it's lifted.
+        if self.blackout {
+            out = net::Frame::black();
+        }
+        *self.net.dmx.lock() = out;
 
         if finished_transition {
             if let Some(run) = self.transition_run.take() {

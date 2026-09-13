@@ -4,10 +4,12 @@
 //! want, and Store. Recalling drops those values into the programmer and links
 //! the channels back to the palette so cues can reference it.
 
+use std::time::{Duration, Instant};
+
 use eframe::egui;
 
 use super::{apply_zoom, zoom_controls};
-use crate::app::{App, Ramp};
+use crate::app::{App, CycleFade, Ramp};
 use crate::palette::{self, Feature, Palette, PaletteSeq, SeqPattern};
 use crate::showbuddy::Role;
 
@@ -196,6 +198,113 @@ impl App {
         }
     }
 
+    /// Start the cycle from the top, fading it in over `fade` seconds
+    /// (0 = snap on). Needs at least two palettes picked.
+    pub(crate) fn start_cycle(&mut self, fade: f32) {
+        if self.cycle_ids.len() < 2 {
+            self.log.push("Cycle: pick at least two palettes first".into());
+            return;
+        }
+        self.cycle_on = true;
+        self.cycle_beats = 0.0;
+        self.cycle_last = None;
+        self.cycle_tempo = if self.master_bpm_on {
+            self.master_bpm
+        } else {
+            self.live.tempo
+        };
+        self.cycle_fade = (fade > 0.01).then(|| CycleFade {
+            start: Instant::now(),
+            dur: fade,
+            out: false,
+        });
+        self.log.push(if fade > 0.01 {
+            format!("Cycle fading in over {fade:.1}s")
+        } else {
+            "Cycle running".into()
+        });
+    }
+
+    /// Stop the cycle — at once, or after fading it out over `fade` seconds.
+    pub(crate) fn stop_cycle(&mut self, fade: f32) {
+        if !self.cycle_on {
+            return;
+        }
+        if fade > 0.01 {
+            self.cycle_fade = Some(CycleFade {
+                start: Instant::now(),
+                dur: fade,
+                out: true,
+            });
+            self.log.push(format!("Cycle fading out over {fade:.1}s"));
+        } else {
+            self.cycle_on = false;
+            self.cycle_seq = None;
+            self.cycle_fade = None;
+            self.log.push("Cycle stopped".into());
+        }
+    }
+
+    /// One button for both: off → start, on → stop. Pressed mid-fade it
+    /// turns the fade round from wherever it is.
+    pub(crate) fn toggle_cycle(&mut self, fade: f32) {
+        if !self.cycle_on {
+            self.start_cycle(fade);
+            return;
+        }
+        if fade > 0.01 && self.cycle_fade.is_some() {
+            let k = self.cycle_fade_k();
+            let out = !self.cycle_fading_out();
+            let done = if out { 1.0 - k } else { k };
+            self.cycle_fade = Some(CycleFade {
+                start: Instant::now() - Duration::from_secs_f32(done * fade),
+                dur: fade,
+                out,
+            });
+            self.log
+                .push(if out { "Cycle fading out" } else { "Cycle fading back in" }.into());
+            return;
+        }
+        self.stop_cycle(fade);
+    }
+
+    /// The cycle's level, 0..1, through any fade in progress.
+    pub(crate) fn cycle_fade_k(&self) -> f32 {
+        match &self.cycle_fade {
+            None => 1.0,
+            Some(f) => {
+                let t = (f.start.elapsed().as_secs_f32() / f.dur.max(0.001)).clamp(0.0, 1.0);
+                if f.out {
+                    1.0 - t
+                } else {
+                    t
+                }
+            }
+        }
+    }
+
+    /// Whether the cycle is on its way out.
+    pub(crate) fn cycle_fading_out(&self) -> bool {
+        self.cycle_fade.as_ref().is_some_and(|f| f.out)
+    }
+
+    /// Per frame: a finished fade-out switches the cycle off; a finished
+    /// fade-in just settles at full.
+    pub(crate) fn settle_cycle_fade(&mut self) {
+        let Some(f) = &self.cycle_fade else {
+            return;
+        };
+        if f.start.elapsed().as_secs_f32() >= f.dur {
+            let out = f.out;
+            self.cycle_fade = None;
+            if out {
+                self.cycle_on = false;
+                self.cycle_seq = None;
+                self.log.push("Cycle stopped".into());
+            }
+        }
+    }
+
     /// Empty the programmer: nothing held, nothing active.
     pub(crate) fn clear_programmer(&mut self) {
         self.live = crate::oscillator::Look::black();
@@ -209,7 +318,7 @@ impl App {
 
     /// Representative colour for a palette tile (real colour for Color palettes,
     /// a feature tint otherwise).
-    fn palette_swatch(&self, p: &Palette) -> egui::Color32 {
+    pub(crate) fn palette_swatch(&self, p: &Palette) -> egui::Color32 {
         let (mut r, mut g, mut b, mut w) = (0u8, 0u8, 0u8, 0u8);
         let mut colored = false;
         for &(addr0, v) in &p.values {
@@ -340,6 +449,23 @@ impl App {
                 });
                 ui.separator();
 
+                ui.horizontal(|ui| {
+                    ui.checkbox(&mut self.send_to_deck, "Send to Deck")
+                        .on_hover_text(
+                            "Mirror DMXpress onto an Elgato Stream Deck. On by default; \
+                             the Mode knob switches the deck between the Colors, Phaser \
+                             and Chases pages. Uncheck to blank the deck entirely.",
+                        );
+                    ui.weak(match self.deck.device_label() {
+                        Some(name) => name,
+                        None => match self.deck.error() {
+                            Some(e) => format!("Stream Deck error: {e}"),
+                            None => "No Stream Deck found".to_string(),
+                        },
+                    });
+                });
+                ui.separator();
+
                 // Palette cycle: pick palettes (⇧click tiles), then rotate
                 // through them on the beat — blue→yellow→blue, or any N.
                 ui.horizontal_wrapped(|ui| {
@@ -426,19 +552,7 @@ impl App {
                         .on_hover_text("Rotate all lights through the picked palettes on the beat")
                         .clicked()
                     {
-                        self.cycle_on = !self.cycle_on;
-                        if !self.cycle_on {
-                            self.cycle_seq = None;
-                        }
-                        if self.cycle_on {
-                            self.cycle_beats = 0.0;
-                            self.cycle_last = None;
-                            self.cycle_tempo = if self.master_bpm_on {
-                                self.master_bpm
-                            } else {
-                                self.live.tempo
-                            };
-                        }
+                        self.toggle_cycle(0.0);
                     }
                     const STEPS: [(&str, f32); 6] = [
                         ("4 bars", 16.0),
@@ -473,6 +587,36 @@ impl App {
                         .response
                         .on_hover_text("How the spacing disperses across the rig");
                 });
+                // What the deck's wheel pages have stacked: one chip per
+                // pick, grouped by island; click a chip to drop it.
+                if !self.effect_lanes.is_empty() {
+                    let mut drop: Option<(String, u32)> = None;
+                    ui.horizontal_wrapped(|ui| {
+                        ui.weak("Stacked:");
+                        for (island, ids) in &self.effect_lanes {
+                            let stepping = ids.len() >= 2;
+                            for id in ids {
+                                let name = self
+                                    .palettes
+                                    .iter()
+                                    .find(|p| p.id == *id)
+                                    .map(|p| p.name.clone())
+                                    .unwrap_or_else(|| format!("#{id}"));
+                                let hint = if stepping {
+                                    format!("{island} lane, stepping through {} picks — click to drop", ids.len())
+                                } else {
+                                    format!("{island} lane, held — click to drop")
+                                };
+                                if ui.small_button(format!("{name} ✕")).on_hover_text(hint).clicked() {
+                                    drop = Some((island.clone(), *id));
+                                }
+                            }
+                        }
+                    });
+                    if let Some((island, id)) = drop {
+                        self.toggle_lane_palette(&island, id);
+                    }
+                }
                 if ui
                     .checkbox(&mut self.cycle_master_beat, "Follow master beat")
                     .on_hover_text(

@@ -5,8 +5,44 @@ use eframe::egui;
 
 use crate::app::App;
 use crate::config;
+use crate::fixturedb;
 use crate::profiles::{self, UserFixture, PROFILES};
+
+/// What the Patch window is about to add — either a library fixture or one
+/// of the built-in profiles, flattened so the Add button doesn't care which.
+pub(crate) struct PatchSelection {
+    pub label: String,
+    pub channels: usize,
+    pub pan: f32,
+    pub tilt: f32,
+    /// Goes straight into `UserFixture.profile`.
+    pub profile: String,
+}
+
 impl App {
+    /// The library fixture picked in the browser, else the built-in profile.
+    fn patch_selection(&self) -> PatchSelection {
+        if let Some(id) = self.patch_library_sel.as_deref() {
+            if let Some(f) = self.library.find(id) {
+                return PatchSelection {
+                    label: format!("{} {}", f.model, f.mode).trim().to_string(),
+                    channels: f.channels.len(),
+                    pan: f.pan_range,
+                    tilt: f.tilt_range,
+                    profile: fixturedb::profile_ref(id),
+                };
+            }
+        }
+        let p = &PROFILES[self.patch_profile.min(PROFILES.len() - 1)];
+        PatchSelection {
+            label: p.name.to_string(),
+            channels: p.channel_count(),
+            pan: p.pan_range,
+            tilt: p.tilt_range,
+            profile: p.name.to_string(),
+        }
+    }
+
     pub(crate) fn patch_window(&mut self, ctx: &egui::Context) {
         if !self.show_patch {
             return;
@@ -64,27 +100,122 @@ impl App {
                 }
                 ui.add_space(4.0);
 
-                self.patch_profile = self.patch_profile.min(PROFILES.len() - 1);
-                let profile = &PROFILES[self.patch_profile];
-                egui::ComboBox::from_label("Profile")
-                    .selected_text(profile.name)
-                    .show_ui(ui, |ui| {
-                        for (i, p) in PROFILES.iter().enumerate() {
-                            ui.selectable_value(&mut self.patch_profile, i, p.name);
-                        }
+                // The library is a few MB of JSON, so it waits until someone
+                // actually opens this window to look for a fixture.
+                if !self.library.is_loaded() {
+                    self.library = fixturedb::Library::load();
+                    if let Some(err) = self.library.error.clone() {
+                        self.log.push(format!("Fixture library unavailable — {err}"));
+                    } else {
+                        self.log.push(format!(
+                            "Fixture library: {} modes from {} manufacturers",
+                            self.library.fixtures.len(),
+                            self.library.manufacturers().len()
+                        ));
+                    }
+                }
+
+                ui.heading("Fixture library");
+                ui.horizontal(|ui| {
+                    ui.label("Search:");
+                    ui.add(
+                        egui::TextEdit::singleline(&mut self.patch_search)
+                            .hint_text("chauvet spot…")
+                            .desired_width(150.0),
+                    );
+                    let all = self.patch_manufacturer.is_none();
+                    egui::ComboBox::from_id_salt("patch_manufacturer")
+                        .selected_text(match &self.patch_manufacturer {
+                            Some(m) => m.as_str(),
+                            None => "All makers",
+                        })
+                        .width(130.0)
+                        .show_ui(ui, |ui| {
+                            if ui.selectable_label(all, "All makers").clicked() {
+                                self.patch_manufacturer = None;
+                            }
+                            for m in self.library.manufacturers() {
+                                let on = self.patch_manufacturer.as_deref() == Some(m);
+                                if ui.selectable_label(on, m).clicked() {
+                                    self.patch_manufacturer = Some(m.to_string());
+                                }
+                            }
+                        });
+                });
+
+                const MAX_HITS: usize = 60;
+                // Collected up front: the list borrows the library, and
+                // picking a row has to mutate the selection.
+                let hits: Vec<(String, String, String, usize)> = self
+                    .library
+                    .search(&self.patch_search, self.patch_manufacturer.as_deref(), MAX_HITS)
+                    .into_iter()
+                    .filter_map(|i| self.library.fixtures.get(i))
+                    .map(|f| (f.id.clone(), f.title(), f.subtitle(), f.channels.len()))
+                    .collect();
+
+                if let Some(err) = &self.library.error {
+                    ui.colored_label(
+                        egui::Color32::from_rgb(240, 170, 90),
+                        egui::RichText::new(err).small(),
+                    );
+                } else if hits.is_empty() {
+                    ui.small("No fixtures match that search.");
+                } else {
+                    egui::ScrollArea::vertical()
+                        .id_salt("patch_library_hits")
+                        .max_height(190.0)
+                        .auto_shrink([false, true])
+                        .show(ui, |ui| {
+                            for (id, title, subtitle, _) in &hits {
+                                let on = self.patch_library_sel.as_deref() == Some(id.as_str());
+                                let text = egui::RichText::new(format!("{title}\n{subtitle}")).size(11.5);
+                                if ui.selectable_label(on, text).clicked() {
+                                    self.patch_library_sel = Some(id.clone());
+                                }
+                            }
+                        });
+                    ui.small(format!(
+                        "{} shown{} · {} in the library",
+                        hits.len(),
+                        if hits.len() == MAX_HITS { " (narrow the search for more)" } else { "" },
+                        self.library.fixtures.len()
+                    ));
+                }
+
+                ui.add_space(4.0);
+                egui::CollapsingHeader::new("Built-in profiles")
+                    .default_open(self.patch_library_sel.is_none())
+                    .show(ui, |ui| {
+                        self.patch_profile = self.patch_profile.min(PROFILES.len() - 1);
+                        egui::ComboBox::from_id_salt("patch_builtin_profile")
+                            .selected_text(PROFILES[self.patch_profile].name)
+                            .width(220.0)
+                            .show_ui(ui, |ui| {
+                                for (i, p) in PROFILES.iter().enumerate() {
+                                    if ui
+                                        .selectable_label(self.patch_profile == i, p.name)
+                                        .clicked()
+                                    {
+                                        self.patch_profile = i;
+                                        self.patch_library_sel = None;
+                                    }
+                                }
+                            });
                     });
-                let profile = &PROFILES[self.patch_profile];
+
+                // Whichever source is selected drives the Add button below.
+                let sel = self.patch_selection();
+                ui.add_space(2.0);
                 ui.small(format!(
-                    "{} channels, pan {}° / tilt {}°",
-                    profile.channel_count(),
-                    profile.pan_range,
-                    profile.tilt_range
+                    "Patching: {} — {} channels, pan {}° / tilt {}°",
+                    sel.label, sel.channels, sel.pan, sel.tilt
                 ));
                 ui.horizontal(|ui| {
                     ui.label("Name:");
                     ui.add(
                         egui::TextEdit::singleline(&mut self.patch_name)
-                            .hint_text(profile.name)
+                            .hint_text(&sel.label)
                             .desired_width(160.0),
                     );
                 });
@@ -97,10 +228,10 @@ impl App {
                     ui.label("Count:");
                     ui.add(egui::DragValue::new(&mut self.patch_count).range(1..=32));
                 });
-                if ui.button("Add").clicked() {
-                    let span = profile.channel_count() as u16;
+                if ui.add_enabled(sel.channels > 0, egui::Button::new("Add")).clicked() {
+                    let span = sel.channels as u16;
                     let base_name = if self.patch_name.trim().is_empty() {
-                        profile.name.to_string()
+                        sel.label.clone()
                     } else {
                         self.patch_name.trim().to_string()
                     };
@@ -121,7 +252,7 @@ impl App {
                         self.log
                             .push(format!("Patched '{display}' at {from}-{}", from + span - 1));
                         self.user_fixtures.push(UserFixture {
-                            profile: profile.name.to_string(),
+                            profile: sel.profile.clone(),
                             display,
                             from,
                         });
@@ -167,7 +298,10 @@ impl App {
                     let mut exclude: Option<String> = None;
                     let mut any = false;
                     for f in &self.patch.fixtures {
-                        if f.file.to_string_lossy().starts_with("builtin:") {
+                        // Anything DMXpress patched itself — a built-in
+                        // profile or a library fixture — is listed above.
+                        let src = f.file.to_string_lossy();
+                        if src.starts_with("builtin:") || src.starts_with(fixturedb::LIB_PREFIX) {
                             continue;
                         }
                         any = true;

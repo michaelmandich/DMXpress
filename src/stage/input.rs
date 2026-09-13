@@ -10,6 +10,7 @@ use super::math::{dir_from_angles, rotate_about, seg_dist, v3, V3};
 use super::settings::Settings;
 use super::view::StageView;
 use crate::chase::ChaseConfig;
+use crate::phaser::PhaserTrace;
 use crate::showbuddy::Patch;
 use crate::transition::{TransitionConfig, TransitionMode};
 
@@ -23,6 +24,7 @@ impl StageView {
         set: &mut Settings,
         mut transition: Option<&mut TransitionConfig>,
         mut chase: Option<&mut ChaseConfig>,
+        trace: Option<&PhaserTrace>,
     ) {
         let covered = {
             let mut seen = vec![false; patch.fixtures.len()];
@@ -670,6 +672,7 @@ impl StageView {
             &proj,
             transition.as_deref(),
             chase.as_deref(),
+            trace,
         );
     }
 }

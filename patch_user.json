@@ -1,14 +1,296 @@
 {
-  "include_showbuddy": true,
+  "include_showbuddy": false,
   "fixtures": [
     {
-      "profile": "25 ch banger (25ch)",
-      "display": "disco banger",
-      "from": 408
+      "profile": "SlimPAR T12 BT (7ch)",
+      "display": "SlimPAR T12 BT (7ch) 1",
+      "from": 513
+    },
+    {
+      "profile": "SlimPAR T12 BT (7ch)",
+      "display": "SlimPAR T12 BT (7ch) 2",
+      "from": 520
+    },
+    {
+      "profile": "SlimPAR T12 BT (7ch)",
+      "display": "SlimPAR T12 BT (7ch) 3",
+      "from": 527
+    },
+    {
+      "profile": "SlimPAR T12 BT (7ch)",
+      "display": "SlimPAR T12 BT (7ch) 4",
+      "from": 534
+    },
+    {
+      "profile": "SlimPAR T12 BT (7ch)",
+      "display": "SlimPAR T12 BT (7ch) 5",
+      "from": 541
+    },
+    {
+      "profile": "SlimPAR T12 BT (7ch)",
+      "display": "SlimPAR T12 BT (7ch) 6",
+      "from": 548
+    },
+    {
+      "profile": "SlimPAR T12 BT (7ch)",
+      "display": "SlimPAR T12 BT (7ch) 7",
+      "from": 555
+    },
+    {
+      "profile": "SlimPAR Q12 BT (8ch)",
+      "display": "SlimPAR Q12 BT (8ch) 1",
+      "from": 562
+    },
+    {
+      "profile": "SlimPAR Q12 BT (8ch)",
+      "display": "SlimPAR Q12 BT (8ch) 2",
+      "from": 570
+    },
+    {
+      "profile": "SlimPAR Q12 BT (8ch)",
+      "display": "SlimPAR Q12 BT (8ch) 3",
+      "from": 578
+    },
+    {
+      "profile": "SlimPAR Q12 BT (8ch)",
+      "display": "SlimPAR Q12 BT (8ch) 4",
+      "from": 586
+    },
+    {
+      "profile": "SlimPAR Q12 BT (8ch)",
+      "display": "SlimPAR Q12 BT (8ch) 5",
+      "from": 594
+    },
+    {
+      "profile": "SlimPAR Q12 BT (8ch)",
+      "display": "SlimPAR Q12 BT (8ch) 6",
+      "from": 602
+    },
+    {
+      "profile": "SlimPAR Q12 BT (8ch)",
+      "display": "SlimPAR Q12 BT (8ch) 7",
+      "from": 610
+    },
+    {
+      "profile": "Fogger (2ch)",
+      "display": "Fogger (2ch)",
+      "from": 470
+    },
+    {
+      "profile": "Maverick MK2 Spot (24ch)",
+      "display": "Maverick MK2 Spot (24ch) 1",
+      "from": 1
+    },
+    {
+      "profile": "Maverick MK2 Spot (24ch)",
+      "display": "Maverick MK2 Spot (24ch) 2",
+      "from": 25
+    },
+    {
+      "profile": "Maverick MK2 Spot (24ch)",
+      "display": "Maverick MK2 Spot (24ch) 3",
+      "from": 49
+    },
+    {
+      "profile": "Maverick MK2 Spot (24ch)",
+      "display": "Maverick MK2 Spot (24ch) 4",
+      "from": 73
+    },
+    {
+      "profile": "Intimidator Spot 475Z (16ch)",
+      "display": "Intimidator Spot 475Z (16ch) 1",
+      "from": 97
+    },
+    {
+      "profile": "Intimidator Spot 475Z (16ch)",
+      "display": "Intimidator Spot 475Z (16ch) 2",
+      "from": 113
+    },
+    {
+      "profile": "Intimidator Spot 475Z (16ch)",
+      "display": "Intimidator Spot 475Z (16ch) 3",
+      "from": 129
+    },
+    {
+      "profile": "Intimidator Spot 475Z (16ch)",
+      "display": "Intimidator Spot 475Z (16ch) 4",
+      "from": 145
+    },
+    {
+      "profile": "Intimidator Trio (15ch)",
+      "display": "Intimidator Trio (15ch) 1",
+      "from": 161
+    },
+    {
+      "profile": "Intimidator Trio (15ch)",
+      "display": "Intimidator Trio (15ch) 2",
+      "from": 176
+    },
+    {
+      "profile": "Rogue R1 Wash (14ch)",
+      "display": "Rogue R1 Wash (14ch) 1",
+      "from": 191
+    },
+    {
+      "profile": "Rogue R1 Wash (14ch)",
+      "display": "Rogue R1 Wash (14ch) 2",
+      "from": 205
+    },
+    {
+      "profile": "Rogue R1 Wash (14ch)",
+      "display": "Rogue R1 Wash (14ch) 3",
+      "from": 219
+    },
+    {
+      "profile": "Rogue R1 Wash (14ch)",
+      "display": "Rogue R1 Wash (14ch) 4",
+      "from": 233
+    },
+    {
+      "profile": "Betopper LF2405 Matrix Strobe (11ch)",
+      "display": "Betopper LF2405 Matrix Strobe (11ch) 1",
+      "from": 247
+    },
+    {
+      "profile": "Betopper LF2405 Matrix Strobe (11ch)",
+      "display": "Betopper LF2405 Matrix Strobe (11ch) 2",
+      "from": 258
+    },
+    {
+      "profile": "Betopper LF2405 Matrix Strobe (11ch)",
+      "display": "Betopper LF2405 Matrix Strobe (11ch) 3",
+      "from": 269
+    },
+    {
+      "profile": "Betopper LF2405 Matrix Strobe (11ch)",
+      "display": "Betopper LF2405 Matrix Strobe (11ch) 4",
+      "from": 280
+    },
+    {
+      "profile": "Fogger (2ch)",
+      "display": "Fogger (2ch)",
+      "from": 291
+    },
+    {
+      "profile": "Intimidator Spot 375Z IRC (15ch)",
+      "display": "Intimidator Spot 375Z IRC (15ch) 1",
+      "from": 293
+    },
+    {
+      "profile": "Intimidator Spot 375Z IRC (15ch)",
+      "display": "Intimidator Spot 375Z IRC (15ch) 2",
+      "from": 308
+    },
+    {
+      "profile": "Intimidator Spot 375Z IRC (15ch)",
+      "display": "Intimidator Spot 375Z IRC (15ch) 3",
+      "from": 323
+    },
+    {
+      "profile": "Intimidator Spot 375Z IRC (15ch)",
+      "display": "Intimidator Spot 375Z IRC (15ch) 4",
+      "from": 338
+    },
+    {
+      "profile": "SHEHDS Bee Eye 19x40 Ring (31ch)",
+      "display": "SHEHDS Bee Eye 19x40 Ring (31ch) 1",
+      "from": 353
+    },
+    {
+      "profile": "SHEHDS Bee Eye 19x40 Ring (31ch)",
+      "display": "SHEHDS Bee Eye 19x40 Ring (31ch) 2",
+      "from": 384
+    },
+    {
+      "profile": "SHEHDS Bee Eye 19x40 Ring (31ch)",
+      "display": "SHEHDS Bee Eye 19x40 Ring (31ch)",
+      "from": 415
+    },
+    {
+      "profile": "Intimidator Trio (30ch)",
+      "display": "top trio on ring",
+      "from": 618
+    },
+    {
+      "profile": "lib:chauvet-professional/maverick-mk-pyxis/26ch",
+      "display": "back left and right pyxis 1",
+      "from": 648
+    },
+    {
+      "profile": "lib:chauvet-professional/maverick-mk-pyxis/26ch",
+      "display": "back left and right pyxis 2",
+      "from": 674
+    },
+    {
+      "profile": "lib:chauvet-professional/maverick-mk-pyxis/26ch",
+      "display": "back left and right pyxis 3",
+      "from": 700
+    },
+    {
+      "profile": "lib:chauvet-professional/maverick-mk-pyxis/26ch",
+      "display": "back left and right pyxis 4",
+      "from": 726
+    },
+    {
+      "profile": "lib:chauvet-professional/maverick-mk-pyxis/26ch",
+      "display": "back left and right pyxis 5",
+      "from": 752
+    },
+    {
+      "profile": "lib:chauvet-professional/maverick-mk-pyxis/26ch",
+      "display": "back left and right pyxis 6",
+      "from": 778
+    },
+    {
+      "profile": "lib:chauvet-professional/maverick-mk-pyxis/26ch",
+      "display": "back left and right pyxis 7",
+      "from": 804
+    },
+    {
+      "profile": "lib:chauvet-professional/maverick-mk-pyxis/26ch",
+      "display": "back left and right pyxis 8",
+      "from": 830
+    },
+    {
+      "profile": "SlimPAR T6 BT (7ch)",
+      "display": "front line 1 1",
+      "from": 856
+    },
+    {
+      "profile": "SlimPAR T6 BT (7ch)",
+      "display": "front line 1 2",
+      "from": 863
+    },
+    {
+      "profile": "SlimPAR Q12 BT (8ch)",
+      "display": "front line 2 1",
+      "from": 870
+    },
+    {
+      "profile": "SlimPAR Q12 BT (8ch)",
+      "display": "front line 2 2",
+      "from": 878
+    },
+    {
+      "profile": "SlimPAR T12 BT (7ch)",
+      "display": "front line 2 1",
+      "from": 886
+    },
+    {
+      "profile": "SlimPAR T12 BT (7ch)",
+      "display": "front line 2 2",
+      "from": 893
+    },
+    {
+      "profile": "SlimPAR T12 BT (7ch)",
+      "display": "front line 2 3",
+      "from": 900
+    },
+    {
+      "profile": "SlimPAR T12 BT (7ch)",
+      "display": "front line 2",
+      "from": 907
     }
   ],
-  "excluded": [
-    "15 channel bee eye1@408",
-    "15 channel bee eye2@423"
-  ]
+  "excluded": []
 }

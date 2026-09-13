@@ -335,6 +335,30 @@ impl StageView {
         self.last_selected = Some(fi);
     }
 
+    /// Whether the whole rig is currently selected.
+    pub fn all_selected(&self) -> bool {
+        !self.instances.is_empty() && self.selection.len() >= self.instances.len()
+    }
+
+    /// Select the whole rig, or drop the selection if it already is. Toggling
+    /// matters on a control surface, where the same key has to both grab
+    /// everything and let go of it again.
+    pub fn select_all_fixtures(&mut self) -> bool {
+        let everything = !self.instances.is_empty() && self.selection.len() >= self.instances.len();
+        self.selection.clear();
+        self.sel_tower = None;
+        self.sel_truss = None;
+        if everything {
+            self.last_selected = None;
+            return false;
+        }
+        for i in 0..self.instances.len() {
+            self.selection.insert(i);
+        }
+        self.last_selected = self.instances.first().map(|inst| inst.fixture);
+        true
+    }
+
     /// Add every instance of patch fixture `fi` without disturbing the click
     /// anchor. Used to complete a "One fixture" group behind the user's back,
     /// where moving the anchor would break shift-range selection.

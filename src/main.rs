@@ -4,7 +4,9 @@ mod app;
 mod artnet;
 mod chase;
 mod config;
+mod encoder;
 mod engine;
+mod fixturedb;
 mod group;
 mod net;
 mod order;
@@ -18,9 +20,11 @@ mod scene;
 mod showbuddy;
 mod stack;
 mod stage;
+mod streamdeck;
 mod transition;
 mod ui;
 mod view;
+mod wheels;
 
 use eframe::egui;
 
@@ -37,12 +41,15 @@ fn resolve_data_dir() {
     let dir = base.join("DMXpress");
     let _ = std::fs::create_dir_all(dir.join("configs"));
     let _ = std::fs::create_dir_all(dir.join("setups"));
+    let _ = std::fs::create_dir_all(dir.join("fixtures"));
     for (rel, data) in [
         ("configs/Great divide.json", include_str!("../configs/Great divide.json")),
         ("configs/My Rig.json", include_str!("../configs/My Rig.json")),
         ("setups/2d original.json", include_str!("../setups/2d original.json")),
         ("setups/Full setup.json", include_str!("../setups/Full setup.json")),
         ("setups/back towers done.json", include_str!("../setups/back towers done.json")),
+        // Without this a downloaded build has no fixture library at all.
+        ("fixtures/library.json", include_str!("../fixtures/library.json")),
     ] {
         let path = dir.join(rel);
         if !path.exists() {

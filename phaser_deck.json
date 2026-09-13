@@ -1,0 +1,947 @@
+[
+  {
+    "phaser": "Pan Slow Small",
+    "color": [
+      242,
+      36,
+      36
+    ],
+    "label": "S1",
+    "icon": "LeftRight"
+  },
+  {
+    "phaser": "Pan Slow Mid",
+    "color": [
+      242,
+      162,
+      36
+    ],
+    "label": "S2",
+    "icon": "LeftRight"
+  },
+  {
+    "phaser": "Pan Slow Big",
+    "color": [
+      196,
+      242,
+      36
+    ],
+    "label": "S3",
+    "icon": "LeftRight"
+  },
+  {
+    "phaser": "Pan Med Small",
+    "color": [
+      70,
+      242,
+      36
+    ],
+    "label": "M1",
+    "icon": "LeftRight"
+  },
+  {
+    "phaser": "Pan Med Mid",
+    "color": [
+      36,
+      242,
+      127
+    ],
+    "label": "M2",
+    "icon": "LeftRight"
+  },
+  {
+    "phaser": "Pan Med Big",
+    "color": [
+      36,
+      230,
+      242
+    ],
+    "label": "M3",
+    "icon": "LeftRight"
+  },
+  {
+    "phaser": "Pan Fast Small",
+    "color": [
+      36,
+      104,
+      242
+    ],
+    "label": "F1",
+    "icon": "LeftRight"
+  },
+  {
+    "phaser": "Pan Fast Mid",
+    "color": [
+      93,
+      36,
+      242
+    ],
+    "label": "F2",
+    "icon": "LeftRight"
+  },
+  {
+    "phaser": "Pan Fast Big",
+    "color": [
+      219,
+      36,
+      242
+    ],
+    "label": "F3",
+    "icon": "LeftRight"
+  },
+  {
+    "phaser": "Tilt Slow Small",
+    "color": [
+      242,
+      99,
+      36
+    ],
+    "label": "S1",
+    "icon": "UpDown"
+  },
+  {
+    "phaser": "Tilt Slow Mid",
+    "color": [
+      242,
+      225,
+      36
+    ],
+    "label": "S2",
+    "icon": "UpDown"
+  },
+  {
+    "phaser": "Tilt Slow Big",
+    "color": [
+      133,
+      242,
+      36
+    ],
+    "label": "S3",
+    "icon": "UpDown"
+  },
+  {
+    "phaser": "Tilt Med Small",
+    "color": [
+      36,
+      242,
+      64
+    ],
+    "label": "M1",
+    "icon": "UpDown"
+  },
+  {
+    "phaser": "Tilt Med Mid",
+    "color": [
+      36,
+      242,
+      190
+    ],
+    "label": "M2",
+    "icon": "UpDown"
+  },
+  {
+    "phaser": "Tilt Med Big",
+    "color": [
+      36,
+      167,
+      242
+    ],
+    "label": "M3",
+    "icon": "UpDown"
+  },
+  {
+    "phaser": "Tilt Fast Small",
+    "color": [
+      36,
+      42,
+      242
+    ],
+    "label": "F1",
+    "icon": "UpDown"
+  },
+  {
+    "phaser": "Tilt Fast Mid",
+    "color": [
+      156,
+      36,
+      242
+    ],
+    "label": "F2",
+    "icon": "UpDown"
+  },
+  {
+    "phaser": "Tilt Fast Big",
+    "color": [
+      242,
+      36,
+      202
+    ],
+    "label": "F3",
+    "icon": "UpDown"
+  },
+  {
+    "phaser": "Circle",
+    "color": [
+      242,
+      48,
+      48
+    ],
+    "label": "CIRC",
+    "icon": "Ring"
+  },
+  {
+    "phaser": "Eight",
+    "color": [
+      242,
+      145,
+      48
+    ],
+    "label": "EIGH",
+    "icon": "Wave"
+  },
+  {
+    "phaser": "Arc",
+    "color": [
+      242,
+      242,
+      48
+    ],
+    "label": "ARC",
+    "icon": "Wave"
+  },
+  {
+    "phaser": "Diamond",
+    "color": [
+      145,
+      242,
+      48
+    ],
+    "label": "DIAM",
+    "icon": "Bullseye"
+  },
+  {
+    "phaser": "Square",
+    "color": [
+      48,
+      242,
+      48
+    ],
+    "label": "SQR",
+    "icon": "None"
+  },
+  {
+    "phaser": "Square (snap)",
+    "color": [
+      48,
+      242,
+      145
+    ],
+    "label": "SNAP",
+    "icon": "None"
+  },
+  {
+    "phaser": "Line",
+    "color": [
+      48,
+      242,
+      242
+    ],
+    "label": "LINE",
+    "icon": "LeftRight"
+  },
+  {
+    "phaser": "Lift",
+    "color": [
+      48,
+      145,
+      242
+    ],
+    "label": "LIFT",
+    "icon": "UpDown"
+  },
+  {
+    "phaser": "Diagonal",
+    "color": [
+      48,
+      48,
+      242
+    ],
+    "label": "DIAG",
+    "icon": "LeftRight"
+  },
+  {
+    "phaser": "Zig-zag",
+    "color": [
+      145,
+      48,
+      242
+    ],
+    "label": "ZIG",
+    "icon": "Wave"
+  },
+  {
+    "phaser": "Lissajous 3:2",
+    "color": [
+      242,
+      48,
+      242
+    ],
+    "label": "LISS",
+    "icon": "Bullseye"
+  },
+  {
+    "phaser": "Fog on",
+    "color": [
+      110,
+      120,
+      150
+    ],
+    "label": "FOGO",
+    "icon": "None"
+  },
+  {
+    "phaser": "Flow",
+    "color": [
+      110,
+      120,
+      150
+    ],
+    "label": "FLOW",
+    "icon": "None"
+  },
+  {
+    "phaser": "Front lights",
+    "color": [
+      110,
+      120,
+      150
+    ],
+    "label": "FRON",
+    "icon": "None"
+  },
+  null,
+  null,
+  null,
+  null,
+  {
+    "phaser": "Dim Breathe Slow Together",
+    "color": [
+      242,
+      36,
+      36
+    ],
+    "label": "S1",
+    "icon": "Wave"
+  },
+  {
+    "phaser": "Dim Breathe Slow Half",
+    "color": [
+      242,
+      162,
+      36
+    ],
+    "label": "S2",
+    "icon": "Wave"
+  },
+  {
+    "phaser": "Dim Breathe Slow Wrap",
+    "color": [
+      196,
+      242,
+      36
+    ],
+    "label": "S3",
+    "icon": "Wave"
+  },
+  {
+    "phaser": "Dim Breathe Med Together",
+    "color": [
+      70,
+      242,
+      36
+    ],
+    "label": "M1",
+    "icon": "Wave"
+  },
+  {
+    "phaser": "Dim Breathe Med Half",
+    "color": [
+      36,
+      242,
+      127
+    ],
+    "label": "M2",
+    "icon": "Wave"
+  },
+  {
+    "phaser": "Dim Breathe Med Wrap",
+    "color": [
+      36,
+      230,
+      242
+    ],
+    "label": "M3",
+    "icon": "Wave"
+  },
+  {
+    "phaser": "Dim Breathe Fast Together",
+    "color": [
+      36,
+      104,
+      242
+    ],
+    "label": "F1",
+    "icon": "Wave"
+  },
+  {
+    "phaser": "Dim Breathe Fast Half",
+    "color": [
+      93,
+      36,
+      242
+    ],
+    "label": "F2",
+    "icon": "Wave"
+  },
+  {
+    "phaser": "Dim Breathe Fast Wrap",
+    "color": [
+      219,
+      36,
+      242
+    ],
+    "label": "F3",
+    "icon": "Wave"
+  },
+  {
+    "phaser": "Dim Blink Slow Together",
+    "color": [
+      242,
+      99,
+      36
+    ],
+    "label": "S1",
+    "icon": "Burst"
+  },
+  {
+    "phaser": "Dim Blink Slow Half",
+    "color": [
+      242,
+      225,
+      36
+    ],
+    "label": "S2",
+    "icon": "Burst"
+  },
+  {
+    "phaser": "Dim Blink Slow Wrap",
+    "color": [
+      133,
+      242,
+      36
+    ],
+    "label": "S3",
+    "icon": "Burst"
+  },
+  {
+    "phaser": "Dim Blink Med Together",
+    "color": [
+      36,
+      242,
+      64
+    ],
+    "label": "M1",
+    "icon": "Burst"
+  },
+  {
+    "phaser": "Dim Blink Med Half",
+    "color": [
+      36,
+      242,
+      190
+    ],
+    "label": "M2",
+    "icon": "Burst"
+  },
+  {
+    "phaser": "Dim Blink Med Wrap",
+    "color": [
+      36,
+      167,
+      242
+    ],
+    "label": "M3",
+    "icon": "Burst"
+  },
+  {
+    "phaser": "Dim Blink Fast Together",
+    "color": [
+      36,
+      42,
+      242
+    ],
+    "label": "F1",
+    "icon": "Burst"
+  },
+  {
+    "phaser": "Dim Blink Fast Half",
+    "color": [
+      156,
+      36,
+      242
+    ],
+    "label": "F2",
+    "icon": "Burst"
+  },
+  {
+    "phaser": "Dim Blink Fast Wrap",
+    "color": [
+      242,
+      36,
+      202
+    ],
+    "label": "F3",
+    "icon": "Burst"
+  },
+  null,
+  null,
+  null,
+  null,
+  null,
+  null,
+  null,
+  null,
+  null,
+  null,
+  {
+    "phaser": "White disco",
+    "color": [
+      110,
+      120,
+      150
+    ],
+    "label": "WHIT",
+    "icon": "None"
+  },
+  {
+    "phaser": "DISCO WHITE",
+    "color": [
+      110,
+      120,
+      150
+    ],
+    "label": "DISC",
+    "icon": "None"
+  },
+  null,
+  null,
+  null,
+  null,
+  null,
+  null,
+  {
+    "phaser": "Mav gobos open",
+    "color": [
+      235,
+      232,
+      215
+    ],
+    "label": "OPEN",
+    "icon": "StageLight"
+  },
+  {
+    "phaser": "Mav W1 Circuits",
+    "color": [
+      242,
+      145,
+      48
+    ],
+    "label": "CIRC",
+    "icon": "Ring"
+  },
+  {
+    "phaser": "Mav W1 Ring of rings",
+    "color": [
+      242,
+      161,
+      48
+    ],
+    "label": "RING",
+    "icon": "Ring"
+  },
+  {
+    "phaser": "Mav W1 Checker vortex",
+    "color": [
+      242,
+      177,
+      48
+    ],
+    "label": "VRTX",
+    "icon": "Ring"
+  },
+  {
+    "phaser": "Mav W1 Triangle",
+    "color": [
+      242,
+      193,
+      48
+    ],
+    "label": "TRI",
+    "icon": "Ring"
+  },
+  {
+    "phaser": "Mav W1 Star field",
+    "color": [
+      242,
+      209,
+      48
+    ],
+    "label": "STAR",
+    "icon": "Ring"
+  },
+  {
+    "phaser": "Mav W1 Lenticular glass",
+    "color": [
+      242,
+      226,
+      48
+    ],
+    "label": "LEN1",
+    "icon": "Ring"
+  },
+  null,
+  null,
+  {
+    "phaser": "Mav W2 Spiral",
+    "color": [
+      48,
+      226,
+      242
+    ],
+    "label": "SPRL",
+    "icon": "Ring"
+  },
+  {
+    "phaser": "Mav W2 Dot chiclets",
+    "color": [
+      48,
+      209,
+      242
+    ],
+    "label": "DOTS",
+    "icon": "Ring"
+  },
+  {
+    "phaser": "Mav W2 Splat breakup",
+    "color": [
+      48,
+      193,
+      242
+    ],
+    "label": "SPLT",
+    "icon": "Ring"
+  },
+  {
+    "phaser": "Mav W2 Wavy bar",
+    "color": [
+      48,
+      177,
+      242
+    ],
+    "label": "WAVY",
+    "icon": "Ring"
+  },
+  {
+    "phaser": "Mav W2 Shower glass",
+    "color": [
+      48,
+      161,
+      242
+    ],
+    "label": "SHWR",
+    "icon": "Ring"
+  },
+  {
+    "phaser": "Mav W2 Lenticular glass",
+    "color": [
+      48,
+      145,
+      242
+    ],
+    "label": "LEN2",
+    "icon": "Ring"
+  },
+  null,
+  null,
+  null,
+  {
+    "phaser": "375Z gobos open",
+    "color": [
+      235,
+      232,
+      215
+    ],
+    "label": "OPEN",
+    "icon": "StageLight"
+  },
+  {
+    "phaser": "375Z Gobo 1",
+    "color": [
+      242,
+      48,
+      193
+    ],
+    "label": "G1",
+    "icon": "Ring"
+  },
+  {
+    "phaser": "375Z Gobo 2",
+    "color": [
+      242,
+      48,
+      177
+    ],
+    "label": "G2",
+    "icon": "Ring"
+  },
+  {
+    "phaser": "375Z Gobo 3",
+    "color": [
+      242,
+      48,
+      161
+    ],
+    "label": "G3",
+    "icon": "Ring"
+  },
+  {
+    "phaser": "375Z Gobo 4",
+    "color": [
+      242,
+      48,
+      145
+    ],
+    "label": "G4",
+    "icon": "Ring"
+  },
+  {
+    "phaser": "375Z Gobo 5",
+    "color": [
+      242,
+      48,
+      129
+    ],
+    "label": "G5",
+    "icon": "Ring"
+  },
+  {
+    "phaser": "375Z Gobo 6",
+    "color": [
+      242,
+      48,
+      113
+    ],
+    "label": "G6",
+    "icon": "Ring"
+  },
+  {
+    "phaser": "375Z Gobo 7",
+    "color": [
+      242,
+      48,
+      96
+    ],
+    "label": "G7",
+    "icon": "Ring"
+  },
+  null,
+  null,
+  null,
+  null,
+  null,
+  null,
+  null,
+  null,
+  null,
+  null,
+  {
+    "phaser": "475Z gobos open",
+    "color": [
+      235,
+      232,
+      215
+    ],
+    "label": "OPEN",
+    "icon": "StageLight"
+  },
+  {
+    "phaser": "475Z Rot Gobo 1",
+    "color": [
+      129,
+      48,
+      242
+    ],
+    "label": "R1",
+    "icon": "Ring"
+  },
+  {
+    "phaser": "475Z Rot Gobo 2",
+    "color": [
+      145,
+      48,
+      242
+    ],
+    "label": "R2",
+    "icon": "Ring"
+  },
+  {
+    "phaser": "475Z Rot Gobo 3",
+    "color": [
+      161,
+      48,
+      242
+    ],
+    "label": "R3",
+    "icon": "Ring"
+  },
+  {
+    "phaser": "475Z Rot Gobo 4",
+    "color": [
+      177,
+      48,
+      242
+    ],
+    "label": "R4",
+    "icon": "Ring"
+  },
+  {
+    "phaser": "475Z Rot Gobo 5",
+    "color": [
+      193,
+      48,
+      242
+    ],
+    "label": "R5",
+    "icon": "Ring"
+  },
+  {
+    "phaser": "475Z Rot Gobo 6",
+    "color": [
+      209,
+      48,
+      242
+    ],
+    "label": "R6",
+    "icon": "Ring"
+  },
+  {
+    "phaser": "475Z Rot Gobo 7",
+    "color": [
+      226,
+      48,
+      242
+    ],
+    "label": "R7",
+    "icon": "Ring"
+  },
+  null,
+  {
+    "phaser": "475Z Static Gobo 1",
+    "color": [
+      80,
+      242,
+      48
+    ],
+    "label": "S1",
+    "icon": "Ring"
+  },
+  {
+    "phaser": "475Z Static Gobo 2",
+    "color": [
+      64,
+      242,
+      48
+    ],
+    "label": "S2",
+    "icon": "Ring"
+  },
+  {
+    "phaser": "475Z Static Gobo 3",
+    "color": [
+      48,
+      242,
+      48
+    ],
+    "label": "S3",
+    "icon": "Ring"
+  },
+  {
+    "phaser": "475Z Static Gobo 4",
+    "color": [
+      48,
+      242,
+      64
+    ],
+    "label": "S4",
+    "icon": "Ring"
+  },
+  {
+    "phaser": "475Z Static Gobo 5",
+    "color": [
+      48,
+      242,
+      80
+    ],
+    "label": "S5",
+    "icon": "Ring"
+  },
+  {
+    "phaser": "475Z Static Gobo 6",
+    "color": [
+      48,
+      242,
+      96
+    ],
+    "label": "S6",
+    "icon": "Ring"
+  },
+  {
+    "phaser": "475Z Static Gobo 7",
+    "color": [
+      48,
+      242,
+      113
+    ],
+    "label": "S7",
+    "icon": "Ring"
+  },
+  {
+    "phaser": "475Z Static Gobo 8",
+    "color": [
+      48,
+      242,
+      129
+    ],
+    "label": "S8",
+    "icon": "Ring"
+  },
+  null,
+  null,
+  null,
+  null,
+  null,
+  null,
+  null,
+  null,
+  null,
+  null,
+  null,
+  null,
+  null,
+  null,
+  null,
+  null,
+  null,
+  null,
+  null
+]

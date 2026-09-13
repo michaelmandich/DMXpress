@@ -335,7 +335,7 @@ impl Look {
 }
 
 /// Periodic waveform in -1..1. `shape` morphs triangle -> sine -> square.
-fn wave(x: f32, shape: f32) -> f32 {
+pub(crate) fn wave(x: f32, shape: f32) -> f32 {
     let ph = x.rem_euclid(1.0);
     let sine = (ph * std::f32::consts::TAU).sin();
     if shape <= 0.5 {

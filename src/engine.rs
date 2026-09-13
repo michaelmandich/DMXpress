@@ -33,6 +33,13 @@ pub(crate) struct Layer {
 impl Layer {
     /// A layer that blends `frame` over everything beneath it on the given
     /// channels only.
+    /// The channels this layer asserts, for tests that need to see which
+    /// fixtures a pattern is actually covering.
+    #[cfg(test)]
+    pub fn weights(&self) -> &[(usize, f32)] {
+        &self.weights
+    }
+
     pub fn overlay(frame: Frame, weights: Vec<(usize, f32)>) -> Self {
         Self {
             frame,

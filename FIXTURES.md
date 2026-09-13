@@ -1,6 +1,38 @@
 # Adding & Editing Fixture Definitions
 
-All built-in fixture profiles live in one file: **`src/profiles.rs`**.
+**Most fixtures don't need any of this.** The **🔌 Patch** window ships with a
+searchable library of ~2,100 fixture modes from ~630 models across 133
+manufacturers, so if your light is from a known brand, search for it there and
+patch it — no code, no rebuild. The rest of this document covers hand-writing a
+built-in profile, which is now only needed for something the library doesn't
+have (a no-name fixture, or a custom channel layout).
+
+## The fixture library
+
+The library is `fixtures/library.json`, generated from the
+[Open Fixture Library](https://github.com/OpenLightingProject/open-fixture-library)
+(MIT) by `tools/ofl_to_library.py`. Unlike the hand-written profiles below,
+library fixtures carry an explicit `role` per channel taken from OFL's own
+capability data, so Amber/UV/CMY/gobo/prism channels are classified outright
+instead of guessed from the channel name.
+
+To refresh it against upstream OFL:
+
+```sh
+curl -L -o ofl.tar.gz \
+    https://github.com/OpenLightingProject/open-fixture-library/archive/refs/heads/master.tar.gz
+tar xzf ofl.tar.gz --strip-components=1 open-fixture-library-master/fixtures
+python3 tools/ofl_to_library.py fixtures/ fixtures/library.json
+cargo test fixturedb    # checks every entry is still patchable
+```
+
+Known gap: modes built from a pixel matrix (LED battens addressed per-pixel)
+are skipped, because expanding OFL's template-channel blocks needs the matrix
+geometry. Those fixtures still appear if they have a non-matrix mode.
+
+## Hand-written profiles
+
+Built-in fixture profiles live in one file: **`src/profiles.rs`**.
 After any change, rebuild and relaunch:
 
 ```sh
@@ -8,8 +40,8 @@ cargo test    # sanity checks on the profiles
 cargo run     # rebuilds and starts DMXpress
 ```
 
-New profiles show up automatically in the **🔌 Patch** window's profile
-dropdown — no other file needs to change.
+New profiles show up automatically in the **🔌 Patch** window, under
+"Built-in profiles" — no other file needs to change.
 
 ---
 
@@ -77,16 +109,25 @@ the 3D view, palettes, and phasers:
 | Pan / Tilt | `pan`, `tilt` (add `fine` for fine channels) | `v("Pan")`, `v("Tilt fine")` |
 | Dimmer | use `d(...)`, or name contains `dim`/`master` | `d("Dimmer")` |
 | Red/Green/Blue/White | `red`, `green`, `blue`, `white` | `v("Red 1")`, `v("BackColor W")` → use `White` if you want it classified |
+| Amber / UV | `amber` / `amb`, `uv` | `v("Amber")`, `v("UV")` |
+| Cyan / Magenta / Yellow | `cyan`, `magenta`, `yellow` | `v("Cyan")` |
 | Color wheel | `color` / `colour` / `clr` | `s("Color wheel", ...)` |
 | Strobe | `strobe` / `strb` | `s("Strobe", ...)` |
-| Zoom | `zoom` | `v("Zoom")` |
+| Shutter | `shutter` / `shut` | `s("Shutter", ...)` |
+| Zoom / Focus / Iris | `zoom`, `focus`, `iris` | `v("Zoom")` |
+| Gobo / Prism / Frost | `gobo`, `prism`, `frost` | `s("Gobo wheel", ...)` |
 | Speed | `speed` / `spd` | `v("Pan/Tilt speed")` |
-| Nothing special | anything else | `v("Gobo rotation")`, `v("Control")` |
+| Nothing special | anything else | `v("Control")`, `v("Reset")` |
 
 **Watch out:** `strobe`/`speed` win over `pan`/`tilt` (so
-`"Pan/Tilt speed"` is a Speed channel, which is correct). A channel named
+`"Pan/Tilt speed"` is a Speed channel, which is correct), and the beam words
+(`gobo`, `prism`, `iris`, `frost`, `focus`) are checked before the colour
+words, so `"Gobo colour"` is a Gobo channel. A channel named
 `"Color macros"` will be treated as a Color channel — that's usually what
 you want.
+
+Name guessing only applies to hand-written profiles. Library fixtures set
+`Channel::role` explicitly, and an explicit role always wins.
 
 ---
 
