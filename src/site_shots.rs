@@ -2,7 +2,14 @@
 //!
 //! [`site_shots_render`] drives the real `App::draw_ui` through
 //! [`crate::stage::headless::render_frames`] and writes the manifest's PNGs
-//! straight into `dist-netlify/images/`.
+//! into `target/site-shots/`.
+//!
+//! They stop there on purpose. The site serves WebP — the same pictures as
+//! PNG are five times the bytes, and a 23 MB page is a page nobody waits for —
+//! and nothing in this crate can encode WebP. `tools/site_shots.py` does that
+//! conversion and is the only thing that writes into `dist-netlify/images/`.
+//! Rendering into the site directly would also mean a plain `cargo test` put
+//! 19 MB of PNG back beside the WebP every time it ran.
 //!
 //! It is a screenshot job, not an assertion suite. Every scene is built in
 //! memory — palettes, groups, cue stacks, routes, board pads, truss — and
@@ -34,8 +41,9 @@ use crate::ui::inspector::presets::{PadSize, PadTarget, PresetView};
 use crate::ui::inspector::InspectorTab;
 use crate::ui::network::{NodeEntry, SourceEntry, Tab as NetTab};
 
-/// Where the site's writers expect to find the pictures.
-const OUT_DIR: &str = "dist-netlify/images";
+/// Where the renders land. `tools/site_shots.py` turns these into the WebP
+/// the site actually serves; see the module docs.
+const OUT_DIR: &str = "target/site-shots";
 
 /// Frames per shot. Frame 0 installs the theme (fonts registered mid-frame
 /// only bind on the next one), frame 1 re-installs the plugin tint, and the
