@@ -89,11 +89,13 @@ cargo test
 7. Assign and run playback from the Decks.
 8. Select an Art-Net interface and output to a node or visualizer.
 
-The [user guide](GUIDE.md) explains the console concepts and workflow in more detail. Fixture-profile development is documented in [the fixture guide](FIXTURES.md).
+The [user guide](GUIDE.md) explains the console concepts and workflow in more detail. Fixture-profile development is documented in [the fixture guide](FIXTURES.md), the gobo catalogue behind the visualizer's beam shapes in [the gobo guide](GOBOS.md), and the order in which cues, effects, plugins and masters combine into each DMX channel in [the layers reference](LAYERS.md).
 
 ## Show Data
 
-DMXpress stores show data as human-readable JSON files in the working directory. This includes palettes, groups, presets, phasers, sequences, stacks, views, patch data, stage layout, and settings.
+DMXpress stores show data as human-readable JSON files in the working directory. This includes palettes, groups, presets, phasers, sequences, stacks, views, patch data, stage layout, saved cameras, the Presets board, and settings.
+
+Panel preferences that belong to the machine rather than the show — the Inspector's open tab and width, which sections are folded, and what the stage draws — live separately in `inspector.json` and are deliberately left out of saved configurations, so switching shows never rearranges your workspace.
 
 Complete show configurations are stored under `configs/`, while reusable stage arrangements are stored under `setups/`.
 
@@ -130,3 +132,12 @@ DMXpress is provided as-is, without warranty or an obligation to provide support
 DMXpress is licensed under the [Mozilla Public License 2.0](LICENSE).
 
 You may use, modify, and sell the software under the MPL 2.0 terms. Changes to MPL-covered source files must remain available under the MPL when distributed, while separate larger works and future plugins may use their own compatible terms.
+
+### Bundled fixture library
+
+`fixtures/library.json.gz` is built from upstream fixture databases, under their own terms. See [FIXTURES.md](FIXTURES.md) for how it is generated.
+
+- [Open Fixture Library](https://github.com/OpenLightingProject/open-fixture-library) — MIT License, Copyright (c) The Open Lighting Project contributors.
+- [QLC+ fixture definitions](https://github.com/mcallegari/qlcplus) — Apache License 2.0, Copyright (c) Massimo Callegari and the QLC+ contributors.
+
+[GDTF Share](https://gdtf-share.com/) can be added as a fourth source for the manufacturers' own fixture data. It is not bundled: each GDTF file is published by its manufacturer under that manufacturer's terms, so `tools/gdtf_fetch.py` downloads them with your own free GDTF Share account and the build only includes them when you pass `--gdtf`.

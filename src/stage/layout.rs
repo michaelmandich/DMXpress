@@ -76,6 +76,15 @@ pub(crate) struct Tower {
     pub yaw_deg: f32,
     pub height: f32,
     pub width: f32,
+    /// Operator label shown in the Build outliner; empty = "Tower N" / "F34 truss N" / "Radius truss N".
+    #[serde(default)]
+    pub name: String,
+    /// Composite this part belongs to; `None` = standalone.
+    #[serde(default)]
+    pub group: Option<ElementGroup>,
+    /// Not drawn, not pickable, not a snap target; hung lights stay hung.
+    #[serde(default)]
+    pub hidden: bool,
 }
 
 impl Default for Tower {
@@ -85,6 +94,9 @@ impl Default for Tower {
             yaw_deg: 0.0,
             height: 3.2,
             width: 2.4,
+            name: String::new(),
+            group: None,
+            hidden: false,
         }
     }
 }
@@ -164,6 +176,34 @@ pub(crate) enum TrussKind {
     Radius,
 }
 
+/// One tower or truss by index — the element reference every tab, the
+/// builder, the placer and the stage share.
+#[derive(Debug, Clone, Copy, PartialEq, Eq, Hash)]
+pub(crate) enum ElementRef {
+    Tower(usize),
+    Truss(usize),
+}
+
+/// What a composite build made; the outliner folds a group's parts under
+/// one header carrying this kind's icon.
+#[derive(Debug, Clone, Copy, PartialEq, Eq, Hash, Serialize, Deserialize)]
+pub(crate) enum CompositeKind {
+    Goalpost,
+    Box,
+    Ring,
+    TowerPair,
+    Arch,
+}
+
+/// Tag on every part of a composite. Groups have no list of their own:
+/// they exist wherever a tower or truss carries the same id, so undo,
+/// files and setups carry them for free.
+#[derive(Debug, Clone, Copy, PartialEq, Eq, Hash, Serialize, Deserialize)]
+pub(crate) struct ElementGroup {
+    pub id: u32,
+    pub kind: CompositeKind,
+}
+
 /// A straight or curved truss run. Lights clip onto slots spaced every
 /// [`TRUSS_SLOT_SPACING`] along the run, on any of [`Truss::face_count`]
 /// faces around the cross-section. The whole run can also tilt in 3D via
@@ -195,6 +235,15 @@ pub(crate) struct Truss {
     pub arc_deg: f32,
     /// Draw support legs down to the floor at both ends of the run.
     pub grounded: bool,
+    /// Operator label shown in the Build outliner; empty = "Tower N" / "F34 truss N" / "Radius truss N".
+    #[serde(default)]
+    pub name: String,
+    /// Composite this part belongs to; `None` = standalone.
+    #[serde(default)]
+    pub group: Option<ElementGroup>,
+    /// Not drawn, not pickable, not a snap target; hung lights stay hung.
+    #[serde(default)]
+    pub hidden: bool,
 }
 
 impl Truss {
@@ -209,6 +258,9 @@ impl Truss {
             radius: 2.0,
             arc_deg: 90.0,
             grounded: true,
+            name: String::new(),
+            group: None,
+            hidden: false,
         }
     }
 
@@ -223,6 +275,9 @@ impl Truss {
             radius: 2.0,
             arc_deg: 90.0,
             grounded: false,
+            name: String::new(),
+            group: None,
+            hidden: false,
         }
     }
 

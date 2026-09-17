@@ -1,92 +1,10 @@
-//! Fixture mesh construction and painter projection. Beam haze is rendered by
-//! the Metal/wgpu volumetric callback in `volumetric`.
+//! Fixture mesh construction and painter projection. Beam haze and the pools
+//! beams throw on surfaces are rendered by the Metal/wgpu callbacks in
+//! `volumetric`.
 
 use eframe::egui::{self, Color32, Pos2, Rect, Shape};
 
-use super::fixture::vis_curve;
 use super::math::{v3, Camera, V3};
-
-/// Soft radial pool where a beam strikes a horizontal surface. Vertex alpha
-/// interpolation gives a continuous hotspot instead of stacked circles.
-pub(crate) fn surface_pool_shape(
-    cam: &Camera,
-    rect: Rect,
-    center: V3,
-    direction: V3,
-    radius: f32,
-    color: Color32,
-    brightness: f32,
-    opacity: f32,
-) -> Option<Shape> {
-    const SIDES: usize = 24;
-    const RADII: [f32; 4] = [0.0, 0.38, 0.72, 1.0];
-    const DENSITY: [f32; 4] = [1.0, 0.78, 0.28, 0.0];
-    let vb = vis_curve(brightness);
-    let hue_scale = (vb / brightness.max(1e-3)).min(4.0);
-    let rgb = [
-        (color.r() as f32 * hue_scale).min(255.0) as u8,
-        (color.g() as f32 * hue_scale).min(255.0) as u8,
-        (color.b() as f32 * hue_scale).min(255.0) as u8,
-    ];
-    let base_alpha = ((28.0 + vb * 105.0) * opacity.max(0.0)).clamp(0.0, 190.0);
-    let horizontal = v3(direction.x, 0.0, direction.z).norm();
-    let along = if horizontal.len() > 0.01 {
-        horizontal
-    } else {
-        v3(1.0, 0.0, 0.0)
-    };
-    let across = v3(-along.z, 0.0, along.x);
-    let incidence_stretch = (1.0 / direction.y.abs().max(0.25)).min(3.0);
-    let mut mesh = egui::Mesh::default();
-    for (ri, &rf) in RADII.iter().enumerate() {
-        if ri == 0 {
-            let (pos, depth) = cam.project(rect, center)?;
-            if depth <= 0.2 {
-                return None;
-            }
-            mesh.vertices.push(egui::epaint::Vertex {
-                pos,
-                uv: egui::epaint::WHITE_UV,
-                color: Color32::from_rgba_unmultiplied(
-                    rgb[0], rgb[1], rgb[2], base_alpha as u8,
-                ),
-            });
-            continue;
-        }
-        let alpha = (base_alpha * DENSITY[ri]) as u8;
-        for k in 0..SIDES {
-            let a = k as f32 / SIDES as f32 * std::f32::consts::TAU;
-            let world = center
-                + across * (a.cos() * radius * rf)
-                + along * (a.sin() * radius * rf * incidence_stretch)
-                + v3(0.0, 0.002, 0.0);
-            let (pos, depth) = cam.project(rect, world)?;
-            if depth <= 0.2 {
-                return None;
-            }
-            mesh.vertices.push(egui::epaint::Vertex {
-                pos,
-                uv: egui::epaint::WHITE_UV,
-                color: Color32::from_rgba_unmultiplied(rgb[0], rgb[1], rgb[2], alpha),
-            });
-        }
-    }
-    // Centre fan to the first ring.
-    for k in 0..SIDES {
-        mesh.add_triangle(0, (1 + k) as u32, (1 + (k + 1) % SIDES) as u32);
-    }
-    // Annuli between the remaining radial rings.
-    for band in 0..2 {
-        let inner = 1 + band * SIDES;
-        let outer = inner + SIDES;
-        for k in 0..SIDES {
-            let next = (k + 1) % SIDES;
-            mesh.add_triangle((inner + k) as u32, (outer + k) as u32, (inner + next) as u32);
-            mesh.add_triangle((inner + next) as u32, (outer + k) as u32, (outer + next) as u32);
-        }
-    }
-    Some(Shape::mesh(mesh))
-}
 
 // ---------------------------------------------------------------- fixture meshes
 

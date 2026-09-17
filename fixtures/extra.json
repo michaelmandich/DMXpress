@@ -1,0 +1,932 @@
+{
+ "version": 1,
+ "source": "Hand-written DMXpress entries, merged by tools/build_library.py and preferred over both upstreams. See FIXTURES.md.",
+ "fixtures": [
+  {
+   "id": "chauvet-professional/maverick-mk-pyxis/26ch",
+   "manufacturer": "Chauvet Professional",
+   "model": "Maverick MK Pyxis",
+   "mode": "Basic",
+   "category": "Moving Head",
+   "pan_range": 540.0,
+   "tilt_range": 270.0,
+   "beam_width": 58.4,
+   "channels": [
+    {
+     "name": "Pan",
+     "role": "Pan"
+    },
+    {
+     "name": "Pan Fine",
+     "role": "PanFine"
+    },
+    {
+     "name": "Tilt",
+     "role": "Tilt"
+    },
+    {
+     "name": "Tilt Fine",
+     "role": "TiltFine"
+    },
+    {
+     "name": "Continuous Pan",
+     "role": "Other",
+     "bands": [
+      {
+       "kind": "S",
+       "min": 0,
+       "max": 0,
+       "label": "No function"
+      },
+      {
+       "kind": "S",
+       "min": 1,
+       "max": 127,
+       "label": "Continuous pan, fast to slow"
+      },
+      {
+       "kind": "S",
+       "min": 128,
+       "max": 128,
+       "label": "No function"
+      },
+      {
+       "kind": "S",
+       "min": 129,
+       "max": 255,
+       "label": "Reverse continuous pan, slow to fast"
+      }
+     ]
+    },
+    {
+     "name": "Continuous Tilt",
+     "role": "Other",
+     "bands": [
+      {
+       "kind": "S",
+       "min": 0,
+       "max": 0,
+       "label": "No function"
+      },
+      {
+       "kind": "S",
+       "min": 1,
+       "max": 127,
+       "label": "Continuous tilt, fast to slow"
+      },
+      {
+       "kind": "S",
+       "min": 128,
+       "max": 128,
+       "label": "No function"
+      },
+      {
+       "kind": "S",
+       "min": 129,
+       "max": 255,
+       "label": "Reverse continuous tilt, slow to fast"
+      }
+     ]
+    },
+    {
+     "name": "Pan/Tilt Speed",
+     "role": "Speed",
+     "bands": [
+      {
+       "kind": "V",
+       "min": 0,
+       "max": 255,
+       "label": "Fast to slow"
+      }
+     ]
+    },
+    {
+     "name": "CTC",
+     "role": "Color",
+     "bands": [
+      {
+       "kind": "S",
+       "min": 0,
+       "max": 0,
+       "label": "No function"
+      },
+      {
+       "kind": "S",
+       "min": 1,
+       "max": 255,
+       "label": "Color temperature, 2800-10000K"
+      }
+     ]
+    },
+    {
+     "name": "Ring Color",
+     "role": "Color",
+     "bands": [
+      {
+       "kind": "S",
+       "min": 0,
+       "max": 0,
+       "label": "No function"
+      },
+      {
+       "kind": "S",
+       "min": 1,
+       "max": 2,
+       "label": "2700K"
+      },
+      {
+       "kind": "S",
+       "min": 3,
+       "max": 4,
+       "label": "3200K"
+      },
+      {
+       "kind": "S",
+       "min": 5,
+       "max": 6,
+       "label": "4200K"
+      },
+      {
+       "kind": "S",
+       "min": 7,
+       "max": 8,
+       "label": "5600K"
+      },
+      {
+       "kind": "S",
+       "min": 9,
+       "max": 10,
+       "label": "8000K"
+      },
+      {
+       "kind": "S",
+       "min": 11,
+       "max": 11,
+       "label": "Blue"
+      },
+      {
+       "kind": "S",
+       "min": 12,
+       "max": 48,
+       "label": "+Green"
+      },
+      {
+       "kind": "S",
+       "min": 49,
+       "max": 49,
+       "label": "Cyan"
+      },
+      {
+       "kind": "S",
+       "min": 50,
+       "max": 86,
+       "label": "-Blue"
+      },
+      {
+       "kind": "S",
+       "min": 87,
+       "max": 87,
+       "label": "Green"
+      },
+      {
+       "kind": "S",
+       "min": 88,
+       "max": 124,
+       "label": "+Red"
+      },
+      {
+       "kind": "S",
+       "min": 125,
+       "max": 125,
+       "label": "Yellow"
+      },
+      {
+       "kind": "S",
+       "min": 126,
+       "max": 162,
+       "label": "-Green"
+      },
+      {
+       "kind": "S",
+       "min": 163,
+       "max": 163,
+       "label": "Red"
+      },
+      {
+       "kind": "S",
+       "min": 164,
+       "max": 200,
+       "label": "+Blue"
+      },
+      {
+       "kind": "S",
+       "min": 201,
+       "max": 201,
+       "label": "Magenta"
+      },
+      {
+       "kind": "S",
+       "min": 202,
+       "max": 238,
+       "label": "-Red"
+      },
+      {
+       "kind": "S",
+       "min": 239,
+       "max": 239,
+       "label": "Blue"
+      },
+      {
+       "kind": "S",
+       "min": 240,
+       "max": 247,
+       "label": "Color fade"
+      },
+      {
+       "kind": "S",
+       "min": 248,
+       "max": 255,
+       "label": "Color snap"
+      }
+     ]
+    },
+    {
+     "name": "Beam Color",
+     "role": "Color",
+     "bands": [
+      {
+       "kind": "S",
+       "min": 0,
+       "max": 0,
+       "label": "No function"
+      },
+      {
+       "kind": "S",
+       "min": 1,
+       "max": 2,
+       "label": "2700K"
+      },
+      {
+       "kind": "S",
+       "min": 3,
+       "max": 4,
+       "label": "3200K"
+      },
+      {
+       "kind": "S",
+       "min": 5,
+       "max": 6,
+       "label": "4200K"
+      },
+      {
+       "kind": "S",
+       "min": 7,
+       "max": 8,
+       "label": "5600K"
+      },
+      {
+       "kind": "S",
+       "min": 9,
+       "max": 10,
+       "label": "8000K"
+      },
+      {
+       "kind": "S",
+       "min": 11,
+       "max": 11,
+       "label": "Blue"
+      },
+      {
+       "kind": "S",
+       "min": 12,
+       "max": 48,
+       "label": "+Green"
+      },
+      {
+       "kind": "S",
+       "min": 49,
+       "max": 49,
+       "label": "Cyan"
+      },
+      {
+       "kind": "S",
+       "min": 50,
+       "max": 86,
+       "label": "-Blue"
+      },
+      {
+       "kind": "S",
+       "min": 87,
+       "max": 87,
+       "label": "Green"
+      },
+      {
+       "kind": "S",
+       "min": 88,
+       "max": 124,
+       "label": "+Red"
+      },
+      {
+       "kind": "S",
+       "min": 125,
+       "max": 125,
+       "label": "Yellow"
+      },
+      {
+       "kind": "S",
+       "min": 126,
+       "max": 162,
+       "label": "-Green"
+      },
+      {
+       "kind": "S",
+       "min": 163,
+       "max": 163,
+       "label": "Red"
+      },
+      {
+       "kind": "S",
+       "min": 164,
+       "max": 200,
+       "label": "+Blue"
+      },
+      {
+       "kind": "S",
+       "min": 201,
+       "max": 201,
+       "label": "Magenta"
+      },
+      {
+       "kind": "S",
+       "min": 202,
+       "max": 238,
+       "label": "-Red"
+      },
+      {
+       "kind": "S",
+       "min": 239,
+       "max": 239,
+       "label": "Blue"
+      },
+      {
+       "kind": "S",
+       "min": 240,
+       "max": 247,
+       "label": "Color fade"
+      },
+      {
+       "kind": "S",
+       "min": 248,
+       "max": 255,
+       "label": "Color snap"
+      }
+     ]
+    },
+    {
+     "name": "Gobo",
+     "role": "Gobo",
+     "bands": [
+      {
+       "kind": "S",
+       "min": 0,
+       "max": 0,
+       "label": "No function"
+      },
+      {
+       "kind": "S",
+       "min": 1,
+       "max": 255,
+       "label": "Gobos (indexed)"
+      }
+     ]
+    },
+    {
+     "name": "LED Macro / Auto Program",
+     "role": "Other",
+     "bands": [
+      {
+       "kind": "S",
+       "min": 0,
+       "max": 15,
+       "label": "No function"
+      },
+      {
+       "kind": "S",
+       "min": 16,
+       "max": 135,
+       "label": "LED macros"
+      },
+      {
+       "kind": "S",
+       "min": 136,
+       "max": 255,
+       "label": "Auto programs"
+      }
+     ]
+    },
+    {
+     "name": "LED Macro / Auto Program Speed",
+     "role": "Speed",
+     "bands": [
+      {
+       "kind": "S",
+       "min": 0,
+       "max": 127,
+       "label": "Auto speed, fast to slow, clockwise"
+      },
+      {
+       "kind": "S",
+       "min": 128,
+       "max": 128,
+       "label": "Hold"
+      },
+      {
+       "kind": "S",
+       "min": 129,
+       "max": 255,
+       "label": "Auto speed, slow to fast, counter-clockwise"
+      }
+     ]
+    },
+    {
+     "name": "LED Built-in Delay",
+     "role": "Other",
+     "bands": [
+      {
+       "kind": "V",
+       "min": 0,
+       "max": 255,
+       "label": "Fast to slow"
+      }
+     ]
+    },
+    {
+     "name": "Background Color",
+     "role": "Color",
+     "bands": [
+      {
+       "kind": "S",
+       "min": 0,
+       "max": 0,
+       "label": "No function"
+      },
+      {
+       "kind": "S",
+       "min": 1,
+       "max": 2,
+       "label": "2700K"
+      },
+      {
+       "kind": "S",
+       "min": 3,
+       "max": 4,
+       "label": "3200K"
+      },
+      {
+       "kind": "S",
+       "min": 5,
+       "max": 6,
+       "label": "4200K"
+      },
+      {
+       "kind": "S",
+       "min": 7,
+       "max": 8,
+       "label": "5600K"
+      },
+      {
+       "kind": "S",
+       "min": 9,
+       "max": 10,
+       "label": "8000K"
+      },
+      {
+       "kind": "S",
+       "min": 11,
+       "max": 11,
+       "label": "Blue"
+      },
+      {
+       "kind": "S",
+       "min": 12,
+       "max": 48,
+       "label": "+Green"
+      },
+      {
+       "kind": "S",
+       "min": 49,
+       "max": 49,
+       "label": "Cyan"
+      },
+      {
+       "kind": "S",
+       "min": 50,
+       "max": 86,
+       "label": "-Blue"
+      },
+      {
+       "kind": "S",
+       "min": 87,
+       "max": 87,
+       "label": "Green"
+      },
+      {
+       "kind": "S",
+       "min": 88,
+       "max": 124,
+       "label": "+Red"
+      },
+      {
+       "kind": "S",
+       "min": 125,
+       "max": 125,
+       "label": "Yellow"
+      },
+      {
+       "kind": "S",
+       "min": 126,
+       "max": 162,
+       "label": "-Green"
+      },
+      {
+       "kind": "S",
+       "min": 163,
+       "max": 163,
+       "label": "Red"
+      },
+      {
+       "kind": "S",
+       "min": 164,
+       "max": 200,
+       "label": "+Blue"
+      },
+      {
+       "kind": "S",
+       "min": 201,
+       "max": 201,
+       "label": "Magenta"
+      },
+      {
+       "kind": "S",
+       "min": 202,
+       "max": 238,
+       "label": "-Red"
+      },
+      {
+       "kind": "S",
+       "min": 239,
+       "max": 239,
+       "label": "Blue"
+      },
+      {
+       "kind": "S",
+       "min": 240,
+       "max": 247,
+       "label": "Color fade"
+      },
+      {
+       "kind": "S",
+       "min": 248,
+       "max": 255,
+       "label": "Color snap"
+      }
+     ]
+    },
+    {
+     "name": "Background Dimmer",
+     "role": "Dimmer"
+    },
+    {
+     "name": "Ring Dimmer",
+     "role": "Dimmer"
+    },
+    {
+     "name": "Beam Dimmer",
+     "role": "Dimmer"
+    },
+    {
+     "name": "Ring Shutter",
+     "role": "Strobe",
+     "bands": [
+      {
+       "kind": "S",
+       "min": 0,
+       "max": 19,
+       "label": "Off"
+      },
+      {
+       "kind": "S",
+       "min": 20,
+       "max": 24,
+       "label": "On"
+      },
+      {
+       "kind": "S",
+       "min": 25,
+       "max": 69,
+       "label": "Strobe, fast to slow"
+      },
+      {
+       "kind": "S",
+       "min": 70,
+       "max": 89,
+       "label": "Strobe 100-0%, fast to slow"
+      },
+      {
+       "kind": "S",
+       "min": 90,
+       "max": 109,
+       "label": "Strobe 0-100%, fast to slow"
+      },
+      {
+       "kind": "S",
+       "min": 110,
+       "max": 129,
+       "label": "Random strobe, fast to slow"
+      },
+      {
+       "kind": "S",
+       "min": 130,
+       "max": 149,
+       "label": "Random strobe 100-0%, fast to slow"
+      },
+      {
+       "kind": "S",
+       "min": 150,
+       "max": 169,
+       "label": "Random strobe 0-100%, fast to slow"
+      },
+      {
+       "kind": "S",
+       "min": 170,
+       "max": 189,
+       "label": "Pulse strobe, fast to slow"
+      },
+      {
+       "kind": "S",
+       "min": 190,
+       "max": 209,
+       "label": "Random pulse strobe, fast to slow"
+      },
+      {
+       "kind": "S",
+       "min": 210,
+       "max": 229,
+       "label": "Strobe 0-100-0%, fast to slow"
+      },
+      {
+       "kind": "S",
+       "min": 230,
+       "max": 244,
+       "label": "Random pulse strobe, fast to slow"
+      },
+      {
+       "kind": "S",
+       "min": 245,
+       "max": 255,
+       "label": "On"
+      }
+     ]
+    },
+    {
+     "name": "Beam Shutter",
+     "role": "Strobe",
+     "bands": [
+      {
+       "kind": "S",
+       "min": 0,
+       "max": 19,
+       "label": "Off"
+      },
+      {
+       "kind": "S",
+       "min": 20,
+       "max": 24,
+       "label": "On"
+      },
+      {
+       "kind": "S",
+       "min": 25,
+       "max": 69,
+       "label": "Strobe, fast to slow"
+      },
+      {
+       "kind": "S",
+       "min": 70,
+       "max": 89,
+       "label": "Strobe 100-0%, fast to slow"
+      },
+      {
+       "kind": "S",
+       "min": 90,
+       "max": 109,
+       "label": "Strobe 0-100%, fast to slow"
+      },
+      {
+       "kind": "S",
+       "min": 110,
+       "max": 129,
+       "label": "Random strobe, fast to slow"
+      },
+      {
+       "kind": "S",
+       "min": 130,
+       "max": 149,
+       "label": "Random strobe 100-0%, fast to slow"
+      },
+      {
+       "kind": "S",
+       "min": 150,
+       "max": 169,
+       "label": "Random strobe 0-100%, fast to slow"
+      },
+      {
+       "kind": "S",
+       "min": 170,
+       "max": 189,
+       "label": "Pulse strobe, fast to slow"
+      },
+      {
+       "kind": "S",
+       "min": 190,
+       "max": 209,
+       "label": "Random pulse strobe, fast to slow"
+      },
+      {
+       "kind": "S",
+       "min": 210,
+       "max": 229,
+       "label": "Strobe 0-100-0%, fast to slow"
+      },
+      {
+       "kind": "S",
+       "min": 230,
+       "max": 244,
+       "label": "Random pulse strobe, fast to slow"
+      },
+      {
+       "kind": "S",
+       "min": 245,
+       "max": 255,
+       "label": "On"
+      }
+     ]
+    },
+    {
+     "name": "Zoom",
+     "role": "Zoom",
+     "bands": [
+      {
+       "kind": "V",
+       "min": 0,
+       "max": 255,
+       "label": "Wide to narrow"
+      }
+     ]
+    },
+    {
+     "name": "Control",
+     "role": "Other",
+     "bands": [
+      {
+       "kind": "S",
+       "min": 0,
+       "max": 9,
+       "label": "No function"
+      },
+      {
+       "kind": "S",
+       "min": 10,
+       "max": 14,
+       "label": "Blackout on Pan/Tilt"
+      },
+      {
+       "kind": "S",
+       "min": 15,
+       "max": 19,
+       "label": "Reserved"
+      },
+      {
+       "kind": "S",
+       "min": 20,
+       "max": 24,
+       "label": "RGBW (additive) color mixing mode"
+      },
+      {
+       "kind": "S",
+       "min": 25,
+       "max": 29,
+       "label": "CMY (subtractive) color mixing mode"
+      },
+      {
+       "kind": "S",
+       "min": 30,
+       "max": 49,
+       "label": "Reserved"
+      },
+      {
+       "kind": "S",
+       "min": 50,
+       "max": 54,
+       "label": "Pan reset"
+      },
+      {
+       "kind": "S",
+       "min": 55,
+       "max": 59,
+       "label": "Tilt reset"
+      },
+      {
+       "kind": "S",
+       "min": 60,
+       "max": 64,
+       "label": "Zoom reset"
+      },
+      {
+       "kind": "S",
+       "min": 65,
+       "max": 69,
+       "label": "Reserved"
+      },
+      {
+       "kind": "S",
+       "min": 70,
+       "max": 74,
+       "label": "Reset all"
+      },
+      {
+       "kind": "S",
+       "min": 75,
+       "max": 109,
+       "label": "Reserved"
+      },
+      {
+       "kind": "S",
+       "min": 110,
+       "max": 114,
+       "label": "Fast Pan/Tilt speed"
+      },
+      {
+       "kind": "S",
+       "min": 115,
+       "max": 119,
+       "label": "Slow Pan/Tilt speed"
+      },
+      {
+       "kind": "S",
+       "min": 120,
+       "max": 124,
+       "label": "Slow fan mode"
+      },
+      {
+       "kind": "S",
+       "min": 125,
+       "max": 129,
+       "label": "Full fan mode"
+      },
+      {
+       "kind": "S",
+       "min": 130,
+       "max": 134,
+       "label": "Auto fan mode"
+      },
+      {
+       "kind": "S",
+       "min": 135,
+       "max": 139,
+       "label": "Fast dimmer mode"
+      },
+      {
+       "kind": "S",
+       "min": 140,
+       "max": 144,
+       "label": "Slow dimmer mode"
+      },
+      {
+       "kind": "S",
+       "min": 145,
+       "max": 255,
+       "label": "Reserved"
+      }
+     ]
+    },
+    {
+     "name": "Main Red",
+     "role": "Red"
+    },
+    {
+     "name": "Main Green",
+     "role": "Green"
+    },
+    {
+     "name": "Main Blue",
+     "role": "Blue"
+    },
+    {
+     "name": "Main White",
+     "role": "White"
+    }
+   ]
+  }
+ ]
+}

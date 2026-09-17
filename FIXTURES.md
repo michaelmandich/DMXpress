@@ -1,7 +1,7 @@
 # Adding & Editing Fixture Definitions
 
 **Most fixtures don't need any of this.** The **🔌 Patch** window ships with a
-searchable library of ~2,100 fixture modes from ~630 models across 133
+searchable library of ~7,400 fixture modes from ~2,200 models across 210
 manufacturers, so if your light is from a known brand, search for it there and
 patch it — no code, no rebuild. The rest of this document covers hand-writing a
 built-in profile, which is now only needed for something the library doesn't
@@ -9,26 +9,122 @@ have (a no-name fixture, or a custom channel layout).
 
 ## The fixture library
 
-The library is `fixtures/library.json`, generated from the
-[Open Fixture Library](https://github.com/OpenLightingProject/open-fixture-library)
-(MIT) by `tools/ofl_to_library.py`. Unlike the hand-written profiles below,
-library fixtures carry an explicit `role` per channel taken from OFL's own
-capability data, so Amber/UV/CMY/gobo/prism channels are classified outright
-instead of guessed from the channel name.
+The library is `fixtures/library.json.gz`, built by `tools/build_library.py`
+from four sources, each preferred over the one after it:
 
-To refresh it against upstream OFL:
+| Source | Covers | Licence |
+|--------|--------|---------|
+| `fixtures/extra.json` | Entries written by hand (see below) | — |
+| [Open Fixture Library](https://github.com/OpenLightingProject/open-fixture-library) | ~640 models, described very precisely | MIT |
+| [QLC+ fixture definitions](https://github.com/mcallegari/qlcplus) | ~1,750 models, and far more *modes* per model | Apache-2.0 |
+| [GDTF Share](https://gdtf-share.com/) | The manufacturers' own data — needs a free account | per file |
+
+No upstream is complete on its own. OFL states what every channel does in
+structured capability data, so Amber/UV/CMY/gobo/prism channels classify
+outright instead of being guessed from the channel name. QLC+ has three times
+the models and is much better at listing **every channel mode a fixture
+offers** — the 6/7/8/13-channel variants of one par, the 9- and 15-channel
+modes of one moving head. GDTF is written by the manufacturers themselves and
+is the only source that reliably carries the current professional ranges:
+Robe's MegaPointe and BMFL, Ayrton's Khamsin and Huracán, the High End
+SolaFrames, the Vari-Lite VL series. All three carry an explicit `role` per
+channel, unlike the hand-written profiles below.
+
+The gobo *pictures* the 3D stage projects through a beam are a separate
+catalogue with its own build — see [GOBOS.md](GOBOS.md). It joins onto these
+entries by manufacturer and model, so nothing here needs to know about it.
+
+A mode is left out when an earlier source already has the same maker and model
+at the same channel count, so you get one row per real choice rather than
+four. **The order is not only about quality:** a patched show stores the
+library id of the mode it was patched with, so a source may only ever *add*
+ids, never displace them. Don't reorder the sources without checking that
+every id from the previous build survives.
+
+### Rebuilding it
 
 ```sh
 curl -L -o ofl.tar.gz \
     https://github.com/OpenLightingProject/open-fixture-library/archive/refs/heads/master.tar.gz
-tar xzf ofl.tar.gz --strip-components=1 open-fixture-library-master/fixtures
-python3 tools/ofl_to_library.py fixtures/ fixtures/library.json
+curl -L -o qlc.tar.gz \
+    https://github.com/mcallegari/qlcplus/archive/refs/heads/master.tar.gz
+mkdir -p build/ofl build/qlc
+tar xzf ofl.tar.gz --strip-components=1 -C build/ofl open-fixture-library-master/fixtures
+tar xzf qlc.tar.gz --strip-components=1 -C build/qlc qlcplus-master/resources/fixtures
+python3 tools/build_library.py build/ofl/fixtures build/qlc/resources/fixtures \
+    fixtures/library.json.gz
 cargo test fixturedb    # checks every entry is still patchable
 ```
 
-Known gap: modes built from a pixel matrix (LED battens addressed per-pixel)
-are skipped, because expanding OFL's template-channel blocks needs the matrix
-geometry. Those fixtures still appear if they have a non-matrix mode.
+Give it an output path without the `.gz` to get the same data uncompressed —
+14 MB, but far easier to read when you're checking a conversion. DMXpress
+loads `library.json.gz` and only falls back to a plain `library.json` when
+there's no `.gz` at all.
+
+### Adding GDTF
+
+GDTF Share is free but its API needs an account, so the files aren't fetched
+automatically. Register at [gdtf-share.com](https://gdtf-share.com/), then:
+
+```sh
+pip install pygdtf
+python3 tools/gdtf_fetch.py build/gdtf --list-manufacturers   # look first
+python3 tools/gdtf_fetch.py build/gdtf                        # then pull
+python3 tools/build_library.py build/ofl/fixtures build/qlc/resources/fixtures \
+    fixtures/library.json.gz --gdtf build/gdtf
+```
+
+`gdtf_fetch.py` prompts for your login (or reads `GDTF_USER` and
+`GDTF_PASSWORD`), keeps only the newest revision of each fixture, and skips
+files it already has, so an interrupted run just needs running again. A full
+pull is thousands of requests against a free community service — it leaves
+0.4 s between them, and `--manufacturer Robe --manufacturer Ayrton` narrows it
+to the brands you actually need.
+
+GDTF names its channels to a published attribute standard, and
+`gdtf_to_library.py` maps those names onto DMXpress roles by shape rather than
+by a fixed list, so attributes it has never seen still classify. The
+order-sensitive cases are pinned by a self-check:
+
+```sh
+python3 tools/gdtf_to_library.py --check
+```
+
+The conversion also prints every attribute that fell through to `Other`, most
+common first — worth a glance after a big pull, since that's where a missing
+rule shows up.
+
+GDTF files are published by each manufacturer under their own terms, which is
+why they are fetched rather than bundled. Check before redistributing a build
+whose library was made with `--gdtf`.
+
+### Adding a fixture the converters can't reach
+
+Anything hand-transcribed goes in **`fixtures/extra.json`**, never straight
+into the generated library — a rebuild would silently drop it. It's the same
+format as a library entry:
+
+```json
+{
+  "id": "chauvet-professional/maverick-mk-pyxis/26ch",
+  "manufacturer": "Chauvet Professional",
+  "model": "Maverick MK Pyxis",
+  "mode": "Basic",
+  "category": "Moving Head",
+  "pan_range": 540.0, "tilt_range": 270.0, "beam_width": 58.4,
+  "channels": [
+    { "name": "Pan", "role": "Pan" },
+    { "name": "Color Wheel", "role": "Color",
+      "bands": [{ "kind": "S", "min": 0, "max": 9, "label": "Open" }] }
+  ]
+}
+```
+
+`role` is the exact Rust `Role` variant (`Pan`, `PanFine`, `Uv`, `Other`…).
+Leave `bands` off unless the channel has labelled steps worth showing — a lone
+unlabelled 0–255 band means the same thing as none, so the library omits them.
+An entry here also *overrides* both upstreams for that maker/model/channel
+count, which is how you correct a bad generated chart.
 
 ## Hand-written profiles
 

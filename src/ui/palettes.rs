@@ -8,7 +8,6 @@ use std::time::{Duration, Instant};
 
 use eframe::egui;
 
-use super::{apply_zoom, zoom_controls};
 use crate::app::{App, CycleFade, Ramp};
 use crate::palette::{self, Feature, Palette, PaletteSeq, SeqPattern};
 use crate::showbuddy::Role;
@@ -371,17 +370,17 @@ impl App {
         let mut do_folder_add = false;
         let mut do_folder_delete: Option<String> = None;
 
+        let mut zoom_level = self.zoom.palettes;
         super::floating_panel(
             ctx,
             "palettes",
             "Palettes",
             &mut open,
             &mut popped,
+            Some(&mut zoom_level),
             [360.0, 340.0],
             [screen.right() - 400.0, 180.0],
             |ui| {
-                zoom_controls(ui, &mut self.zoom.palettes);
-                apply_zoom(ui, self.zoom.palettes);
 
                 // Feature tabs.
                 ui.horizontal_wrapped(|ui| {
@@ -635,12 +634,12 @@ impl App {
                 ui.horizontal(|ui| {
                     ui.label("Spacing");
                     ui.add(
-                        egui::Slider::new(&mut self.cycle_spread, 0.0..=1.0)
+                        egui::Slider::new(&mut self.cycle_spread, 0.0..=2.0)
                             .show_value(false),
                     )
                     .on_hover_text(
-                        "0 = all lights change together, 1 = the whole cycle \
-                         spread across the rig",
+                        "Spacing: 0 = all lights change together · 1 = the whole cycle \
+                         spread across the rig · 2 = scattered, no pattern left",
                     );
                     ui.label("Snap");
                     ui.add(
@@ -987,6 +986,7 @@ impl App {
                 });
             },
         );
+        self.zoom.palettes = zoom_level;
         self.show_palettes = open;
         if popped {
             self.popped_out.insert("palettes");

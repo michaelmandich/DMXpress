@@ -187,7 +187,13 @@ impl App {
             .default_size([430.0, 480.0])
             .default_pos([screen.right() - 470.0, 120.0])
             .show(ctx, |ui| {
-                zoom_controls(ui, &mut self.zoom.scenes);
+                // A bounded row: a bare right-to-left layout would claim the
+                // window's whole remaining height.
+                ui.horizontal(|ui| {
+                    ui.with_layout(egui::Layout::right_to_left(egui::Align::Center), |ui| {
+                        zoom_controls(ui, &mut self.zoom.scenes);
+                    });
+                });
                 apply_zoom(ui, self.zoom.scenes);
 
                 theme::section(ui, "Capture");

@@ -34,6 +34,18 @@ pub(crate) struct EncoderChannel {
     pub addrs: Vec<usize>,
 }
 
+/// Move `cur` by `delta` whole bands of a stepped channel, landing in the
+/// middle of the band reached. Fewer than two bands: nothing to step.
+pub(crate) fn step_bands(bands: &[(u8, u8)], cur: u8, delta: i32) -> u8 {
+    if bands.len() < 2 {
+        return cur;
+    }
+    let i = bands.iter().position(|&(lo, hi)| cur >= lo && cur <= hi).unwrap_or(0) as i32;
+    let j = (i + delta).clamp(0, bands.len() as i32 - 1) as usize;
+    let (lo, hi) = bands[j];
+    ((lo as u16 + hi as u16) / 2) as u8
+}
+
 /// What the next Clear press removes.
 #[derive(Debug, Clone, Copy, PartialEq, Eq)]
 pub(crate) enum ClearStage {
@@ -71,11 +83,7 @@ impl App {
                     continue;
                 }
                 let role = ch.role();
-                let key = if role.tag().is_empty() {
-                    format!("n:{}", ch.name.to_lowercase())
-                } else {
-                    format!("r:{}", role.tag())
-                };
+                let key = crate::ui::chanrows::role_key(role, &ch.name);
                 match index.get(&key) {
                     Some(&p) => out[p].addrs.push(addr - 1),
                     None => {
@@ -166,13 +174,7 @@ impl App {
         for &a in &ch.addrs {
             let cur = self.encoder_value(a);
             let new = if bands.len() > 1 {
-                let i = bands
-                    .iter()
-                    .position(|&(lo, hi)| cur >= lo && cur <= hi)
-                    .unwrap_or(0) as i32;
-                let j = (i + delta).clamp(0, bands.len() as i32 - 1) as usize;
-                let (lo, hi) = bands[j];
-                ((lo as u16 + hi as u16) / 2) as u8
+                step_bands(&bands, cur, delta)
             } else {
                 (cur as i32 + delta * STEP).clamp(0, 255) as u8
             };
@@ -275,5 +277,22 @@ impl App {
             ClearStage::Effects => self.clear_effects(),
             ClearStage::Blackout => self.blackout_all(),
         }
+    }
+}
+
+#[cfg(test)]
+mod tests {
+    use super::step_bands;
+
+    #[test]
+    fn bands_step_whole_slots_and_stop_at_the_ends() {
+        let bands = [(0u8, 9u8), (10, 19), (20, 255)];
+        assert_eq!(step_bands(&bands, 4, 1), 14);
+        assert_eq!(step_bands(&bands, 14, 1), 137);
+        assert_eq!(step_bands(&bands, 137, 1), 137);
+        assert_eq!(step_bands(&bands, 4, -1), 4);
+        assert_eq!(step_bands(&bands, 14, -1), 4);
+        assert_eq!(step_bands(&[], 77, 1), 77);
+        assert_eq!(step_bands(&[(0, 255)], 77, 1), 77);
     }
 }

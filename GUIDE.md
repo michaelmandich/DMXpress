@@ -40,8 +40,8 @@ names. If you ever read MA tutorials, here is the translation table:
 │  Top toolbar:  Universe · ArtPoll · Reload patch · 📡🌊⏱🌀… │  ← open/close everything here
 ├───────────┬─────────────────────────────────┬───────────────┤
 │ Fixtures  │        3D Stage view            │   Inspector   │
-│  (left)   │   (live beams, click to select) │   (presets,   │
-│           ├─────────────────────────────────┤   setups)     │
+│  (left)   │   (live beams, click to select) │  (five tabs — │
+│           ├─────────────────────────────────┤   see below)  │
 │  click to │   Channel control               │               │
 │  select   │   (sliders for selected fixtures)│              │
 ├───────────┴─────────────────────────────────┴───────────────┤
@@ -54,6 +54,65 @@ names. If you ever read MA tutorials, here is the translation table:
 Floating windows (Palettes, Phasers, Stacks, Groups, Views, Log, …) open on top
 when you toggle their toolbar button. Every panel has its own little **zoom
 control** (the `−  100%  +`) in its corner.
+
+### The Inspector (right panel)
+
+The Inspector is five tabs. Press **Alt + 1…5** to jump between them, **Alt + I**
+to fold the whole panel away, or roll the wheel over the tab strip. Under the
+strip a **context line** always says what is picked — "6 lights · SlimPAR ×6",
+"F34 truss 2 · 4 / 24 slots" — with the live colour beside it; click it to jump
+to **Selection**, press the ✕ to drop the selection, or right-click it for
+select-all / same-type.
+
+**Presets** — your stored looks, as coloured pads. Each pad takes its colour
+from the look itself, so a warm wash is amber and a cold blue is blue, with
+little badges for the ones carrying oscillators, phasers or a colour cycle.
+Type a name and press **Store look** to keep what the Programmer is holding.
+Drop pads into **folders**, pin the ones you reach for, search them, and choose
+whether a recall cuts, fades over *n* seconds, or follows the Transition window.
+The **board** button opens a page of pads laid out exactly like the Stream
+Deck's Presets page; turn **Arrange** on and you can click a pad to point it at
+a preset, drag pads to swap them, right-click to clear one, and set each pad's
+colour, four-letter label and artwork. **Blackout** lives at the bottom.
+
+**Selection** — everything about the lights you have picked. The top card
+summarises them and the transform grid edits X / Y / Z, yaw, pitch and size,
+marking a row **mixed** when the selected lights disagree. Below that are the
+tools: a **nudge** pad (and the arrow keys over the stage), **align** and
+**distribute** on any axis, **mirror**, **arrange** into a line, arc, circle or
+grid, **aim** (straight down, level, at stage centre, at a point, or fanned),
+set a common height, and **hang** the selection onto a tower or truss, choosing
+the face and how the lights fill the free slots. A tower or truss picked on its
+own gets its own editor here instead.
+
+**Stage** — how you look at the rig. Switch between **Orbit** and **Fly**, jump
+to a stored angle with the quick-view pads (Iso, Front, Back, Left, Right, Top
+and a front-of-house seat), and **frame** either the selection or the whole rig.
+Save the angle you like as a named camera, give it a number key, and press
+**1…9** over the stage to fly back to it. The **Show** block turns individual
+things on and off — floor grid, stage box, towers, truss, beams, floor pools,
+name labels, the gizmo — with All / Clean / Plan presets, and the stage box's
+own width, depth and height sit underneath.
+
+**Build** — the rig itself. Eight pads build a **tower**, a straight **F34**
+run, a **radius** run, or a whole **goalpost**, **box**, **ring**, **tower pair**
+or **arch** in one press; the number keys **1…8** do the same. Standard lengths,
+radii, arcs and heights are one tap each. Under the pads, an **outliner** lists
+every element, folding a composite's parts under one heading with the lights
+hung on them; click to select, rename, hide, mirror, duplicate or point the
+camera at one. **Setups** at the bottom save and reload a whole named rig.
+
+**Patch** — the fast way in. Pick a fixture from your **recents**, the built-in
+profiles, or the library (search it, filter by moving head / par / bar / strobe),
+and a preview card shows the mode, channel count, pan and tilt ranges and what
+each channel does. Set a count and a start address — **next free** and **first
+gap** find one for you, and it will skip over addresses already taken and keep a
+fixture from straddling the two universes. Name them once and they are numbered
+for you, continuing the series already in the rig. Then choose where they land:
+a line, grid, arc, circle, on the floor, or hung straight onto a truss or tower,
+which it will build to fit if you ask. Underneath, the **rig** is grouped by
+type with how full each universe is, so you can add one more of something, select
+them all, or unpatch them in two clicks.
 
 ---
 
@@ -87,6 +146,12 @@ Selection modifiers (in the Fixtures list):
 
 The number of selected fixtures drives what the **Channel control** grid shows.
 
+The Fixtures grid shows each light as a tile in its live colour. The picker at
+the top of the panel changes the tile style — **Lit** (plain colour chips),
+**Amp jewel** (pilot-light jewels in chrome bezels), **Future** (chamfered
+slabs with a glowing bar), **Glass**, **Chrome** or **Pillow** — and the
+choice is remembered in `settings.json`.
+
 ---
 
 ## 5. Step 2 — Set values (the Programmer)
@@ -108,10 +173,20 @@ what sit on top of playback. You'll see a running count like
 > window, where you can make it move on its own. Phasers (below) are the easy
 > way to do this across a whole selection.
 
-**Presets (Inspector, right side):** if your ShowBuddy show has presets, click
-one to drop a whole-rig look straight into the Programmer.
+**Presets (Inspector → Presets):** click a pad to drop a whole-rig look straight
+into the Programmer, and **Store look** to keep the one you are holding now.
+Your ShowBuddy presets, if the show has any, are in the **ShowBuddy banks**
+section of the same tab.
 
 ---
+
+### The channel list, in detail
+
+Under the stage, the selected light's channels (or, with several lights selected, each channel *type* across all of them) sit under headings in console order: Dimmer, Position, Color, Beam, Focus, Control, Other. Click a heading to fold it; its Arm / 0 / FL buttons act on the whole group. **By address** flattens the list into DMX order, and the filter box narrows it by name, tag, group or address - press Enter there to arm everything that matches.
+
+Each row is a **level bar**: click anywhere on it and the level jumps there, keep the button down and it follows the pointer. Hold Shift for a fine drag (six pixels per step), Alt + wheel for ±1, Alt + Shift + wheel for ±10. Stepped channels (gobo and colour wheels) show their slot boundaries as ticks and their current slot name beside the bar.
+
+Clicking a name **arms** the row. Armed channels feed the Oscillator window and the arrow keys: with the pointer over the list, ↑ ↓ (or → ←) nudge every armed channel by one, Shift by ten, PgUp / PgDn hop a whole slot on stepped channels, Home / End go to 0 / 255. Arming tactics: Shift-click for a range, Ctrl-click to toggle, Alt-click for every row of the same role, double-click for the whole group, **All / None / Invert** in the toolbar, **Similar** to add every row like the armed ones (same role, group, cell, coarse + fine partner, or name), and a right-click menu on any name with the same choices. The pill at the right of the toolbar shows how many channels are armed; **clear** disarms them all.
 
 ## 6. Step 3 — Groups (save selections)
 
@@ -200,7 +275,7 @@ The editor at the top builds one phaser:
 | **Amount** | Depth of the effect (how far it swings) |
 | **Shape** | Waveform character |
 | **Rate** | Speed, as a musical subdivision (or **Free** for a raw speed) |
-| **Spread** | How much the phase fans out across the fixtures |
+| **Spread** | Spacing, from order to chaos: 0 keeps every light together, 1 fans one wave across the fixtures, 2 scatters them so every light is on its own phase. The Palettes cycle's Spacing (and the deck's SP keys) work the same way |
 | **Wings** | Mirror the spread into 1–8 symmetric groups |
 | **Invert** | Flip direction |
 
@@ -219,6 +294,12 @@ DMXpress ships with starter phasers: **Dimmer Chase**, **Dimmer Wings**,
 > cue (below).
 
 ---
+
+### Design here, play from the board
+
+The Phasers window is the workbench: pick the channels to oscillate, shape the motion, Apply it to the selection, and **Store** it (or **Store to board**). Its **Library** lists everything stored, one line each, with a search box and filters (Light, Movement, Snapshots, Running). Click a name to edit it in place, the play button starts it, and **+ Board** puts it on a pad.
+
+The **Board** window (toolbar → Board) is where you play: a page of pads laid out exactly like the Stream Deck's Phaser page, with ALL, CLR and TAP in the same corners. Press a pad to start or stop its phaser; a running pad glows with a white ring. **Arrange** lets you click a pad to assign a phaser, symbol and colour, drag pads onto each other to swap them, and right-click to clear; **Fill...** lays in the movement presets and path shapes. Pop the board out into its own window and keep designing in the Phasers window beside it - anything you store to the board appears on the next free pad, and on the deck.
 
 ## 9. Step 6 — Stacks (record cues & play them back)
 
@@ -381,6 +462,12 @@ automatically (see below) — reopen DMXpress and it's all still there.
 | `views.json` | Your saved Views |
 
 Plus the ShowBuddy patch/presets DMXpress loads on startup.
+
+### Backups, export and undo
+
+- **Undo anything.** `Ctrl+Shift+Z` (`Cmd+Shift+Z` on a Mac) takes back the last thing you did anywhere in the console - a slider, a stored palette, a recorded cue, a light you moved, a show you loaded - up to ten steps. `Ctrl+Shift+Y` redoes. The two arrows at the left of the toolbar do the same and show how many steps are left. A drag or a typed name counts as one step.
+- **Automatic backups.** Every minute in which something changed, and when you quit, the whole show is written to `backups/` next to your show files; the newest 20 are kept. Open **Configs** to see them, back up on demand, or **Restore** one. A restore backs up the current show first, and can itself be undone.
+- **Move a show.** **Configs → Export show...** writes the whole show as one file into `exports/` and opens the folder. On another machine, drop that file onto the DMXpress window (or paste its path in **Configs → Import...**) to load it. The show being replaced is backed up first.
 
 ### Suggested order of operations
 1. Patch & Art-Net → 2. Groups → 3. **Palettes** (color + position first) →

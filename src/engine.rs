@@ -8,7 +8,7 @@
 use crate::net::Frame;
 
 /// How a layer folds into everything beneath it.
-#[derive(Clone, Copy, PartialEq, Eq, Default)]
+#[derive(Clone, Copy, Debug, PartialEq, Eq, Default)]
 pub(crate) enum Blend {
     /// Crossfade toward this layer's value by its weight — the layer takes
     /// over the channel outright at full weight (LTP).

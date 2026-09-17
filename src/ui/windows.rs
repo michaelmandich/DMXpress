@@ -3,7 +3,6 @@
 
 use eframe::egui;
 
-use super::{apply_zoom, zoom_controls};
 use crate::app::App;
 use crate::net;
 use crate::oscillator::{
@@ -54,6 +53,7 @@ impl App {
             "Settings",
             &mut open,
             &mut popped,
+            None,
             [360.0, 460.0],
             [80.0, 80.0],
             |ui| {
@@ -150,6 +150,16 @@ impl App {
                 ui.weak("Pitch -90 = down, 90 = up, 0 = toward audience.");
                 ui.add_space(10.0);
                 ui.separator();
+                if ui
+                    .button("Network…")
+                    .on_hover_text(
+                        "Art-Net / sACN output setup, node discovery, a troubleshooting \
+                         checklist, test patterns and a packet monitor",
+                    )
+                    .clicked()
+                {
+                    self.network.open = true;
+                }
                 ui.weak(format!("DMXpress v{}", env!("CARGO_PKG_VERSION")));
             },
         );
@@ -174,17 +184,17 @@ impl App {
         let mut open = self.show_transition;
         let mut popped = self.popped_out.contains("transition");
         let mut stop_at_current = false;
+        let mut zoom_level = self.zoom.transition;
         super::floating_panel(
             ctx,
             "transition",
             "Transition",
             &mut open,
             &mut popped,
+            Some(&mut zoom_level),
             [340.0, 320.0],
             [screen.right() - 390.0, 430.0],
             |ui| {
-                zoom_controls(ui, &mut self.zoom.transition);
-                apply_zoom(ui, self.zoom.transition);
 
                 if let Some(progress) = active_progress {
                     ui.add(
@@ -280,6 +290,7 @@ impl App {
                 }
             },
         );
+        self.zoom.transition = zoom_level;
         if stop_at_current {
             self.transition_run = None;
             self.chase.enabled = false;
@@ -306,17 +317,17 @@ impl App {
         let screen = ctx.screen_rect();
         let mut open = self.show_osc;
         let mut popped = self.popped_out.contains("oscillator");
+        let mut zoom_level = self.zoom.osc;
         super::floating_panel(
             ctx,
             "oscillator",
             "Oscillator",
             &mut open,
             &mut popped,
+            Some(&mut zoom_level),
             [320.0, 280.0],
             [screen.right() - 360.0, 120.0],
             |ui| {
-                zoom_controls(ui, &mut self.zoom.osc);
-                apply_zoom(ui, self.zoom.osc);
 
                 // Global engine controls (shown only while oscillators run).
                 if self.live.is_animated() {
@@ -496,6 +507,7 @@ impl App {
                 }
             },
         );
+        self.zoom.osc = zoom_level;
         self.show_osc = open;
         if popped {
             self.popped_out.insert("oscillator");

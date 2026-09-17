@@ -125,7 +125,8 @@ pub fn save_waveforms(waves: &[CustomWaveform]) {
 
 /// One channel's oscillator (ShowBuddy-style: Enabled/Invert/Amount/Offset/
 /// Speed/Shape).
-#[derive(Debug, Clone, PartialEq)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[serde(default)]
 pub(crate) struct Osc {
     pub enabled: bool,
     pub invert: bool,

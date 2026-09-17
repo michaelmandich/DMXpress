@@ -534,6 +534,11 @@ impl Default for Phaser {
 
 /// Phase offset for fixture `k` of `n`, fanning `spread` across the selection
 /// and mirroring it into `wings` symmetric groups.
+///
+/// `spread` is one knob from order to chaos: 0 keeps every light on the
+/// same phase, 1 fans exactly one cycle along the selection (a wave), and
+/// past 1 the wave breaks up — see [`scatter_offset`] — until at 2 every
+/// light sits on its own phase with no pattern left to see.
 pub fn spread_phase(k: usize, n: usize, spread: f32, wings: usize) -> f32 {
     if n <= 1 {
         return 0.0;
@@ -545,7 +550,64 @@ pub fn spread_phase(k: usize, n: usize, spread: f32, wings: usize) -> f32 {
     if wi % 2 == 1 {
         pos = 1.0 - pos; // mirror alternate wings
     }
-    pos * spread
+    scatter_offset(k, pos, spread)
+}
+
+/// Turn a light's place in the order (`pos`, 0..1) into its phase offset for
+/// a spacing of `spread`. Up to 1 the offset is simply `pos * spread`: the
+/// pattern fans out. Past 1 the wave cross-fades into a golden-ratio
+/// scatter, so neighbours drift apart and, at 2, the order is gone entirely
+/// — a scramble that never clumps the way real random numbers do. (It is a
+/// cross-fade, not a sum: wave plus scatter makes a near-rational step that
+/// lands some lights on top of each other.) Existing shows with spacings up
+/// to 1 look the same.
+pub fn scatter_offset(k: usize, pos: f32, spread: f32) -> f32 {
+    let spread = spread.max(0.0);
+    let fan = spread.min(1.0);
+    let chaos = (spread - 1.0).clamp(0.0, 1.0);
+    if chaos <= 0.0 {
+        return pos * fan;
+    }
+    (pos * fan * (1.0 - chaos) + chaos * scatter(k)).rem_euclid(1.0)
+}
+
+/// Where light `k` lands when the order is thrown away.
+pub fn scatter(k: usize) -> f32 {
+    (k as f32 * 0.618_034).fract()
+}
+
+/// The Phasers window's library filter.
+#[derive(Debug, Clone, Copy, PartialEq, Eq, Default)]
+pub enum LibFilter {
+    #[default]
+    All,
+    /// Dimmer, colour, strobe: everything that is not movement.
+    Light,
+    Movement,
+    /// Poses, holds, locks and FX tiles: stored snapshots, not waves.
+    Snapshots,
+    Running,
+}
+
+impl LibFilter {
+    pub const ALL: [Self; 5] = [Self::All, Self::Light, Self::Movement, Self::Snapshots, Self::Running];
+
+    pub fn label(self) -> &'static str {
+        match self {
+            Self::All => "All",
+            Self::Light => "Light",
+            Self::Movement => "Movement",
+            Self::Snapshots => "Snapshots",
+            Self::Running => "Running",
+        }
+    }
+}
+
+impl Phaser {
+    /// A stored pose, hold, lock or FX tile rather than a wave.
+    pub fn is_snapshot(&self) -> bool {
+        !self.static_pos.is_empty() || !self.hold.is_empty()
+    }
 }
 
 /// A handful of ready-to-use phasers, seeded on first run.
@@ -827,5 +889,38 @@ mod tests {
         assert_eq!(spread_phase(0, 3, 1.0, 1), 0.0);
         assert!((spread_phase(1, 3, 1.0, 1) - 1.0 / 3.0).abs() < 0.001);
         assert!((spread_phase(2, 3, 1.0, 1) - 2.0 / 3.0).abs() < 0.001);
+    }
+
+    /// Past one wave the spacing scatters: at the top every light is on its
+    /// own phase and no two neighbours sit close, so a rig of any size
+    /// flips about instead of rolling.
+    #[test]
+    fn spread_past_one_wave_scatters_the_rig() {
+        let n = 40;
+        // At one wave neighbours are a fortieth of a cycle apart: a roll.
+        let wave: Vec<f32> = (0..n).map(|k| spread_phase(k, n, 1.0, 1)).collect();
+        for w in wave.windows(2) {
+            assert!((w[1] - w[0]).abs() < 0.03, "wave neighbours are close");
+        }
+        // Fully scattered: neighbours are far apart and no phase repeats.
+        let chaos: Vec<f32> = (0..n).map(|k| spread_phase(k, n, 2.0, 1)).collect();
+        for w in chaos.windows(2) {
+            let d = (w[1] - w[0]).rem_euclid(1.0);
+            let d = d.min(1.0 - d);
+            assert!(d > 0.2, "scattered neighbours differ: {} vs {}", w[0], w[1]);
+        }
+        for (i, a) in chaos.iter().enumerate() {
+            for b in &chaos[i + 1..] {
+                assert!((a - b).abs() > 0.005, "every light has its own phase");
+            }
+        }
+        // Halfway there is still a wave, just a broken one.
+        let mid: Vec<f32> = (0..n).map(|k| spread_phase(k, n, 1.5, 1)).collect();
+        assert!(mid.iter().zip(&wave).any(|(m, w)| (m - w).abs() > 0.1));
+        assert!(mid.iter().zip(&chaos).any(|(m, c)| (m - c).abs() > 0.1));
+        // Every offset stays a phase.
+        for v in chaos.iter().chain(&mid) {
+            assert!((0.0..1.0).contains(v));
+        }
     }
 }

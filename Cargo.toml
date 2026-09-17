@@ -1,6 +1,6 @@
 [package]
 name = "dmxpress"
-version = "0.1.2"
+version = "0.1.3"
 edition = "2021"
 license = "MPL-2.0"
 
@@ -17,6 +17,11 @@ serde_json = "1"
 bytemuck = { version = "1", features = ["derive"] }
 # Only used to decode the embedded logo at startup.
 image = { version = "0.25", default-features = false, features = ["png"] }
+# Unpacks the bundled fixture library, which is ~14 MB of JSON and compresses
+# to under 1. Already in the tree as an `image` dependency.
+flate2 = "1"
+# Unpacks the bundled gobo catalogue (`fixtures/gobos.tar.gz`, see `gobo.rs`).
+tar = "0.4"
 # Audio-reactive triggers: capture (incl. WASAPI loopback) and spectrum.
 cpal = "0.15"
 realfft = "3"
@@ -25,6 +30,8 @@ dirs = "5"
 elgato-streamdeck = "0.13"
 # Anti-aliased text on the Stream Deck keys/strip (same crate epaint uses).
 ab_glyph = "0.2"
+# Sandboxed plugin scripts: layers, custom windows and theme tints (plugin.rs).
+rhai = "1"
 
 [profile.release]
 opt-level = 3

@@ -136,6 +136,7 @@ impl App {
             "Beat",
             &mut open,
             &mut popped,
+            None,
             [300.0, 220.0],
             [screen.center().x - 140.0, 120.0],
             |ui| {

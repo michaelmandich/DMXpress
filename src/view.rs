@@ -38,6 +38,26 @@ pub struct View {
     pub command: bool,
     pub log: bool,
     pub osc: bool,
+    /// Docked panels that are open rather than folded away. Views saved
+    /// before folding existed leave every panel open.
+    #[serde(default = "yes")]
+    pub fixtures: bool,
+    #[serde(default = "yes")]
+    pub inspector: bool,
+    #[serde(default = "yes")]
+    pub channels: bool,
+    #[serde(default)]
+    pub phaser_board: bool,
+    /// The Inspector tab the view was saved on. Older views leave it unset.
+    #[serde(default)]
+    pub inspector_tab: Option<crate::ui::inspector::InspectorTab>,
+    /// The Presets board window. Older views leave it closed.
+    #[serde(default)]
+    pub preset_board: bool,
+}
+
+fn yes() -> bool {
+    true
 }
 
 pub fn load_views() -> Vec<View> {

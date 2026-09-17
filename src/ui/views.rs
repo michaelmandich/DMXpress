@@ -2,7 +2,6 @@
 
 use eframe::egui;
 
-use super::{apply_zoom, zoom_controls};
 use crate::app::App;
 use crate::view::{self, View};
 
@@ -27,6 +26,12 @@ impl App {
             command: self.show_command,
             log: self.show_log,
             osc: self.show_osc,
+            fixtures: !self.collapsed.contains("fixtures"),
+            inspector: !self.collapsed.contains("inspector"),
+            channels: !self.collapsed.contains("channels"),
+            phaser_board: self.show_phaser_board,
+            inspector_tab: Some(self.insp.prefs.tab),
+            preset_board: self.show_preset_board,
         }
     }
 
@@ -50,6 +55,22 @@ impl App {
         self.show_command = v.command;
         self.show_log = v.log;
         self.show_osc = v.osc;
+        self.show_phaser_board = v.phaser_board;
+        if let Some(t) = v.inspector_tab {
+            self.insp.set_tab(t);
+        }
+        self.show_preset_board = v.preset_board;
+        for (key, open) in [
+            ("fixtures", v.fixtures),
+            ("inspector", v.inspector),
+            ("channels", v.channels),
+        ] {
+            if open {
+                self.collapsed.remove(key);
+            } else {
+                self.collapsed.insert(key);
+            }
+        }
         self.log.push(format!("View → {}", v.name));
     }
 
@@ -64,17 +85,17 @@ impl App {
         let mut do_delete: Option<usize> = None;
         let mut do_save = false;
 
+        let mut zoom_level = self.zoom.views;
         super::floating_panel(
             ctx,
             "views",
             "Views",
             &mut open,
             &mut popped,
+            Some(&mut zoom_level),
             [220.0, 300.0],
             [screen.left() + 80.0, 300.0],
             |ui| {
-                zoom_controls(ui, &mut self.zoom.views);
-                apply_zoom(ui, self.zoom.views);
 
                 ui.horizontal(|ui| {
                     ui.label("Name");
@@ -105,6 +126,7 @@ impl App {
                 }
             },
         );
+        self.zoom.views = zoom_level;
 
         self.show_views = open;
         if popped {

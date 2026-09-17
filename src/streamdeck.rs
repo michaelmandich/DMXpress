@@ -24,14 +24,15 @@ use crate::app::App;
 use crate::chase::ChaseKind;
 use crate::encoder::ClearStage;
 use crate::palette::{hsv, Feature, Palette, SeqPattern};
+use crate::preset_deck::{preset_deck_pages, PRESET_DECK_SLOTS};
 use crate::showbuddy::PresetBank;
 use crate::wheels::effect_islands;
 
 /// Which page the deck is currently showing — cycled by the Mode knob.
 #[derive(Debug, Clone, Copy, PartialEq, Eq, Hash, Default)]
 pub enum DeckPage {
-    /// Page 1: the ShowBuddy General banks, OFF, and the rainbows — whole
-    /// looks at one press.
+    /// Page 1: the Presets board's pages of pads, then (Page knob) the
+    /// ShowBuddy General banks, OFF and the rainbows as a last page.
     #[default]
     Presets,
     /// Palettes: colours, then (Page knob) gobos and prisms, picked into
@@ -39,6 +40,9 @@ pub enum DeckPage {
     Palettes,
     Phasers,
     Chases,
+    /// The raid grid on keys: one light per key, press to select. What
+    /// the other pages' effects land on.
+    Fixtures,
 }
 
 impl DeckPage {
@@ -47,7 +51,8 @@ impl DeckPage {
             DeckPage::Presets => DeckPage::Palettes,
             DeckPage::Palettes => DeckPage::Phasers,
             DeckPage::Phasers => DeckPage::Chases,
-            DeckPage::Chases => DeckPage::Presets,
+            DeckPage::Chases => DeckPage::Fixtures,
+            DeckPage::Fixtures => DeckPage::Presets,
         }
     }
 
@@ -57,6 +62,7 @@ impl DeckPage {
             DeckPage::Palettes => "PALETTES",
             DeckPage::Phasers => "PHASERS",
             DeckPage::Chases => "CHASES",
+            DeckPage::Fixtures => "FIXTURES",
         }
     }
 
@@ -67,10 +73,11 @@ impl DeckPage {
             DeckPage::Palettes => 2,
             DeckPage::Phasers => 3,
             DeckPage::Chases => 4,
+            DeckPage::Fixtures => 5,
         }
     }
 
-    pub const COUNT: usize = 4;
+    pub const COUNT: usize = 5;
 }
 
 /// The Palettes page's sub-pages, flipped by the Page knob. Colours carry
@@ -691,8 +698,12 @@ fn render_key(spec: &KeySpec, size: u32) -> DynamicImage {
     if let Some(label) = &spec.label {
         let fg = readable_on(spec.rgb);
         if art {
+            // One caption line under the artwork: a name split for the
+            // two-line layout is joined back up, or the break would draw
+            // as a notdef box.
+            let caption = label.replace('\n', " ");
             let (x0, x1) = ((0.10 * s) as i32, (0.90 * s) as i32);
-            draw_label_in(&mut img, x0, (0.66 * s) as i32, x1, (0.92 * s) as i32, label, fg);
+            draw_label_in(&mut img, x0, (0.66 * s) as i32, x1, (0.92 * s) as i32, &caption, fg);
         } else if let Some((top, bottom)) = label.split_once('\n') {
             // Two lines, for an island header written out in full.
             let (x0, x1) = ((0.08 * s) as i32, (0.92 * s) as i32);
@@ -1140,6 +1151,19 @@ fn draw_terrapin(img: &mut RgbImage, cx: f32, cy: f32, size: f32, mono: Option<[
 }
 
 /// A skull, with a rainbow arcing over it.
+/// A par can — the Fixtures page's creature: body, lens ring, and a warm
+/// beam spilling down and out.
+fn draw_lamp(img: &mut RgbImage, cx: f32, cy: f32, size: f32, mono: Option<[u8; 3]>) {
+    let r = size * 0.5;
+    let body = mono.unwrap_or([205, 210, 220]);
+    let beam = mono.unwrap_or([255, 226, 120]);
+    fill_rect(img, cx - 0.30 * r, cy - 0.95 * r, cx + 0.30 * r, cy - 0.34 * r, body);
+    fill_rect(img, cx - 0.42 * r, cy - 0.36 * r, cx + 0.42 * r, cy - 0.20 * r, body);
+    let (ly, by) = (cy - 0.18 * r, cy + 0.95 * r);
+    fill_tri(img, (cx - 0.30 * r, ly), (cx + 0.30 * r, ly), (cx + 0.85 * r, by), beam);
+    fill_tri(img, (cx - 0.30 * r, ly), (cx + 0.85 * r, by), (cx - 0.85 * r, by), beam);
+}
+
 fn draw_skull(img: &mut RgbImage, cx: f32, cy: f32, size: f32, mono: Option<[u8; 3]>) {
     let bone = mono.unwrap_or([235, 228, 210]);
     let shade = mono.unwrap_or([180, 170, 150]);
@@ -1260,6 +1284,7 @@ fn paint_panel(key: &PanelKey) -> RgbImage {
                 DeckPage::Palettes => canvas(0.0, 360.0, 0.34),
                 DeckPage::Phasers => canvas(110.0, 90.0, 0.32),
                 DeckPage::Chases => canvas(330.0, 75.0, 0.34),
+                DeckPage::Fixtures => canvas(200.0, 45.0, 0.34),
             };
             // The creature takes the left, the page's full name and its
             // place in the cycle fill the right.
@@ -1269,6 +1294,7 @@ fn paint_panel(key: &PanelKey) -> RgbImage {
                 DeckPage::Palettes => draw_rose(img, icx + dx, icy + dy, isz, mono),
                 DeckPage::Phasers => draw_bear(img, icx + dx, icy + dy, isz, mono),
                 DeckPage::Chases => draw_terrapin(img, icx + dx, icy + dy, isz, mono),
+                DeckPage::Fixtures => draw_lamp(img, icx + dx, icy + dy, isz, mono),
             });
             let (tx0, tx1) = ((pw * 0.47) as i32, (pw - 6.0 * s) as i32);
             outlined_label(&mut img, tx0, (8.0 * s) as i32, tx1, (54.0 * s) as i32, page.name(), paper, text_ow);
@@ -1872,9 +1898,10 @@ fn pattern_label(p: SeqPattern) -> &'static str {
 }
 
 /// The four discrete levels exposed for Spacing/Snap (deck keys aren't
-/// sliders), matching `cycle_spread`/`cycle_shape`'s 0..1 range. Spacing and
-/// Snap both step through the same four percentages, so each key's label is
-/// prefixed ("SP"/"SN") on top of the colour difference above.
+/// sliders). Snap uses them as they are (0..1); Spacing doubles them, since
+/// its knob runs 0..2 — 100 is the fully scattered end, not one wave. Both
+/// step through the same four percentages, so each key's label is prefixed
+/// ("SP"/"SN") on top of the colour difference above.
 const LEVELS: [(f32, &str); 4] = [(0.0, "0"), (0.33, "33"), (0.66, "66"), (1.0, "100")];
 
 fn level_num(v: f32) -> &'static str {
@@ -1886,7 +1913,7 @@ fn level_num(v: f32) -> &'static str {
 /// What one deck key currently shows/does. Rebuilt fresh every frame from
 /// `self.palettes`/`self.deck.kind()` so rendering and press-handling can
 /// never drift apart from each other.
-#[derive(Clone, Copy)]
+#[derive(Clone, Copy, Debug, PartialEq)]
 enum DeckItem {
     /// A ShowBuddy preset, by (bank, index) — the Presets page.
     Preset(usize, usize),
@@ -1897,6 +1924,8 @@ enum DeckItem {
     Tap,
     /// A slot index into `App.phaser_deck` (Phaser page only).
     PhaserPad(usize),
+    /// A slot index into `App.preset_deck` — the Presets page's board pages.
+    PresetPad(usize),
     /// Grab the whole rig, so a phaser applies to everything.
     SelectAll,
     /// The staged Clear: encoders, then effects, then blackout.
@@ -1924,6 +1953,61 @@ enum DeckItem {
     /// Show the chase's shape on the 3D stage, where it can be moved.
     ChaseShow,
     ChaseGo,
+    // --- Fixtures page ---
+    /// A patch fixture, by index: press to toggle it in the selection.
+    Fixture(usize),
+    /// Drop the whole selection.
+    SelectNone,
+    /// Scroll the fixture keys by whole pages.
+    FixturePage(i32),
+}
+
+/// How many lights one page of the Fixtures page holds: every key but the
+/// bottom row, which carries the page's controls. A deck with a single row
+/// keeps the whole row for lights.
+fn fixture_keys_per_page(rows: usize, cols: usize) -> usize {
+    if rows > 1 {
+        (rows - 1) * cols
+    } else {
+        cols
+    }
+}
+
+/// Pages `n` lights spread over on a `rows` × `cols` deck; always at least one.
+fn fixture_pages(n: usize, rows: usize, cols: usize) -> usize {
+    n.div_ceil(fixture_keys_per_page(rows, cols).max(1)).max(1)
+}
+
+/// The Fixtures page: the raid grid, one light per key in patch order, with
+/// ALL / NONE — and PREV / NEXT when the rig spills over — on the bottom
+/// row, and Tap in its usual corner. `page` past the end shows the last page.
+fn fixture_layout(n: usize, page: usize, rows: usize, cols: usize) -> Vec<(u8, DeckItem)> {
+    let mut out = Vec::new();
+    let per = fixture_keys_per_page(rows, cols);
+    let pages = fixture_pages(n, rows, cols);
+    let page = page.min(pages - 1);
+    for k in 0..per {
+        let fi = page * per + k;
+        if fi < n {
+            out.push((k as u8, DeckItem::Fixture(fi)));
+        }
+    }
+    if rows > 1 {
+        let row = (rows - 1) * cols;
+        let mut controls = vec![DeckItem::SelectAll, DeckItem::SelectNone];
+        if pages > 1 {
+            controls.push(DeckItem::FixturePage(-1));
+            controls.push(DeckItem::FixturePage(1));
+        }
+        for (c, item) in controls.into_iter().enumerate() {
+            // The last key stays Tap, as on every page.
+            if c + 1 < cols {
+                out.push(((row + c) as u8, item));
+            }
+        }
+        out.push(((row + cols - 1) as u8, DeckItem::Tap));
+    }
+    out
 }
 
 /// What the Phaser page puts on one key. The bottom corners are reserved —
@@ -1957,6 +2041,14 @@ pub fn phaser_page_key(k: usize, rows: usize, cols: usize) -> PhaserKey {
         slot -= 1;
     }
     PhaserKey::Pad(slot)
+}
+
+/// How many of a `rows` × `cols` page's keys actually hold a pad — the grid
+/// less whichever corners [`phaser_page_key`] reserves. A page's slot store
+/// is a round number (36), so this is what every writer has to clamp to or
+/// it fills slots no key on screen or on the deck can reach.
+pub fn page_pad_count(rows: usize, cols: usize) -> usize {
+    (0..rows * cols).filter(|&k| matches!(phaser_page_key(k, rows, cols), PhaserKey::Pad(_))).count()
 }
 
 /// Speed steps offered on the Chases page, slowest first.
@@ -1997,7 +2089,7 @@ fn preset_hue(name: &str) -> Option<&'static str> {
 /// word picks the hue, a "50" dims it, "rainbow" gets the arch, and the
 /// label is whatever the name says beyond the colour ("100", "FADE",
 /// "OFF"; a rainbow's last word).
-fn preset_key_look(name: &str) -> ([u8; 3], String, KeyIcon) {
+pub(crate) fn preset_key_look(name: &str) -> ([u8; 3], String, KeyIcon) {
     let lower = name.to_lowercase();
     let words: Vec<&str> = lower.split_whitespace().collect();
     let hue = preset_hue(name);
@@ -2169,7 +2261,7 @@ fn control_items() -> Vec<DeckItem> {
         DeckItem::Pattern(SeqPattern::Wings),
         DeckItem::Pattern(SeqPattern::Random),
     ];
-    v.extend(LEVELS.iter().map(|(lv, _)| DeckItem::Spacing(*lv)));
+    v.extend(LEVELS.iter().map(|(lv, _)| DeckItem::Spacing(lv * 2.0)));
     v.extend(LEVELS.iter().map(|(lv, _)| DeckItem::Snap(*lv)));
     v.push(DeckItem::Tap);
     v
@@ -2326,7 +2418,26 @@ impl App {
         let mut out = Vec::new();
 
         if self.deck_page == DeckPage::Presets {
-            return preset_layout(&preset_page_rows(&self.banks), rows, cols);
+            // The board's pages first; the ShowBuddy banks, when there are
+            // any, as one last page.
+            let board_pages = preset_deck_pages(&self.preset_deck);
+            let page = self.deck_preset_page.min(self.preset_deck_page_count() - 1);
+            if page >= board_pages {
+                return preset_layout(&preset_page_rows(&self.banks), rows, cols);
+            }
+            let base = page * PRESET_DECK_SLOTS;
+            for k in 0..rows * cols {
+                match phaser_page_key(k, rows, cols) {
+                    PhaserKey::Tap => out.push((k as u8, DeckItem::Tap)),
+                    PhaserKey::SelectAll => out.push((k as u8, DeckItem::SelectAll)),
+                    PhaserKey::Clear => out.push((k as u8, DeckItem::Clear)),
+                    PhaserKey::Pad(slot) if base + slot < self.preset_deck.len() => {
+                        out.push((k as u8, DeckItem::PresetPad(base + slot)))
+                    }
+                    PhaserKey::Pad(_) => {}
+                }
+            }
+            return out;
         }
 
         if self.deck_page == DeckPage::Phasers {
@@ -2344,6 +2455,10 @@ impl App {
                 }
             }
             return out;
+        }
+
+        if self.deck_page == DeckPage::Fixtures {
+            return fixture_layout(self.patch.fixtures.len(), self.deck_fixture_page, rows, cols);
         }
 
         if self.deck_page == DeckPage::Chases {
@@ -2383,7 +2498,7 @@ impl App {
             }
             for (c, (lv, _)) in LEVELS.iter().enumerate() {
                 if right_start + c < cols {
-                    out.push(((spacing_row * cols + right_start + c) as u8, DeckItem::Spacing(*lv)));
+                    out.push(((spacing_row * cols + right_start + c) as u8, DeckItem::Spacing(lv * 2.0)));
                 }
             }
             for (c, (lv, _)) in LEVELS.iter().enumerate() {
@@ -2410,6 +2525,18 @@ impl App {
         out
     }
 
+    /// Pages the rig spreads over on the deck's Fixtures page.
+    fn fixture_deck_pages(&self) -> usize {
+        let Some(kind) = self.deck.kind() else { return 1 };
+        fixture_pages(self.patch.fixtures.len(), kind.row_count() as usize, kind.column_count() as usize)
+    }
+
+    /// Scroll the Fixtures page by `d` pages, wrapping at either end.
+    pub(crate) fn step_fixture_deck_page(&mut self, d: i32) {
+        let count = self.fixture_deck_pages() as i32;
+        self.deck_fixture_page = (self.deck_fixture_page as i32 + d).rem_euclid(count) as usize;
+    }
+
     /// Builds the full desired key-image frame from current app state.
     fn deck_key_specs(&self) -> Vec<KeySpec> {
         let Some(kind) = self.deck.kind() else { return Vec::new() };
@@ -2423,6 +2550,8 @@ impl App {
             _ => ISLAND_ACCENTS[i % ISLAND_ACCENTS.len()],
         };
         let cycle_ready = self.cycle_on || self.cycle_ids.len() >= 2;
+        // The live output, for the Fixtures page's swatches.
+        let dmx = (self.deck_page == DeckPage::Fixtures).then(|| *self.net.dmx.lock());
         for (key, item) in self.deck_layout() {
             let Some(slot) = specs.get_mut(key as usize) else { continue };
             *slot = match item {
@@ -2460,11 +2589,55 @@ impl App {
                     }
                     None => KeySpec::plain(key, [14, 14, 16], None),
                 },
+                DeckItem::PresetPad(idx) => match self.preset_deck.get(idx).cloned().flatten() {
+                    Some(s) => {
+                        let on = self.preset_pad_lit(&s);
+                        KeySpec {
+                            index: key,
+                            rgb: if on { s.color } else { mute_rgb(s.color) },
+                            label: if s.label.is_empty() { None } else { Some(s.label) },
+                            icon: s.icon,
+                            wheel: None,
+                        }
+                    }
+                    None => KeySpec::plain(key, [14, 14, 16], None),
+                },
                 DeckItem::SelectAll => {
                     let all = self.stage.all_selected();
                     let mut spec = control_spec(key, "ALL", all, SELECT_ALL_ACCENT);
                     spec.icon = KeyIcon::StageLight;
                     spec
+                }
+                DeckItem::Fixture(fi) => {
+                    let Some(f) = self.patch.fixtures.get(fi) else { continue };
+                    let live = dmx.as_ref().map(|b| crate::stage::fixture_swatch(f, b));
+                    let rgb = live.map_or([40, 40, 46], |c| [c.r(), c.g(), c.b()]);
+                    // A light that is off still needs a face you can read.
+                    let rgb = [rgb[0].max(38), rgb[1].max(38), rgb[2].max(44)];
+                    let on = self.stage.fixture_selected(fi);
+                    let (a, b) = split_label(&f.display);
+                    let label = match b {
+                        Some(b) => format!("{a}\n{b}"),
+                        None => format!("{a}\n@{}", f.from),
+                    };
+                    KeySpec {
+                        index: key,
+                        rgb: if on { rgb } else { mute_rgb(rgb) },
+                        label: Some(label),
+                        icon: if on { KeyIcon::StageLight } else { KeyIcon::None },
+                        wheel: None,
+                    }
+                }
+                DeckItem::SelectNone => {
+                    let none = self.stage.selected_fixtures().is_empty();
+                    control_spec(key, "NONE", none, SELECT_ALL_ACCENT)
+                }
+                DeckItem::FixturePage(d) => {
+                    let pages = self.fixture_deck_pages();
+                    let page = self.deck_fixture_page.min(pages - 1);
+                    let (label, at_edge) =
+                        if d < 0 { ("PREV", page == 0) } else { ("NEXT", page + 1 >= pages) };
+                    control_spec(key, label, !at_edge, CHASE_ACCENT)
                 }
                 DeckItem::CycleGo => {
                     let running = self.cycle_on && !self.cycle_fading_out();
@@ -2536,7 +2709,7 @@ impl App {
                 }
                 DeckItem::Spacing(v) => control_spec(
                     key,
-                    &format!("SP{}", level_num(v)),
+                    &format!("SP{}", level_num(v / 2.0)),
                     (self.cycle_spread - v).abs() < 0.05,
                     ACCENT_SOFT,
                 ),
@@ -2642,6 +2815,18 @@ impl App {
                     self.apply_phaser(ph, false);
                 }
             }
+            DeckItem::PresetPad(idx) => self.press_preset_pad(idx),
+            DeckItem::Fixture(fi) => {
+                self.stage.toggle_fixture(fi);
+                self.sel_fixture = Some(fi);
+                self.sync_selection_units();
+            }
+            DeckItem::SelectNone => {
+                self.stage.clear_selection();
+                self.sync_selection_units();
+                self.log.push("Selection cleared".into());
+            }
+            DeckItem::FixturePage(d) => self.step_fixture_deck_page(d),
             DeckItem::Clear => self.clear_stage(),
             DeckItem::SelectAll => {
                 let on = self.stage.select_all_fixtures();
@@ -2754,6 +2939,18 @@ impl App {
                     self.deck_phaser_page + 1,
                     phaser_deck_pages(&self.phaser_deck),
                 )),
+                // On the Presets page the knob scrolls the board's pages (then the banks).
+                DeckPage::Presets => Some((
+                    "PRESETS",
+                    self.deck_preset_page.min(self.preset_deck_page_count() - 1) + 1,
+                    self.preset_deck_page_count(),
+                )),
+                // And on the Fixtures page, the pages of lights.
+                DeckPage::Fixtures => Some((
+                    "LIGHTS",
+                    self.deck_fixture_page.min(self.fixture_deck_pages() - 1) + 1,
+                    self.fixture_deck_pages(),
+                )),
                 _ => None,
             },
         })
@@ -2827,6 +3024,22 @@ impl App {
                 }
             }
         }
+        // On the Presets page it scrolls the board's pages, then the banks.
+        if self.deck_page == DeckPage::Presets {
+            if let Some(&d) = deltas.get(3) {
+                if d != 0 {
+                    self.step_preset_deck_page(d);
+                }
+            }
+        }
+        // On the Fixtures page it scrolls through the pages of lights.
+        if self.deck_page == DeckPage::Fixtures {
+            if let Some(&d) = deltas.get(3) {
+                if d != 0 {
+                    self.step_fixture_deck_page(d);
+                }
+            }
+        }
         // Encoder 5 = the programmer knob: nudges one channel type across
         // the selected lights (see `encoder.rs`).
         if let Some(&d) = deltas.get(5) {
@@ -2838,7 +3051,7 @@ impl App {
             match enc {
                 0 => self.blackout = !self.blackout,
                 1 => self.set_frozen(!self.frozen),
-                // Encoder 2 = Mode: cycles Presets → Colors → Phasers → Chases.
+                // Encoder 2 = Mode: cycles Presets → Colors → Phasers → Chases → Fixtures.
                 2 => self.deck_page = self.deck_page.next(),
                 // Encoder 5 = programmer knob: step to the next channel type.
                 5 => self.encoder_next_channel(),
@@ -2874,6 +3087,103 @@ mod tests {
                 }
             }
         }
+    }
+
+    /// The Fixtures page keeps its controls and Tap on the bottom row, pages
+    /// only when the rig needs it, and never leaves a light unreachable.
+    #[test]
+    fn fixtures_page_pages_the_rig_under_a_control_row() {
+        let (rows, cols) = (4usize, 9usize);
+        // 50 lights on 27 keys a page: two pages.
+        assert_eq!(fixture_pages(50, rows, cols), 2);
+        let page0 = fixture_layout(50, 0, rows, cols);
+        let page1 = fixture_layout(50, 1, rows, cols);
+        let lights = |page: &[(u8, DeckItem)]| {
+            page.iter()
+                .filter_map(|(k, i)| match i {
+                    DeckItem::Fixture(fi) => Some((*k, *fi)),
+                    _ => None,
+                })
+                .collect::<Vec<_>>()
+        };
+        assert_eq!(lights(&page0), (0..27).map(|k| (k as u8, k)).collect::<Vec<_>>());
+        assert_eq!(lights(&page1), (0..23).map(|k| (k as u8, k + 27)).collect::<Vec<_>>());
+        let at = |page: &[(u8, DeckItem)], key: u8| {
+            page.iter().find(|(k, _)| *k == key).map(|(_, i)| *i)
+        };
+        assert_eq!(at(&page0, 27), Some(DeckItem::SelectAll));
+        assert_eq!(at(&page0, 28), Some(DeckItem::SelectNone));
+        assert_eq!(at(&page0, 29), Some(DeckItem::FixturePage(-1)));
+        assert_eq!(at(&page0, 30), Some(DeckItem::FixturePage(1)));
+        assert_eq!(at(&page0, 35), Some(DeckItem::Tap));
+        // A page past the end shows the last page rather than nothing.
+        assert_eq!(fixture_layout(50, 7, rows, cols), page1);
+        // A rig that fits has no paging keys.
+        let small = fixture_layout(10, 0, rows, cols);
+        assert_eq!(fixture_pages(10, rows, cols), 1);
+        assert!(!small.iter().any(|(_, i)| matches!(i, DeckItem::FixturePage(_))));
+        assert_eq!(at(&small, 35), Some(DeckItem::Tap));
+        // A one-row deck gives the whole row to lights.
+        let strip = fixture_layout(5, 0, 1, 3);
+        assert_eq!(lights(&strip), vec![(0, 0), (1, 1), (2, 2)]);
+        assert!(!strip.iter().any(|(_, i)| matches!(i, DeckItem::Tap)));
+        assert_eq!(fixture_pages(5, 1, 3), 2);
+    }
+
+    /// The Fixtures page's keys, as they would look on a Stream Deck XL with
+    /// a mixed rig — some selected, some off — written to
+    /// `target/deck_fixtures_page.png` for a look.
+    #[test]
+    fn dump_fixtures_page_sheet() {
+        const SIZE: u32 = 96;
+        const GAP: u32 = 4;
+        let (rows, cols) = (4usize, 9usize);
+        let names = ["SlimPAR 1", "Maverick", "Intimidator", "Rogue R1", "Betopper", "front left"];
+        let colours: [[u8; 3]; 6] =
+            [[255, 40, 40], [40, 255, 90], [60, 80, 255], [0, 0, 0], [255, 220, 120], [230, 230, 240]];
+        let mut sheet = RgbImage::from_pixel(
+            cols as u32 * (SIZE + GAP) + GAP,
+            rows as u32 * (SIZE + GAP) + GAP,
+            image::Rgb([24, 24, 28]),
+        );
+        for (key, item) in fixture_layout(50, 0, rows, cols) {
+            let spec = match item {
+                DeckItem::Fixture(fi) => {
+                    let rgb = colours[fi % colours.len()];
+                    let rgb = [rgb[0].max(38), rgb[1].max(38), rgb[2].max(44)];
+                    let on = fi % 3 == 0;
+                    let (a, b) = split_label(names[fi % names.len()]);
+                    let label = match b {
+                        Some(b) => format!("{a}\n{b}"),
+                        None => format!("{a}\n@{}", 1 + fi * 7),
+                    };
+                    KeySpec {
+                        index: key,
+                        rgb: if on { rgb } else { mute_rgb(rgb) },
+                        label: Some(label),
+                        icon: if on { KeyIcon::StageLight } else { KeyIcon::None },
+                        wheel: None,
+                    }
+                }
+                DeckItem::SelectAll => control_spec(key, "ALL", false, SELECT_ALL_ACCENT),
+                DeckItem::SelectNone => control_spec(key, "NONE", false, SELECT_ALL_ACCENT),
+                DeckItem::FixturePage(d) => {
+                    control_spec(key, if d < 0 { "PREV" } else { "NEXT" }, d > 0, CHASE_ACCENT)
+                }
+                DeckItem::Tap => KeySpec::plain(key, ACCENT, Some("TAP".to_string())),
+                _ => continue,
+            };
+            let img = render_key(&spec, SIZE).into_rgb8();
+            let (r, c) = (key as u32 / cols as u32, key as u32 % cols as u32);
+            let (ox, oy) = (GAP + c * (SIZE + GAP), GAP + r * (SIZE + GAP));
+            for y in 0..SIZE {
+                for x in 0..SIZE {
+                    sheet.put_pixel(ox + x, oy + y, *img.get_pixel(x, y));
+                }
+            }
+        }
+        let _ = std::fs::create_dir_all("target");
+        sheet.save("target/deck_fixtures_page.png").expect("write sheet");
     }
 
     /// A deck saved before paging existed is exactly page 1; anything

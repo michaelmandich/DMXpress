@@ -210,7 +210,13 @@ impl App {
             .default_size([380.0, 460.0])
             .default_pos([screen.right() - 420.0, 200.0])
             .show(ctx, |ui| {
-                zoom_controls(ui, &mut self.zoom.orders);
+                // A bounded row: a bare right-to-left layout would claim the
+                // window's whole remaining height.
+                ui.horizontal(|ui| {
+                    ui.with_layout(egui::Layout::right_to_left(egui::Align::Center), |ui| {
+                        zoom_controls(ui, &mut self.zoom.orders);
+                    });
+                });
                 apply_zoom(ui, self.zoom.orders);
 
                 theme::section(ui, "Chain");

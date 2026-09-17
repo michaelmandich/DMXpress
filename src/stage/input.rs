@@ -15,17 +15,22 @@ use crate::showbuddy::Patch;
 use crate::transition::{TransitionConfig, TransitionMode};
 
 impl StageView {
+    #[allow(clippy::too_many_arguments)]
     pub fn ui(
         &mut self,
         ui: &mut egui::Ui,
         patch: &Patch,
         buf: &[u8; crate::net::DMX_SLOTS],
+        gobos: &crate::gobo::Catalogue,
         height: f32,
         set: &mut Settings,
         mut transition: Option<&mut TransitionConfig>,
         mut chase: Option<&mut ChaseConfig>,
         trace: Option<&PhaserTrace>,
     ) {
+        // Every gobo the patch can show, ready on the GPU before the beams
+        // that need it are drawn.
+        self.gobo_atlas.sync(patch, gobos);
         let covered = {
             let mut seen = vec![false; patch.fixtures.len()];
             let mut ok = true;
@@ -48,6 +53,13 @@ impl StageView {
             egui::vec2(ui.available_width(), height),
             Sense::click_and_drag(),
         );
+        // -- area B: post-allocate camera bookkeeping goes here --
+        if rect.height() > 1.0 {
+            self.last_rect = rect;
+        }
+        self.hovered = resp.hovered();
+        self.user_moved = false;
+        self.step_cam_tween(ui, &resp);
         let painter = ui.painter_at(rect);
         painter.rect_filled(rect, 4.0, crate::ui::BACKDROP);
 
@@ -168,6 +180,9 @@ impl StageView {
             .towers
             .iter()
             .map(|tw| {
+                if tw.hidden {
+                    return Vec::new();
+                }
                 let bar = tw.bar_dir();
                 let top = tw.pos + v3(0.0, tw.height, 0.0);
                 [
@@ -201,6 +216,9 @@ impl StageView {
             .trusses
             .iter()
             .map(|tr| {
+                if tr.hidden {
+                    return Vec::new();
+                }
                 let pts: Vec<V3> = match tr.kind {
                     TrussKind::Straight => {
                         let dir = dir_from_angles(tr.yaw_deg, 0.0);
@@ -251,6 +269,7 @@ impl StageView {
                     && !on_chase
                     && self
                         .selection_centroid()
+                        .filter(|_| self.show.gizmo)
                         .and_then(|o| self.gizmo_pick(rect, o, ptr))
                         .is_some();
                 if on_transition {
@@ -285,13 +304,13 @@ impl StageView {
                         self.selection.insert(i);
                         self.last_selected = Some(fi);
                     }
-                } else if let Some(ti) = tower_hit(ptr) {
+                } else if let Some(ti) = tower_hit(ptr).filter(|_| self.show.towers) {
                     deselect_spheres(&mut transition, &mut chase);
                     self.selection.clear();
                     self.sel_tower = Some(ti);
                     self.sel_truss = None;
                     self.sel_stage = false;
-                } else if let Some(ti) = truss_hit(ptr) {
+                } else if let Some(ti) = truss_hit(ptr).filter(|_| self.show.trusses) {
                     deselect_spheres(&mut transition, &mut chase);
                     self.selection.clear();
                     self.sel_truss = Some(ti);
@@ -299,7 +318,7 @@ impl StageView {
                     self.sel_stage = false;
                 } else if self.sel_stage && self.stage_handle_pick(rect, set, ptr).is_some() {
                     // A click on a stage resize arrow keeps the selection.
-                } else if self.stage_box_hit(rect, set, ptr) {
+                } else if self.show.stage_box && self.stage_box_hit(rect, set, ptr) {
                     // Click the stage box itself to reveal its resize arrows.
                     deselect_spheres(&mut transition, &mut chase);
                     self.selection.clear();
@@ -330,6 +349,7 @@ impl StageView {
                         None
                     } else {
                         self.selection_centroid()
+                            .filter(|_| self.show.gizmo)
                             .and_then(|o| self.gizmo_pick(rect, o, ptr))
                     };
                     if on_transition {
@@ -384,14 +404,14 @@ impl StageView {
                             }
                         }
                         self.drag = Drag::Move;
-                    } else if let Some(ti) = tower_hit(ptr) {
+                    } else if let Some(ti) = tower_hit(ptr).filter(|_| self.show.towers) {
                         self.selection.clear();
                         self.sel_tower = Some(ti);
                         self.sel_truss = None;
                         self.sel_stage = false;
                         self.push_undo();
                         self.drag = Drag::MoveTower;
-                    } else if let Some(ti) = truss_hit(ptr) {
+                    } else if let Some(ti) = truss_hit(ptr).filter(|_| self.show.trusses) {
                         self.selection.clear();
                         self.sel_truss = Some(ti);
                         self.sel_tower = None;
@@ -659,6 +679,12 @@ impl StageView {
                     self.delete_truss(patch, ti);
                 }
             }
+            // -- area E: arrow-key nudge goes here --
+            // Arrow keys nudge the selection or the picked element by the
+            // Selection tab's step; fly mode keeps the arrows for looking.
+            if !self.fly_mode && !ui.ctx().wants_keyboard_input() {
+                self.nudge_keys(ui, patch);
+            }
         }
 
         // ---- render the scene ----
@@ -674,6 +700,10 @@ impl StageView {
             chase.as_deref(),
             trace,
         );
+        // The outliner's hover highlight is per frame.
+        self.hover_element = None;
+        // Arrow keys let go away from the stage still end the nudge run.
+        self.release_nudge_keys(ui);
     }
 }
 

@@ -4,7 +4,6 @@
 
 use eframe::egui;
 
-use super::{apply_zoom, zoom_controls};
 use crate::app::App;
 use crate::chase::{ChaseKind, ChaseSource};
 
@@ -57,17 +56,17 @@ impl App {
         let mut popped = self.popped_out.contains("chases");
         let mut do_start = false;
         let mut do_stop = false;
+        let mut zoom_level = self.zoom.transition;
         super::floating_panel(
             ctx,
             "chases",
             "Chases",
             &mut open,
             &mut popped,
+            Some(&mut zoom_level),
             [330.0, 360.0],
             [screen.right() - 380.0, 150.0],
             |ui| {
-                zoom_controls(ui, &mut self.zoom.transition);
-                apply_zoom(ui, self.zoom.transition);
 
                 let tr = &mut self.chase;
                 ui.horizontal_wrapped(|ui| {
@@ -319,6 +318,7 @@ impl App {
                 }
             },
         );
+        self.zoom.transition = zoom_level;
         if do_start {
             self.start_chase();
         }

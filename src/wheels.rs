@@ -294,7 +294,7 @@ mod tests {
             name: name.into(),
             bands: bands
                 .iter()
-                .map(|(k, lo, hi, l)| Band { kind: *k, min: *lo, max: *hi, label: (*l).into() })
+                .map(|(k, lo, hi, l)| Band { kind: *k, min: *lo, max: *hi, label: (*l).into(), gobo: None })
                 .collect(),
             role: None,
         }

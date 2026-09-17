@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Community — DMXexpress</title>
+  <meta name="description" content="The DMXexpress community board: ask questions, share shows and screenshots, and post plugins. Sign in with Google, pick a username, and join in.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <link rel="icon" type="image/png" href="images/logo.png">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <header class="nav">
+    <div class="container nav-inner">
+      <a href="index.html" class="brand">
+        <img src="images/logo.png" alt="DMXexpress" class="logo-nav">
+      </a>
+      <nav class="nav-links">
+        <a href="index.html#features">Features</a>
+        <a href="index.html#streamdeck">Stream Deck</a>
+        <a href="plugins.html">Plugins</a>
+        <a href="community.html" class="is-current">Community</a>
+        <a href="download.html">Download</a>
+        <a href="guide.html">Guide</a>
+        <a href="https://github.com/michaelmandich/DMXpress" class="btn btn-ghost" target="_blank" rel="noopener">GitHub</a>
+      </nav>
+    </div>
+  </header>
+
+  <main>
+    <section class="guide-head">
+      <div class="container">
+        <p class="eyebrow">Message board</p>
+        <h1>Community</h1>
+        <p class="guide-lede">
+          Questions, show files, screenshots, plugin links, bug reports — this is the place.
+          Sign in with Google, pick a username, and post. You can delete anything you wrote.
+        </p>
+      </div>
+    </section>
+
+    <section class="section" style="padding-top: 32px">
+      <div class="container forum-shell">
+        <div id="forum-status" class="notice" hidden></div>
+
+        <div class="auth-row" id="auth-row"></div>
+
+        <div class="form-panel" id="username-box" hidden>
+          <h3 style="margin-top:0">Pick a username</h3>
+          <p class="fine">This is the name you post under. 3–24 letters, numbers, dashes or underscores.</p>
+          <div class="form-actions">
+            <input id="username-input" placeholder="stagehand42" pattern="[A-Za-z0-9_\-]{3,24}" maxlength="24">
+            <button class="btn btn-primary" id="username-save">Save</button>
+            <span class="fine" id="username-msg"></span>
+          </div>
+        </div>
+
+        <div id="board">
+          <div class="forum-controls">
+            <div class="chips" id="cat-chips"></div>
+            <button class="btn btn-primary" id="new-thread-btn" hidden>New thread</button>
+          </div>
+
+          <div class="form-panel" id="new-thread-form" hidden>
+            <h3 style="margin-top:0">New thread</h3>
+            <div class="form-grid">
+              <label class="field field-wide"><span>Title</span>
+                <input id="nt-title" maxlength="120" placeholder="What's it about?">
+              </label>
+              <label class="field"><span>Category</span>
+                <select id="nt-category">
+                  <option value="general">General</option>
+                  <option value="help">Help</option>
+                  <option value="shows">Show files</option>
+                  <option value="plugins">Plugins</option>
+                  <option value="bugs">Bugs</option>
+                </select>
+              </label>
+              <label class="field"><span>Screenshot (optional)</span>
+                <input id="nt-image" type="file" accept="image/png,image/jpeg,image/webp">
+              </label>
+              <label class="field field-wide"><span>Post</span>
+                <textarea id="nt-body" rows="5" maxlength="10000" placeholder="Write it up - GitHub links welcome."></textarea>
+              </label>
+            </div>
+            <div class="form-actions">
+              <button class="btn btn-primary" id="nt-submit">Post thread</button>
+              <button class="btn btn-outline" id="nt-cancel">Cancel</button>
+              <span class="fine" id="nt-msg"></span>
+            </div>
+          </div>
+
+          <div id="thread-list"></div>
+        </div>
+
+        <div id="thread-view" hidden></div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="footer">
+    <div class="container footer-inner">
+      <div>
+        <img src="images/logo.png" alt="DMXexpress" class="logo-footer">
+        <p class="fine">A native, all-in-one DMX fixture visualizer and live lighting controller built in Rust.</p>
+      </div>
+      <div class="footer-links">
+        <a href="index.html#features">Features</a>
+        <a href="plugins.html">Plugins</a>
+        <a href="community.html">Community</a>
+        <a href="download.html">Download</a>
+        <a href="guide.html">Guide</a>
+        <a href="https://github.com/michaelmandich/DMXpress" target="_blank" rel="noopener">GitHub</a>
+      </div>
+    </div>
+  </footer>
+
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+  <script src="js/config.js"></script>
+  <script src="js/community.js"></script>
+</body>
+</html>

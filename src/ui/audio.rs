@@ -50,7 +50,7 @@ enum GraphDrag {
 
 impl App {
     /// Write the machine-local audio state (device, follow, triggers).
-    fn persist_audio(&self) {
+    pub(crate) fn persist_audio(&self) {
         audio::save_audio(&audio::AudioFile {
             device: self.audio_device_pref.as_ref().map(|(n, _)| n.clone()),
             loopback: self.audio_device_pref.as_ref().is_some_and(|&(_, l)| l),
@@ -81,7 +81,13 @@ impl App {
             .default_size([520.0, 560.0])
             .default_pos([screen.center().x - 260.0, 80.0])
             .show(ctx, |ui| {
-                zoom_controls(ui, &mut self.zoom.audio);
+                // A bounded row: a bare right-to-left layout would claim the
+                // window's whole remaining height.
+                ui.horizontal(|ui| {
+                    ui.with_layout(egui::Layout::right_to_left(egui::Align::Center), |ui| {
+                        zoom_controls(ui, &mut self.zoom.audio);
+                    });
+                });
                 apply_zoom(ui, self.zoom.audio);
 
                 // ---- source ----

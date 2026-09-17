@@ -1,24 +1,62 @@
-//! Central panel: the 3D stage view plus the channel-type control grid.
-
-use std::collections::HashMap;
+//! Central panel: the 3D stage view plus the channel controls (`channels.rs`).
+//!
+//! The channel controls under the stage can be folded to one row or torn
+//! off into their own OS window; either way the stage takes the room they
+//! leave, so with the side panels folded too the screen is the visualiser.
 
 use eframe::egui;
 
-use super::{apply_zoom, role_color, zoom_controls};
+use super::{apply_zoom, icons, theme, zoom_controls};
 use crate::app::App;
-use crate::net;
-use crate::oscillator::Look;
-use crate::showbuddy::Role;
+
+/// Key of the channel controls in `popped_out` / `collapsed`.
+const CHANNELS: &str = "channels";
 
 impl App {
     pub(crate) fn central_panel(&mut self, ctx: &egui::Context) {
+        let popped = self.popped_out.contains(CHANNELS);
+        let collapsed = self.collapsed.contains(CHANNELS);
+        if popped {
+            let mut zoom_level = self.zoom.central;
+            let outcome = super::popped_viewport(
+                ctx,
+                CHANNELS,
+                "Channel control",
+                Some(&mut zoom_level),
+                [760.0, 560.0],
+                |ui| {
+                    // The popped window has its own input: the undo chord is
+                    // read from it here, since App::update only sees the main one.
+                    self.undo_keys(ui.ctx());
+                    self.channel_controls(ui);
+                },
+            );
+            self.zoom.central = zoom_level;
+            if outcome.dock {
+                self.popped_out.remove(CHANNELS);
+            }
+            if outcome.closed {
+                self.popped_out.remove(CHANNELS);
+                self.collapsed.insert(CHANNELS);
+            }
+        }
+
+        let mut pop = false;
+        let mut fold = false;
+        let mut unfold = false;
         egui::CentralPanel::default().show(ctx, |ui| {
-            let mut buf = *self.net.dmx.lock();
-            let orig = buf;
-            let mut changed = false;
+            let buf = *self.net.dmx.lock();
 
             // --- 3D stage: live beams, movable lights ---
-            let stage_h = (ui.available_height() * 0.55).max(240.0);
+            let stage_h = if popped {
+                ui.available_height()
+            } else if collapsed {
+                // Leave exactly one row for the folded controls.
+                let row = ui.spacing().interact_size.y + ui.spacing().item_spacing.y * 3.0 + 4.0;
+                (ui.available_height() - row).max(240.0)
+            } else {
+                (ui.available_height() * 0.5).max(240.0)
+            };
             self.transition.active_progress =
                 self.transition_run.as_ref().map(|r| r.progress());
             let chase_head = self.chase_run.as_ref().map(|r| r.head(&self.chase));
@@ -64,6 +102,7 @@ impl App {
                 ui,
                 &self.patch,
                 &buf,
+                &self.gobos,
                 stage_h,
                 &mut self.settings,
                 transition,
@@ -75,265 +114,59 @@ impl App {
                     self.sel_fixture = Some(i);
                 }
             }
+            if popped {
+                return;
+            }
             ui.separator();
-            let encoder = self.encoder_readout();
-            let encoder_held = self.encoder_layer.len();
-            let mut clear_encoders = false;
-            ui.horizontal(|ui| {
-                ui.label("Channel control");
-                if let Some((name, value, n)) = &encoder {
-                    ui.separator();
-                    ui.weak(format!("Knob: {name} = {value} ({n})")).on_hover_text(
-                        "The Stream Deck's programmer knob: twist to nudge this channel \
-                         on every selected light, press to move to the next channel",
-                    );
-                }
-                if encoder_held > 0 {
-                    ui.separator();
-                    ui.label(format!("{encoder_held} encoder ch")).on_hover_text(
-                        "Channels held by the encoder layer — painted over the mix \
-                         until cleared (Clear on the deck, or here)",
-                    );
-                    if ui.small_button("clear").clicked() {
-                        clear_encoders = true;
+            if collapsed {
+                ui.horizontal(|ui| {
+                    if icons::icon_button(ui, icons::Icon::ChevronUp, None)
+                        .on_hover_text("Show the channel controls")
+                        .clicked()
+                    {
+                        unfold = true;
                     }
-                }
+                    ui.label(
+                        egui::RichText::new("Channel control")
+                            .family(theme::medium())
+                            .color(theme::TEXT_DIM),
+                    );
+                    if !self.sel_channels.is_empty() {
+                        theme::hint(ui, format!("{} ch armed", self.sel_channels.len()));
+                    }
+                });
+                return;
+            }
+            ui.horizontal(|ui| {
+                ui.label(egui::RichText::new("Channel control").family(theme::semibold()));
                 ui.with_layout(egui::Layout::right_to_left(egui::Align::Center), |ui| {
+                    if icons::icon_button(ui, icons::Icon::ChevronDown, None)
+                        .on_hover_text("Fold the channel controls away, giving the stage the room")
+                        .clicked()
+                    {
+                        fold = true;
+                    }
+                    if icons::icon_button(ui, icons::Icon::PopOut, None)
+                        .on_hover_text("Open the channel controls in their own window")
+                        .clicked()
+                    {
+                        pop = true;
+                    }
+                    ui.add_space(4.0);
                     zoom_controls(ui, &mut self.zoom.central);
                 });
             });
-            if clear_encoders {
-                self.clear_encoders();
-            }
-
-            egui::ScrollArea::vertical()
-                .auto_shrink([false, false])
-                .id_salt("central_scroll")
-                .show(ui, |ui| {
-                    apply_zoom(ui, self.zoom.central);
-
-                    // --- Channel-type control ---
-                    // The fixtures we expose: all stage-selected fixtures, else
-                    // the single list-selected one.
-                    let targets: Vec<usize> = {
-                        let sf = self.stage.selected_fixtures();
-                        if sf.len() > 1 {
-                            sf
-                        } else if let Some(i) = self.sel_fixture {
-                            vec![i]
-                        } else {
-                            Vec::new()
-                        }
-                    };
-
-                    if targets.is_empty() {
-                        ui.label("Select a fixture from the list or stage view.");
-                    } else {
-                        let multi = targets.len() > 1;
-                        // Build the controllable rows. One fixture → one row per
-                        // channel. Several fixtures → one row per channel *type*
-                        // (role; unclassified channels grouped by name), each
-                        // driving that type across every selected fixture.
-                        // (role, label, representative (fixture, channel), dmx indices)
-                        let mut groups: Vec<(Role, String, (usize, usize), Vec<usize>)> =
-                            Vec::new();
-                        let mut index: HashMap<String, usize> = HashMap::new();
-                        for &fi in &targets {
-                            let Some(f) = self.patch.fixtures.get(fi) else {
-                                continue;
-                            };
-                            for (ci, ch) in f.channels.iter().enumerate() {
-                                let addr = f.from as usize + ci;
-                                if addr == 0 || addr > net::DMX_SLOTS {
-                                    continue;
-                                }
-                                let idx = addr - 1;
-                                let role = ch.role();
-                                if multi {
-                                    let key = if role.tag().is_empty() {
-                                        format!("n:{}", ch.name.to_lowercase())
-                                    } else {
-                                        format!("r:{}", role.tag())
-                                    };
-                                    if let Some(&p) = index.get(&key) {
-                                        groups[p].3.push(idx);
-                                    } else {
-                                        index.insert(key, groups.len());
-                                        groups.push((role, ch.name.clone(), (fi, ci), vec![idx]));
-                                    }
-                                } else {
-                                    groups.push((
-                                        role,
-                                        format!("{:>3}  {}", addr, ch.name),
-                                        (fi, ci),
-                                        vec![idx],
-                                    ));
-                                }
-                            }
-                        }
-
-                        ui.horizontal(|ui| {
-                            if multi {
-                                ui.heading(format!("Channel types — {} fixtures", targets.len()));
-                            } else if let Some(f) = self.patch.fixtures.get(targets[0]) {
-                                ui.heading(format!(
-                                    "{} — {}ch @ DMX {}..{}",
-                                    f.display,
-                                    f.channel_count(),
-                                    f.from,
-                                    f.to
-                                ));
-                            }
-                        });
-                        ui.weak(if multi {
-                            "Each row drives that channel type across all selected \
-                             fixtures. Click a row to arm it for the Oscillator window."
-                        } else {
-                            "Click a row to arm it for the Oscillator window."
-                        });
-                        ui.separator();
-
-                        let mut toggle: Option<Vec<usize>> = None;
-                        egui::ScrollArea::vertical()
-                            .id_salt("chan_ctrl")
-                            .show(ui, |ui| {
-                                for (role, label, repr, idxs) in &groups {
-                                    let role = *role;
-                                    let idx0 = idxs[0];
-                                    let mut v = buf[idx0];
-                                    let armed =
-                                        idxs.iter().all(|i| self.sel_channels.contains(i));
-                                    ui.horizontal(|ui| {
-                                        let badge =
-                                            egui::RichText::new(format!("{:>5}", role.tag()))
-                                                .monospace()
-                                                .size(10.0)
-                                                .color(role_color(role));
-                                        ui.label(badge);
-                                        let text = if idxs.len() > 1 {
-                                            format!("{}  ×{}", label, idxs.len())
-                                        } else {
-                                            label.clone()
-                                        };
-                                        if ui.selectable_label(armed, text).clicked() {
-                                            toggle = Some(idxs.clone());
-                                        }
-                                        if ui
-                                            .add(egui::Slider::new(&mut v, 0..=255).text(""))
-                                            .changed()
-                                        {
-                                            for &i in idxs {
-                                                buf[i] = v;
-                                            }
-                                            changed = true;
-                                        }
-                                        if ui.small_button("0").clicked() {
-                                            for &i in idxs {
-                                                buf[i] = 0;
-                                            }
-                                            changed = true;
-                                        }
-                                        if ui.small_button("255").clicked() {
-                                            for &i in idxs {
-                                                buf[i] = 255;
-                                            }
-                                            changed = true;
-                                        }
-                                        let (fi, ci) = *repr;
-                                        if let Some(lbl) = self
-                                            .patch
-                                            .fixtures
-                                            .get(fi)
-                                            .and_then(|f| f.channels.get(ci))
-                                            .and_then(|ch| ch.band_label(buf[idx0]))
-                                        {
-                                            ui.weak(lbl);
-                                        }
-                                    });
-                                }
-
-                                ui.add_space(8.0);
-                                ui.horizontal(|ui| {
-                                    if ui.button("Blackout").clicked() {
-                                        for &fi in &targets {
-                                            if let Some(f) = self.patch.fixtures.get(fi) {
-                                                for ci in 0..f.channel_count() {
-                                                    let addr = f.from as usize + ci;
-                                                    if addr >= 1 && addr <= net::DMX_SLOTS {
-                                                        buf[addr - 1] = 0;
-                                                    }
-                                                }
-                                            }
-                                        }
-                                        changed = true;
-                                    }
-                                    if ui.button("Full").clicked() {
-                                        for &fi in &targets {
-                                            if let Some(f) = self.patch.fixtures.get(fi) {
-                                                for ci in 0..f.channel_count() {
-                                                    let addr = f.from as usize + ci;
-                                                    if addr >= 1 && addr <= net::DMX_SLOTS {
-                                                        buf[addr - 1] = 255;
-                                                    }
-                                                }
-                                            }
-                                        }
-                                        changed = true;
-                                    }
-                                    if !self.sel_channels.is_empty() {
-                                        ui.separator();
-                                        ui.label(format!("{} ch armed", self.sel_channels.len()));
-                                        if ui.small_button("clear").clicked() {
-                                            self.sel_channels.clear();
-                                        }
-                                    }
-                                });
-                            });
-
-                        if let Some(idxs) = toggle {
-                            let all = idxs.iter().all(|i| self.sel_channels.contains(i));
-                            let additive =
-                                ui.input(|inp| inp.modifiers.shift || inp.modifiers.command);
-                            if !additive {
-                                self.sel_channels.clear();
-                            }
-                            if all {
-                                for i in &idxs {
-                                    self.sel_channels.remove(i);
-                                }
-                            } else {
-                                for i in idxs {
-                                    self.sel_channels.insert(i);
-                                }
-                            }
-                        }
-                    }
-
-                    if changed {
-                        // A manual edit settles the look. If a transition was
-                        // mid-flight, capture the edited output as the new base;
-                        // otherwise fold only the changed channels into
-                        // `live.base` so oscillators keep animating around them.
-                        if self.transition_run.take().is_some() {
-                            self.live = Look::from_frame(buf);
-                        } else {
-                            for i in 0..net::DMX_SLOTS {
-                                if buf[i] != orig[i] {
-                                    self.live.base[i] = buf[i];
-                                }
-                            }
-                        }
-                        // Every touched channel joins the programmer and stops
-                        // tracking whatever palette it used to reference.
-                        for i in 0..net::DMX_SLOTS {
-                            if buf[i] != orig[i] {
-                                self.live_active.insert(i);
-                                self.live_refs.remove(&i);
-                            }
-                        }
-                        *self.net.dmx.lock() = buf;
-                    }
-                });
+            apply_zoom(ui, self.zoom.central);
+            self.channel_controls(ui);
         });
+        if pop {
+            self.popped_out.insert(CHANNELS);
+        }
+        if fold {
+            self.collapsed.insert(CHANNELS);
+        }
+        if unfold {
+            self.collapsed.remove(CHANNELS);
+        }
     }
 }

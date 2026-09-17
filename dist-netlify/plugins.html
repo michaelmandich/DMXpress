@@ -1,0 +1,245 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Plugins — DMXexpress</title>
+  <meta name="description" content="Browse, download, and submit DMXexpress plugins: script effects, custom windows, and console looks. Install by dropping one file into the app.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <link rel="icon" type="image/png" href="images/logo.png">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <header class="nav">
+    <div class="container nav-inner">
+      <a href="index.html" class="brand">
+        <img src="images/logo.png" alt="DMXexpress" class="logo-nav">
+      </a>
+      <nav class="nav-links">
+        <a href="index.html#features">Features</a>
+        <a href="index.html#streamdeck">Stream Deck</a>
+        <a href="plugins.html" class="is-current">Plugins</a>
+        <a href="community.html">Community</a>
+        <a href="download.html">Download</a>
+        <a href="guide.html">Guide</a>
+        <a href="https://github.com/michaelmandich/DMXpress" class="btn btn-ghost" target="_blank" rel="noopener">GitHub</a>
+      </nav>
+    </div>
+  </header>
+
+  <main>
+    <section class="guide-head">
+      <div class="container">
+        <p class="eyebrow">Marketplace</p>
+        <h1>Plugins</h1>
+        <p class="guide-lede">
+          A plugin is a single script file that extends DMXexpress: paint a new effect layer,
+          add your own window of controls, or restyle the whole console. Download one below,
+          drop it on the app's Plugins window, and it is live — no restart, no compiler.
+        </p>
+      </div>
+    </section>
+
+    <section class="section" style="padding-top: 40px">
+      <div class="container">
+        <div class="cards cards-3">
+          <div class="card">
+            <div class="card-icon">1</div>
+            <h3>Download</h3>
+            <p>Grab a <code>.rhai</code> file from the registry below — or from any GitHub link someone shares on the forum.</p>
+          </div>
+          <div class="card">
+            <div class="card-icon">2</div>
+            <h3>Drop it in</h3>
+            <p>In DMXexpress, open <strong>Plugins</strong> from the toolbar and drag the file onto the window — or press <strong>Open folder</strong> and copy it there, then <strong>Reload all</strong>.</p>
+          </div>
+          <div class="card">
+            <div class="card-icon">3</div>
+            <h3>Enable it</h3>
+            <p>Tick the plugin in the list. Layers start mixing immediately, windows appear under its <strong>Window</strong> toggle, and looks restyle the console. Untick or <strong>Remove</strong> any time.</p>
+          </div>
+        </div>
+
+        <div class="warn" style="margin-top: 28px">
+          <h4>Plugins are sandboxed, but read them anyway</h4>
+          <p>Scripts run inside the app's sandbox: no file, network, or system access, and a
+          runaway loop is stopped by an operation budget. Still, a plugin does drive your rig's
+          DMX output — skim any script before running it in front of an audience.</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="section section-alt">
+      <div class="container">
+        <div class="section-head">
+          <p class="eyebrow">Registry</p>
+          <h2>Browse plugins.</h2>
+          <p class="section-sub">
+            Community plugins are reviewed before they appear here. The three starters ship
+            inside DMXexpress — download them here anyway if you deleted yours.
+          </p>
+        </div>
+        <div id="registry-status" class="notice" hidden></div>
+        <div class="cards cards-3" id="plugin-grid"></div>
+      </div>
+    </section>
+
+    <section class="section">
+      <div class="container">
+        <div class="section-head">
+          <p class="eyebrow">Share yours</p>
+          <h2>Submit a plugin.</h2>
+          <p class="section-sub">
+            Host the <code>.rhai</code> file anywhere public — a GitHub repository or release
+            works perfectly — then submit the direct link. Submissions are held for review
+            before they appear in the registry.
+          </p>
+        </div>
+        <div id="submit-box" class="form-panel">
+          <div id="submit-auth" class="auth-row"></div>
+          <form id="submit-form" hidden>
+            <div class="form-grid">
+              <label class="field"><span>Slug (id)</span>
+                <input name="id" required pattern="[a-z0-9][a-z0-9\-]{1,48}" placeholder="my-cool-effect">
+              </label>
+              <label class="field"><span>Name</span>
+                <input name="name" required minlength="2" maxlength="60" placeholder="My Cool Effect">
+              </label>
+              <label class="field"><span>Version</span>
+                <input name="version" value="1.0" maxlength="20">
+              </label>
+              <label class="field"><span>Category</span>
+                <select name="category">
+                  <option value="effect">Effect (layers)</option>
+                  <option value="tool">Tool (windows)</option>
+                  <option value="look">Look (theme)</option>
+                </select>
+              </label>
+              <label class="field field-wide"><span>Direct download link (.rhai)</span>
+                <input name="download_url" required type="url" placeholder="https://github.com/you/repo/releases/download/v1/my_cool_effect.rhai">
+              </label>
+              <label class="field field-wide"><span>Homepage (optional)</span>
+                <input name="homepage" type="url" placeholder="https://github.com/you/repo">
+              </label>
+              <label class="field field-wide"><span>Description</span>
+                <textarea name="description" maxlength="500" rows="3" placeholder="What does it do on stage?"></textarea>
+              </label>
+            </div>
+            <div class="form-actions">
+              <button class="btn btn-primary" type="submit">Submit for review</button>
+              <span id="submit-msg" class="fine"></span>
+            </div>
+          </form>
+        </div>
+      </div>
+    </section>
+
+    <section class="section section-alt" id="dev">
+      <div class="container">
+        <div class="section-head">
+          <p class="eyebrow">For developers</p>
+          <h2>Write a plugin in an afternoon.</h2>
+          <p class="section-sub">
+            Plugins are <a href="https://rhai.rs" target="_blank" rel="noopener">Rhai</a> scripts —
+            one file, four optional functions, headers at the top. If you can write a for-loop,
+            you can write a light show.
+          </p>
+        </div>
+
+        <h3 style="margin-top: 0">The shape of a plugin</h3>
+        <div class="code-block">
+          <div class="code-title">wave_floor.rhai</div>
+          <pre><code><span class="c">//! name: Wave Floor</span>
+<span class="c">//! version: 1.0</span>
+<span class="c">//! author: you</span>
+<span class="c">//! description: A sine wave across every dimmer.</span>
+<span class="c">//! blend: highest      // mix | highest | add</span>
+
+fn controls() {
+    [
+        #{ kind: "slider", id: "rate", label: "Rate", min: 0.1, max: 4.0, value: 1.0 },
+        #{ kind: "button", id: "kick", label: "KICK" },
+    ]
+}
+
+<span class="c">// Called ~40x a second while enabled. Return [address, value] pairs.</span>
+fn frame(t, rig, state) {
+    let out = [];
+    for f in rig {
+        if f.dimmer > 0 {
+            let v = (1.0 + sin(t * state.rate + f.x)) / 2.0;
+            out.push([f.dimmer, (v * 255.0).to_int()]);
+        }
+    }
+    out
+}
+
+<span class="c">// A window button was pressed. Stash anything you like in state.</span>
+fn button(id, t, state) {
+    if id == "kick" { state.kicked_at = t; }
+    state
+}</code></pre>
+        </div>
+
+        <div class="split" style="margin-top: 40px">
+          <div class="split-text">
+            <h3>The four hooks</h3>
+            <table class="kv">
+              <thead><tr><th>Function</th><th>What it does</th></tr></thead>
+              <tbody>
+                <tr><td><code>controls()</code></td><td>Declares the plugin's window: sliders, checkboxes, buttons, labels. Values arrive in <code>state</code>.</td></tr>
+                <tr><td><code>frame(t, rig, state)</code></td><td>Called every tick. Returns <code>[address, value]</code> pairs painted onto the plugin's own mixer layer.</td></tr>
+                <tr><td><code>button(id, t, state)</code></td><td>Runs when a window button is pressed; return the new state map.</td></tr>
+                <tr><td><code>theme()</code></td><td>Returns <code>#RRGGBB</code> strings for <code>accent</code>, <code>surface</code>, <code>text</code> — a console re-tint while enabled.</td></tr>
+              </tbody>
+            </table>
+          </div>
+          <div class="split-text">
+            <h3>Each rig entry</h3>
+            <table class="kv">
+              <thead><tr><th>Field</th><th>Meaning</th></tr></thead>
+              <tbody>
+                <tr><td><code>i</code>, <code>name</code></td><td>Fixture index and display name</td></tr>
+                <tr><td><code>addr</code>, <code>channels</code></td><td>1-based base address and channel count</td></tr>
+                <tr><td><code>dimmer red green blue white</code></td><td>Absolute address of that channel, 0 if the fixture has none</td></tr>
+                <tr><td><code>x y z</code></td><td>Stage position in metres — fan effects across space</td></tr>
+              </tbody>
+            </table>
+            <h3>Rules of the sandbox</h3>
+            <ul class="checklist">
+              <li>No file, network, or process access — scripts only compute values</li>
+              <li>An operation budget stops infinite loops with an error, not a hang</li>
+              <li>Errors park the hook and show in the Plugins window; fix and press Reload</li>
+              <li><code>print("...")</code> goes to the app's Log window</li>
+              <li><code>hsv(h, s, v)</code> is built in and returns <code>[r, g, b]</code></li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="footer">
+    <div class="container footer-inner">
+      <div>
+        <img src="images/logo.png" alt="DMXexpress" class="logo-footer">
+        <p class="fine">A native, all-in-one DMX fixture visualizer and live lighting controller built in Rust.</p>
+      </div>
+      <div class="footer-links">
+        <a href="index.html#features">Features</a>
+        <a href="plugins.html">Plugins</a>
+        <a href="community.html">Community</a>
+        <a href="download.html">Download</a>
+        <a href="guide.html">Guide</a>
+        <a href="https://github.com/michaelmandich/DMXpress" target="_blank" rel="noopener">GitHub</a>
+      </div>
+    </div>
+  </footer>
+
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+  <script src="js/config.js"></script>
+  <script src="js/plugins.js"></script>
+</body>
+</html>

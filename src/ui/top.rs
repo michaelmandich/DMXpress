@@ -4,23 +4,36 @@ use std::net::Ipv4Addr;
 
 use eframe::egui;
 
-use super::{apply_zoom, icons, theme, zoom_controls};
+use super::{icons, theme};
 use crate::app::App;
 use crate::net::NetCmd;
 
 impl App {
     pub(crate) fn top_bar(&mut self, ctx: &egui::Context) {
-        egui::TopBottomPanel::top("top").show(ctx, |ui| {
-            egui::ScrollArea::horizontal()
-                .id_salt("top_tabs")
-                // Trackpad-scrolled: no scroll bar drawn over the buttons.
-                .scroll_bar_visibility(egui::scroll_area::ScrollBarVisibility::AlwaysHidden)
-                .show(ui, |ui| {
-                    ui.horizontal(|ui| {
-                        self.top_bar_contents(ui);
+        let margin = egui::Margin::symmetric(10.0, 7.0);
+        egui::TopBottomPanel::top("top")
+            .frame(egui::Frame::none().inner_margin(margin))
+            .show_separator_line(false)
+            .show(ctx, |ui| {
+                // Reserve a slot for the backdrop, fill it in once the row
+                // has laid out and its height is known.
+                let backdrop = ui.painter().add(egui::Shape::Noop);
+                egui::ScrollArea::horizontal()
+                    .id_salt("top_tabs")
+                    // Trackpad-scrolled: no scroll bar drawn over the buttons.
+                    .scroll_bar_visibility(egui::scroll_area::ScrollBarVisibility::AlwaysHidden)
+                    .show(ui, |ui| {
+                        ui.horizontal(|ui| {
+                            self.top_bar_contents(ui);
+                        });
                     });
-                });
-        });
+                let rect = egui::Rect::from_x_y_ranges(
+                    ui.max_rect().x_range(),
+                    ui.min_rect().y_range(),
+                )
+                .expand2(margin.sum() / 2.0);
+                ui.painter().set(backdrop, theme::toolbar_backdrop(rect));
+            });
     }
 
     fn top_bar_contents(&mut self, ui: &mut egui::Ui) {
@@ -44,6 +57,39 @@ impl App {
                     None => {
                         ui.heading("DMXpress");
                     }
+                }
+                ui.separator();
+                let undo_steps = self.undo.undo_len();
+                let undo_hint = if undo_steps == 0 {
+                    "Nothing to undo · Ctrl+Shift+Z".to_string()
+                } else {
+                    format!(
+                        "Undo the last change · Ctrl+Shift+Z ({undo_steps} step{} back)",
+                        if undo_steps == 1 { "" } else { "s" }
+                    )
+                };
+                if ui
+                    .add_enabled_ui(undo_steps > 0, |ui| {
+                        icons::icon_button(ui, icons::Icon::Undo, None)
+                    })
+                    .inner
+                    .on_hover_text(&undo_hint)
+                    .on_disabled_hover_text(&undo_hint)
+                    .clicked()
+                {
+                    self.undo();
+                }
+                let redo_steps = self.undo.redo_len();
+                if ui
+                    .add_enabled_ui(redo_steps > 0, |ui| {
+                        icons::icon_button(ui, icons::Icon::Redo, None)
+                    })
+                    .inner
+                    .on_hover_text("Redo · Ctrl+Shift+Y")
+                    .on_disabled_hover_text("Nothing to redo · Ctrl+Shift+Y")
+                    .clicked()
+                {
+                    self.redo();
                 }
                 ui.separator();
                 ui.label("Universe:");
@@ -89,7 +135,7 @@ impl App {
                 }
                 ui.separator();
                 // Every pool and panel toggle, in one consistent icon row.
-                let tabs: [(icons::Icon, &str, &mut bool, &str); 20] = [
+                let tabs: [(icons::Icon, &str, &mut bool, &str); 24] = [
                     (
                         icons::Icon::Artnet,
                         "Art-Net",
@@ -139,10 +185,28 @@ impl App {
                         "Referenced looks and colour cycles",
                     ),
                     (
+                        icons::Icon::Gobo,
+                        "Gobos",
+                        &mut self.show_gobos,
+                        "What the selected lights project: pick a gobo by its picture",
+                    ),
+                    (
                         icons::Icon::Phaser,
                         "Phasers",
                         &mut self.show_phasers,
-                        "Spread effects across the selection",
+                        "Design phasers: pick channels to oscillate, shape the motion, store",
+                    ),
+                    (
+                        icons::Icon::Board,
+                        "Board",
+                        &mut self.show_phaser_board,
+                        "Phaser board: pads that start and stop phasers, mirrored on the Stream Deck",
+                    ),
+                    (
+                        icons::Icon::Presets,
+                        "Presets",
+                        &mut self.show_preset_board,
+                        "Presets board: pads that recall looks, mirrored on the Stream Deck's Presets page",
                     ),
                     (
                         icons::Icon::Beat,
@@ -200,6 +264,12 @@ impl App {
                         "Channel monitor & connection tester",
                     ),
                     (
+                        icons::Icon::Plugin,
+                        "Plugins",
+                        &mut self.show_plugins,
+                        "Script plugins: extra layers, windows and looks",
+                    ),
+                    (
                         icons::Icon::Settings,
                         "Settings",
                         &mut self.show_settings,
@@ -219,12 +289,13 @@ impl App {
         if !self.show_artnet {
             return;
         }
+        let frame = theme::panel_frame(&ctx.style());
         egui::TopBottomPanel::top("artnet_panel")
             .resizable(true)
             .default_height(170.0)
+            .frame(frame)
             .show(ctx, |ui| {
-                ui.heading("Art-Net Output");
-                ui.separator();
+                theme::panel_header(ui, "Art-Net Output", |_| {});
                 egui::ScrollArea::vertical().show(ui, |ui| {
                     if self.nodes.is_empty() {
                         ui.label("Searching... (ArtPoll broadcast)");
@@ -280,23 +351,21 @@ impl App {
         let screen = ctx.screen_rect();
         let mut open = self.show_log;
         let mut popped = self.popped_out.contains("log");
+        let mut zoom_level = self.zoom.log;
         super::floating_panel(
             ctx,
             "log",
             "Log",
             &mut open,
             &mut popped,
+            Some(&mut zoom_level),
             [360.0, 160.0],
             [12.0, screen.bottom() - 200.0],
             |ui| {
-                ui.with_layout(egui::Layout::right_to_left(egui::Align::Center), |ui| {
-                    zoom_controls(ui, &mut self.zoom.log);
-                });
                 egui::ScrollArea::vertical()
                     .auto_shrink([false, false])
                     .stick_to_bottom(true)
                     .show(ui, |ui| {
-                        apply_zoom(ui, self.zoom.log);
                         for line in &self.log {
                             ui.monospace(line);
                         }
@@ -304,6 +373,7 @@ impl App {
             },
         );
         self.show_log = open;
+        self.zoom.log = zoom_level;
         if popped {
             self.popped_out.insert("log");
         } else {

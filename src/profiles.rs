@@ -28,6 +28,8 @@ use crate::fixturedb::{self, Library};
 use crate::showbuddy::{Band, Channel, Fixture, Patch, Role};
 
 pub const USER_PATCH_FILE: &str = "patch_user.json";
+/// How many recently patched profiles `UserPatch::recent` keeps.
+pub const RECENT_CAP: usize = 8;
 
 /// One built-in fixture definition.
 pub struct Profile {
@@ -196,7 +198,7 @@ pub fn find(name: &str) -> Option<&'static Profile> {
 // ---- channel builders ----
 
 fn band(kind: char, min: u8, max: u8, label: &str) -> Band {
-    Band { kind, min, max, label: label.to_string() }
+    Band { kind, min, max, label: label.to_string(), gobo: None }
 }
 
 /// Continuous 0-255 value channel. These built-ins leave `role` unset and
@@ -1046,6 +1048,17 @@ pub struct UserFixture {
     pub from: u16,
 }
 
+/// A profile patched recently, cached with its label and channel count so the
+/// Inspector's recents strip renders without loading the fixture library.
+#[derive(Debug, Clone, PartialEq, Eq, Serialize, Deserialize)]
+pub struct RecentProfile {
+    /// `UserFixture.profile`: a built-in name or `lib:<id>`.
+    pub profile: String,
+    /// Short human label, e.g. "SlimPAR Q12 BT".
+    pub label: String,
+    pub channels: u16,
+}
+
 /// On-disk DMXpress patch: user fixtures plus whether the ShowBuddy patch is
 /// merged in at all (off = a fresh rig built only from built-in profiles).
 #[derive(Debug, Clone, Serialize, Deserialize)]
@@ -1057,6 +1070,9 @@ pub struct UserPatch {
     /// Individual ShowBuddy fixtures hidden from the rig (`display@from` keys).
     #[serde(default)]
     pub excluded: Vec<String>,
+    /// Profiles patched most recently, newest first, at most `RECENT_CAP`.
+    #[serde(default)]
+    pub recent: Vec<RecentProfile>,
 }
 
 fn yes() -> bool {
@@ -1069,6 +1085,7 @@ impl Default for UserPatch {
             include_showbuddy: true,
             fixtures: Vec::new(),
             excluded: Vec::new(),
+            recent: Vec::new(),
         }
     }
 }
@@ -1085,6 +1102,7 @@ pub fn load_user_patch() -> UserPatch {
         include_showbuddy: true,
         fixtures: serde_json::from_str(&text).unwrap_or_default(),
         excluded: Vec::new(),
+        recent: Vec::new(),
     }
 }
 
@@ -1092,6 +1110,14 @@ pub fn save_user_patch(patch: &UserPatch) {
     if let Ok(json) = serde_json::to_string_pretty(patch) {
         let _ = std::fs::write(USER_PATCH_FILE, json);
     }
+}
+
+/// Move `r` to the front of `recent` (matching on `profile`, so a re-patch
+/// refreshes the cached label), keeping at most `RECENT_CAP` entries.
+pub fn note_recent(recent: &mut Vec<RecentProfile>, r: RecentProfile) {
+    recent.retain(|p| p.profile != r.profile);
+    recent.insert(0, r);
+    recent.truncate(RECENT_CAP);
 }
 /// Stable identifier for a patched fixture (used by the exclusion list).
 pub fn fixture_key(display: &str, from: u16) -> String {
@@ -1144,6 +1170,22 @@ pub fn extend_patch(patch: &mut Patch, user: &UserPatch, library: &Library) {
 #[cfg(test)]
 mod tests {
     use super::*;
+
+    #[test]
+    fn note_recent_dedups_and_caps() {
+        let rp = |i: usize| RecentProfile { profile: format!("p{i}"), label: format!("P{i}"), channels: 4 };
+        let mut r = Vec::new();
+        for i in 0..10 {
+            note_recent(&mut r, rp(i));
+        }
+        assert_eq!(r.len(), RECENT_CAP);
+        assert_eq!(r[0].profile, "p9");
+        note_recent(&mut r, RecentProfile { label: "new".into(), ..rp(5) });
+        assert_eq!(r[0].profile, "p5");
+        assert_eq!(r[0].label, "new");
+        assert_eq!(r.iter().filter(|p| p.profile == "p5").count(), 1);
+        assert_eq!(r.len(), RECENT_CAP);
+    }
 
     #[test]
     fn channel_counts_match_modes() {

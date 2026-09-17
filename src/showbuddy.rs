@@ -124,11 +124,22 @@ pub struct Band {
     pub min: u8,
     pub max: u8,
     pub label: String,
+    /// The gobo this slot carries, as a key into the gobo catalogue
+    /// (`gobo::Catalogue`), when known. Filled in at patch time from the
+    /// catalogue's wheel map or the Gobos window's own assignments; the
+    /// stage renders the beam through that mask.
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub gobo: Option<String>,
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct Channel {
     pub name: String,
+    /// Labelled sub-ranges, for the channels that have them. Empty is the
+    /// normal case: a lone unlabelled 0-255 band means the same thing as no
+    /// bands at all to every reader, so the fixture library leaves it out
+    /// rather than repeating it ~90,000 times.
+    #[serde(default, skip_serializing_if = "Vec::is_empty")]
     pub bands: Vec<Band>,
     /// Set by the fixture library, where the source data says outright what a
     /// channel does. Absent for ShowBuddy imports and older saves, which fall
@@ -228,6 +239,45 @@ impl Channel {
             .iter()
             .find(|b| v >= b.min && v <= b.max && !b.label.is_empty())
             .map(|b| b.label.as_str())
+    }
+
+    /// The band `v` falls in, whatever it is labelled.
+    pub fn band_at(&self, v: u8) -> Option<&Band> {
+        self.bands.iter().find(|b| v >= b.min && v <= b.max)
+    }
+
+    /// A gobo wheel: a gobo-role channel whose stepped bands pick slots.
+    /// Rotation/index channels are gobo-role too but don't select anything
+    /// (see [`Channel::is_gobo_rotation`]).
+    pub fn is_gobo_wheel(&self) -> bool {
+        if self.role() != Role::Gobo {
+            return false;
+        }
+        let stepped = self
+            .bands
+            .iter()
+            .filter(|b| b.kind == 'S' && !(b.min == 0 && b.max == 255))
+            .count();
+        stepped >= 2 && !self.bands_all_rotation()
+    }
+
+    /// A gobo-role channel that spins or indexes a wheel rather than picking
+    /// a slot: named for it ("Gobo rotation", "Gobo index"), or — the way
+    /// OFL labels them — every band a rotation band.
+    pub fn is_gobo_rotation(&self) -> bool {
+        if self.role() != Role::Gobo || self.is_gobo_wheel() {
+            return false;
+        }
+        let n = self.name.to_lowercase();
+        n.contains("rot") || n.contains("index") || n.contains("spin") || self.bands_all_rotation()
+    }
+
+    fn bands_all_rotation(&self) -> bool {
+        !self.bands.is_empty()
+            && self.bands.iter().all(|b| {
+                let l = b.label.to_lowercase();
+                l.contains("rotat") || l.contains("index") || l.contains("spin")
+            })
     }
 
     /// Usable dimming sub-range of a dimmer channel that also carries
@@ -417,6 +467,7 @@ fn parse_band(line: &str) -> Option<Band> {
         min,
         max,
         label,
+        gobo: None,
     })
 }
 
@@ -664,4 +715,55 @@ fn attr_here<'a>(s: &'a str, name: &str) -> Option<&'a str> {
             None
         }
     })
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    /// `Channel.bands` became optional when the fixture library stopped
+    /// writing the unlabelled full-range band that ~90% of channels carried.
+    /// Saved show configs embed whole channel lists, so both spellings have
+    /// to keep parsing, and a bandless channel has to survive a save.
+    #[test]
+    fn channels_round_trip_with_and_without_bands() {
+        let explicit: Channel =
+            serde_json::from_str(r#"{"name":"Red","bands":[],"role":"Red"}"#).unwrap();
+        let omitted: Channel = serde_json::from_str(r#"{"name":"Red","role":"Red"}"#).unwrap();
+        assert!(explicit.bands.is_empty() && omitted.bands.is_empty());
+        assert_eq!(explicit.role(), Role::Red);
+        assert_eq!(omitted.role(), Role::Red);
+
+        let saved = serde_json::to_string(&omitted).unwrap();
+        assert!(!saved.contains("bands"), "{saved}");
+        assert_eq!(
+            serde_json::from_str::<Channel>(&saved).unwrap().name,
+            "Red"
+        );
+
+        let banded: Channel = serde_json::from_str(
+            r#"{"name":"Color","bands":[{"kind":"S","min":0,"max":9,"label":"Open"}]}"#,
+        )
+        .unwrap();
+        assert_eq!(banded.band_label(5), Some("Open"));
+        assert!(serde_json::to_string(&banded).unwrap().contains("Open"));
+    }
+
+    /// A bandless channel has to behave exactly like one carrying a single
+    /// unlabelled 0-255 band — that equivalence is the reason the library
+    /// leaves them out.
+    #[test]
+    fn a_lone_full_range_band_is_the_same_as_none() {
+        let full = Channel {
+            name: "Dimmer".into(),
+            bands: vec![Band { kind: 'D', min: 0, max: 255, label: String::new(), gobo: None }],
+            role: Some(Role::Dimmer),
+        };
+        let bare = Channel { name: "Dimmer".into(), bands: Vec::new(), role: Some(Role::Dimmer) };
+        assert_eq!(full.role(), bare.role());
+        assert_eq!(full.dim_range(), bare.dim_range());
+        for v in [0u8, 1, 127, 254, 255] {
+            assert_eq!(full.band_label(v), bare.band_label(v), "at {v}");
+        }
+    }
 }

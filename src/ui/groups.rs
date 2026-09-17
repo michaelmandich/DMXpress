@@ -4,7 +4,7 @@
 
 use eframe::egui;
 
-use super::{apply_zoom, theme, zoom_controls};
+use super::theme;
 use crate::app::App;
 use crate::group::{self, Group, GroupMode};
 
@@ -128,17 +128,17 @@ impl App {
             .collect();
         let chain_locked = chain_fixtures.iter().any(|fi| order_bound.contains(fi));
 
+        let mut zoom_level = self.zoom.groups;
         super::floating_panel(
             ctx,
             "groups",
             "Groups",
             &mut open,
             &mut popped,
+            Some(&mut zoom_level),
             [320.0, 300.0],
             [screen.right() - 360.0, 150.0],
             |ui| {
-                zoom_controls(ui, &mut self.zoom.groups);
-                apply_zoom(ui, self.zoom.groups);
 
                 let cur = self.stage.selected_fixtures();
                 ui.horizontal(|ui| {
@@ -289,6 +289,7 @@ impl App {
                 });
             },
         );
+        self.zoom.groups = zoom_level;
         self.show_groups = open;
         if popped {
             self.popped_out.insert("groups");

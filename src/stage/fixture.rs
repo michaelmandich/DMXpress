@@ -200,6 +200,87 @@ pub(crate) fn live_state(f: &Fixture, buf: &[u8; crate::net::DMX_SLOTS]) -> Live
     }
 }
 
+/// Which gobos a fixture is projecting right now, and how far each is turned.
+pub(crate) struct GoboLive<'a> {
+    /// Catalogue keys, one per wheel (a static and a rotating wheel at most).
+    pub keys: [Option<&'a str>; 2],
+    /// Rotation of each wheel's gobo, radians.
+    pub angle: [f32; 2],
+}
+
+/// Read the gobo wheels and rotation channels off the DMX buffer. `time` in
+/// seconds drives continuous rotation.
+pub(crate) fn gobo_state<'a>(
+    f: &'a Fixture,
+    buf: &[u8; crate::net::DMX_SLOTS],
+    time: f64,
+) -> GoboLive<'a> {
+    let mut out = GoboLive { keys: [None; 2], angle: [0.0; 2] };
+    let mut wheels: Vec<(usize, &'a crate::showbuddy::Channel, u8)> = Vec::new();
+    let mut rotations: Vec<(usize, &'a crate::showbuddy::Channel, u8)> = Vec::new();
+    for (i, ch) in f.channels.iter().enumerate() {
+        let addr = f.from as usize + i;
+        if addr == 0 || addr > crate::net::DMX_SLOTS {
+            continue;
+        }
+        let v8 = buf[addr - 1];
+        if ch.is_gobo_wheel() {
+            if wheels.len() < 2 {
+                wheels.push((i, ch, v8));
+            }
+        } else if ch.is_gobo_rotation() {
+            rotations.push((i, ch, v8));
+        }
+    }
+    for (w, (_, ch, v8)) in wheels.iter().enumerate() {
+        out.keys[w] = ch.band_at(*v8).and_then(|b| b.gobo.as_deref());
+    }
+    for (ri, ch, v8) in rotations {
+        if let Some(w) = wheel_for_rotation(&wheels, ri, &ch.name) {
+            out.angle[w] = rotation_angle(v8, time);
+        }
+    }
+    out
+}
+
+/// Which wheel a rotation channel turns: the one sharing its number ("Gobo
+/// 2" ↔ "Gobo rotation 2"), else the one called rotating, else the nearest
+/// wheel patched before it.
+fn wheel_for_rotation(
+    wheels: &[(usize, &crate::showbuddy::Channel, u8)],
+    rotation_index: usize,
+    rotation_name: &str,
+) -> Option<usize> {
+    if wheels.is_empty() {
+        return None;
+    }
+    if let Some(digit) = rotation_name.chars().find(|c| c.is_ascii_digit()) {
+        if let Some(w) = wheels.iter().position(|(_, ch, _)| ch.name.contains(digit)) {
+            return Some(w);
+        }
+    }
+    if let Some(w) = wheels.iter().position(|(_, ch, _)| ch.name.to_lowercase().contains("rot")) {
+        return Some(w);
+    }
+    wheels.iter().rposition(|(ci, _, _)| *ci < rotation_index).or(Some(0))
+}
+
+/// The usual rotation channel layout: the lower half indexes the gobo to a
+/// fixed angle, the upper half spins it, one way then the other, faster
+/// further from the middle.
+fn rotation_angle(v: u8, time: f64) -> f32 {
+    use std::f32::consts::TAU;
+    if v < 128 {
+        return v as f32 / 127.0 * TAU;
+    }
+    let (speed, sign) = if v < 192 {
+        ((v - 128) as f32 / 63.0, 1.0)
+    } else {
+        ((v - 192) as f32 / 63.0, -1.0)
+    };
+    ((time as f32) * speed * sign * 1.5) % TAU
+}
+
 /// Perceptual brightness curve: lifts the low end so a light running at
 /// 10–30% (or even 1%) still reads as clearly coloured rather than near-black.
 /// Roughly an sRGB-style gamma (linear in → perceived out).
@@ -209,6 +290,11 @@ pub(crate) fn vis_curve(b: f32) -> f32 {
 
 /// Swatch for the fixture list: its live colour (scaled by output level), or
 /// near-black when the fixture is off.
+/// The fixture's live output level, 0 (dark) to 1 (full).
+pub fn fixture_level(f: &Fixture, buf: &[u8; crate::net::DMX_SLOTS]) -> f32 {
+    live_state(f, buf).brightness.clamp(0.0, 1.0)
+}
+
 pub fn fixture_swatch(f: &Fixture, buf: &[u8; crate::net::DMX_SLOTS]) -> Color32 {
     let live = live_state(f, buf);
     if live.brightness > 0.02 {

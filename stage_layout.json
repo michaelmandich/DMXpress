@@ -1005,7 +1005,10 @@
       },
       "yaw_deg": 0.0,
       "height": 3.7,
-      "width": 2.4
+      "width": 2.4,
+      "name": "",
+      "group": null,
+      "hidden": false
     },
     {
       "pos": {
@@ -1015,7 +1018,10 @@
       },
       "yaw_deg": 0.0,
       "height": 3.65,
-      "width": 2.4
+      "width": 2.4,
+      "name": "",
+      "group": null,
+      "hidden": false
     },
     {
       "pos": {
@@ -1025,7 +1031,10 @@
       },
       "yaw_deg": 0.0,
       "height": 3.6,
-      "width": 2.4
+      "width": 2.4,
+      "name": "",
+      "group": null,
+      "hidden": false
     },
     {
       "pos": {
@@ -1035,7 +1044,10 @@
       },
       "yaw_deg": -38.0,
       "height": 5.27,
-      "width": 2.4
+      "width": 2.4,
+      "name": "",
+      "group": null,
+      "hidden": false
     }
   ],
   "trusses": []

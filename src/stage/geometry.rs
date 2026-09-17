@@ -63,6 +63,9 @@ impl StageView {
             };
             let mut best: Option<(SnapTarget, f32)> = None;
             for (ti, tw) in self.towers.iter().enumerate() {
+                if tw.hidden {
+                    continue;
+                }
                 for slot in 0..TOWER_SLOTS {
                     let target = SnapTarget::Tower(ti, slot);
                     if taken.contains(&target) {
@@ -77,6 +80,9 @@ impl StageView {
                 }
             }
             for (ti, tr) in self.trusses.iter().enumerate() {
+                if tr.hidden {
+                    continue;
+                }
                 for slot in 0..tr.total_slots() {
                     let target = SnapTarget::Truss(ti, slot);
                     if taken.contains(&target) {

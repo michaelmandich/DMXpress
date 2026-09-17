@@ -1,416 +1,380 @@
-//! Right-hand transform editor for the current selection (lights, a tower,
-//! or a truss).
+//! The stage side of the light / tower / truss editor grids the Inspector's
+//! Selection tab embeds: what a grid reads out of the selection (values plus
+//! the "mixed" flags a multi-selection needs), what it writes back, and the
+//! fix-ups an element edit owes its hung lights.
+//!
+//! The grids themselves are drawn in `ui::inspector::selection` — `theme`
+//! and `icons` are private to `crate::ui`, so the kit cannot be reached from
+//! here. Everything in this file is therefore pure of egui and unit-testable.
 
-use eframe::egui;
-
-use super::fixture::{classify, Archetype};
-use super::layout::{TrussKind, TOWER_SLOTS};
-use super::math::V3;
+use super::arrange::OrderBy;
+use super::fixture::classify;
+use super::layout::{ElementRef, TrussKind};
+use super::math::{v3, V3};
+use super::settings::Settings;
 use super::view::StageView;
 use crate::showbuddy::Patch;
 
+/// What the element editor's footer asked for, applied by the tab.
+#[derive(Clone, Copy, PartialEq, Eq, Debug, Default)]
+pub(crate) enum ElementAction {
+    #[default]
+    None,
+    Delete,
+    SelectMounted,
+    HangLast,
+    MirrorX,
+    MirrorZ,
+}
+
+/// The placement quick-chips on an element editor.
+#[derive(Clone, Copy, PartialEq, Eq, Debug)]
+pub(crate) enum ElementSpot {
+    Centre,
+    Back,
+    Front,
+    Left,
+    Right,
+}
+
+impl ElementSpot {
+    pub const ALL: [ElementSpot; 5] = [
+        ElementSpot::Centre,
+        ElementSpot::Back,
+        ElementSpot::Front,
+        ElementSpot::Left,
+        ElementSpot::Right,
+    ];
+
+    pub fn label(self) -> &'static str {
+        match self {
+            ElementSpot::Centre => "Centre",
+            ElementSpot::Back => "Back",
+            ElementSpot::Front => "Front",
+            ElementSpot::Left => "Left",
+            ElementSpot::Right => "Right",
+        }
+    }
+}
+
+/// Floor X / Z for a quick placement. Upstage (back) is −Z, matching the
+/// stage box and the nudge pad's chevrons.
+pub(crate) fn element_spot(spot: ElementSpot, set: &Settings) -> (f32, f32) {
+    match spot {
+        ElementSpot::Centre => (0.0, 0.0),
+        ElementSpot::Back => (0.0, -set.stage_half_d),
+        ElementSpot::Front => (0.0, set.stage_half_d),
+        ElementSpot::Left => (-set.stage_half_w, 0.0),
+        ElementSpot::Right => (set.stage_half_w, 0.0),
+    }
+}
+
+/// The values one transform grid shows for the whole selection: the
+/// centroid, and the anchor light's rotation, size and opacity.
+#[derive(Clone, Copy, Debug, PartialEq)]
+pub(crate) struct LightEdit {
+    pub pos: V3,
+    pub yaw_deg: f32,
+    pub pitch_deg: f32,
+    pub roll_deg: f32,
+    pub scale: f32,
+    pub opacity: f32,
+}
+
+/// Which of those values differ across the selection, so the grid can say
+/// so instead of pretending the first light speaks for all of them.
+#[derive(Clone, Copy, Debug, Default, PartialEq, Eq)]
+pub(crate) struct LightMixed {
+    pub pos: [bool; 3],
+    pub yaw: bool,
+    pub pitch: bool,
+    pub roll: bool,
+    pub scale: bool,
+    pub opacity: bool,
+}
+
+/// Everything the transform grid needs about the selection.
+pub(crate) struct LightEditor {
+    pub values: LightEdit,
+    pub mixed: LightMixed,
+    /// Selected moving heads / everything else: which rotation rows show.
+    pub heads: usize,
+    pub pars: usize,
+    pub count: usize,
+}
+
+/// Values closer than this read as the same number in the grid.
+const EPS: f32 = 1e-4;
+
 impl StageView {
-    /// Transform editor for the current selection (right-hand inspector).
-    pub fn inspector_ui(&mut self, ui: &mut egui::Ui, patch: &Patch) {
-        ui.horizontal(|ui| {
-            ui.selectable_value(&mut self.fly_mode, false, "Orbit");
-            ui.selectable_value(&mut self.fly_mode, true, "Free fly");
-        });
-        if self.fly_mode {
-            ui.add(egui::Slider::new(&mut self.fly_speed, 0.5..=30.0).text("Fly speed"));
-            ui.weak(
-                "Hover stage: WASD move · Space up · Shift down · arrows/right-drag look · scroll adjusts speed",
-            );
-        } else {
-            ui.weak("Right-drag orbit · middle-drag pan · scroll zoom");
-        }
-        ui.separator();
-
-        // Tower editor when a tower is picked and no lights are selected.
-        if self.selection.is_empty() {
-            if let Some(ti) = self.sel_tower {
-                if ti >= self.towers.len() {
-                    self.sel_tower = None;
-                } else {
-                    ui.label(format!("Tower {}", ti + 1));
-                    let mounted = self
-                        .instances
-                        .iter()
-                        .filter(|inst| inst.mount.is_some_and(|(t, _)| t == ti))
-                        .count();
-                    ui.weak(format!(
-                        "{mounted}/{TOWER_SLOTS} slots holding lights — drag a light \
-                         near a blue ring to snap it on"
-                    ));
-                    ui.separator();
-                    let mut changed = false;
-                    let old_yaw = self.towers[ti].yaw_deg;
-                    {
-                        let tw = &mut self.towers[ti];
-                        egui::Grid::new("tower_xform").num_columns(2).show(ui, |ui| {
-                            ui.label("X");
-                            changed |= ui
-                                .add(egui::DragValue::new(&mut tw.pos.x).speed(0.05))
-                                .changed();
-                            ui.end_row();
-                            ui.label("Z");
-                            changed |= ui
-                                .add(egui::DragValue::new(&mut tw.pos.z).speed(0.05))
-                                .changed();
-                            ui.end_row();
-                            ui.label("Yaw °");
-                            changed |= ui
-                                .add(egui::DragValue::new(&mut tw.yaw_deg).speed(0.5))
-                                .changed();
-                            ui.end_row();
-                            ui.label("Height");
-                            changed |= ui
-                                .add(egui::Slider::new(&mut tw.height, 1.2..=6.0))
-                                .changed();
-                            ui.end_row();
-                            ui.label("Width");
-                            changed |= ui
-                                .add(egui::Slider::new(&mut tw.width, 0.8..=4.0))
-                                .changed();
-                            ui.end_row();
-                        });
-                    }
-                    ui.add_space(6.0);
-                    if ui.button("Delete tower").clicked() {
-                        self.delete_tower(patch, ti);
-                    } else if changed {
-                        let dyaw = self.towers[ti].yaw_deg - old_yaw;
-                        if dyaw != 0.0 {
-                            self.spin_tower_mounts(ti, dyaw);
-                        }
-                        self.save(patch);
-                    }
-                    return;
-                }
+    /// Read the selection into one editable row set, or `None` when nothing
+    /// is selected.
+    pub(crate) fn light_editor(&self, patch: &Patch) -> Option<LightEditor> {
+        let sel = self.sorted_selection(patch, OrderBy::Selection);
+        let first = *sel.first()?;
+        let centre = self.selection_centroid()?;
+        let t0 = &self.instances[first].t;
+        let values = LightEdit {
+            pos: centre,
+            yaw_deg: t0.yaw_deg,
+            pitch_deg: t0.pitch_deg,
+            roll_deg: t0.roll_deg,
+            scale: t0.scale,
+            opacity: self.instances[first].opacity,
+        };
+        let mut mixed = LightMixed::default();
+        let (mut heads, mut pars) = (0, 0);
+        let p0 = t0.pos;
+        for &i in &sel {
+            let inst = &self.instances[i];
+            let t = &inst.t;
+            mixed.pos[0] |= (t.pos.x - p0.x).abs() > EPS;
+            mixed.pos[1] |= (t.pos.y - p0.y).abs() > EPS;
+            mixed.pos[2] |= (t.pos.z - p0.z).abs() > EPS;
+            mixed.yaw |= (t.yaw_deg - values.yaw_deg).abs() > EPS;
+            mixed.pitch |= (t.pitch_deg - values.pitch_deg).abs() > EPS;
+            mixed.roll |= (t.roll_deg - values.roll_deg).abs() > EPS;
+            mixed.scale |= (t.scale - values.scale).abs() > EPS;
+            mixed.opacity |= (inst.opacity - values.opacity).abs() > EPS;
+            match patch.fixtures.get(inst.fixture).map(classify) {
+                Some(a) if super::arrange::is_head(a) => heads += 1,
+                _ => pars += 1,
             }
         }
+        Some(LightEditor { values, mixed, heads, pars, count: sel.len() })
+    }
 
-        // Truss editor when a truss is picked and no lights are selected.
-        if self.selection.is_empty() {
-            if let Some(ti) = self.sel_truss {
-                if ti >= self.trusses.len() {
-                    self.sel_truss = None;
-                } else {
-                    let kind = self.trusses[ti].kind;
-                    ui.label(format!(
-                        "{} truss {}",
-                        match kind {
-                            TrussKind::Straight => "F34 straight",
-                            TrussKind::Radius => "Radius",
-                        },
-                        ti + 1
-                    ));
-                    let total_slots = self.trusses[ti].total_slots();
-                    let mounted = self
-                        .instances
-                        .iter()
-                        .filter(|inst| inst.truss_mount.is_some_and(|(t, _)| t == ti))
-                        .count();
-                    ui.weak(format!(
-                        "{mounted}/{total_slots} slots holding lights — drag a light \
-                         near a blue ring to snap it on"
-                    ));
-                    ui.separator();
-                    let mut changed = false;
-                    let old_yaw = self.trusses[ti].yaw_deg;
-                    {
-                        let tr = &mut self.trusses[ti];
-                        egui::Grid::new("truss_xform").num_columns(2).show(ui, |ui| {
-                            ui.label("X");
-                            changed |= ui
-                                .add(egui::DragValue::new(&mut tr.pos.x).speed(0.05))
-                                .changed();
-                            ui.end_row();
-                            ui.label("Z");
-                            changed |= ui
-                                .add(egui::DragValue::new(&mut tr.pos.z).speed(0.05))
-                                .changed();
-                            ui.end_row();
-                            ui.label("Height");
-                            changed |= ui
-                                .add(egui::Slider::new(&mut tr.pos.y, 0.5..=8.0))
-                                .changed();
-                            ui.end_row();
-                            ui.label(match kind {
-                                TrussKind::Straight => "Heading °",
-                                TrussKind::Radius => "Start angle °",
-                            });
-                            changed |= ui
-                                .add(egui::DragValue::new(&mut tr.yaw_deg).speed(0.5))
-                                .changed();
-                            ui.end_row();
-                            ui.label("Pitch °").on_hover_text(
-                                "Tilt the whole truss out of the horizontal plane — \
-                                 0 = flat/hanging overhead, 90 = standing on edge \
-                                 (e.g. a ring stood up against a wall).",
-                            );
-                            changed |= ui
-                                .add(
-                                    egui::DragValue::new(&mut tr.pitch_deg)
-                                        .speed(0.5)
-                                        .range(-180.0..=180.0),
-                                )
-                                .changed();
-                            ui.end_row();
-                            ui.label("Roll °")
-                                .on_hover_text("Which way a pitched truss faces.");
-                            changed |= ui
-                                .add(
-                                    egui::DragValue::new(&mut tr.roll_deg)
-                                        .speed(0.5)
-                                        .range(-180.0..=180.0),
-                                )
-                                .changed();
-                            ui.end_row();
-                            match kind {
-                                TrussKind::Straight => {
-                                    ui.label("Length");
-                                    changed |= ui
-                                        .add(egui::Slider::new(&mut tr.length, 0.5..=6.0))
-                                        .changed();
-                                    ui.end_row();
-                                }
-                                TrussKind::Radius => {
-                                    ui.label("Radius");
-                                    changed |= ui
-                                        .add(egui::Slider::new(&mut tr.radius, 0.5..=8.0))
-                                        .changed();
-                                    ui.end_row();
-                                    ui.label("Arc °");
-                                    changed |= ui
-                                        .add(egui::Slider::new(&mut tr.arc_deg, 15.0..=360.0))
-                                        .changed();
-                                    ui.end_row();
-                                }
-                            }
-                            ui.label("Grounded")
-                                .on_hover_text("Draw support legs down to the floor.");
-                            changed |= ui.checkbox(&mut tr.grounded, "").changed();
-                            ui.end_row();
-                        });
-                    }
-                    ui.add_space(6.0);
-                    if ui.button("🗑 Delete truss").clicked() {
-                        self.delete_truss(patch, ti);
-                    } else if changed {
-                        let dyaw = self.trusses[ti].yaw_deg - old_yaw;
-                        self.spin_truss_mounts(ti, dyaw);
-                        self.save(patch);
-                    }
-                    return;
-                }
-            }
+    /// Write back whatever the grid changed. Position moves the whole
+    /// selection by the delta (and unhooks what it moves); rotation, size
+    /// and opacity are absolute on every selected light and keep their
+    /// mounts. No undo step of its own — the caller checkpoints the gesture.
+    pub(crate) fn apply_light_edit(
+        &mut self,
+        patch: &Patch,
+        before: LightEdit,
+        now: LightEdit,
+    ) -> bool {
+        if before == now {
+            return false;
         }
-
-        let mut sel: Vec<usize> = self.selection.iter().copied().collect();
-        sel.sort_unstable();
-        sel.retain(|&i| i < self.instances.len());
+        let sel = self.sorted_selection(patch, OrderBy::Selection);
         if sel.is_empty() {
-            ui.weak("Nothing selected.\nClick or drag-select lights in the stage view.");
-            return;
+            return false;
         }
-        let mut changed = false;
-
-        if sel.len() == 1 {
-            let i = sel[0];
-            let fi = self.instances[i].fixture;
-            if let Some(f) = patch.fixtures.get(fi) {
-                ui.label(format!("{}  [{}..{}]", f.display, f.from, f.to));
-                let copies = self.instances.iter().filter(|inst| inst.fixture == fi).count();
-                if copies > 1 {
-                    ui.weak(format!(
-                        "{:?} — {copies} copies share these channels",
-                        classify(f)
-                    ));
-                } else {
-                    ui.weak(format!("{:?}", classify(f)));
-                }
+        let d = now.pos - before.pos;
+        let moved = d.len() > EPS;
+        for &i in &sel {
+            if moved {
+                let inst = &mut self.instances[i];
+                inst.mount = None;
+                inst.truss_mount = None;
+                inst.t.pos = inst.t.pos + d;
             }
-            if self.instances[i].mount.is_some() {
-                ui.weak("Snapped to tower — drag away to detach");
+            let inst = &mut self.instances[i];
+            if (now.yaw_deg - before.yaw_deg).abs() > EPS {
+                inst.t.yaw_deg = now.yaw_deg;
             }
-            ui.separator();
-            // Moving heads (a base + pan/tilt) only get a single base-spin
-            // control — rotating the fixture itself with yaw+pitch causes
-            // gimbal tumbling when it hangs straight down on a bar. Pars and
-            // other bodies keep full yaw/pitch freedom.
-            let has_base = patch
-                .fixtures
-                .get(fi)
-                .map(|f| matches!(classify(f), Archetype::MovingPar | Archetype::Beam))
-                .unwrap_or(false);
-            let mut pos_changed = false;
-            let t = &mut self.instances[i].t;
-            egui::Grid::new("xform").num_columns(2).show(ui, |ui| {
-                ui.label("X");
-                pos_changed |= ui.add(egui::DragValue::new(&mut t.pos.x).speed(0.01)).changed();
-                ui.end_row();
-                ui.label("Y (height)");
-                pos_changed |= ui.add(egui::DragValue::new(&mut t.pos.y).speed(0.01)).changed();
-                ui.end_row();
-                ui.label("Z");
-                pos_changed |= ui.add(egui::DragValue::new(&mut t.pos.z).speed(0.01)).changed();
-                ui.end_row();
-                if has_base {
-                    ui.label("Base spin °")
-                        .on_hover_text("Rotate the base around its mounting axis. The pan/tilt sweep follows.");
-                    changed |= ui
-                        .add(
-                            egui::DragValue::new(&mut t.roll_deg)
-                                .speed(1.0)
-                                .range(0.0..=360.0),
-                        )
-                        .changed();
-                    ui.end_row();
-                } else {
-                    ui.label("Yaw °");
-                    changed |= ui
-                        .add(egui::DragValue::new(&mut t.yaw_deg).speed(0.5).range(-360.0..=360.0))
-                        .changed();
-                    ui.end_row();
-                    ui.label("Pitch °");
-                    changed |= ui
-                        .add(
-                            egui::DragValue::new(&mut t.pitch_deg)
-                                .speed(0.5)
-                                .range(-360.0..=360.0),
-                        )
-                        .changed();
-                    ui.end_row();
-                }
-                ui.label("Size ×")
-                    .on_hover_text("Scale this fixture up or down.");
-                changed |= ui
-                    .add(
-                        egui::DragValue::new(&mut t.scale)
-                            .speed(0.02)
-                            .range(0.05..=10.0),
-                    )
-                    .changed();
-                ui.end_row();
-            });
-            ui.label("Visualizer");
-            changed |= ui
-                .add(
-                    egui::Slider::new(&mut self.instances[i].opacity, 0.0..=1.0)
-                        .text("Housing opacity"),
-                )
-                .on_hover_text(
-                    "Fade this fixture's complete visual contribution: housing, \
-                     emitting lens, beam haze and surface pool",
-                )
-                .changed();
-            if pos_changed {
-                // Manually moving a snapped light pulls it off the tower
-                // (rotating/spinning it does not — snapped lights stay
-                // spinnable).
-                self.instances[i].mount = None;
-                changed = true;
+            if (now.pitch_deg - before.pitch_deg).abs() > EPS {
+                inst.t.pitch_deg = now.pitch_deg;
             }
-        } else {
-            ui.label(format!("{} lights selected", sel.len()));
-            ui.weak("Drag values to nudge all:");
-            ui.separator();
-            let mut d = V3::default();
-            let (mut dyaw, mut dpitch, mut dspin) = (0f32, 0f32, 0f32);
-            let mut scale_mul = 1.0f32;
-            let mut opacity = self.instances[sel[0]].opacity;
-            let mut opacity_changed = false;
-            egui::Grid::new("xform_multi").num_columns(2).show(ui, |ui| {
-                ui.label("ΔX");
-                ui.add(egui::DragValue::new(&mut d.x).speed(0.01));
-                ui.end_row();
-                ui.label("ΔY");
-                ui.add(egui::DragValue::new(&mut d.y).speed(0.01));
-                ui.end_row();
-                ui.label("ΔZ");
-                ui.add(egui::DragValue::new(&mut d.z).speed(0.01));
-                ui.end_row();
-                ui.label("Size ×")
-                    .on_hover_text("Multiply the size of every selected fixture.");
-                ui.add(
-                    egui::DragValue::new(&mut scale_mul)
-                        .speed(0.02)
-                        .range(0.1..=10.0),
-                );
-                ui.end_row();
-                ui.label("ΔSpin °")
-                    .on_hover_text("Spin base-mounted lights around their mount axis.");
-                ui.add(egui::DragValue::new(&mut dspin).speed(1.0));
-                ui.end_row();
-                ui.label("ΔYaw °");
-                ui.add(egui::DragValue::new(&mut dyaw).speed(0.5));
-                ui.end_row();
-                ui.label("ΔPitch °");
-                ui.add(egui::DragValue::new(&mut dpitch).speed(0.5));
-                ui.end_row();
-                ui.label("Housing opacity");
-                opacity_changed |= ui
-                    .add(egui::Slider::new(&mut opacity, 0.0..=1.0))
-                    .on_hover_text(
-                        "Fade housing, emitting lens, beam haze and surface pool for \
-                         all selected/grouped lights",
-                    )
-                    .changed();
-                ui.end_row();
-            });
-            if d != V3::default()
-                || dyaw != 0.0
-                || dpitch != 0.0
-                || dspin != 0.0
-                || scale_mul != 1.0
-                || opacity_changed
-            {
-                let detached = d != V3::default();
-                for &i in &sel {
-                    let inst = &mut self.instances[i];
-                    if detached {
-                        inst.mount = None;
-                    }
-                    inst.t.pos = inst.t.pos + d;
-                    inst.t.yaw_deg += dyaw;
-                    inst.t.pitch_deg += dpitch;
-                    inst.t.roll_deg = (inst.t.roll_deg + dspin).rem_euclid(360.0);
-                    inst.t.scale = (inst.t.scale * scale_mul).clamp(0.05, 10.0);
-                    if opacity_changed {
-                        inst.opacity = opacity;
-                    }
-                }
-                changed = true;
+            if (now.roll_deg - before.roll_deg).abs() > EPS {
+                inst.t.roll_deg = now.roll_deg.rem_euclid(360.0);
+            }
+            if (now.scale - before.scale).abs() > EPS {
+                inst.t.scale = now.scale.clamp(0.05, 10.0);
+            }
+            if (now.opacity - before.opacity).abs() > EPS {
+                inst.opacity = now.opacity.clamp(0.0, 1.0);
             }
         }
+        self.save(patch);
+        true
+    }
 
-        ui.add_space(6.0);
-        ui.horizontal(|ui| {
-            if ui
-                .button("⧉ Duplicate")
-                .on_hover_text(
-                    "Copy the selected light(s). Copies follow the same DMX \
-                     channels — for fixtures wired to several physical units. (⌘D)",
-                )
-                .clicked()
-            {
-                self.duplicate_selection(patch);
-            }
-            if ui
-                .button("Remove copy")
-                .on_hover_text(
-                    "Delete the selected copies. The last copy of each fixture \
-                     always stays. (⌫)",
-                )
-                .clicked()
-            {
-                self.delete_selection(patch);
-            }
-        });
-
-        if changed {
-            self.save(patch);
+    /// After a tower grid edit: re-glue its lights to the turned bar, save.
+    pub(crate) fn apply_tower_edit(&mut self, patch: &Patch, ti: usize, dyaw: f32) {
+        if dyaw != 0.0 {
+            self.spin_tower_mounts(ti, dyaw);
         }
+        self.save(patch);
+    }
+
+    /// After a truss grid edit: re-glue its lights, re-index them onto the
+    /// new slot spacing and drop the ones whose slot fell off the end (the
+    /// old editor let them silently jump to another face). Returns how many
+    /// came off, so the tab can say so.
+    pub(crate) fn apply_truss_edit(
+        &mut self,
+        patch: &Patch,
+        ti: usize,
+        dyaw: f32,
+        prev_per_face: usize,
+    ) -> usize {
+        let fell = self.unmount_overflow(ti, prev_per_face);
+        self.spin_truss_mounts(ti, dyaw);
+        self.save(patch);
+        fell
+    }
+
+    /// Slots per face on truss `ti` right now — the number
+    /// [`Self::apply_truss_edit`] wants handed back after a shape change.
+    pub(crate) fn truss_per_face(&self, ti: usize) -> usize {
+        self.trusses.get(ti).map_or(1, |tr| tr.slot_count())
+    }
+
+    /// Move a whole element onto one of the stage's quick spots. Height is
+    /// kept; the hung lights come along.
+    pub(crate) fn place_element(
+        &mut self,
+        patch: &Patch,
+        r: ElementRef,
+        spot: ElementSpot,
+        set: &Settings,
+    ) -> bool {
+        let (x, z) = element_spot(spot, set);
+        match r {
+            ElementRef::Tower(i) => {
+                let Some(tw) = self.towers.get(i) else { return false };
+                if (tw.pos.x - x).abs() < EPS && (tw.pos.z - z).abs() < EPS {
+                    return false;
+                }
+                self.push_undo();
+                let tw = &mut self.towers[i];
+                tw.pos = v3(x, tw.pos.y, z);
+            }
+            ElementRef::Truss(i) => {
+                let Some(tr) = self.trusses.get(i) else { return false };
+                if (tr.pos.x - x).abs() < EPS && (tr.pos.z - z).abs() < EPS {
+                    return false;
+                }
+                self.push_undo();
+                let tr = &mut self.trusses[i];
+                tr.pos = v3(x, tr.pos.y, z);
+                self.resync_truss_mounts(i);
+            }
+        }
+        self.save(patch);
+        true
+    }
+
+    /// The editor card's title: "Tower" / "F34 truss" / "Radius truss".
+    pub(crate) fn element_kind_label(&self, r: ElementRef) -> &'static str {
+        match r {
+            ElementRef::Tower(_) => "Tower",
+            ElementRef::Truss(i) => match self.trusses.get(i).map(|tr| tr.kind) {
+                Some(TrussKind::Radius) => "Radius truss",
+                _ => "F34 truss",
+            },
+        }
+    }
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+    use crate::stage::{Settings, Truss};
+
+    fn rig(name: &str, n: usize) -> (StageView, Patch) {
+        let profile = crate::profiles::find("Generic RGBW Par (4ch)").expect("the built-in par");
+        let patch = Patch {
+            fixtures: (0..n)
+                .map(|i| profile.to_fixture(format!("T {i}"), 1 + (i as u16) * 4))
+                .collect(),
+            warnings: Vec::new(),
+        };
+        let mut stage = StageView::new();
+        stage.layout_path = std::env::temp_dir().join(format!("dmxpress_editor_{name}.json"));
+        let _ = std::fs::remove_file(&stage.layout_path);
+        stage.sync(&patch, &Settings::default());
+        for (k, inst) in stage.instances.iter_mut().enumerate() {
+            inst.t.pos = v3(k as f32, 4.0, 0.0);
+        }
+        stage.select_all_fixtures();
+        (stage, patch)
+    }
+
+    #[test]
+    fn light_editor_reads_the_centroid_and_flags_mixed_values() {
+        let (mut stage, patch) = rig("read", 3);
+        stage.instances[1].t.yaw_deg = 45.0;
+        let e = stage.light_editor(&patch).expect("a selection");
+        assert_eq!(e.count, 3);
+        assert!((e.values.pos.x - 1.0).abs() < 1e-4, "{:?}", e.values.pos);
+        assert_eq!(e.mixed.pos, [true, false, false]);
+        assert!(e.mixed.yaw && !e.mixed.pitch && !e.mixed.scale);
+        assert_eq!((e.heads, e.pars), (0, 3));
+        stage.clear_selection();
+        assert!(stage.light_editor(&patch).is_none());
+        let _ = std::fs::remove_file(&stage.layout_path);
+    }
+
+    #[test]
+    fn apply_light_edit_moves_by_delta_and_sets_rotation_absolutely() {
+        let (mut stage, patch) = rig("apply", 3);
+        stage.trusses.push(Truss::straight());
+        stage.instances[0].truss_mount = Some((0, 1));
+        let before = stage.light_editor(&patch).unwrap().values;
+        let mut now = before;
+        now.pos.x += 2.0;
+        now.yaw_deg = 90.0;
+        assert!(stage.apply_light_edit(&patch, before, now));
+        for (k, inst) in stage.instances.iter().enumerate() {
+            assert!((inst.t.pos.x - (k as f32 + 2.0)).abs() < 1e-4);
+            assert!((inst.t.yaw_deg - 90.0).abs() < 1e-4);
+        }
+        // A typed move unhooks BOTH kinds of mount (the old editor cleared
+        // only `mount`, so truss-hung lights snapped straight back).
+        assert_eq!(stage.instances[0].truss_mount, None);
+        assert_eq!(stage.instances[0].mount, None);
+        // Nothing changed: no write at all.
+        let same = stage.light_editor(&patch).unwrap().values;
+        assert!(!stage.apply_light_edit(&patch, same, same));
+        // A rotation-only edit keeps the mounts.
+        stage.instances[0].truss_mount = Some((0, 1));
+        let mut now = same;
+        now.pitch_deg = -45.0;
+        assert!(stage.apply_light_edit(&patch, same, now));
+        assert_eq!(stage.instances[0].truss_mount, Some((0, 1)));
+        let _ = std::fs::remove_file(&stage.layout_path);
+    }
+
+    #[test]
+    fn truss_edit_reindexes_and_drops_what_fell_off() {
+        let (mut stage, patch) = rig("shrink", 2);
+        let mut tr = Truss::straight();
+        tr.length = 3.0;
+        stage.trusses.push(tr);
+        let prev = stage.truss_per_face(0);
+        assert_eq!(prev, 6);
+        stage.instances[0].truss_mount = Some((0, 5));
+        stage.instances[1].truss_mount = Some((0, 6));
+        stage.trusses[0].length = 1.0;
+        assert_eq!(stage.apply_truss_edit(&patch, 0, 0.0, prev), 1);
+        assert_eq!(stage.instances[0].truss_mount, None);
+        assert_eq!(stage.instances[1].truss_mount, Some((0, 2)));
+        // …and the survivor really is back on the bottom face.
+        let want = stage.trusses[0].slot_pos(2);
+        assert!((stage.instances[1].t.pos - want).len() < 1e-4);
+        let _ = std::fs::remove_file(&stage.layout_path);
+    }
+
+    #[test]
+    fn element_spots_use_the_stage_size() {
+        let set = Settings::default();
+        assert_eq!(element_spot(ElementSpot::Centre, &set), (0.0, 0.0));
+        assert_eq!(element_spot(ElementSpot::Back, &set), (0.0, -set.stage_half_d));
+        assert_eq!(element_spot(ElementSpot::Front, &set), (0.0, set.stage_half_d));
+        assert_eq!(element_spot(ElementSpot::Left, &set), (-set.stage_half_w, 0.0));
+        assert_eq!(element_spot(ElementSpot::Right, &set), (set.stage_half_w, 0.0));
+        let (mut stage, patch) = rig("place", 1);
+        stage.towers.push(crate::stage::Tower::default());
+        assert!(stage.place_element(&patch, ElementRef::Tower(0), ElementSpot::Left, &set));
+        assert!((stage.towers[0].pos.x + set.stage_half_w).abs() < 1e-4);
+        assert_eq!(stage.undo_stack.len(), 1);
+        // Already there: no second undo step.
+        assert!(!stage.place_element(&patch, ElementRef::Tower(0), ElementSpot::Left, &set));
+        assert_eq!(stage.undo_stack.len(), 1);
+        assert_eq!(stage.element_kind_label(ElementRef::Tower(0)), "Tower");
+        let _ = std::fs::remove_file(&stage.layout_path);
     }
 }

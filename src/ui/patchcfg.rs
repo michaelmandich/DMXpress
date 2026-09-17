@@ -10,6 +10,7 @@ use crate::profiles::{self, UserFixture, PROFILES};
 
 /// What the Patch window is about to add — either a library fixture or one
 /// of the built-in profiles, flattened so the Add button doesn't care which.
+#[derive(Clone)]
 pub(crate) struct PatchSelection {
     pub label: String,
     pub channels: usize,
@@ -21,7 +22,7 @@ pub(crate) struct PatchSelection {
 
 impl App {
     /// The library fixture picked in the browser, else the built-in profile.
-    fn patch_selection(&self) -> PatchSelection {
+    pub(crate) fn patch_selection(&self) -> PatchSelection {
         if let Some(id) = self.patch_library_sel.as_deref() {
             if let Some(f) = self.library.find(id) {
                 return PatchSelection {
@@ -55,6 +56,7 @@ impl App {
             "Patch",
             &mut open,
             &mut popped,
+            None,
             [380.0, 520.0],
             [160.0, 80.0],
             |ui| {
@@ -143,7 +145,9 @@ impl App {
                         });
                 });
 
-                const MAX_HITS: usize = 60;
+                // A model contributes one row per channel mode, so a maker's
+                // name alone can be a hundred rows; the list scrolls.
+                const MAX_HITS: usize = 150;
                 // Collected up front: the list borrows the library, and
                 // picking a row has to mutate the selection.
                 let hits: Vec<(String, String, String, usize)> = self
@@ -258,6 +262,14 @@ impl App {
                         });
                         self.patch_addr = from + span;
                     }
+                    profiles::note_recent(
+                        &mut self.recent_profiles,
+                        profiles::RecentProfile {
+                            profile: sel.profile.clone(),
+                            label: sel.label.clone(),
+                            channels: sel.channels as u16,
+                        },
+                    );
                     self.save_user_patch();
                     self.rebuild_patch();
                 }
@@ -378,6 +390,7 @@ impl App {
             "Configurations",
             &mut open,
             &mut popped,
+            None,
             [360.0, 420.0],
             [180.0, 100.0],
             |ui| {
@@ -439,6 +452,7 @@ impl App {
                         ui.label(&name);
                     });
                 }
+                self.safety_sections(ui);
             },
         );
         self.show_configs = open;

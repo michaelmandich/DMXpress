@@ -78,7 +78,7 @@ pub(crate) struct Camera {
     pub fov_y: f32,
 }
 
-#[derive(Debug, Clone, Serialize, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub(crate) struct CameraSnapshot {
     pub yaw: f32,
     pub pitch: f32,

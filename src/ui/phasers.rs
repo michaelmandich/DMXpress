@@ -1,18 +1,21 @@
-//! Floating "Phasers" pool window: build a spread effect, apply it across the
-//! current selection, and store it for reuse. Phasers arm the live oscillator
-//! engine, so the Oscillator window still shows/edits the per-channel result.
+//! Floating "Phasers" window — the design side: build a spread effect from
+//! channel components, apply it across the current selection, and store it
+//! in the library. Playing stored phasers is the Phaser board's job
+//! (`board.rs`); the library here searches, filters, edits in place and
+//! sends phasers to the board. Phasers arm the live oscillator engine, so
+//! the Oscillator window still shows/edits the per-channel result.
 
 use eframe::egui;
 
 use std::collections::HashSet;
 
-use super::{apply_zoom, theme, zoom_controls};
+use super::theme;
 use crate::app::{App, Ramp};
 use crate::group::GroupMode;
 use crate::net;
 use crate::oscillator::{subdiv_label, Osc, SPEED_CHOICES};
 use crate::palette::Feature;
-use crate::phaser::{self, spread_phase, ChannelFilter, ComponentMode, PathShape, Phaser, PhaserMode};
+use crate::phaser::{self, spread_phase, ChannelFilter, ComponentMode, LibFilter, PathShape, Phaser, PhaserMode};
 use crate::streamdeck::{KeyIcon, PhaserSlot};
 use crate::showbuddy::{Band, Role};
 
@@ -512,256 +515,11 @@ impl App {
     /// deck's own layout, each tile either empty ("+") or a configured slot
     /// (a phaser, a colour, and a short symbol). Click a tile to open the
     /// slot editor below the grid; right-click a filled one to clear it.
-    fn phaser_deck_page_ui(&mut self, ui: &mut egui::Ui) {
-        egui::CollapsingHeader::new("Stream Deck: Phaser page")
-            .default_open(false)
-            .show(ui, |ui| {
-                ui.weak(
-                    "One tile per key on the Phaser page (Mode knob switches the deck \
-                     to it), in pages of 36. The Page knob scrolls pages while the deck \
-                     is in Phaser mode; Select-all, Clear and Tap stay put on every \
-                     page. Click a tile to assign a phaser, colour and symbol; \
-                     right-click a filled tile to clear it.",
-                );
-                let pages = crate::streamdeck::phaser_deck_pages(&self.phaser_deck);
-                self.deck_phaser_page = self.deck_phaser_page.min(pages - 1);
-                let base = self.deck_phaser_page * crate::streamdeck::PHASER_DECK_SLOTS;
-                ui.horizontal(|ui| {
-                    if ui.add_enabled(pages > 1, egui::Button::new("< Prev")).clicked() {
-                        self.step_phaser_deck_page(-1);
-                    }
-                    ui.strong(format!("Page {} / {}", self.deck_phaser_page + 1, pages));
-                    if ui.add_enabled(pages > 1, egui::Button::new("Next >")).clicked() {
-                        self.step_phaser_deck_page(1);
-                    }
-                    if ui
-                        .button("Add page")
-                        .on_hover_text(
-                            "Appends an empty page of 36 slots after the last one and \
-                             jumps to it. Existing pages are left exactly as they are.",
-                        )
-                        .clicked()
-                    {
-                        self.add_phaser_deck_page();
-                    }
-                    let page_empty = self.phaser_deck
-                        [base..base + crate::streamdeck::PHASER_DECK_SLOTS]
-                        .iter()
-                        .all(|s| s.is_none());
-                    if pages > 1
-                        && page_empty
-                        && ui
-                            .button("Remove this page")
-                            .on_hover_text("Only offered while the page is empty")
-                            .clicked()
-                    {
-                        self.remove_phaser_deck_page();
-                    }
-                });
-                // The page bar may have moved us; index the grid off the
-                // page it settled on.
-                let base = self.deck_phaser_page * crate::streamdeck::PHASER_DECK_SLOTS;
-                if ui
-                    .button("Fill rows 1-2 with movement presets")
-                    .on_hover_text(
-                        "Adds Pan (\"back and forth\") and Tilt (\"up and down\") phasers at \
-                         3 speeds x 3 amplitudes each — 18 in all — to the pool if they \
-                         aren't already there, and lays them into this page's first two \
-                         rows (Pan on row 1, Tilt on row 2), Pan in teal and Tilt in green, \
-                         shaded lighter as amplitude increases. Overwrites whatever is \
-                         currently in those two rows.",
-                    )
-                    .clicked()
-                {
-                    self.fill_movement_deck_page();
-                }
-                if ui
-                    .button("Fill row 3 with path shapes")
-                    .on_hover_text(
-                        "Adds one phaser per pan/tilt figure — circle, eight, arc, diamond, \
-                         square, snap-square, line, lift, diagonal, zig-zag, Lissajous — to \
-                         the pool if it isn't there, and lays them in from row 3, coloured \
-                         across the spectrum in that order.",
-                    )
-                    .clicked()
-                {
-                    self.fill_path_deck_page();
-                }
-                let mut open_edit: Option<usize> = None;
-                let mut clear_slot: Option<usize> = None;
-                egui::Grid::new("phaser_deck_grid").spacing([3.0, 3.0]).show(ui, |ui| {
-                    for row in 0..4 {
-                        for col in 0..9 {
-                            // Mirror the device exactly, reserved corners and
-                            // all, so what you arrange here is what you get.
-                            let idx = match crate::streamdeck::phaser_page_key(row * 9 + col, 4, 9) {
-                                crate::streamdeck::PhaserKey::Pad(slot) => base + slot,
-                                reserved => {
-                                    let (label, tint) = match reserved {
-                                        crate::streamdeck::PhaserKey::Tap => {
-                                            ("TAP", egui::Color32::from_rgb(31, 111, 120))
-                                        }
-                                        crate::streamdeck::PhaserKey::Clear => {
-                                            ("CLR", egui::Color32::from_rgb(160, 105, 40))
-                                        }
-                                        _ => ("ALL", egui::Color32::from_rgb(150, 128, 42)),
-                                    };
-                                    ui.add_enabled(
-                                        false,
-                                        egui::Button::new(
-                                            egui::RichText::new(label)
-                                                .color(egui::Color32::from_gray(230))
-                                                .size(11.0),
-                                        )
-                                        .fill(tint)
-                                        .min_size([44.0, 32.0].into()),
-                                    )
-                                    .on_disabled_hover_text(
-                                        "Reserved on every page — select-all, the staged Clear, and beat tap",
-                                    );
-                                    continue;
-                                }
-                            };
-                            let slot = self.phaser_deck.get(idx).cloned().flatten();
-                            let (fill, text, txt_col) = match &slot {
-                                Some(s) => {
-                                    let [r, g, b] = s.color;
-                                    let lum = 0.299 * r as f32 + 0.587 * g as f32 + 0.114 * b as f32;
-                                    let tc = if lum > 140.0 {
-                                        egui::Color32::BLACK
-                                    } else {
-                                        egui::Color32::WHITE
-                                    };
-                                    (egui::Color32::from_rgb(r, g, b), s.label.clone(), tc)
-                                }
-                                None => (theme::RAISED, "+".to_string(), egui::Color32::from_gray(140)),
-                            };
-                            let btn = egui::Button::new(egui::RichText::new(text).color(txt_col).size(11.0))
-                                .fill(fill)
-                                .min_size([44.0, 32.0].into());
-                            let resp = ui.add(btn).on_hover_text(match &slot {
-                                Some(s) => format!("\"{}\" — click to edit, right-click to clear", s.phaser),
-                                None => "Click to assign a phaser here".to_string(),
-                            });
-                            if resp.clicked() {
-                                open_edit = Some(idx);
-                            }
-                            if slot.is_some() {
-                                resp.context_menu(|ui| {
-                                    if ui.button("Clear").clicked() {
-                                        clear_slot = Some(idx);
-                                        ui.close_menu();
-                                    }
-                                });
-                            }
-                        }
-                        ui.end_row();
-                    }
-                });
-
-                if let Some(idx) = clear_slot {
-                    if idx < self.phaser_deck.len() {
-                        self.phaser_deck[idx] = None;
-                        crate::streamdeck::save_phaser_deck(&self.phaser_deck);
-                    }
-                    if self.deck_slot_edit == Some(idx) {
-                        self.deck_slot_edit = None;
-                    }
-                }
-                if let Some(idx) = open_edit {
-                    self.deck_slot_edit = Some(idx);
-                    match self.phaser_deck.get(idx).cloned().flatten() {
-                        Some(s) => {
-                            self.deck_slot_phaser = s.phaser;
-                            self.deck_slot_color = s.color;
-                            self.deck_slot_label = s.label;
-                            self.deck_slot_icon = s.icon;
-                        }
-                        None => {
-                            self.deck_slot_icon = crate::streamdeck::KeyIcon::None;
-                            if let Some(first) = self.phasers.first() {
-                                self.deck_slot_phaser = first.name.clone();
-                                self.deck_slot_color = first.color;
-                                self.deck_slot_label =
-                                    first.name.chars().filter(|c| c.is_alphanumeric()).take(4).collect::<String>().to_uppercase();
-                            } else {
-                                self.deck_slot_phaser.clear();
-                                self.deck_slot_label.clear();
-                            }
-                        }
-                    }
-                }
-
-                if let Some(idx) = self.deck_slot_edit {
-                    ui.separator();
-                    ui.horizontal(|ui| {
-                        ui.label(format!("Slot {}:", idx - base + 1));
-                        egui::ComboBox::from_id_salt("deck_slot_phaser")
-                            .selected_text(if self.deck_slot_phaser.is_empty() {
-                                "(choose a phaser)"
-                            } else {
-                                &self.deck_slot_phaser
-                            })
-                            .show_ui(ui, |ui| {
-                                for p in &self.phasers {
-                                    if ui.selectable_label(self.deck_slot_phaser == p.name, &p.name).clicked() {
-                                        self.deck_slot_phaser = p.name.clone();
-                                        self.deck_slot_color = p.color;
-                                        self.deck_slot_label = p
-                                            .name
-                                            .chars()
-                                            .filter(|c| c.is_alphanumeric())
-                                            .take(4)
-                                            .collect::<String>()
-                                            .to_uppercase();
-                                    }
-                                }
-                            });
-                        ui.color_edit_button_srgb(&mut self.deck_slot_color);
-                        ui.add(
-                            egui::TextEdit::singleline(&mut self.deck_slot_label)
-                                .desired_width(50.0)
-                                .char_limit(4)
-                                .hint_text("symbol"),
-                        );
-                        egui::ComboBox::from_id_salt("deck_slot_icon")
-                            .selected_text(self.deck_slot_icon.label())
-                            .width(110.0)
-                            .show_ui(ui, |ui| {
-                                for icon in crate::streamdeck::KeyIcon::ALL {
-                                    ui.selectable_value(&mut self.deck_slot_icon, icon, icon.label());
-                                }
-                            })
-                            .response
-                            .on_hover_text("Artwork drawn behind the symbol on the key itself");
-                    });
-                    ui.horizontal(|ui| {
-                        let can_save = !self.deck_slot_phaser.is_empty();
-                        if ui.add_enabled(can_save, egui::Button::new("Save")).clicked() {
-                            if idx < self.phaser_deck.len() {
-                                self.phaser_deck[idx] = Some(crate::streamdeck::PhaserSlot {
-                                    phaser: self.deck_slot_phaser.clone(),
-                                    color: self.deck_slot_color,
-                                    label: self.deck_slot_label.clone(),
-                                    icon: self.deck_slot_icon,
-                                });
-                                crate::streamdeck::save_phaser_deck(&self.phaser_deck);
-                            }
-                            self.deck_slot_edit = None;
-                        }
-                        if ui.button("Cancel").clicked() {
-                            self.deck_slot_edit = None;
-                        }
-                    });
-                }
-            });
-    }
-
     /// Adds the 18 Pan/Tilt movement presets to the pool (skipping any name
     /// already present) and lays them into the Phaser page's first two rows
     /// — Pan on row 1, Tilt on row 2 — in generator order (speed blocks of
     /// 3, amplitude ascending within each), overwriting those 18 slots.
-    fn fill_movement_deck_page(&mut self) {
+    pub(crate) fn fill_movement_deck_page(&mut self) {
         let presets = phaser::movement_variety_phasers();
         let mut added = 0;
         for p in &presets {
@@ -804,7 +562,7 @@ impl App {
     }
 
     /// Appends an empty page of pads after the last one and shows it.
-    fn add_phaser_deck_page(&mut self) {
+    pub(crate) fn add_phaser_deck_page(&mut self) {
         let len = self.phaser_deck.len() + crate::streamdeck::PHASER_DECK_SLOTS;
         self.phaser_deck.resize(len, None);
         self.deck_phaser_page = crate::streamdeck::phaser_deck_pages(&self.phaser_deck) - 1;
@@ -815,7 +573,7 @@ impl App {
 
     /// Drops the page being shown (the editor only offers this while it is
     /// empty and isn't the last page standing).
-    fn remove_phaser_deck_page(&mut self) {
+    pub(crate) fn remove_phaser_deck_page(&mut self) {
         const SLOTS: usize = crate::streamdeck::PHASER_DECK_SLOTS;
         if crate::streamdeck::phaser_deck_pages(&self.phaser_deck) <= 1 {
             return;
@@ -836,7 +594,7 @@ impl App {
     /// the third row on. Eleven shapes overrun a nine-wide row; the slot
     /// numbering already skips the reserved corner keys, so they simply
     /// continue into row four.
-    fn fill_path_deck_page(&mut self) {
+    pub(crate) fn fill_path_deck_page(&mut self) {
         let presets = phaser::path_shape_phasers();
         let mut added = 0;
         for p in &presets {
@@ -905,25 +663,23 @@ impl App {
         let mut do_bind: Option<usize> = None;
         let mut do_unbind: Option<usize> = None;
         let mut do_master_beat: Option<usize> = None;
+        let mut do_board: Option<usize> = None;
+        let mut store_to_board = false;
         let mut set_groups_mode: Option<GroupMode> = None;
         let edit_before = self.phaser_edit.clone();
         let name_before = self.phaser_name.clone();
 
+        let mut zoom_level = self.zoom.phasers;
         super::floating_panel(
             ctx,
             "phasers",
             "Phasers",
             &mut open,
             &mut popped,
+            Some(&mut zoom_level),
             [680.0, 760.0],
             [screen.right() - 720.0, 90.0],
             |ui| {
-                zoom_controls(ui, &mut self.zoom.phasers);
-                apply_zoom(ui, self.zoom.phasers);
-
-                self.phaser_deck_page_ui(ui);
-                ui.separator();
-
                 let sel = self.stage.selected_fixtures();
                 // How the selection breaks into effect units, and which groups
                 // it covers entirely (only those can be switched wholesale).
@@ -1258,7 +1014,11 @@ impl App {
                         ui.horizontal_wrapped(|ui| {
                             ui.checkbox(&mut e.master_beat, "Master beat");
                             ui.label("Spread");
-                            ui.add_sized([120.0, 20.0], egui::Slider::new(&mut e.spread, 0.0..=2.0));
+                            ui.add_sized([120.0, 20.0], egui::Slider::new(&mut e.spread, 0.0..=2.0))
+                                .on_hover_text(
+                                    "Spacing: 0 = every light together · 1 = one wave along \
+                                     the selection · 2 = scattered, every light on its own phase",
+                                );
                             ui.label("Wings");
                             ui.add_sized([90.0, 20.0], egui::Slider::new(&mut e.wings, 1..=8));
                             if e.components.is_empty() {
@@ -1339,8 +1099,20 @@ impl App {
                             .hint_text("name…")
                             .desired_width(120.0),
                     );
-                    if ui.button("Store").clicked() {
+                    if ui
+                        .button("Store")
+                        .on_hover_text("Save the editor's phaser to the library")
+                        .clicked()
+                    {
                         do_store = true;
+                    }
+                    if ui
+                        .button("Store to board")
+                        .on_hover_text("Save it and put it on the first free pad of the board")
+                        .clicked()
+                    {
+                        do_store = true;
+                        store_to_board = true;
                     }
                     if ui
                         .add_enabled(!sel.is_empty(), egui::Button::new("Store pose"))
@@ -1479,225 +1251,257 @@ impl App {
                             do_store_fx = true;
                         }
                     });
-                ui.separator();
+                ui.add_space(6.0);
+                theme::section(ui, "Library");
                 ui.horizontal(|ui| {
-                    if ui
-                        .selectable_label(self.phaser_edit_mode, "Edit mode")
-                        .on_hover_text(
-                            "Click tiles to load them into the editor and tweak them \
-                             in place — without applying or stopping anything",
-                        )
-                        .clicked()
-                    {
-                        self.phaser_edit_mode = !self.phaser_edit_mode;
-                        if !self.phaser_edit_mode {
-                            self.phaser_edit_sel = None;
-                        }
-                    }
-                    if let Some(i) = self.phaser_edit_sel {
-                        if let Some(ph) = self.phasers.get(i) {
-                            ui.colored_label(
-                                egui::Color32::from_rgb(250, 210, 90),
-                                format!("editing \"{}\"", ph.name),
-                            );
+                    ui.add(
+                        egui::TextEdit::singleline(&mut self.phaser_search)
+                            .hint_text("search…")
+                            .desired_width(130.0),
+                    );
+                    for f in LibFilter::ALL {
+                        if ui.selectable_label(self.phaser_lib_filter == f, f.label()).clicked() {
+                            self.phaser_lib_filter = f;
                         }
                     }
                 });
-                ui.weak(if self.phaser_edit_mode {
-                    "Click a tile to edit it · changes save instantly · right-click for more:"
-                } else {
-                    "Click to start/stop · right-click to edit:"
-                });
-
-                egui::ScrollArea::vertical().show(ui, |ui| {
-                    ui.columns(2, |cols| {
-                        cols[0].strong("Intensity & color");
-                        cols[1].strong("Movement");
-                        let (mut left, mut right) = (Vec::new(), Vec::new());
-                        for (i, ph) in self.phasers.iter().enumerate() {
-                            if ph.is_movement() {
-                                right.push(i);
-                            } else {
-                                left.push(i);
+                if let Some(i) = self.phaser_edit_sel {
+                    if let Some(ph) = self.phasers.get(i) {
+                        ui.horizontal(|ui| {
+                            theme::pill(ui, "EDITING", theme::WARN);
+                            ui.label(egui::RichText::new(&ph.name).family(theme::medium()));
+                            ui.weak("— the editor above writes straight into it");
+                            if ui
+                                .small_button("Done")
+                                .on_hover_text(
+                                    "Stop editing this one; the editor keeps its settings as a new phaser",
+                                )
+                                .clicked()
+                            {
+                                self.phaser_edit_sel = None;
+                                self.phaser_edit_mode = false;
                             }
-                        }
-                        for (c, list) in [(0usize, left), (1, right)] {
-                            cols[c].horizontal_wrapped(|ui| {
-                                for i in list {
-                                    let ph = &self.phasers[i];
-                                    let on = self.active_phasers.contains_key(&ph.name);
-                                    let [r, g, b] = ph.color;
-                                    let fill = if on {
-                                        egui::Color32::from_rgb(r, g, b)
-                                    } else {
-                                        egui::Color32::from_rgb(
-                                            r / 4 + 10,
-                                            g / 4 + 10,
-                                            b / 4 + 10,
-                                        )
-                                    };
-                                    let lum = 0.299 * r as f32
-                                        + 0.587 * g as f32
-                                        + 0.114 * b as f32;
-                                    let txt = if on && lum > 145.0 {
-                                        egui::Color32::BLACK
-                                    } else if on {
-                                        egui::Color32::WHITE
-                                    } else {
-                                        egui::Color32::from_gray(150)
-                                    };
-                                    let sub = if let Some(path) = ph.path {
-                                        path.label().to_string()
-                                    } else if !ph.hold.is_empty() {
-                                        "Hold".to_string()
-                                    } else if !ph.static_pos.is_empty() {
-                                        if ph.feature == Feature::Position {
-                                            "Pose".to_string()
-                                        } else {
-                                            "FX".to_string()
-                                        }
-                                    } else {
-                                        let mut s = if !ph.components.is_empty() {
-                                            ph.components
-                                                .iter()
-                                                .map(|component| component.target.as_str())
-                                                .collect::<Vec<_>>()
-                                                .join("+")
-                                        } else if !ph.targets.is_empty() {
-                                            ph.targets.join("+")
-                                        } else if ph.filter == ChannelFilter::All {
-                                            ph.feature.label().to_string()
-                                        } else {
-                                            ph.filter.label().to_string()
-                                        };
-                                        if s.len() > 18 {
-                                            s.truncate(17);
-                                            s.push('…');
-                                        }
-                                        if ph.mode == PhaserMode::Add {
-                                            format!("+{s}")
-                                        } else {
-                                            s
-                                        }
-                                    };
-                                    let bound = if ph.fixtures.is_empty() { "" } else { "bound" };
-                                    let beat = if ph.master_beat { "beat" } else { "" };
-                                    let label = egui::RichText::new(format!(
-                                        "{}\n{}{}{}{}",
-                                        ph.name,
-                                        if on { "> " } else { "" },
-                                        bound,
-                                        beat,
-                                        sub
-                                    ))
-                                    .size(11.5)
-                                    .strong()
-                                    .color(txt);
-                                    let editing = self.phaser_edit_sel == Some(i);
-                                    let btn = egui::Button::new(label)
-                                        .fill(fill)
-                                        .rounding(7.0)
-                                        .stroke(if editing {
-                                            egui::Stroke::new(
-                                                2.0,
-                                                egui::Color32::from_rgb(250, 210, 90),
-                                            )
-                                        } else if on {
-                                            egui::Stroke::new(1.5, egui::Color32::WHITE)
-                                        } else {
-                                            egui::Stroke::new(
-                                                1.0,
-                                                egui::Color32::from_gray(70),
-                                            )
-                                        });
-                                    let resp = ui.add_sized([106.0, 64.0], btn);
-                                    if resp.clicked() {
-                                        if self.phaser_edit_mode {
-                                            do_edit = Some(i);
-                                        } else if on {
-                                            do_stop = Some(i);
-                                        } else {
-                                            do_load_apply = Some(i);
-                                        }
-                                    }
-                                    resp.context_menu(|ui| {
-                                        if ui
-                                            .button("Edit")
-                                            .on_hover_text(
-                                                "Load into the editor and tweak in place — \
-                                                 without applying or stopping it",
-                                            )
-                                            .clicked()
-                                        {
-                                            do_edit = Some(i);
-                                            ui.close_menu();
-                                        }
-                                        if ui.button("Apply").clicked() {
-                                            do_load_apply = Some(i);
-                                            ui.close_menu();
-                                        }
-                                        if on && ui.button("Stop").clicked() {
-                                            do_stop = Some(i);
-                                            ui.close_menu();
-                                        }
-                                        let mut follow = ph.master_beat;
-                                        if ui
-                                            .checkbox(&mut follow, "Follow master beat")
-                                            .on_hover_text(
-                                                "Opt this card in or out of taps and Master BPM",
-                                            )
-                                            .changed()
-                                        {
-                                            do_master_beat = Some(i);
-                                            ui.close_menu();
-                                        }
-                                        ui.separator();
-                                        if ui
-                                            .add_enabled(
-                                                !sel.is_empty(),
-                                                egui::Button::new("Bind to selection"),
-                                            )
-                                            .on_hover_text(
-                                                "Remember the selected fixtures: with nothing \
-                                                 selected, the tile applies to them (a live \
-                                                 selection still wins)",
-                                            )
-                                            .clicked()
-                                        {
-                                            do_bind = Some(i);
-                                            ui.close_menu();
-                                        }
-                                        if !ph.fixtures.is_empty()
-                                            && ui.button("Unbind (use selection)").clicked()
-                                        {
-                                            do_unbind = Some(i);
-                                            ui.close_menu();
-                                        }
-                                        ui.separator();
-                                        if ui
-                                            .button("Overwrite with editor")
-                                            .on_hover_text(
-                                                "Replace this phaser's settings with the \
-                                                 editor's current values",
-                                            )
-                                            .clicked()
-                                        {
-                                            do_update = Some(i);
-                                            ui.close_menu();
-                                        }
-                                        ui.separator();
-                                        if ui.button("Delete").clicked() {
-                                            do_delete = Some(i);
-                                            ui.close_menu();
-                                        }
-                                    });
+                        });
+                    }
+                }
+                theme::hint(
+                    ui,
+                    "Click a name to edit it in place · ▶ starts, ■ stops · + Board puts it on a pad",
+                );
+
+                let query = self.phaser_search.trim().to_lowercase();
+                let filter = self.phaser_lib_filter;
+                let mut rows: Vec<usize> = (0..self.phasers.len())
+                    .filter(|&i| {
+                        let ph = &self.phasers[i];
+                        let running = self.active_phasers.contains_key(&ph.name);
+                        let kind_ok = match filter {
+                            LibFilter::All => true,
+                            LibFilter::Light => !ph.is_movement() && !ph.is_snapshot(),
+                            LibFilter::Movement => ph.is_movement() && !ph.is_snapshot(),
+                            LibFilter::Snapshots => ph.is_snapshot(),
+                            LibFilter::Running => running,
+                        };
+                        kind_ok && (query.is_empty() || ph.name.to_lowercase().contains(&query))
+                    })
+                    .collect();
+                rows.sort_by(|&a, &b| {
+                    self.phasers[a].name.to_lowercase().cmp(&self.phasers[b].name.to_lowercase())
+                });
+                ui.weak(format!("{} of {}", rows.len(), self.phasers.len()));
+
+                egui::ScrollArea::vertical()
+                    .max_height(300.0)
+                    .auto_shrink([false, true])
+                    .id_salt("phaser_library")
+                    .show(ui, |ui| {
+                        for i in rows {
+                            let ph = &self.phasers[i];
+                            let on = self.active_phasers.contains_key(&ph.name);
+                            let editing = self.phaser_edit_sel == Some(i);
+                            let [r, g, b] = ph.color;
+                            let color = egui::Color32::from_rgb(r, g, b);
+                            let sub = if let Some(path) = ph.path {
+                                path.label().to_string()
+                            } else if !ph.hold.is_empty() {
+                                "hold".to_string()
+                            } else if !ph.static_pos.is_empty() {
+                                if ph.feature == Feature::Position {
+                                    "pose".to_string()
+                                } else {
+                                    "FX".to_string()
                                 }
-                            });
+                            } else {
+                                let mut s = if !ph.components.is_empty() {
+                                    ph.components
+                                        .iter()
+                                        .map(|c| c.target.as_str())
+                                        .collect::<Vec<_>>()
+                                        .join("+")
+                                } else if !ph.targets.is_empty() {
+                                    ph.targets.join("+")
+                                } else if ph.filter == ChannelFilter::All {
+                                    ph.feature.label().to_string()
+                                } else {
+                                    ph.filter.label().to_string()
+                                };
+                                if s.len() > 22 {
+                                    s.truncate(21);
+                                    s.push('…');
+                                }
+                                if ph.mode == PhaserMode::Add {
+                                    format!("+{s}")
+                                } else {
+                                    s
+                                }
+                            };
+                            let bound = !ph.fixtures.is_empty();
+                            let beat = ph.master_beat;
+                            let name = ph.name.clone();
+                            let on_board = self.on_board(i);
+                            let row_fill = if editing {
+                                theme::WARN.gamma_multiply(0.10)
+                            } else if on {
+                                color.gamma_multiply(0.12)
+                            } else {
+                                egui::Color32::TRANSPARENT
+                            };
+                            egui::Frame::none()
+                                .fill(row_fill)
+                                .rounding(4.0)
+                                .inner_margin(egui::Margin::symmetric(4.0, 2.0))
+                                .show(ui, |ui| {
+                                    ui.horizontal(|ui| {
+                                        // Colour swatch, bright while running.
+                                        let (dot, _) = ui.allocate_exact_size(
+                                            egui::vec2(10.0, 10.0),
+                                            egui::Sense::hover(),
+                                        );
+                                        ui.painter().circle_filled(
+                                            dot.center(),
+                                            5.0,
+                                            if on { color } else { color.lerp_to_gamma(theme::SURFACE, 0.5) },
+                                        );
+                                        if on {
+                                            ui.painter().circle_stroke(
+                                                dot.center(),
+                                                6.0,
+                                                egui::Stroke::new(1.0, egui::Color32::WHITE),
+                                            );
+                                        }
+                                        let (icon, hint) = if on {
+                                            (super::icons::Icon::Stop, "Stop")
+                                        } else {
+                                            (
+                                                super::icons::Icon::Play,
+                                                "Apply to the selection, or to the lights it was stored with",
+                                            )
+                                        };
+                                        if super::icons::icon_button(ui, icon, None)
+                                            .on_hover_text(hint)
+                                            .clicked()
+                                        {
+                                            if on {
+                                                do_stop = Some(i);
+                                            } else {
+                                                do_load_apply = Some(i);
+                                            }
+                                        }
+                                        if ui
+                                            .selectable_label(
+                                                editing,
+                                                egui::RichText::new(&name).family(theme::medium()),
+                                            )
+                                            .on_hover_text("Edit in place — changes save as you make them")
+                                            .clicked()
+                                        {
+                                            do_edit = Some(i);
+                                        }
+                                        ui.weak(&sub);
+                                        if bound {
+                                            theme::pill(ui, "bound", theme::TEXT_DIM);
+                                        }
+                                        if beat {
+                                            theme::pill(ui, "beat", theme::ACCENT_SOFT);
+                                        }
+                                        ui.with_layout(
+                                            egui::Layout::right_to_left(egui::Align::Center),
+                                            |ui| {
+                                                ui.menu_button("…", |ui| {
+                                                    if ui.button("Apply").clicked() {
+                                                        do_load_apply = Some(i);
+                                                        ui.close_menu();
+                                                    }
+                                                    if on && ui.button("Stop").clicked() {
+                                                        do_stop = Some(i);
+                                                        ui.close_menu();
+                                                    }
+                                                    let mut follow = beat;
+                                                    if ui
+                                                        .checkbox(&mut follow, "Follow master beat")
+                                                        .on_hover_text(
+                                                            "Opt this phaser in or out of taps and Master BPM",
+                                                        )
+                                                        .changed()
+                                                    {
+                                                        do_master_beat = Some(i);
+                                                        ui.close_menu();
+                                                    }
+                                                    ui.separator();
+                                                    if ui
+                                                        .add_enabled(
+                                                            !sel.is_empty(),
+                                                            egui::Button::new("Bind to selection"),
+                                                        )
+                                                        .on_hover_text(
+                                                            "Remember the selected fixtures: with nothing \
+                                                             selected, it applies to them (a live selection \
+                                                             still wins)",
+                                                        )
+                                                        .clicked()
+                                                    {
+                                                        do_bind = Some(i);
+                                                        ui.close_menu();
+                                                    }
+                                                    if bound && ui.button("Unbind (use selection)").clicked() {
+                                                        do_unbind = Some(i);
+                                                        ui.close_menu();
+                                                    }
+                                                    ui.separator();
+                                                    if ui
+                                                        .button("Overwrite with editor")
+                                                        .on_hover_text(
+                                                            "Replace its settings with the editor's current values",
+                                                        )
+                                                        .clicked()
+                                                    {
+                                                        do_update = Some(i);
+                                                        ui.close_menu();
+                                                    }
+                                                    ui.separator();
+                                                    if ui.button("Delete").clicked() {
+                                                        do_delete = Some(i);
+                                                        ui.close_menu();
+                                                    }
+                                                });
+                                                if on_board {
+                                                    theme::pill(ui, "on board", theme::ACCENT_MUTED);
+                                                } else if ui
+                                                    .small_button("+ Board")
+                                                    .on_hover_text("Put it on the first free pad of the Phaser board")
+                                                    .clicked()
+                                                {
+                                                    do_board = Some(i);
+                                                }
+                                            },
+                                        );
+                                    });
+                                });
                         }
                     });
-                });
             },
         );
+        self.zoom.phasers = zoom_level;
         self.show_phasers = open;
         if popped {
             self.popped_out.insert("phasers");
@@ -1800,6 +1604,12 @@ impl App {
             self.phasers.push(ph);
             phaser::save_phasers(&self.phasers);
             self.phaser_name.clear();
+            if store_to_board {
+                self.board_add(self.phasers.len() - 1);
+            }
+        }
+        if let Some(i) = do_board {
+            self.board_add(i);
         }
         if do_store_pose {
             let sel = self.stage.selected_fixtures();

@@ -35,6 +35,7 @@ impl App {
             "DMX Monitor",
             &mut open,
             &mut popped,
+            None,
             [380.0, 460.0],
             [140.0, 100.0],
             |ui| {

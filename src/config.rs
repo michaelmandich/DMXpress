@@ -17,7 +17,7 @@ use crate::profiles::UserFixture;
 use crate::scene::Scene;
 use crate::showbuddy::Fixture;
 use crate::stack::Stack;
-use crate::stage::{LayoutFile, Settings};
+use crate::stage::{CameraBookmark, LayoutFile, Settings};
 use crate::view::View;
 
 pub const CONFIGS_DIR: &str = "configs";
@@ -68,6 +68,10 @@ pub struct Configuration {
     pub scenes: Vec<Scene>,
     #[serde(default)]
     pub views: Vec<View>,
+    /// Saved stage-camera bookmarks (Inspector → Stage → Saved cameras).
+    /// Absent in configurations written before them.
+    #[serde(default)]
+    pub cameras: Vec<CameraBookmark>,
     #[serde(default)]
     pub universe: u16,
     #[serde(default = "one")]

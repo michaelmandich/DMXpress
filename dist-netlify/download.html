@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Download DMXexpress</title>
+  <meta name="description" content="Download DMXexpress for Windows, macOS, or Linux.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <link rel="icon" type="image/png" href="images/logo.png">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <header class="nav">
+    <div class="container nav-inner">
+      <a href="index.html" class="brand">
+        <img src="images/logo.png" alt="DMXexpress" class="logo-nav">
+      </a>
+      <nav class="nav-links">
+        <a href="index.html#features">Features</a>
+        <a href="index.html#streamdeck">Stream Deck</a>
+        <a href="plugins.html">Plugins</a>
+        <a href="community.html">Community</a>
+        <a href="download.html" class="is-current">Download</a>
+        <a href="guide.html">Guide</a>
+        <a href="https://github.com/michaelmandich/DMXpress" class="btn btn-ghost" target="_blank" rel="noopener">GitHub</a>
+      </nav>
+    </div>
+  </header>
+
+  <main>
+    <section class="guide-head">
+      <div class="container">
+        <p class="eyebrow">Downloads</p>
+        <h1>Choose your platform.</h1>
+        <p class="guide-lede">Every download is built from the current GitHub release. Start with the standalone Windows executable, or choose a universal macOS app or Linux x86_64 archive.</p>
+      </div>
+    </section>
+
+    <section class="section">
+      <div class="container">
+        <div class="cards cards-3">
+          <article class="card">
+            <div class="card-icon">WIN</div>
+            <h2>Windows</h2>
+            <p>Windows 10 and later, x86_64. One executable with the Microsoft runtime and built-in profiles included. No installer, Rust toolchain, or companion files required.</p>
+            <p style="margin-top:20px"><a href="https://github.com/michaelmandich/DMXpress/releases/latest/download/DMXpress-windows-x86_64.exe" class="btn btn-primary">Download for Windows</a></p>
+            <p class="fine" style="margin-top:16px">If Windows SmartScreen appears on first launch, click <strong>More info</strong>, then <strong>Run anyway</strong>. The executable is not code-signed yet, so Windows asks once per download.</p>
+          </article>
+          <article class="card">
+            <div class="card-icon">MAC</div>
+            <h2>macOS</h2>
+            <p>Universal app for Apple Silicon and Intel Macs. Unzip the download and move DMXexpress to Applications.</p>
+            <p style="margin-top:20px"><a href="https://github.com/michaelmandich/DMXpress/releases/latest/download/DMXpress-macos-universal.zip" class="btn btn-primary">Download for macOS</a></p>
+            <p class="fine" style="margin-top:16px">Requires macOS 11 or later. The app is not notarized yet: if macOS blocks the first launch, click <strong>Done</strong>, then open <strong>System Settings &gt; Privacy &amp; Security</strong>, scroll to Security, and click <strong>Open Anyway</strong>. On older macOS versions, right-click the app and choose <strong>Open</strong> instead.</p>
+          </article>
+          <article class="card">
+            <div class="card-icon">LNX</div>
+            <h2>Linux</h2>
+            <p>x86_64 binary for a desktop with Wayland or X11 and ALSA audio. Extract the archive, make the binary executable if necessary, then run it.</p>
+            <p style="margin-top:20px"><a href="https://github.com/michaelmandich/DMXpress/releases/latest/download/DMXpress-linux-x86_64.tar.gz" class="btn btn-primary">Download for Linux</a></p>
+            <p class="fine" style="margin-top:16px">System graphics and audio drivers are still required.</p>
+          </article>
+        </div>
+
+        <div class="callout">
+          <h3>Show files stay separate from the app.</h3>
+          <p>On first launch, DMXexpress creates its show-data folder and seeds it with sample rigs, stage setups, the 2,200-model fixture library, and the gobo catalogue. Your work persists there, rather than being written beside the downloaded application.</p>
+        </div>
+        <div class="callout">
+          <h3>Hardware is plug and play.</h3>
+          <p>An Elgato Stream Deck is detected the moment it is plugged in — no Elgato software or plugins needed. Audio input works out of the box too: on Windows, DMXexpress can listen to the computer's own output and light whatever is playing.</p>
+        </div>
+        <p class="fine" style="text-align:center; margin-top:28px">Need a previous version or a checksum? Visit <a href="https://github.com/michaelmandich/DMXpress/releases" target="_blank" rel="noopener">all releases on GitHub</a>.</p>
+      </div>
+    </section>
+  </main>
+
+  <footer class="footer">
+    <div class="container footer-inner">
+      <div>
+        <img src="images/logo.png" alt="DMXexpress" class="logo-footer">
+        <p class="fine">A native, all-in-one DMX fixture visualizer and live lighting controller built in Rust.</p>
+      </div>
+      <div class="footer-links">
+        <a href="index.html#features">Features</a>
+        <a href="plugins.html">Plugins</a>
+        <a href="community.html">Community</a>
+        <a href="download.html">Download</a>
+        <a href="guide.html">Guide</a>
+        <a href="https://github.com/michaelmandich/DMXpress" target="_blank" rel="noopener">GitHub</a>
+      </div>
+    </div>
+  </footer>
+</body>
+</html>

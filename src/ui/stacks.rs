@@ -4,7 +4,6 @@
 
 use eframe::egui;
 
-use super::{apply_zoom, zoom_controls};
 use crate::app::App;
 use crate::net::Frame;
 use crate::palette::{Feature, PaletteRef};
@@ -172,17 +171,17 @@ impl App {
         let mut do_fire: Option<(usize, usize)> = None;
         let mut do_delete_cue: Option<(usize, usize)> = None;
 
+        let mut zoom_level = self.zoom.stacks;
         super::floating_panel(
             ctx,
             "stacks",
             "Stacks",
             &mut open,
             &mut popped,
+            Some(&mut zoom_level),
             [400.0, 380.0],
             [screen.left() + 80.0, 120.0],
             |ui| {
-                zoom_controls(ui, &mut self.zoom.stacks);
-                apply_zoom(ui, self.zoom.stacks);
 
                 ui.horizontal_wrapped(|ui| {
                     for i in 0..self.stacks.len() {
@@ -323,6 +322,7 @@ impl App {
                 });
             },
         );
+        self.zoom.stacks = zoom_level;
         self.show_stacks = open;
         if popped {
             self.popped_out.insert("stacks");

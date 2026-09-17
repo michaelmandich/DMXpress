@@ -5,15 +5,15 @@ use std::collections::HashSet;
 
 use eframe::egui::{self, Align2, Color32, FontId, Pos2, Rect, Shape, Stroke};
 
-use super::fixture::{classify, live_state, vis_curve, Archetype};
+use super::fixture::{classify, gobo_state, live_state, vis_curve, Archetype};
 use super::geometry::SnapTarget;
 use super::gizmo::{Drag, GizmoPart, StageHandle};
-use super::layout::TOWER_SLOTS;
+use super::layout::{ElementRef, TOWER_SLOTS};
 use super::math::{dir_from_angles, v3, V3};
-use super::render::{add_box, add_cylinder, mesh_shapes, surface_pool_shape, Mesh};
+use super::render::{add_box, add_cylinder, mesh_shapes, Mesh};
 use super::settings::Settings;
 use super::view::StageView;
-use super::volumetric::{paint_callback, BeamSpec};
+use super::volumetric::{paint_callbacks, BeamSpec, GoboOn};
 use crate::chase::ChaseConfig;
 use crate::phaser::PhaserTrace;
 use crate::showbuddy::Patch;
@@ -37,8 +37,12 @@ impl StageView {
         trace: Option<&PhaserTrace>,
     ) {
         // ---- static scene ----
-        self.draw_grid(painter, rect);
-        self.draw_stage_box(painter, rect, set);
+        if self.show.grid {
+            self.draw_grid(painter, rect);
+        }
+        if self.show.stage_box {
+            self.draw_stage_box(painter, rect, set);
+        }
 
         // ---- lights & beams, painter-sorted back to front ----
         struct Item {
@@ -48,7 +52,8 @@ impl StageView {
         let eye = self.cam.eye();
         let mut items: Vec<Item> = Vec::new();
         let mut beams: Vec<BeamSpec> = Vec::new();
-        let mut pools: Vec<Shape> = Vec::new();
+        // Drives continuous gobo rotation.
+        let time = painter.ctx().input(|i| i.time);
 
         for (i, inst) in self.instances.iter().enumerate() {
             let Some(f) = patch.fixtures.get(inst.fixture) else {
@@ -216,22 +221,15 @@ impl StageView {
                     }
                 }
                 let len = surface_hit.map_or(max_len, |(t, _)| t.min(max_len));
-                if let Some((hit_t, hit_y)) = surface_hit.filter(|(t, _)| *t <= max_len) {
-                    let mut hit = apex + dir * hit_t;
-                    hit.y = hit_y;
-                    let pool_radius = (0.05 + half_deg.to_radians().tan() * hit_t) * 1.18;
-                    if let Some(pool) = surface_pool_shape(
-                        &self.cam,
-                        rect,
-                        hit,
-                        dir,
-                        pool_radius,
-                        live.color,
-                        live.brightness,
-                        set.beam_opacity * visual_opacity,
-                    ) {
-                        pools.push(pool);
-                    }
+                let surface = surface_hit.filter(|(t, _)| *t <= max_len);
+                // The gobos in the light path, as atlas layers. A slot whose
+                // mask isn't in the atlas (unknown gobo) projects a plain cone.
+                let gobo = gobo_state(f, buf, time);
+                let mut gobos = [None; 2];
+                for (w, slot) in gobos.iter_mut().enumerate() {
+                    *slot = gobo.keys[w]
+                        .and_then(|key| self.gobo_atlas.layer(key))
+                        .map(|layer| GoboOn { layer, angle: gobo.angle[w] });
                 }
                 beams.push(BeamSpec {
                     apex,
@@ -241,6 +239,8 @@ impl StageView {
                     color: live.color,
                     brightness: live.brightness,
                     opacity: set.beam_opacity * visual_opacity,
+                    gobos,
+                    surface,
                 });
             }
 
@@ -248,7 +248,7 @@ impl StageView {
                 let r = (160.0 / z).clamp(3.0, 24.0);
                 shapes.extend(mesh_shapes(&self.cam, rect, &mesh));
                 // Orientation tick so off lights still show where they aim.
-                if live.brightness <= 0.02 {
+                if self.show.ticks && live.brightness <= 0.02 {
                     if let Some((tip, _)) = self.cam.project(rect, apex + dir * 0.7) {
                         shapes.push(Shape::line_segment(
                             [sp, tip],
@@ -271,8 +271,13 @@ impl StageView {
             });
         }
         // Surface illumination belongs on the stage/ground, below physical
-        // fixture bodies and towers.
-        painter.extend(pools);
+        // fixture bodies and towers; the haze goes over everything, so the
+        // two GPU passes bracket the geometry.
+        let (pool_callback, beam_callback) =
+            paint_callbacks(&self.cam, rect, &beams, self.gobo_atlas.upload());
+        if let Some(callback) = pool_callback.filter(|_| self.show.pools) {
+            painter.add(Shape::Callback(callback));
+        }
         // Towers & trusses (drawn with the same depth sort as the lights).
         let occupied: HashSet<(usize, usize)> =
             self.instances.iter().filter_map(|inst| inst.mount).collect();
@@ -281,10 +286,14 @@ impl StageView {
         // Slots a light is currently hovering over (live snap target).
         let snap_targets: HashSet<SnapTarget> = self.snap_preview.values().copied().collect();
         for (ti, tw) in self.towers.iter().enumerate() {
-            let selected = self.sel_tower == Some(ti);
+            if !self.show.towers || tw.hidden {
+                continue;
+            }
+            let selected =
+                self.sel_tower == Some(ti) || self.hover_element == Some(ElementRef::Tower(ti));
             let mut shapes = mesh_shapes(&self.cam, rect, &tw.mesh(selected));
             // Slot markers while placing lights or when the tower is picked.
-            if selected || matches!(self.drag, Drag::Move) {
+            if self.show.slot_rings && (selected || matches!(self.drag, Drag::Move)) {
                 for slot in 0..TOWER_SLOTS {
                     if let Some((sp, _)) = self.cam.project(rect, tw.slot_pos(slot)) {
                         if snap_targets.contains(&SnapTarget::Tower(ti, slot)) {
@@ -316,11 +325,15 @@ impl StageView {
             });
         }
         for (ti, tr) in self.trusses.iter().enumerate() {
-            let selected = self.sel_truss == Some(ti);
+            if !self.show.trusses || tr.hidden {
+                continue;
+            }
+            let selected =
+                self.sel_truss == Some(ti) || self.hover_element == Some(ElementRef::Truss(ti));
             let mut shapes = mesh_shapes(&self.cam, rect, &tr.mesh(selected));
             let total_slots = tr.total_slots();
             // Slot markers while placing lights or when the truss is picked.
-            if selected || matches!(self.drag, Drag::Move) {
+            if self.show.slot_rings && (selected || matches!(self.drag, Drag::Move)) {
                 for slot in 0..total_slots {
                     if let Some((sp, _)) = self.cam.project(rect, tr.slot_pos(slot)) {
                         if snap_targets.contains(&SnapTarget::Truss(ti, slot)) {
@@ -360,12 +373,12 @@ impl StageView {
         // Composite participating media after scene geometry. Thick/head-on
         // haze can now veil bodies behind it, while the emissive lens remains
         // faintly visible through physically bounded beam alpha.
-        if let Some(callback) = paint_callback(&self.cam, rect, &beams) {
+        if let Some(callback) = beam_callback.filter(|_| self.show.beams) {
             painter.add(Shape::Callback(callback));
         }
 
         // ---- transform gizmo (Fusion-style axis arrows + rotation rings) ----
-        if let Some(origin) = self.selection_centroid() {
+        if let Some(origin) = self.selection_centroid().filter(|_| self.show.gizmo) {
             if let Some((o_s, _)) = self.cam.project(rect, origin) {
                 let arm = self.gizmo_arm(rect);
                 let active = match self.drag {
@@ -468,8 +481,15 @@ impl StageView {
             }
         }
 
-        // Labels for selected lights.
-        for &i in &self.selection {
+        // Labels for selected lights (or every light).
+        let label_ids: Vec<usize> = if !self.show.labels {
+            Vec::new()
+        } else if self.show.label_all {
+            (0..self.instances.len()).collect()
+        } else {
+            self.selection.iter().copied().collect()
+        };
+        for i in label_ids {
             let Some(inst) = self.instances.get(i) else { continue };
             if let (Some(Some((sp, _))), Some(f)) =
                 (proj.get(i), patch.fixtures.get(inst.fixture))
@@ -483,6 +503,18 @@ impl StageView {
                 );
             }
         }
+        // The picked element's name, so the outliner and the stage agree.
+        if self.selection.is_empty() {
+            let picked = self.sel_tower.map(ElementRef::Tower).or(self.sel_truss.map(ElementRef::Truss));
+            if let Some(r) = picked {
+                if let Some(top) = self.element_centre(r) {
+                    if let Some((sp, _)) = self.cam.project(rect, top) {
+                        painter.text(sp + egui::vec2(0.0, -14.0), Align2::CENTER_BOTTOM, self.element_name(r),
+                                     FontId::proportional(10.5), Color32::from_gray(210));
+                    }
+                }
+            }
+        }
 
         // Marquee overlay.
         if let Drag::Marquee(start) = self.drag {
@@ -493,20 +525,24 @@ impl StageView {
             }
         }
 
-        painter.text(
-            rect.left_bottom() + egui::vec2(6.0, -6.0),
-            Align2::LEFT_BOTTOM,
-            if self.fly_mode {
-                "FREE FLY · WASD: move · Space/Shift: up/down · arrows/right-drag: look · scroll: speed · click/drag lights normally"
-            } else {
-                "drag light: move · gizmo arrows/rings: fine move & rotate · click stage: resize arrows · ⌘drag: height · drag empty: pan · ⇧drag empty: marquee · ⇧click: multi · ⌘click: select type · ⌘Z: undo · ⌘D: duplicate · ⌫: remove copy · right-drag: orbit · scroll: zoom"
-            },
-            FontId::proportional(10.5),
-            Color32::from_gray(120),
-        );
-        self.draw_transition_overlay(painter, rect, transition);
-        self.draw_chase_overlay(painter, rect, chase);
-        self.draw_phaser_paths(painter, rect, patch, buf, trace);
+        if self.show.help {
+            painter.text(
+                rect.left_bottom() + egui::vec2(6.0, -6.0),
+                Align2::LEFT_BOTTOM,
+                if self.fly_mode {
+                    "FREE FLY · WASD: move · Space/Shift: up/down · arrows/right-drag: look · scroll: speed · click/drag lights normally"
+                } else {
+                    "drag light: move · gizmo arrows/rings: fine move & rotate · click stage: resize arrows · ⌘drag: height · drag empty: pan · ⇧drag empty: marquee · ⇧click: multi · ⌘click: select type · ⌘Z: undo · ⌘D: duplicate · ⌫: remove copy · right-drag: orbit · scroll: zoom · F/Home: frame · 1–9: cameras"
+                },
+                FontId::proportional(10.5),
+                Color32::from_gray(120),
+            );
+        }
+        if self.show.overlays {
+            self.draw_transition_overlay(painter, rect, transition);
+            self.draw_chase_overlay(painter, rect, chase);
+            self.draw_phaser_paths(painter, rect, patch, buf, trace);
+        }
     }
 
     fn line3(&self, painter: &egui::Painter, rect: Rect, a: V3, b: V3, stroke: Stroke) {
@@ -519,7 +555,8 @@ impl StageView {
 
     fn draw_grid(&self, painter: &egui::Painter, rect: Rect) {
         let stroke = Stroke::new(1.0, Color32::from_gray(30));
-        let (n, s) = (8i32, 2.0f32);
+        let s = self.show.grid_pitch.metres();
+        let n = (16.0 / s).round().max(1.0) as i32;
         let ext = n as f32 * s;
         for i in -n..=n {
             let a = i as f32 * s;

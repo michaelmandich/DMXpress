@@ -100,6 +100,17 @@ pub(crate) struct App {
     /// The output compositor: each frame's layer stack (base look + overlays,
     /// and later Decks/Phasers) flattened into the frame sent to Art-Net.
     pub mixer: Mixer,
+    /// Sandboxed Rhai engine every plugin call runs through (see `plugin.rs`).
+    pub plugin_engine: rhai::Engine,
+    /// Installed plugin scripts, in file order.
+    pub plugins: Vec<crate::plugin::Plugin>,
+    /// Zero point of the `t` handed to plugin `frame`/`button` calls.
+    pub plugin_epoch: Instant,
+    /// A plugin theme tint changed — re-apply the style next frame.
+    pub plugin_theme_dirty: bool,
+    /// Plugin row awaiting delete confirmation in the Plugins window.
+    pub plugin_confirm_remove: Option<usize>,
+    pub show_plugins: bool,
     /// Stored fixture selections (the renamed grandMA3 Group pool).
     pub groups: Vec<Group>,
     /// Name field for storing the current selection as a group.
@@ -207,17 +218,14 @@ pub(crate) struct App {
     pub waveform_edit: CustomWaveform,
     pub waveform_edit_sel: Option<usize>,
     pub waveform_drag: Option<usize>,
-    /// When true, inspector presets drag (for filing/reordering) instead of
-    /// selecting on click.
-    pub preset_drag: bool,
     /// Native DMXpress presets (saved programmer snapshots incl. oscillators).
     pub user_presets: Vec<UserPreset>,
     /// Preset folders (may be empty); presets reference them by name.
     pub preset_folders: Vec<String>,
-    /// Which preset folders are expanded in the inspector.
-    pub open_user_folders: HashSet<String>,
     pub preset_name: String,
     pub active_user_preset: Option<usize>,
+    /// Next `UserPreset.id` to hand out (see `preset::next_id`).
+    pub next_preset_id: u32,
     /// The phaser currently being edited in the pool window.
     pub phaser_edit: Phaser,
     pub phaser_name: String,
@@ -286,12 +294,20 @@ pub(crate) struct App {
     /// Which page of `phaser_deck` the deck (and the editor) is showing —
     /// scrolled by the Page knob while in Phaser mode.
     pub deck_phaser_page: usize,
+    /// Which page of lights the deck's Fixtures page shows.
+    pub deck_fixture_page: usize,
     /// Slot index currently open in the Phaser page editor, if any.
     pub deck_slot_edit: Option<usize>,
     pub deck_slot_phaser: String,
     pub deck_slot_color: [u8; 3],
     pub deck_slot_label: String,
     pub deck_slot_icon: crate::streamdeck::KeyIcon,
+    /// The Presets board's pads, 36 per page, persisted to `preset_deck.json`;
+    /// the deck's Presets page shows these pages, then the ShowBuddy banks.
+    pub preset_deck: Vec<Option<crate::preset_deck::PresetSlot>>,
+    /// Which page of `preset_deck` the deck and the board window show; one
+    /// past the last board page = the ShowBuddy page.
+    pub deck_preset_page: usize,
     /// Band-threshold rules painting looks over the show (see `audio.rs`).
     pub audio_triggers: Vec<AudioTrigger>,
     /// Detected beats press the TAP button automatically.
@@ -319,9 +335,14 @@ pub(crate) struct App {
     /// Saved workspace layouts (the renamed grandMA3 Views).
     pub views: Vec<View>,
     pub view_name: String,
+    /// Saved stage-camera bookmarks (cameras.json), Inspector → Stage.
+    pub cameras: Vec<stage::CameraBookmark>,
     /// Current text in the command line.
     pub command: String,
     pub settings: stage::Settings,
+    /// The Network screen (Settings → Network…): protocol setup, node and
+    /// sACN source tables, checklist, test patterns and packet monitor.
+    pub network: crate::ui::network::NetworkState,
     pub show_settings: bool,
     pub show_artnet: bool,
     pub show_transition: bool,
@@ -345,6 +366,29 @@ pub(crate) struct App {
     /// out into their own native OS window instead of docked as a floating
     /// `egui::Window` inside the main window.
     pub popped_out: HashSet<&'static str>,
+    /// Docked panels folded away: the side panels to a thin rail
+    /// ("fixtures", "inspector"), the channel controls to one row
+    /// ("channels"). All three folded leaves just the stage.
+    pub collapsed: HashSet<&'static str>,
+    /// The Phaser board window (the deck's Phaser page, on screen).
+    pub show_phaser_board: bool,
+    /// Board in arrange mode: pads are assigned and swapped, not pressed.
+    pub board_arrange: bool,
+    /// The Presets board window (the deck's Presets page, on screen).
+    pub show_preset_board: bool,
+    /// The Phasers window's library search and filter.
+    pub phaser_search: String,
+    pub phaser_lib_filter: crate::phaser::LibFilter,
+    /// Ctrl+Shift+Z history (see `undo.rs`).
+    pub undo: crate::undo::History,
+    /// Rolling backups of the show (see `backup.rs`).
+    pub autosave: crate::backup::Autosave,
+    /// A show file waiting for the "Import show?" answer.
+    pub pending_import: Option<std::path::PathBuf>,
+    /// A backup waiting for the "Restore backup?" answer.
+    pub confirm_restore: Option<std::path::PathBuf>,
+    /// The Configurations window's import path field.
+    pub import_path: String,
     /// Name field for saving the current stage arrangement as a setup.
     pub setup_name: String,
     /// Fixtures patched in DMXpress on top of the ShowBuddy patch.
@@ -357,6 +401,8 @@ pub(crate) struct App {
     pub showbuddy_patch: Vec<showbuddy::Fixture>,
     /// Individual ShowBuddy fixtures hidden from the rig (`display@from` keys).
     pub excluded_fixtures: Vec<String>,
+    /// Profiles patched most recently, newest first (see `profiles::UserPatch::recent`).
+    pub recent_profiles: Vec<profiles::RecentProfile>,
     /// Patch window visible.
     pub show_patch: bool,
     /// Profile index selected in the Patch window.
@@ -369,6 +415,23 @@ pub(crate) struct App {
     pub patch_count: u16,
     /// The bundled fixture library, loaded on demand (see `fixturedb.rs`).
     pub library: fixturedb::Library,
+    /// The gobo catalogue: masks, names, and which model carries what in
+    /// which slot (see `gobo.rs`).
+    pub gobos: crate::gobo::Catalogue,
+    /// Gobo slots pinned by hand in the Gobos window.
+    pub user_gobos: crate::gobo::UserGobos,
+    /// Gobos window visible.
+    pub show_gobos: bool,
+    /// Assign mode in the Gobos window: clicking a slot picks its picture
+    /// instead of sending the lights there.
+    pub gobo_assign_mode: bool,
+    /// Search box and maker filter in the Gobos window's picture picker.
+    pub gobo_search: String,
+    pub gobo_maker: Option<String>,
+    /// The slot the picker is choosing a picture for.
+    pub gobo_pick: Option<crate::gobo::GoboPick>,
+    /// Thumbnails uploaded so far, by gobo key (`None` = no mask to show).
+    pub(crate) gobo_thumbs: HashMap<String, Option<egui::TextureHandle>>,
     /// Search box in the Patch window's fixture browser.
     pub patch_search: String,
     /// Manufacturer the browser is narrowed to, if any.
@@ -390,6 +453,12 @@ pub(crate) struct App {
     pub new_show_reset_layout: bool,
     /// Selected channels (0-based DMX buffer indices) in the channel editor.
     pub sel_channels: HashSet<usize>,
+    /// Channel control UI state: filter, sort, folded groups, range anchor.
+    /// Not saved, not part of undo.
+    pub chan_ui: crate::ui::chanrows::ChanUi,
+    /// Inspector shell: active tab, per-tab UI state and the cosmetic
+    /// preferences in inspector.json. Not saved with the show, not undone.
+    pub insp: crate::ui::inspector::InspectorUi,
     /// Independent UI zoom for each major panel (1.0 = default).
     pub zoom: PanelZoom,
     /// The toolbar logo, uploaded on first paint. `Some(None)` means the
@@ -410,9 +479,12 @@ pub(crate) struct PanelZoom {
     pub scenes: f32,
     pub audio: f32,
     pub palettes: f32,
+    pub gobos: f32,
     pub phasers: f32,
+    pub preset_board: f32,
     pub stacks: f32,
     pub views: f32,
+    pub plugins: f32,
 }
 
 impl Default for PanelZoom {
@@ -429,9 +501,12 @@ impl Default for PanelZoom {
             scenes: 1.0,
             audio: 1.0,
             palettes: 1.0,
+            gobos: 1.0,
             phasers: 1.0,
+            preset_board: 1.0,
             stacks: 1.0,
             views: 1.0,
+            plugins: 1.0,
         }
     }
 }
@@ -517,8 +592,9 @@ impl App {
             log.push("ShowBuddy patch disabled — DMXpress fixtures only".into());
             Patch::default()
         };
-        // The library is a few MB, so it only loads when something actually
-        // needs it: a patched `lib:` fixture now, or the patch browser later.
+        // The library unpacks to over ten megabytes, so it only loads when
+        // something actually needs it: a patched `lib:` fixture now, or the
+        // patch browser later.
         let library = if user_patch.fixtures.iter().any(|f| fixturedb::library_id(&f.profile).is_some())
         {
             fixturedb::Library::load()
@@ -526,6 +602,12 @@ impl App {
             fixturedb::Library::default()
         };
         profiles::extend_patch(&mut patch, &user_patch, &library);
+        let gobos = crate::gobo::Catalogue::load();
+        if let Some(e) = &gobos.error {
+            log.push(format!("Gobo catalogue unavailable ({e}) — beams render without gobos"));
+        }
+        let user_gobos = crate::gobo::UserGobos::load();
+        crate::gobo::assign_patch(&mut patch, &library, &gobos, &user_gobos);
         if !user_patch.fixtures.is_empty() {
             log.push(format!("Patched {} DMXpress fixtures", user_patch.fixtures.len()));
         }
@@ -534,8 +616,16 @@ impl App {
         }
         let sel_fixture = if patch.fixtures.is_empty() { None } else { Some(0) };
         let settings = stage::Settings::load();
+        let insp = crate::ui::inspector::InspectorUi::load();
         let mut stage = StageView::new();
         stage.sync(&patch, &settings);
+        stage.show = insp.prefs.display;
+        stage.fly_mode = insp.prefs.fly_mode;
+        if insp.prefs.stage.restore_camera {
+            if let Some(c) = &insp.prefs.stage.last_camera {
+                stage.cam.apply_snapshot(c);
+            }
+        }
         let banks = if user_patch.include_showbuddy {
             load_banks(&mut log)
         } else {
@@ -544,9 +634,24 @@ impl App {
         let palettes = palette::load_palettes();
         let next_palette_id = palettes.iter().map(|p| p.id).max().map_or(0, |m| m + 1);
         let seq_store = palette::load_seqs();
-        let preset_store = preset::load_presets();
+        let mut preset_store = preset::load_presets();
+        let next_preset_id = preset::assign_ids(&mut preset_store.presets);
+        let preset_deck = crate::preset_deck::load_preset_deck();
+        // A brand-new, empty board on a machine with ShowBuddy banks starts
+        // the deck on the banks page, so nothing familiar disappears.
+        let deck_preset_page = if preset_deck.iter().all(Option::is_none) && !banks.is_empty() {
+            crate::preset_deck::preset_deck_pages(&preset_deck)
+        } else {
+            0
+        };
         let audio_file = audio::load_audio();
+        let plugin_engine = crate::plugin::engine();
+        let plugins = crate::plugin::load_all(&plugin_engine);
+        if !plugins.is_empty() {
+            log.push(format!("Plugins: {} loaded", plugins.len()));
+        }
         Self {
+            network: crate::ui::network::NetworkState::new(net.config.clone()),
             net,
             nodes: Vec::new(),
             selected: None,
@@ -569,6 +674,12 @@ impl App {
             frozen: false,
             frozen_at: None,
             mixer: Mixer::new(),
+            plugin_engine,
+            plugins,
+            plugin_epoch: Instant::now(),
+            plugin_theme_dirty: true,
+            plugin_confirm_remove: None,
+            show_plugins: false,
             groups: group::load_groups(),
             group_name: String::new(),
             group_chain: Vec::new(),
@@ -621,12 +732,11 @@ impl App {
             waveform_edit: CustomWaveform::default(),
             waveform_edit_sel: None,
             waveform_drag: None,
-            preset_drag: false,
             user_presets: preset_store.presets,
             preset_folders: preset_store.folders,
-            open_user_folders: HashSet::new(),
             preset_name: String::new(),
             active_user_preset: None,
+            next_preset_id,
             phaser_edit: Phaser::default(),
             phaser_name: String::new(),
             phaser_edit_mode: false,
@@ -656,11 +766,14 @@ impl App {
             palette_sub: crate::streamdeck::PaletteSub::default(),
             phaser_deck: crate::streamdeck::load_phaser_deck(),
             deck_phaser_page: 0,
+            deck_fixture_page: 0,
             deck_slot_edit: None,
             deck_slot_phaser: String::new(),
             deck_slot_color: [110, 120, 150],
             deck_slot_label: String::new(),
             deck_slot_icon: crate::streamdeck::KeyIcon::None,
+            preset_deck,
+            deck_preset_page,
             audio_triggers: audio_file.triggers,
             audio_follow_beat: audio_file.follow_beat,
             audio_beat_seen: 0,
@@ -675,6 +788,7 @@ impl App {
             record_mask: Feature::ALL.iter().copied().collect(),
             views: view::load_views(),
             view_name: String::new(),
+            cameras: stage::load_cameras(),
             command: String::new(),
             settings,
             show_settings: false,
@@ -695,17 +809,37 @@ impl App {
             show_log: true,
             show_osc: true,
             popped_out: HashSet::new(),
+            collapsed: HashSet::new(),
+            show_phaser_board: false,
+            board_arrange: false,
+            show_preset_board: false,
+            phaser_search: String::new(),
+            phaser_lib_filter: crate::phaser::LibFilter::All,
+            undo: crate::undo::History::new(),
+            autosave: crate::backup::Autosave::new(),
+            pending_import: None,
+            confirm_restore: None,
+            import_path: String::new(),
             setup_name: String::new(),
             user_fixtures: user_patch.fixtures,
             include_showbuddy: user_patch.include_showbuddy,
             showbuddy_patch,
             excluded_fixtures: user_patch.excluded,
+            recent_profiles: user_patch.recent,
             show_patch: false,
             patch_profile: 0,
             patch_name: String::new(),
             patch_addr: 1,
             patch_count: 1,
             library,
+            gobos,
+            user_gobos,
+            show_gobos: false,
+            gobo_assign_mode: false,
+            gobo_search: String::new(),
+            gobo_maker: None,
+            gobo_pick: None,
+            gobo_thumbs: HashMap::new(),
             patch_search: String::new(),
             patch_manufacturer: None,
             patch_library_sel: None,
@@ -717,6 +851,8 @@ impl App {
             new_show_drop_showbuddy: true,
             new_show_reset_layout: true,
             sel_channels: HashSet::new(),
+            chan_ui: crate::ui::chanrows::ChanUi::default(),
+            insp,
             zoom: PanelZoom::default(),
             logo: None,
         }
@@ -737,6 +873,7 @@ impl App {
             Patch::default()
         };
         profiles::extend_patch(&mut patch, &self.current_user_patch(), &self.library);
+        crate::gobo::assign_patch(&mut patch, &self.library, &self.gobos, &self.user_gobos);
         for w in &patch.warnings {
             self.log.push(format!("patch warning: {w}"));
         }
@@ -749,6 +886,7 @@ impl App {
         self.patch = patch;
         self.stage.sync(&self.patch, &self.settings);
         self.sel_channels.clear();
+        self.chan_ui.anchor = None;
         self.live_refs.clear();
         self.live_active.clear();
         self.active_phasers.clear();
@@ -772,6 +910,7 @@ impl App {
             include_showbuddy: self.include_showbuddy,
             fixtures: self.user_fixtures.clone(),
             excluded: self.excluded_fixtures.clone(),
+            recent: self.recent_profiles.clone(),
         }
     }
 
@@ -796,11 +935,17 @@ impl App {
         self.cur_stack = None;
         self.user_presets.clear();
         self.preset_folders.clear();
-        self.open_user_folders.clear();
         preset::save_presets(&self.preset_folders, &self.user_presets);
         self.active_user_preset = None;
+        self.forget_preset_caches();
+        self.next_preset_id = 1;
+        self.preset_deck = vec![None; crate::preset_deck::PRESET_DECK_SLOTS];
+        self.deck_preset_page = 0;
+        crate::preset_deck::save_preset_deck(&self.preset_deck);
         self.views.clear();
         view::save_views(&self.views);
+        self.cameras.clear();
+        stage::save_cameras(&self.cameras);
         self.live = Look::black();
         self.live_refs.clear();
         self.live_active.clear();
@@ -846,6 +991,7 @@ impl App {
             stacks: self.stacks.clone(),
             scenes: self.scenes.clone(),
             views: self.views.clone(),
+            cameras: self.cameras.clone(),
             universe: self.universe,
             grand_master: self.grand_master,
             cue_fade: self.cue_fade,
@@ -901,9 +1047,10 @@ impl App {
         phaser::save_phasers(&self.phasers);
         self.user_presets = cfg.user_presets;
         self.preset_folders = cfg.preset_folders;
-        self.open_user_folders.clear();
+        self.next_preset_id = preset::assign_ids(&mut self.user_presets);
         preset::save_presets(&self.preset_folders, &self.user_presets);
         self.active_user_preset = None;
+        self.forget_preset_caches();
         self.stacks = cfg.stacks;
         stack::save_stacks(&self.stacks);
         self.cur_stack = None;
@@ -912,6 +1059,8 @@ impl App {
         self.scene_chain = false;
         self.views = cfg.views;
         view::save_views(&self.views);
+        self.cameras = cfg.cameras;
+        stage::save_cameras(&self.cameras);
         self.universe = cfg.universe;
         let _ = self.net.cmd_tx.send(NetCmd::SetUniverse(self.universe));
         self.grand_master = cfg.grand_master;
@@ -928,7 +1077,7 @@ impl App {
     }
 
     /// Fixtures that have a resolved stage position, paired with that position.
-    fn fixture_positions(&self) -> Vec<(usize, V3)> {
+    pub(crate) fn fixture_positions(&self) -> Vec<(usize, V3)> {
         let mut pos = self.stage.fixture_positions(&self.patch);
         // A super-fixture occupies a single place in space, so chases and
         // spatial transitions sweep past it as one light instead of rippling
@@ -957,6 +1106,46 @@ impl App {
             .enumerate()
             .filter_map(|(fi, p)| p.map(|p| (fi, p)))
             .collect()
+    }
+
+    /// The rig, as the array of maps plugin `frame` calls receive: one entry
+    /// per fixture with its 1-based base address, the first channel of each
+    /// core role (0 when absent), and its stage position in metres.
+    pub(crate) fn plugin_rig(&self) -> rhai::Array {
+        use rhai::Dynamic;
+        let positions = self.stage.fixture_positions(&self.patch);
+        let mut rig = rhai::Array::with_capacity(self.patch.fixtures.len());
+        for (i, fx) in self.patch.fixtures.iter().enumerate() {
+            let base = fx.from.saturating_sub(1) as usize;
+            let (mut dimmer, mut red, mut green, mut blue, mut white) = (0i64, 0i64, 0i64, 0i64, 0i64);
+            for (ci, ch) in fx.channels.iter().enumerate() {
+                let a = (base + ci + 1) as i64;
+                match ch.role() {
+                    Role::Dimmer if dimmer == 0 => dimmer = a,
+                    Role::Red if red == 0 => red = a,
+                    Role::Green if green == 0 => green = a,
+                    Role::Blue if blue == 0 => blue = a,
+                    Role::White if white == 0 => white = a,
+                    _ => {}
+                }
+            }
+            let p = positions.get(i).copied().flatten().unwrap_or_default();
+            let mut m = rhai::Map::new();
+            m.insert("i".into(), Dynamic::from_int(i as i64));
+            m.insert("name".into(), Dynamic::from(fx.display.clone()));
+            m.insert("addr".into(), Dynamic::from_int(fx.from as i64));
+            m.insert("channels".into(), Dynamic::from_int(fx.channels.len() as i64));
+            m.insert("dimmer".into(), Dynamic::from_int(dimmer));
+            m.insert("red".into(), Dynamic::from_int(red));
+            m.insert("green".into(), Dynamic::from_int(green));
+            m.insert("blue".into(), Dynamic::from_int(blue));
+            m.insert("white".into(), Dynamic::from_int(white));
+            m.insert("x".into(), Dynamic::from_float(p.x as f64));
+            m.insert("y".into(), Dynamic::from_float(p.y as f64));
+            m.insert("z".into(), Dynamic::from_float(p.z as f64));
+            rig.push(Dynamic::from_map(m));
+        }
+        rig
     }
 
     /// Lights the active order welds into multi-light steps. Touching any one
@@ -1174,7 +1363,14 @@ impl App {
         ));
     }
 
-    fn draw_ui(&mut self, ctx: &egui::Context) {
+    pub(crate) fn draw_ui(&mut self, ctx: &egui::Context) {
+        for line in crate::plugin::drain_prints() {
+            self.log.push(format!("Plugin: {line}"));
+        }
+        if self.plugin_theme_dirty {
+            self.plugin_theme_dirty = false;
+            crate::ui::install_with(ctx, &crate::plugin::merged_theme(&self.plugins));
+        }
         self.top_bar(ctx);
         self.artnet_window(ctx);
         self.transition_window(ctx);
@@ -1185,7 +1381,12 @@ impl App {
         self.scenes_window(ctx);
         self.audio_window(ctx);
         self.palettes_window(ctx);
+        self.gobos_window(ctx);
         self.phasers_window(ctx);
+        self.phaser_board_window(ctx);
+        self.preset_board_window(ctx);
+        self.plugins_window(ctx);
+        self.plugin_panels(ctx);
         self.stacks_window(ctx);
         self.views_window(ctx);
         self.command_bar(ctx);
@@ -1195,11 +1396,18 @@ impl App {
         self.inspector_panel(ctx);
         self.confirm_reset_window(ctx);
         self.settings_window(ctx);
+        self.network_window(ctx);
         self.patch_window(ctx);
         self.configs_window(ctx);
         self.dmx_test_window(ctx);
         self.central_panel(ctx);
+        self.stage_camera_tick(ctx);
         self.show_oscillator(ctx);
+        self.safety_windows(ctx);
+        // With every edit of the frame in, see whether one happened.
+        self.undo_tick(ctx);
+        // Last: lift every button drawn above (see `ui::theme::relief_pass`).
+        crate::ui::relief_pass(ctx);
     }
 
     /// Save the programmer's current content — every non-zero channel value
@@ -1268,6 +1476,7 @@ impl App {
             oscs.len()
         ));
         self.user_presets.push(UserPreset {
+            id: self.next_preset_id,
             name,
             folder: String::new(),
             values,
@@ -1293,7 +1502,13 @@ impl App {
                 master_beat: self.cycle_master_beat,
                 tempo: self.cycle_tempo,
             }),
+            color: None,
+            symbol: String::new(),
+            icon: crate::streamdeck::KeyIcon::None,
+            fade: None,
+            pinned: false,
         });
+        self.next_preset_id += 1;
         preset::save_presets(&self.preset_folders, &self.user_presets);
     }
 
@@ -1704,8 +1919,10 @@ impl App {
                     crate::chase::rand01((k as u32).wrapping_mul(2654435761).wrapping_add(7))
                 }
             };
-            let pk = (pos - self.cycle_spread * disp * total_width)
-                .rem_euclid(total_width);
+            // Past one full cycle the spacing breaks the pattern up rather
+            // than winding more of it on (see `phaser::scatter_offset`).
+            let offset = crate::phaser::scatter_offset(k, disp, self.cycle_spread);
+            let pk = (pos - offset * total_width).rem_euclid(total_width);
             let mut start = 0.0;
             let mut idx = n - 1;
             for (i, width) in widths.iter().enumerate() {
@@ -1769,8 +1986,17 @@ impl App {
 }
 
 impl eframe::App for App {
+    fn on_exit(&mut self) {
+        self.insp.prefs.stage.last_camera = Some(self.stage.cam.snapshot());
+        self.insp.prefs.save();
+        // One last backup if anything changed since the previous one.
+        self.backup_now_if_changed("exit");
+    }
+
     fn update(&mut self, ctx: &egui::Context, _frame: &mut eframe::Frame) {
         self.drain_events();
+        // Ctrl+Shift+Z first, before any text field can see the chord.
+        self.undo_keys(ctx);
         // Keep super-fixtures whole before anything reads the selection.
         self.sync_selection_units();
 
@@ -1900,6 +2126,21 @@ impl eframe::App for App {
             if animated && sc.is_running() {
                 repaint_ms = repaint_ms.min(25);
             }
+        }
+        // Plugin layers ride with the scenes, under the programmer, so
+        // whatever a script paints never fights the desk for control.
+        if self.plugins.iter().any(|p| p.enabled && p.has_frame) {
+            let t = self.plugin_epoch.elapsed().as_secs_f64();
+            let rig = self.plugin_rig();
+            for p in &mut self.plugins {
+                if !(p.enabled && p.has_frame) {
+                    continue;
+                }
+                if let Some(layer) = p.layer(&self.plugin_engine, t, rig.clone()) {
+                    self.mixer.push(layer);
+                }
+            }
+            repaint_ms = repaint_ms.min(25);
         }
         // The programmer asserts only the channels it is actively holding.
         if !self.live_active.is_empty() {

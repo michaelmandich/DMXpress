@@ -10,6 +10,8 @@
 //!   store            record the programmer into the current stack
 //!   cue n            jump the current stack to cue position n
 //!   group n          recall (select) group n
+//!   preset n|name    recall a native preset by number, or by the start of its name
+//!   preset store x   record the programmer as a new preset called x
 //!   gm n             set grand master to n percent
 //!   full             grand master to 100%
 
@@ -71,6 +73,12 @@ impl App {
                 Some(gi) if (1..=self.groups.len()).contains(&gi) => self.recall_group(gi - 1),
                 _ => self.log.push("Usage: group <#>".into()),
             },
+            ["preset" | "pr", "store", rest @ ..] if !rest.is_empty() => {
+                self.store_look_into(rest.join(" "), String::new());
+            }
+            ["preset" | "pr", rest @ ..] if !rest.is_empty() => {
+                self.command_recall_preset(&rest.join(" "))
+            }
             _ => self.log.push(format!("? unknown command: {raw}")),
         }
     }
@@ -87,7 +95,7 @@ impl App {
                     egui::TextEdit::singleline(&mut self.command)
                         .desired_width(f32::INFINITY)
                         .hint_text(
-                            "clear · clr · go [n] · off [n] · store · cue n · group n · gm n · black",
+                            "clear · clr · go [n] · off [n] · store · cue n · group n · preset n · gm n · black",
                         ),
                 );
                 if resp.lost_focus() && ui.input(|i| i.key_pressed(egui::Key::Enter)) {

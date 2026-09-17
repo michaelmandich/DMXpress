@@ -1,2 +1,18 @@
 /target
 /dist
+# gobo-pack helper crate build output (see tools/gobo-pack)
+/tools/gobo-pack/target
+# Per-install network config, holds this machine's sACN CID (see src/net.rs)
+/network.json
+# Rolling show backups and one-file exports (see src/backup.rs): derived from the tracked show files
+/backups/
+/exports/
+# Local release/staging output and the packaged copy of the site
+/build/
+/DMXexpress-site.zip
+# Python bytecode from the fixture/gobo tools
+__pycache__/
+# Inspector panel preferences: per machine, not per show (see src/ui/inspector/mod.rs)
+/inspector.json
+# Screenshots kept for reference, not shipped
+/screenshots/

@@ -7,11 +7,11 @@ use std::path::PathBuf;
 use super::geometry::SnapTarget;
 use super::gizmo::Drag;
 use super::layout::{
-    default_transform, layout_key, Instance, LayoutFile, LightTransform, SavedInstance, Tower,
-    Truss, TrussKind, TOWER_SLOTS,
+    default_transform, layout_key, ElementRef, Instance, LayoutFile, LightTransform,
+    SavedInstance, Tower, Truss, TOWER_SLOTS,
 };
 use super::math::{v3, Camera};
-use super::settings::Settings;
+use super::settings::{DisplayToggles, Settings};
 use super::{LAYOUT_FILE, SETUPS_DIR};
 use crate::showbuddy::Patch;
 
@@ -20,6 +20,22 @@ pub struct StageView {
     /// Free-space camera navigation instead of orbiting a focal point.
     pub fly_mode: bool,
     pub fly_speed: f32,
+    /// What draw_scene shows; the Inspector copies its prefs here every frame.
+    pub show: DisplayToggles,
+    // -- area B: camera fields go here --
+    /// A camera glide in progress (quick view / frame / bookmark recall).
+    pub(crate) cam_tween: Option<super::camera_views::CamTween>,
+    /// Previous camera poses for "previous camera" (newest last, ≤ 10).
+    pub(crate) cam_history: Vec<super::math::CameraSnapshot>,
+    /// The rect the stage was drawn into last frame: the framing aspect and
+    /// the crop rectangle a stage snapshot uses.
+    pub(crate) last_rect: eframe::egui::Rect,
+    /// Whether the pointer was over the stage last frame, so the Inspector's
+    /// camera keys only fire while it is.
+    pub(crate) hovered: bool,
+    /// Set when the operator's own camera input ran this frame; cancels a
+    /// glide and stops the camera tour.
+    pub(crate) user_moved: bool,
     /// Visual lights; several may reference the same patch fixture.
     pub instances: Vec<Instance>,
     pub towers: Vec<Tower>,
@@ -32,6 +48,13 @@ pub struct StageView {
     pub sel_stage: bool,
     /// Most recently picked *fixture* index (drives the channel editor).
     pub last_selected: Option<usize>,
+    // -- area E: nudge fields go here --
+    /// Step (m) the Selection tab's nudge pad and the arrow keys move by.
+    pub nudge_step: f32,
+    /// Nudge along the camera's right/forward instead of stage X/Z.
+    pub nudge_camera_relative: bool,
+    /// An arrow-key nudge run is in progress (one undo step per run).
+    pub(crate) nudge_key_armed: bool,
     pub(crate) drag: Drag,
     /// Layout snapshots (instances, towers, trusses) for undo — newest last.
     pub(crate) undo_stack: Vec<(Vec<Instance>, Vec<Tower>, Vec<Truss>)>,
@@ -40,7 +63,12 @@ pub struct StageView {
     pub(crate) snap_preview: HashMap<usize, SnapTarget>,
     /// Pointer angle (radians) captured for the active rotation-ring drag.
     pub(crate) gizmo_last_angle: f32,
+    /// Element the Build outliner is hovering this frame; drawn lit like a
+    /// selection. `ui()` clears it after drawing, so it never goes stale.
+    pub(crate) hover_element: Option<ElementRef>,
     pub(crate) layout_path: PathBuf,
+    /// The gobo masks the patch can project, staged for the GPU.
+    pub(crate) gobo_atlas: super::atlas::GoboAtlas,
 }
 
 /// How many edit steps the visualizer can undo.
@@ -52,6 +80,16 @@ impl StageView {
             cam: Camera::default(),
             fly_mode: false,
             fly_speed: 5.0,
+            show: DisplayToggles::default(),
+            // -- area B: camera inits go here --
+            cam_tween: None,
+            cam_history: Vec::new(),
+            last_rect: eframe::egui::Rect::from_min_max(
+                eframe::egui::Pos2::ZERO,
+                eframe::egui::pos2(1600.0, 1000.0),
+            ),
+            hovered: false,
+            user_moved: false,
             instances: Vec::new(),
             towers: Vec::new(),
             trusses: Vec::new(),
@@ -60,11 +98,17 @@ impl StageView {
             sel_truss: None,
             sel_stage: false,
             last_selected: None,
+            // -- area E: nudge inits go here --
+            nudge_step: 0.1,
+            nudge_camera_relative: false,
+            nudge_key_armed: false,
             drag: Drag::None,
             undo_stack: Vec::new(),
             snap_preview: HashMap::new(),
             gizmo_last_angle: 0.0,
+            hover_element: None,
             layout_path: PathBuf::from(LAYOUT_FILE),
+            gobo_atlas: Default::default(),
         }
     }
 
@@ -245,29 +289,13 @@ impl StageView {
 
     // ---- named setups ----
 
-    fn setup_path(name: &str) -> PathBuf {
+    pub(crate) fn setup_path(name: &str) -> PathBuf {
         let safe: String = name
             .trim()
             .chars()
             .map(|c| if c.is_alphanumeric() || " -_().".contains(c) { c } else { '_' })
             .collect();
         PathBuf::from(SETUPS_DIR).join(format!("{safe}.json"))
-    }
-
-    pub fn list_setups() -> Vec<String> {
-        let mut out = Vec::new();
-        if let Ok(rd) = std::fs::read_dir(SETUPS_DIR) {
-            for e in rd.flatten() {
-                let p = e.path();
-                if p.extension().is_some_and(|x| x == "json") {
-                    if let Some(stem) = p.file_stem().and_then(|s| s.to_str()) {
-                        out.push(stem.to_string());
-                    }
-                }
-            }
-        }
-        out.sort();
-        out
     }
 
     /// Save the current arrangement (positions, duplicates, towers) under a
@@ -333,6 +361,14 @@ impl StageView {
         self.sel_tower = None;
         self.sel_truss = None;
         self.last_selected = Some(fi);
+    }
+
+    /// Drop the selection entirely.
+    pub fn clear_selection(&mut self) {
+        self.selection.clear();
+        self.sel_tower = None;
+        self.sel_truss = None;
+        self.last_selected = None;
     }
 
     /// Whether the whole rig is currently selected.
@@ -455,17 +491,6 @@ impl StageView {
 
     // ---- towers ----
 
-    pub fn add_tower(&mut self, patch: &Patch) {
-        self.push_undo();
-        let mut t = Tower::default();
-        t.pos.x = self.towers.len() as f32 * 1.5 - 2.0;
-        self.sel_tower = Some(self.towers.len());
-        self.sel_truss = None;
-        self.towers.push(t);
-        self.selection.clear();
-        self.save(patch);
-    }
-
     pub fn delete_tower(&mut self, patch: &Patch, ti: usize) {
         if ti >= self.towers.len() {
             return;
@@ -484,21 +509,6 @@ impl StageView {
     }
 
     // ---- trusses ----
-
-    /// Add a new truss run of `kind` (F34 straight or curved radius).
-    pub fn add_truss(&mut self, patch: &Patch, kind: TrussKind) {
-        self.push_undo();
-        let mut t = match kind {
-            TrussKind::Straight => Truss::straight(),
-            TrussKind::Radius => Truss::radius(),
-        };
-        t.pos.x = self.trusses.len() as f32 * 1.5 - 2.0;
-        self.sel_truss = Some(self.trusses.len());
-        self.sel_tower = None;
-        self.trusses.push(t);
-        self.selection.clear();
-        self.save(patch);
-    }
 
     pub fn delete_truss(&mut self, patch: &Patch, ti: usize) {
         if ti >= self.trusses.len() {
