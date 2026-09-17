@@ -191,6 +191,15 @@ impl AudioEngine {
     pub fn error(&self) -> Option<String> {
         self.shared.error.lock().clone()
     }
+
+    /// Put an analysis frame in front of the UI without a sound card — the
+    /// headless screenshots need a spectrum to draw. A real source starting
+    /// overwrites it on the next hop.
+    #[cfg(test)]
+    pub(crate) fn plant(&self, analysis: Analysis, running: bool) {
+        *self.shared.analysis.lock() = analysis;
+        self.shared.running.store(running, Ordering::Relaxed);
+    }
 }
 
 /// Owns the cpal stream and the DSP state; everything stays on this thread.

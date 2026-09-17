@@ -1088,6 +1088,12 @@ a.card:hover { text-decoration: none; }
     padding-top: 28px;
   }
 
+  /* A grid item defaults to min-width:auto, so neither column would shrink below
+     its widest child: the track grew past the viewport and the page scrolled
+     sideways instead of the rail and the wide blocks scrolling inside
+     themselves. Both need the override, not just the rail. */
+  .sub-rail,
+  .guide-panels { min-width: 0; }
   .sub-rail { position: static; }
 
   .sub-list.is-active {

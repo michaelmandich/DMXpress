@@ -4,11 +4,11 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Guide — DMXexpress</title>
-  <meta name="description" content="How-to guide for every part of DMXexpress: rig setup, programming, effects, playback, and Art-Net output — organized tab by tab.">
+  <meta name="description" content="How-to guide for every part of DMXexpress: rig setup, the Inspector's five tabs, programming, effects, playback, and Art-Net output — organized tab by tab.">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
-  <link rel="icon" type="image/png" href="images/logo.png">
+  <link rel="icon" type="image/png" href="images/favicon.png">
   <link rel="stylesheet" href="styles.css">
 </head>
 <body>
@@ -17,7 +17,7 @@
   <header class="nav">
     <div class="container nav-inner">
       <a href="index.html" class="brand">
-        <img src="images/logo.png" alt="DMXexpress" class="logo-nav">
+        <img src="images/logo.webp" alt="DMXexpress" class="logo-nav">
       </a>
       <nav class="nav-links">
         <a href="index.html#features">Features</a>
@@ -50,6 +50,7 @@
       <div class="cat-tabs" role="tablist" aria-label="Guide categories">
         <button class="cat-tab" role="tab" data-cat="start">Getting Started</button>
         <button class="cat-tab" role="tab" data-cat="rig">Rig &amp; Stage</button>
+        <button class="cat-tab" role="tab" data-cat="insp">Inspector</button>
         <button class="cat-tab" role="tab" data-cat="program">Programming</button>
         <button class="cat-tab" role="tab" data-cat="fx">Effects &amp; Motion</button>
         <button class="cat-tab" role="tab" data-cat="play">Playback</button>
@@ -80,9 +81,18 @@
         <button class="sub-tab" data-panel="rig/fixtures">Fixtures panel</button>
         <button class="sub-tab" data-panel="rig/stage">3D stage view</button>
         <button class="sub-tab" data-panel="rig/truss">Trusses &amp; towers</button>
-        <button class="sub-tab" data-panel="rig/inspector">Inspector</button>
         <button class="sub-tab" data-panel="rig/settings">Settings</button>
         <button class="sub-tab" data-panel="rig/configs">Configs &amp; setups</button>
+      </div>
+
+      <div class="sub-list" data-cat="insp">
+        <p class="rail-title">Inspector</p>
+        <button class="sub-tab" data-panel="insp/overview">The five tabs</button>
+        <button class="sub-tab" data-panel="insp/presets">Presets tab</button>
+        <button class="sub-tab" data-panel="insp/selection">Selection tab</button>
+        <button class="sub-tab" data-panel="insp/stage">Stage tab</button>
+        <button class="sub-tab" data-panel="insp/build">Build tab</button>
+        <button class="sub-tab" data-panel="insp/patch">Patch tab</button>
       </div>
 
       <div class="sub-list" data-cat="program">
@@ -119,6 +129,7 @@
       <div class="sub-list" data-cat="out">
         <p class="rail-title">Output &amp; Fixes</p>
         <button class="sub-tab" data-panel="out/artnet">Art-Net output</button>
+        <button class="sub-tab" data-panel="out/network">Network</button>
         <button class="sub-tab" data-panel="out/dmx">DMX monitor</button>
         <button class="sub-tab" data-panel="out/freeze">Freeze &amp; blackout</button>
         <button class="sub-tab" data-panel="out/log">Log</button>
@@ -145,6 +156,10 @@
           world over Art-Net. Everything happens in one window, and everything you build is
           visible on the virtual stage as you build it.
         </p>
+
+        <div class="panel-shot">
+          <img src="images/shot-console.webp" alt="The DMXexpress console: the Fixtures panel down the left, the 3D stage with live beams in the middle, the Inspector down the right, and channel control underneath the stage" loading="lazy" decoding="async">
+        </div>
 
         <h3>The one big idea</h3>
         <p>
@@ -229,6 +244,10 @@ cargo test</code></pre>
           its corner, so you can size each area independently.
         </p>
 
+        <div class="panel-shot">
+          <img src="images/shot-console.webp" alt="The four fixed regions of the DMXexpress window: Fixtures left, 3D stage centre, Inspector right, channel control below the stage" loading="lazy" decoding="async">
+        </div>
+
         <div class="layout-map">
           <div class="lm-row lm-top">Top toolbar &mdash; Universe, ArtPoll, Freeze, Reload patch, and one chip per window</div>
           <div class="lm-mid">
@@ -237,7 +256,7 @@ cargo test</code></pre>
               <div class="lm-stage">3D stage view<span>Live beams. Click, drag, and gizmo your rig.</span></div>
               <div class="lm-channels">Channel control<span>Sliders for the current selection. This is the Programmer.</span></div>
             </div>
-            <div class="lm-col lm-right">Inspector<span>Presets, ShowBuddy banks, transform editor, setups.</span></div>
+            <div class="lm-col lm-right">Inspector<span>Five tabs: Presets, Selection, Stage, Build, Patch.</span></div>
           </div>
           <div class="lm-row">Decks &mdash; Grand Master plus one strip per stack (when shown)</div>
           <div class="lm-row">Command line (when shown)</div>
@@ -249,6 +268,16 @@ cargo test</code></pre>
           Phasers, Beat, Audio, Stacks, Decks, Cmd, Views, Log, Patch, Configs, DMX, and
           Settings. Each one shows or hides its window. Art-Net docks to the top, Decks and
           Cmd dock to the bottom; the rest float.
+        </p>
+
+        <h3>The Inspector's five tabs</h3>
+        <p>
+          The right-hand panel is not one page but five: <strong>Presets</strong>,
+          <strong>Selection</strong>, <strong>Stage</strong>, <strong>Build</strong>, and
+          <strong>Patch</strong>. Press <strong>Alt-1</strong> to <strong>Alt-5</strong> to jump
+          between them and <strong>Alt-I</strong> to fold the panel away. A context line under the
+          tab strip always says what is selected. It has <a href="#insp/overview">a chapter of its
+          own</a>.
         </p>
 
         <div class="tip">
@@ -271,6 +300,10 @@ cargo test</code></pre>
         <p class="lede">
           This is the single concept that trips up every newcomer, so it gets its own page.
         </p>
+
+        <div class="panel-shot">
+          <img src="images/shot-channels.webp" alt="The channel control grid with several fixtures selected, some rows armed for the Oscillator, and level bars part-lit" loading="lazy" decoding="async">
+        </div>
 
         <h3>What the Programmer is</h3>
         <ul class="checklist">
@@ -308,6 +341,10 @@ cargo test</code></pre>
           A complete run-through that produces a three-cue show. Assumes a few moving heads are
           patched. Do this once and the rest of the guide will make sense.
         </p>
+
+        <div class="panel-shot">
+          <img src="images/all-50-starting-position.webp" alt="The full rig in an All 50 starting position, with pan and tilt being shaped in channel control and the result visible on the 3D stage" loading="lazy" decoding="async">
+        </div>
 
         <h3>A. Save a selection</h3>
         <ol class="howto">
@@ -361,6 +398,10 @@ cargo test</code></pre>
           This is where your rig is defined in DMX terms.
         </p>
 
+        <div class="panel-shot">
+          <img src="images/shot-patch-window.webp" alt="The Patch window with the fixture library search open and a model picked, showing its channel count and pan and tilt ranges" loading="lazy" decoding="async">
+        </div>
+
         <h3>How to patch a fixture</h3>
         <ol class="howto">
           <li>Open <strong>Patch</strong> from the toolbar.</li>
@@ -387,6 +428,14 @@ cargo test</code></pre>
           the next universe up. A fixture that would run past slot 1024 is rejected and the
           reason is written to the Log.</p>
         </div>
+
+        <div class="tip">
+          <h4>There is a faster way in</h4>
+          <p>The Inspector's <a href="#insp/patch">Patch tab</a> does the same job as a wizard:
+          it finds a free address for you, names and numbers a whole batch, and places or hangs
+          the lights as it patches them. The two share the same state, so they never disagree —
+          use this window to audit and prune a rig, and the tab to build one.</p>
+        </div>
       </article>
 
       <article class="panel" data-panel="rig/library">
@@ -397,6 +446,10 @@ cargo test</code></pre>
           patchable modes from 209 manufacturers — so most rigs patch without writing a
           single profile.
         </p>
+
+        <div class="panel-shot">
+          <img src="images/shot-patch-window.webp" alt="The Patch window's fixture library search, one row per channel mode with the maker and mode in the subtitle" loading="lazy" decoding="async">
+        </div>
 
         <h3>Where it comes from</h3>
         <p>The library is compiled from three open sources, merged so the best data wins:</p>
@@ -444,6 +497,10 @@ cargo test</code></pre>
           color, so the panel doubles as an at-a-glance rig monitor.
         </p>
 
+        <div class="panel-shot">
+          <img src="images/shot-raid-looks.webp" alt="The Fixtures panel's six tile looks side by side: Lit, Amp jewel, Future, Glass, Chrome and Pillow, each carrying the fixture name, DMX address and live output colour" loading="lazy" decoding="async">
+        </div>
+
         <h3>Reading a tile</h3>
         <ul class="checklist">
           <li>Top-left text is the fixture name, truncated to fit.</li>
@@ -463,10 +520,34 @@ cargo test</code></pre>
           </tbody>
         </table>
 
+        <h3>Six ways to draw a tile</h3>
+        <p>
+          The dropdown in the panel header changes the material the tiles are made of. Every look
+          shows the same three things — the live colour, the name, the address — and answers the
+          same selection outline; pick whichever one you can read fastest across a dark room.
+        </p>
+        <table class="kv">
+          <thead><tr><th>Look</th><th>What it is</th></tr></thead>
+          <tbody>
+            <tr><td>Lit</td><td>A colour tile lit from above, matching the console's raised controls. The default.</td></tr>
+            <tr><td>Amp jewel</td><td>A faceted pilot-light lens in a chrome bezel on a dark faceplate, glowing with the fixture's colour.</td></tr>
+            <tr><td>Future</td><td>A chamfered black slab with a glowing colour bar and corner brackets.</td></tr>
+            <tr><td>Glass</td><td>A pane of tinted glass with a specular streak.</td></tr>
+            <tr><td>Chrome</td><td>A domed lens set into a brushed-steel frame.</td></tr>
+            <tr><td>Pillow</td><td>A soft convex button, deep-rounded and shadowed.</td></tr>
+          </tbody>
+        </table>
+        <p>
+          A tile's brightness tracks the fixture's real output, corrected so a dim lamp looks as
+          dim as it actually is. The depth is painted with gradient meshes rather than textures,
+          so a rig of two hundred tiles costs no more to draw than a flat grid.
+        </p>
+
         <div class="tip">
           <h4>Sizing the grid</h4>
           <p>Use the <code>A-</code> / <code>A+</code> stepper in the panel header to shrink the
-          tiles when you have a big rig, or enlarge them for touch use.</p>
+          tiles when you have a big rig, or enlarge them for touch use. The look you pick is
+          saved to <code>settings.json</code> straight away.</p>
         </div>
       </article>
 
@@ -479,6 +560,10 @@ cargo test</code></pre>
           volumetric beams respond live.
         </p>
 
+        <div class="panel-shot">
+          <img src="images/shot-stage-beams.webp" alt="The 3D stage filling the frame: movers and pars throwing volumetric beams in several colours, with lit pools on the floor" loading="lazy" decoding="async">
+        </div>
+
         <h3>Camera</h3>
         <table class="kv">
           <thead><tr><th>Mode</th><th>Controls</th></tr></thead>
@@ -487,7 +572,11 @@ cargo test</code></pre>
             <tr><td>Free fly</td><td>Right-drag to look, W A S D to move, Space up, Shift down, arrow keys to look, scroll to change fly speed.</td></tr>
           </tbody>
         </table>
-        <p>Switch modes with the <strong>Orbit</strong> / <strong>Free fly</strong> toggle at the top of the Inspector.</p>
+        <p>
+          Switch modes with the <strong>Orbit</strong> / <strong>Fly</strong> toggle on the
+          Inspector's <a href="#insp/stage">Stage tab</a>, which also holds the quick-view pads,
+          the saved cameras, and every switch for what the stage draws.
+        </p>
 
         <h3>Selecting on stage</h3>
         <ul class="checklist">
@@ -513,8 +602,17 @@ cargo test</code></pre>
             <tr><td>Cmd-Z</td><td>Undo the last stage edit</td></tr>
             <tr><td>Cmd-D</td><td>Duplicate the selection</td></tr>
             <tr><td>Backspace or Delete</td><td>Delete the selected copies, or the selected tower when nothing is selected</td></tr>
+            <tr><td>Arrow keys</td><td>Nudge the selection by the step set on the <a href="#insp/selection">Selection tab</a></td></tr>
+            <tr><td>F</td><td>Frame the selection</td></tr>
+            <tr><td>Home</td><td>Frame the whole rig and the stage box</td></tr>
+            <tr><td>1 to 9</td><td>Fly to the saved camera on that digit</td></tr>
+            <tr><td>Alt-1 to Alt-5 &middot; Alt-I</td><td>Switch Inspector tabs &middot; fold the Inspector away</td></tr>
           </tbody>
         </table>
+        <p>
+          A card in the stage corner lists these as you work. Turn it off with the
+          <strong>Help</strong> switch on the Inspector's Stage tab.
+        </p>
       </article>
 
       <article class="panel" data-panel="rig/truss">
@@ -526,83 +624,52 @@ cargo test</code></pre>
           virtual rig hangs the way the real one will.
         </p>
 
+        <div class="panel-shot">
+          <img src="images/shot-stage-truss.webp" alt="The 3D stage showing tower and truss structures with lights hung on their slots" loading="lazy" decoding="async">
+        </div>
+
         <h3>The three structures</h3>
         <table class="kv">
           <thead><tr><th>Structure</th><th>What it is</th></tr></thead>
           <tbody>
             <tr><td>Tower</td><td>A floor stand with one crossbar and eight light slots — four top, four bottom.</td></tr>
-            <tr><td>F34 truss</td><td>A straight box-truss run with mount slots spaced every half metre along the top and bottom chords.</td></tr>
-            <tr><td>Radius truss</td><td>A curved segment sweeping an arc. Set the radius and arc angle and the slots follow the curve, aimed along the tangent.</td></tr>
+            <tr><td>F34 truss</td><td>A straight box-truss run with mount slots spaced every half metre along each of its four faces.</td></tr>
+            <tr><td>Radius truss</td><td>A curved segment sweeping an arc, with two faces. Set the radius and arc angle and the slots follow the curve, aimed along the tangent.</td></tr>
           </tbody>
         </table>
+        <p>
+          Five more shapes are built out of those three in one press — <strong>goalpost</strong>,
+          <strong>box</strong>, <strong>ring</strong>, <strong>tower pair</strong>, and
+          <strong>arch</strong> — and stay grouped afterwards, so you move and turn the whole
+          thing as one object. See the <a href="#insp/build">Build tab</a>.
+        </p>
 
         <h3>How to rig one</h3>
         <ol class="howto">
-          <li>At the bottom of the <strong>Inspector</strong>, press <strong>Add tower</strong>, <strong>F34 truss</strong>, or <strong>Radius truss</strong>.</li>
-          <li>Drag lights near the blue rings to snap them onto slots; drag them away to detach.</li>
-          <li>Click the structure with no lights selected to open its editor in the Inspector.</li>
+          <li>Open the Inspector's <a href="#insp/build">Build tab</a> (<strong>Alt-4</strong>) and click one of the eight element pads. Keys <strong>1</strong> to <strong>8</strong> do the same while the pointer is over the tab.</li>
+          <li>Size it in the parameter card underneath — or right-click the pad for the standard lengths, radii, arcs, and heights.</li>
+          <li>Drag lights near the blue rings to snap them onto slots; drag them away to detach. To hang a whole selection at once, use <strong>Hang on</strong> on the <a href="#insp/selection">Selection tab</a>.</li>
+          <li>Click the structure with no lights selected and the <strong>Selection</strong> tab becomes its editor.</li>
           <li>Edit <strong>X</strong>, <strong>Z</strong>, and <strong>Height</strong> numerically. Straight truss gets <strong>Length</strong> and <strong>Heading</strong>; radius truss gets <strong>Radius</strong>, <strong>Arc</strong>, and <strong>Start angle</strong>.</li>
           <li><strong>Pitch</strong> tilts the whole run out of the horizontal plane, and <strong>Roll</strong> sets which way a pitched truss faces.</li>
-          <li>Press <strong>Delete truss</strong> (or <strong>Delete tower</strong>) to remove one.</li>
+          <li>Delete one from the Build tab's outliner, or press <code>Backspace</code> with the pointer over that list. It asks first and tells you how many lights it will unhang.</li>
         </ol>
 
         <div class="tip">
           <h4>Mounted lights travel with the structure</h4>
           <p>Move or rotate a truss and every snapped light swings with it, keeping its slot.
-          Editing a light's own X, Y, or Z detaches it; rotating the light does not.</p>
+          Editing a light's own X, Y, or Z detaches it; rotating the light does not. The
+          Selection tab's <strong>Re-seat</strong> button puts a detached light back on its
+          nearest free slot.</p>
         </div>
 
         <div class="tip">
           <h4>Setups remember structures</h4>
-          <p>The Inspector's <strong>Setups</strong> section saves and reloads the whole physical
-          arrangement — light placement, towers, and truss — so a rig you build once can move
-          between shows.</p>
+          <p>The Build tab's <strong>Setups</strong> section saves and reloads the whole physical
+          arrangement — light positions, copies, towers, and truss — so a rig you build once can
+          move between shows. Save it as <strong>Rig only</strong> to keep the structures as a
+          template with no light positions in it.</p>
         </div>
-      </article>
-
-      <article class="panel" data-panel="rig/inspector">
-        <p class="crumb">Rig &amp; Stage &middot; Inspector</p>
-        <h2>Inspector</h2>
-        <p class="lede">
-          The right rail. Below the Presets and ShowBuddy sections sits the transform editor:
-          precise numeric control over whatever is selected on stage.
-        </p>
-
-        <h3>One light selected</h3>
-        <p>
-          You get its name and DMX range, its archetype, and a grid of <strong>X</strong>,
-          <strong>Y (height)</strong>, <strong>Z</strong>, then either <strong>Base spin</strong>
-          for moving heads or <strong>Yaw</strong> and <strong>Pitch</strong> for fixed bodies,
-          plus <strong>Size</strong> and a <strong>Housing opacity</strong> slider for the
-          visualizer. Editing X, Y, or Z detaches the light from its tower; rotating does not.
-        </p>
-
-        <h3>Several lights selected</h3>
-        <p>
-          The grid becomes nudge controls: <strong>&Delta;X</strong>, <strong>&Delta;Y</strong>,
-          <strong>&Delta;Z</strong>, a <strong>Size</strong> multiplier, and
-          <strong>&Delta;Spin</strong>, <strong>&Delta;Yaw</strong>, <strong>&Delta;Pitch</strong>.
-          Each drag applies its delta once to the whole selection and resets to zero.
-        </p>
-
-        <h3>Towers</h3>
-        <ol class="howto">
-          <li>Press <strong>Add tower</strong> at the bottom of the panel. A tower is a floor stand with one crossbar and eight light slots. The <strong>F34 truss</strong> and <strong>Radius truss</strong> buttons beside it add straight and curved truss runs — see <a href="#rig/truss">Trusses &amp; towers</a>.</li>
-          <li>Drag lights near the blue rings to snap them on.</li>
-          <li>Select the tower to edit its <strong>X</strong>, <strong>Z</strong>, <strong>Yaw</strong>, <strong>Height</strong>, and <strong>Width</strong>.</li>
-          <li>Press <strong>Delete tower</strong> to remove it.</li>
-        </ol>
-
-        <h3>Other buttons</h3>
-        <table class="kv">
-          <thead><tr><th>Control</th><th>What it does</th></tr></thead>
-          <tbody>
-            <tr><td>Duplicate</td><td>Copies the selection, same as Cmd-D on the stage.</td></tr>
-            <tr><td>Remove copy</td><td>Deletes a copy. The last copy of each fixture always stays.</td></tr>
-            <tr><td>Setups</td><td>A collapsing section: name an arrangement and press Save, then Load it later. Setups store light placement and towers only.</td></tr>
-            <tr><td>Reset light positions</td><td>Opens a confirmation dialog, then rebuilds the layout from the defaults in Settings.</td></tr>
-          </tbody>
-        </table>
       </article>
 
       <article class="panel" data-panel="rig/settings">
@@ -612,6 +679,10 @@ cargo test</code></pre>
           A small window covering the physical stage dimensions and how the visualizer renders.
           Every change is written to <code>settings.json</code> immediately.
         </p>
+
+        <div class="panel-shot">
+          <img src="images/shot-settings.webp" alt="The Settings window with the stage dimension fields, the body size and beam opacity sliders, and the new light defaults" loading="lazy" decoding="async">
+        </div>
 
         <table class="kv">
           <thead><tr><th>Section</th><th>Control</th><th>Notes</th></tr></thead>
@@ -627,10 +698,23 @@ cargo test</code></pre>
           </tbody>
         </table>
 
+        <h3>The rest of the window</h3>
+        <ul class="checklist">
+          <li><strong>Network&hellip;</strong> opens the <a href="#out/network">Network screen</a> — protocol, interface, node discovery, the checklist, and test patterns.</li>
+          <li><strong>Reset layout</strong> puts every light back to its default position, after a confirmation.</li>
+          <li>The app version is printed at the bottom. Quote it in a bug report.</li>
+        </ul>
+        <p>
+          Stage width, depth, height, body size, and beam opacity are also editable on the
+          Inspector's <a href="#insp/stage">Stage tab</a>, where you can see the result without
+          leaving the panel. They are the same five settings, and they go into the undo history.
+        </p>
+
         <div class="tip">
           <h4>Match your real room first</h4>
           <p>Set the stage width, depth, and height before you place fixtures. Everything you
-          position afterwards will then translate straight to the venue.</p>
+          position afterwards will then translate straight to the venue. Or select the stage box
+          on stage and drag its gold edge arrows to size it by eye.</p>
         </div>
       </article>
 
@@ -644,10 +728,16 @@ cargo test</code></pre>
 
         <h3>What a configuration contains</h3>
         <p>
-          Stage settings, the 3D layout (placements, duplicates, towers), patched fixtures,
+          Stage settings, the 3D layout (placements, duplicates, towers, truss), patched fixtures,
           whether the ShowBuddy patch is included, excluded fixtures, groups, palettes, phasers,
           presets and preset folders, stacks, views, the universe, the grand master, and the cue
           fade time. Files land in <code>configs/</code> as readable JSON.
+        </p>
+        <p>
+          What it deliberately leaves out is your workspace: which Inspector tab is open, how wide
+          the panel is, which sections are folded, and what the stage draws. Those belong to the
+          machine rather than the show, and live in <code>inspector.json</code> instead — so
+          loading somebody else's configuration never rearranges your desk.
         </p>
 
         <h3>How to save and load a show</h3>
@@ -668,9 +758,510 @@ cargo test</code></pre>
 
         <div class="tip">
           <h4>Setups are lighter</h4>
-          <p>Setups live in the <strong>Setups</strong> section of the Inspector, not here. They
-          store light placement and towers only, so you can reuse a rig arrangement across
-          different shows.</p>
+          <p>Setups live in the <strong>Setups</strong> section of the Inspector's
+          <a href="#insp/build">Build tab</a>, not here. They store the physical arrangement only
+          — light positions, copies, towers, and truss — so you can reuse a rig across different
+          shows, and load the structures without disturbing the lights.</p>
+        </div>
+      </article>
+
+      <!-- ================================================= -->
+      <!-- INSPECTOR                                         -->
+      <!-- ================================================= -->
+
+      <article class="panel" data-panel="insp/overview">
+        <p class="crumb">Inspector &middot; The five tabs</p>
+        <h2>The Inspector</h2>
+        <p class="lede">
+          The right-hand panel, and the part of the app you touch most. It is five tabs —
+          <strong>Presets</strong>, <strong>Selection</strong>, <strong>Stage</strong>,
+          <strong>Build</strong>, <strong>Patch</strong> — sharing one strip, one context line,
+          and one scroll area. Store looks, move lights, aim the camera, rig truss, patch
+          fixtures: all of it without opening a window.
+        </p>
+
+        <div class="panel-shot">
+          <img src="images/shot-inspector-tabs.webp" alt="The Inspector's tab strip — Presets, Selection, Stage, Build and Patch — with the context line underneath naming what is currently selected" loading="lazy" decoding="async">
+        </div>
+
+        <h3>Getting around</h3>
+        <table class="kv">
+          <thead><tr><th>Key</th><th>What it does</th></tr></thead>
+          <tbody>
+            <tr><td>Alt-1 to Alt-5</td><td>Jump straight to Presets, Selection, Stage, Build, or Patch. A folded Inspector unfolds.</td></tr>
+            <tr><td>Alt-I</td><td>Fold the whole panel away, and bring it back.</td></tr>
+            <tr><td>Wheel over the tab strip</td><td>Cycles through the tabs, wrapping at either end. The strip swallows that scroll, so the panel underneath stays put.</td></tr>
+            <tr><td>Drag the panel edge</td><td>Resize it. The width is remembered once the drag settles.</td></tr>
+            <tr><td>Pop-out button</td><td>Moves the Inspector into its own OS window, like any other panel.</td></tr>
+          </tbody>
+        </table>
+        <p>
+          The hotkeys only fire when no text field has the keyboard, so typing a preset name
+          never jumps you somewhere else mid-word.
+        </p>
+
+        <h3>Badges on the tabs</h3>
+        <p>
+          Each tab carries a small count in its corner, so you can read the state of the show
+          without switching:
+        </p>
+        <table class="kv">
+          <thead><tr><th>Tab</th><th>What the badge counts</th></tr></thead>
+          <tbody>
+            <tr><td>Presets</td><td>How many looks you have stored.</td></tr>
+            <tr><td>Selection</td><td>How many fixtures are selected, or <code>T</code>, <code>F</code>, <code>S</code> when a tower, a truss, or the stage box is picked instead.</td></tr>
+            <tr><td>Build</td><td>Towers plus trusses in the rig.</td></tr>
+            <tr><td>Patch</td><td>Patched fixtures &mdash; or, in amber, the number of patch warnings, which outrank the count.</td></tr>
+          </tbody>
+        </table>
+
+        <h3>The context line</h3>
+        <p>
+          Under the tab strip a single row always says what is picked, on every tab. It carries
+          the live output colour of the first selected light as a swatch, a title, and a detail
+          line: <code>6 lights &middot; SlimPAR &times;6 &middot; 4 hung</code> for a selection,
+          <code>DMX 17&ndash;25 &middot; 9 ch</code> for one light,
+          <code>F34 truss 2 &middot; 4 / 24 slots &middot; 6.0 m</code> for a truss,
+          <code>8.0 &times; 6.0 m &middot; 0.3 m high</code> for the stage box. With nothing
+          selected it tells you what to do next.
+        </p>
+        <ul class="checklist">
+          <li>Click the row to jump to <strong>Selection</strong> &mdash; or to <strong>Patch</strong> when nothing is patched yet.</li>
+          <li>Press the &times; to drop the selection.</li>
+          <li>Right-click for <strong>Select every light</strong>, <strong>Select same type</strong>, and <strong>Clear selection</strong>.</li>
+          <li>Hover the colour swatch for the first light's live RGB values and its output level.</li>
+          <li><code>FROZEN</code> and <code>BLACKOUT</code> pills appear on the right when either is in force.</li>
+        </ul>
+
+        <div class="tip">
+          <h4>Follow selection</h4>
+          <p>In that same right-click menu is <strong>Follow selection</strong>. Turn it on and
+          the Inspector jumps to the Selection tab every time you pick something new on stage &mdash;
+          worth having while you lay a rig out, worth turning off while you programme.</p>
+        </div>
+
+        <div class="tip">
+          <h4>Your workspace is not show data</h4>
+          <p>Which tab is open, how wide the panel is, which sections are folded, and what the
+          stage draws live in <code>inspector.json</code> and are deliberately kept out of saved
+          configurations. Loading somebody else's show never rearranges your desk.</p>
+        </div>
+      </article>
+
+      <article class="panel" data-panel="insp/presets">
+        <p class="crumb">Inspector &middot; Presets tab</p>
+        <h2>Presets tab</h2>
+        <p class="lede">
+          Store what the Programmer is holding as a look, then get it back with one press.
+          A preset carries a stable id, so every reference to it &mdash; a board pad, a deck key,
+          an audio trigger, the chase source &mdash; survives a rename, a reorder, or a delete.
+        </p>
+
+        <div class="panel-shot">
+          <img src="images/shot-inspector-presets.webp" alt="The Inspector's Presets tab: pads coloured from their own stored values, folders open, the pinned strip at the top and the recall row" loading="lazy" decoding="async">
+        </div>
+
+        <h3>Storing a look</h3>
+        <ol class="howto">
+          <li>Build something in the Programmer: a group, some palettes, a dimmer, a running phaser.</li>
+          <li>Type a name into the store card and press <strong>Store look</strong>. The button is gated while the Programmer is empty, and says so.</li>
+          <li>Pick a folder in the store card first and the look is filed straight into it.</li>
+          <li>Recall a preset, change it, then press <strong>Update with current look</strong> to overwrite the lit one.</li>
+        </ol>
+
+        <h3>Pads read their own colour</h3>
+        <p>
+          Every pad is coloured from the values inside it &mdash; the mixed emitter colour for a
+          colour look, amber for a dimmer-only one, deep blue for a position, plain raised grey
+          for anything else &mdash; unless you pick a colour by hand. Badges mark the presets
+          carrying oscillators, phasers, or a colour cycle. The same colour reaches the Presets
+          board and the Stream Deck, so a look is the same shade everywhere you meet it.
+        </p>
+
+        <h3>The recall row</h3>
+        <table class="kv">
+          <thead><tr><th>Mode</th><th>What a plain click does</th></tr></thead>
+          <tbody>
+            <tr><td>Cut</td><td>Arrives instantly, whatever the Transition window says.</td></tr>
+            <tr><td>Fade</td><td>Arrives over the seconds set beside it, 0.1 to 20.</td></tr>
+            <tr><td>As set</td><td>Uses the <a href="#program/transition">Transition</a> window's duration. The pill warns you when that duration is zero.</td></tr>
+          </tbody>
+        </table>
+        <p>
+          A preset given a recall time of its own wins over the row, and shift-clicking any pad
+          always cuts. <strong>Recall onto selection</strong> applies only the channels belonging
+          to the lights you have selected, which is how you drop one look onto half a rig.
+        </p>
+
+        <h3>Organising the pool</h3>
+        <ul class="checklist">
+          <li>Search the pool, switch between <strong>Grid</strong> pads and <strong>List</strong> rows, and set the pad size to small, medium, or large.</li>
+          <li>Sort <strong>Manual</strong>, <strong>Alpha</strong>, or <strong>Newest</strong>.</li>
+          <li>Drag pads onto a folder to file them, or onto each other to reorder.</li>
+          <li><strong>Pin</strong> the handful you reach for constantly &mdash; they get their own strip above the pool.</li>
+          <li>A <strong>Recent</strong> strip keeps the last few you recalled.</li>
+          <li>Right-click a pad for <strong>Duplicate</strong>, <strong>Move to</strong>, <strong>Set as chase source</strong>, <strong>To board</strong>, <strong>Edit pad</strong>, and <strong>Delete</strong>.</li>
+        </ul>
+
+        <h3>The Presets board</h3>
+        <p>
+          The board button opens a 4 &times; 9 page of pads laid out exactly like the Stream
+          Deck's Presets page &mdash; the same slots, the same reserved corners for select-all,
+          Clear, and Tap. What you arrange here is what is under your fingers on the device, and
+          a show with no deck plugged in gets the same board on screen.
+        </p>
+        <ol class="howto">
+          <li>Turn <strong>Arrange</strong> on.</li>
+          <li>Click a pad to point it at a preset, or at a ShowBuddy bank preset.</li>
+          <li>Drag pads to swap them; right-click to clear one.</li>
+          <li>Give each pad its own colour, four-letter label, and artwork.</li>
+          <li>Press <strong>Fill</strong> to lay a whole folder out in one go.</li>
+        </ol>
+        <p>
+          Pads hold preset <em>ids</em>, so renaming or reordering the pool never re-points a pad
+          at the wrong look. A pad whose preset has gone shows a muted <code>?</code> and says so
+          when you press it.
+        </p>
+
+        <h3>ShowBuddy banks</h3>
+        <p>
+          If your ShowBuddy show carries preset banks they appear in their own section, one bank
+          open at a time. Clicking a preset inside applies it to the whole rig; you can also
+          <strong>Import as native preset</strong>, or import a whole bank into a folder, and edit
+          it from then on like anything else you stored. The section is hidden while the ShowBuddy
+          patch is switched off in Patch.
+        </p>
+
+        <h3>The output row</h3>
+        <table class="kv">
+          <thead><tr><th>Button</th><th>What it does</th></tr></thead>
+          <tbody>
+            <tr><td>Blackout</td><td>Every channel to zero, every effect stopped. The Programmer keeps nothing. This is the panic button.</td></tr>
+            <tr><td>Clear</td><td>A staged clear: encoders first, then effects, then blackout &mdash; one stage per press.</td></tr>
+            <tr><td>Release</td><td>Drops the lit-preset highlight without changing a single output value.</td></tr>
+          </tbody>
+        </table>
+        <p>
+          Underneath, one line always names the preset currently lit, or reads
+          <code>No preset active</code>.
+        </p>
+      </article>
+
+      <article class="panel" data-panel="insp/selection">
+        <p class="crumb">Inspector &middot; Selection tab</p>
+        <h2>Selection tab</h2>
+        <p class="lede">
+          Everything that moves, turns, lines up, aims, or hangs whatever is picked on the stage.
+          A summary card, a Select bar, the transform grid and nudge pad, then a five-page tool
+          strip. Pick a tower or a truss instead of lights and the tab shows that element's editor
+          on its own.
+        </p>
+
+        <div class="panel-shot">
+          <img src="images/shot-inspector-selection.webp" alt="The Inspector's Selection tab with several lights picked: the summary card, the transform grid with a row reading mixed, and the tool strip" loading="lazy" decoding="async">
+        </div>
+
+        <h3>The summary card</h3>
+        <p>
+          The top card counts what is selected and breaks it down &mdash; how many moving heads,
+          how many are hung on the rig, how much space the selection covers as width &times;
+          height &times; depth. With a single light picked it names it and gives its DMX range.
+        </p>
+
+        <h3>Select</h3>
+        <p>
+          An always-visible bar of verbs that build a selection without going near the stage:
+          every light, every light of the same type as the last one picked, every copy of it,
+          every mover, every par, every bar, everything <em>not</em> selected, everything not hung
+          on anything, everything hung on the picked element, or the element a light hangs from.
+          Your stored <a href="#program/groups">groups</a> sit here too. Shift-clicking any of them
+          adds to the selection instead of replacing it.
+        </p>
+
+        <h3>The transform grid</h3>
+        <p>
+          <strong>X</strong>, <strong>Y</strong> (height) and <strong>Z</strong> in metres, then
+          <strong>Spin</strong> for a moving head's base, or <strong>Yaw</strong>,
+          <strong>Pitch</strong>, and <strong>Roll</strong> for a fixed body, plus
+          <strong>Size</strong> and a housing <strong>Opacity</strong> slider for the visualizer.
+          Where the selected lights disagree, the row reads <strong>mixed</strong> rather than
+          lying about a value; typing into it sets them all. Each row has its own reset.
+        </p>
+        <p>
+          Editing X, Y, or Z detaches a light from the tower or truss it hangs on. Rotating does
+          not. <strong>Re-seat</strong> puts a detached light back onto its nearest free slot.
+        </p>
+
+        <h3>Nudge</h3>
+        <p>
+          A pad of six arrows that shift the selection by a fixed step. Shift multiplies the step
+          by ten, Alt divides it by ten, and the arrow keys over the stage do the same thing.
+          Switch the axes to <strong>camera-relative</strong> and "left" means left from where you
+          are sitting rather than stage left &mdash; much easier once the camera is off-axis.
+        </p>
+
+        <h3>The five tool pages</h3>
+        <table class="kv">
+          <thead><tr><th>Page</th><th>What is on it</th></tr></thead>
+          <tbody>
+            <tr><td>Move</td><td>Align and distribute on any axis, mirror across X or Z, flip 180, rotate by a step, set a common height, snap to a grid, spread or pull the selection in by 10 %, scatter, stagger, cross, centre on stage.</td></tr>
+            <tr><td>Arrange</td><td>Re-lay the selection into a <strong>line</strong>, an <strong>arc</strong>, a <strong>circle</strong>, or a <strong>grid</strong>, with ready-made spacings, radii, sweeps, and column counts one tap away. A line can be fitted to a total length instead of a fixed spacing.</td></tr>
+            <tr><td>Aim</td><td>Point every selected light straight down, straight up, out level, at the stage centre, at the selection's own centre, at a typed point, or at the chase and transition spheres on stage. <strong>Fan</strong> opens them across an angle. Moving heads are aimed with pan and tilt; pars and bars are turned bodily.</td></tr>
+            <tr><td>Hang</td><td>Hang the selection onto a tower or truss: pick the element, pick the face, and choose whether the lights fill <strong>from start</strong>, sit <strong>centred</strong>, or <strong>spread</strong> across the free slots. <strong>Detach</strong> and <strong>Unhang</strong> take them off again.</td></tr>
+            <tr><td>Clip</td><td>Copy one set of lights' placement &mdash; position, rotation, size, opacity, independently &mdash; and paste any part of it onto another set. <strong>Match anchor</strong> gives every selected light the rotation and size of the last one picked.</td></tr>
+          </tbody>
+        </table>
+
+        <h3>Copies</h3>
+        <p>
+          <strong>Duplicate</strong> makes copies of the selected lights, with a step across and
+          upstage per copy. Copies share the fixture's DMX address, so they cost nothing on the
+          wire &mdash; they are extra bodies on stage, useful for a row of pars driven from one
+          patch entry. <strong>Remove copy</strong> deletes them; the last copy of each fixture
+          always stays.
+        </p>
+
+        <div class="tip">
+          <h4>Nothing changes while you look at it</h4>
+          <p>Every button here queues one action and applies it after the panel has finished
+          drawing, then writes one plain sentence into the <a href="#out/log">Log</a> &mdash;
+          <code>Arranged 12 lights in a circle</code>. Cmd-Z over the stage takes it back.</p>
+        </div>
+      </article>
+
+      <article class="panel" data-panel="insp/stage">
+        <p class="crumb">Inspector &middot; Stage tab</p>
+        <h2>Stage tab</h2>
+        <p class="lede">
+          How you look at the rig. Camera mode, quick views, saved camera bookmarks, what the
+          stage draws, and the size of the stage box. Nothing here is undoable, because none of
+          it is show data &mdash; the camera has its own escape hatch instead.
+        </p>
+
+        <div class="panel-shot">
+          <img src="images/shot-inspector-stage.webp" alt="The Inspector's Stage tab: the Orbit and Fly toggle, the seven quick-view pads, saved cameras with their number keys, and the display toggles" loading="lazy" decoding="async">
+        </div>
+
+        <h3>Camera</h3>
+        <ul class="checklist">
+          <li>Switch between <strong>Orbit</strong> and <strong>Fly</strong>. Orbit: right-drag orbits, middle-drag pans, the wheel zooms. Fly: WASD moves, Space goes up, Shift down, the arrow keys look around.</li>
+          <li>Seven quick-view pads jump to a stored angle: <strong>Iso</strong>, <strong>Front</strong>, <strong>Back</strong>, <strong>Left</strong>, <strong>Right</strong>, <strong>Top</strong>, and a front-of-house seat. Shift-click one to keep your current zoom instead of re-framing.</li>
+          <li><strong>Frame</strong> fits the selection in view (<code>F</code> over the stage), <strong>Fit rig</strong> fits the whole rig and the stage box (<code>Home</code>).</li>
+          <li>Orbit and tilt buttons step the camera 15&deg; round and 10&deg; up or down; zoom buttons scale the distance.</li>
+          <li><strong>Camera &rarr; previous</strong> puts you back where you were before the last jump.</li>
+          <li>Open <strong>Stage controls</strong> for the exact numbers: yaw, pitch, distance, field of view, and the target X, Y, Z the camera is aimed at.</li>
+        </ul>
+
+        <h3>Saved cameras</h3>
+        <ol class="howto">
+          <li>Frame a view you like.</li>
+          <li>Type a name and press <strong>Save</strong>. Leave the name blank and it is numbered for you.</li>
+          <li>Give the bookmark a digit from <strong>1</strong> to <strong>9</strong>, then press that digit over the stage to fly back to it.</li>
+          <li>Tint a row so it stands out, reorder with the up and down buttons, rename in place with F2, or <strong>Update to current camera</strong> to re-point it.</li>
+        </ol>
+        <p>
+          <strong>Tour</strong> walks the saved cameras one after another on a timer you set &mdash;
+          eight seconds each by default &mdash; which is the easy way to show a rig off, or to
+          check a look from every seat in the house. You need at least two saved cameras.
+        </p>
+
+        <h3>Show</h3>
+        <p>
+          A block of switches for what the stage draws. Turn beams off to read positions, turn
+          labels on to find a light by name, turn everything off but the plan view to lay a rig
+          out on paper.
+        </p>
+        <table class="kv">
+          <thead><tr><th>Toggle</th><th>Draws</th></tr></thead>
+          <tbody>
+            <tr><td>Grid</td><td>The floor grid, at a pitch you choose &mdash; a ruler for eyeballing distances.</td></tr>
+            <tr><td>Stage box</td><td>The stage riser.</td></tr>
+            <tr><td>Towers / Truss</td><td>The mounting structures.</td></tr>
+            <tr><td>Beams</td><td>The volumetric haze in the air (GPU).</td></tr>
+            <tr><td>Pools</td><td>The floor and stage light pools (GPU).</td></tr>
+            <tr><td>Labels</td><td>Names on the selected lights, or on every light with <strong>label all</strong> on.</td></tr>
+            <tr><td>Gizmo</td><td>The transform arrows and rings on the selection.</td></tr>
+            <tr><td>Slot rings</td><td>The blue rings on a picked tower or truss, and while you drag a light.</td></tr>
+            <tr><td>Ticks</td><td>Aim ticks on lights that are currently dark, so you can see where they point.</td></tr>
+            <tr><td>Overlays</td><td>The transition sphere, the chase band, and phaser traces.</td></tr>
+            <tr><td>Help</td><td>The shortcut card in the stage corner.</td></tr>
+          </tbody>
+        </table>
+        <p>
+          Three presets set the lot in one press: <strong>All</strong> turns everything on,
+          <strong>Clean</strong> strips the scaffolding back to the lights, and <strong>Plan</strong>
+          gives you a rig plan &mdash; names on every light, no beams, no pools.
+        </p>
+
+        <h3>Stage</h3>
+        <p>
+          The stage box's own <strong>width</strong>, <strong>depth</strong>, and
+          <strong>height</strong>, plus <strong>body size</strong> and <strong>beam haze</strong>.
+          These five are show settings and go into the undo history, unlike everything else on
+          this tab. Select the stage box on stage and gold arrows appear on its edges so you can
+          resize it by eye instead.
+        </p>
+
+        <h3>Options and Snapshot</h3>
+        <ul class="checklist">
+          <li><strong>Animate camera moves</strong> glides over about a third of a second instead of cutting.</li>
+          <li><strong>Camera tracks the selection</strong> re-centres the orbit on whatever you pick.</li>
+          <li><strong>Quick views keep zoom</strong> flips the Shift behaviour round: the pads only turn the camera, and Shift re-frames.</li>
+          <li><strong>Restore the camera on launch</strong> opens the app looking where you left off.</li>
+          <li><strong>Snapshot</strong> writes a PNG of the stage view into the screenshots folder.</li>
+        </ul>
+      </article>
+
+      <article class="panel" data-panel="insp/build">
+        <p class="crumb">Inspector &middot; Build tab</p>
+        <h2>Build tab</h2>
+        <p class="lede">
+          The rig itself: what holds the lights up. Eight pads build the structures, a parameter
+          card sizes whatever you picked, an outliner lists everything you have built, and Setups
+          save a whole named arrangement to reuse on the next show.
+        </p>
+
+        <div class="panel-shot">
+          <img src="images/shot-inspector-build.webp" alt="The Inspector's Build tab: the eight element pads, the parameter card for the picked recipe, and the outliner nesting a composite's parts" loading="lazy" decoding="async">
+        </div>
+
+        <h3>The eight element pads</h3>
+        <table class="kv">
+          <thead><tr><th>Pad</th><th>Builds</th></tr></thead>
+          <tbody>
+            <tr><td>Tower</td><td>A floor stand with one crossbar and eight light slots &mdash; four top, four bottom.</td></tr>
+            <tr><td>F34</td><td>A straight box-truss run, with a slot every half metre on each of its four faces.</td></tr>
+            <tr><td>Radius</td><td>A curved segment sweeping an arc. Slots follow the curve, aimed along the tangent.</td></tr>
+            <tr><td>Goalpost</td><td>Two towers with a truss across their tops, in one press.</td></tr>
+            <tr><td>Box</td><td>Four runs enclosing a rectangle, at one trim height.</td></tr>
+            <tr><td>Ring</td><td>A full circle of curved truss.</td></tr>
+            <tr><td>Tower pair</td><td>Two matched stands, left and right.</td></tr>
+            <tr><td>Arch</td><td>Two legs with a curved run springing from their tops.</td></tr>
+          </tbody>
+        </table>
+        <ol class="howto">
+          <li>Click a pad to set it up &mdash; the parameter card underneath fills with that recipe's sizes.</li>
+          <li>Shift-click a pad to add it straight away with the last sizes you used.</li>
+          <li>Right-click a pad for the standard sizes: F34 run lengths, radii, arcs, spans, and crossbar heights are one tap each.</li>
+          <li>Keys <strong>1</strong> to <strong>8</strong> add while the pointer is over this tab.</li>
+        </ol>
+
+        <h3>Where a new element lands</h3>
+        <p>
+          The <strong>Place</strong> row decides that: <strong>Stagger</strong> takes the next free
+          spot in a row, <strong>Upstage</strong>, <strong>Centre</strong>, and
+          <strong>Downstage</strong> put it inside the stage box, <strong>Behind</strong> puts it
+          clear of the box at the back for a backdrop rig, <strong>Camera</strong> drops it wherever
+          you are looking, and <strong>Custom</strong> takes an exact spot on the floor.
+          <strong>Heading</strong> turns it, in degrees clockwise from upstage.
+        </p>
+
+        <h3>The outliner</h3>
+        <p>
+          Every tower and truss in the rig, one row each, with a composite's parts folded under a
+          single heading &mdash; a goalpost lists its left leg, its right leg, and its beam. Turn
+          <strong>Lights</strong> on and each element's hung fixtures appear as rows beneath it.
+        </p>
+        <ul class="checklist">
+          <li>Click a row to pick that element on the stage; double-click to rename it.</li>
+          <li>With the pointer over the list, <code>Backspace</code> deletes, <code>F2</code> renames, and the arrow keys step through it.</li>
+          <li>Right-click for <strong>Move / turn</strong>, <strong>Duplicate</strong>, <strong>Mirror across centre</strong>, <strong>Hide</strong>, <strong>Point camera here</strong>, <strong>Select its lights</strong>, <strong>Unhang lights</strong>, <strong>Ungroup</strong>, and <strong>Delete</strong>.</li>
+          <li>A composite can be slid, turned, raised, and mirrored as one thing, legs and all.</li>
+          <li>Deleting an element asks first, and tells you how many lights it is about to unhang. The lights stay exactly where they were hanging.</li>
+        </ul>
+
+        <h3>Setups</h3>
+        <ol class="howto">
+          <li>Build a rig you want to keep.</li>
+          <li>Type a name in the Setups section and press <strong>Save</strong> to store every light position, copy, tower, and truss under it.</li>
+          <li>Or press <strong>Rig only</strong> to save just the towers and trusses as a template, with no light positions in it.</li>
+          <li>Press <strong>Load</strong> to bring a whole arrangement back, <strong>Load rig only</strong> to take its structures and leave your lights where they are, or <strong>Load lights only</strong> for the reverse.</li>
+          <li><strong>Add to current rig</strong> merges a setup's elements into what you already have.</li>
+        </ol>
+        <p>
+          Setups are files in <code>setups/</code>, so a rig you build once travels between shows
+          &mdash; and between machines.
+        </p>
+
+        <h3>Reset</h3>
+        <table class="kv">
+          <thead><tr><th>Button</th><th>What it does</th></tr></thead>
+          <tbody>
+            <tr><td>Clear rig</td><td>Removes every tower and truss. Lights stay exactly where they hang, just unhung. Asks first, and names the count.</td></tr>
+            <tr><td>Reset lights</td><td>Moves every light back to its default position and removes copies, towers, and trusses. Asks first.</td></tr>
+          </tbody>
+        </table>
+
+        <div class="warn">
+          <h4>Neither one is undoable</h4>
+          <p>Cmd-Z will not bring a cleared rig back. Save a setup first if you might want the
+          arrangement again.</p>
+        </div>
+      </article>
+
+      <article class="panel" data-panel="insp/patch">
+        <p class="crumb">Inspector &middot; Patch tab</p>
+        <h2>Patch tab</h2>
+        <p class="lede">
+          The fast way in. One press patches a batch, places it, and selects it, so a rig goes up
+          in one pass instead of a light at a time. The tab reads top to bottom: pick a model,
+          check the preview, set count, address and name, choose where it lands, press Patch.
+        </p>
+
+        <div class="panel-shot">
+          <img src="images/shot-inspector-patch.webp" alt="The Inspector's Patch tab mid-flow: the library search with hits, the preview card with its channel role badges, and the address plan" loading="lazy" decoding="async">
+        </div>
+
+        <h3>Picking a model</h3>
+        <ul class="checklist">
+          <li><strong>Recents</strong> puts the last few models you patched one click away.</li>
+          <li><strong>Built-in</strong> lists the hand-written DMXexpress profiles.</li>
+          <li><strong>Library</strong> searches the whole <a href="#rig/library">fixture library</a> by name and maker, with filter chips for <strong>Moving</strong>, <strong>Par</strong>, <strong>Bar</strong>, <strong>Strobe</strong>, and <strong>Other</strong>.</li>
+        </ul>
+        <p>
+          Whatever you pick, a preview card shows the mode, its channel count, the pan and tilt
+          ranges, and what each channel does, with a coloured role badge per channel. Read it
+          before you commit &mdash; it is the cheapest way to catch a 12-channel mode where you
+          wanted the 16.
+        </p>
+
+        <h3>Addresses and names</h3>
+        <ol class="howto">
+          <li>Set a <strong>count</strong>: how many of this model you are adding.</li>
+          <li>Set the <strong>start address</strong>, or let it follow. <strong>Next free</strong> appends past the last patched light; <strong>first gap</strong> finds the first hole big enough for the whole batch.</li>
+          <li>The address plan lists what each copy would get before you press anything, and says so if the batch would run past slot 1024.</li>
+          <li>Tick <strong>skip taken</strong> to step over addresses already in use, and <strong>same universe</strong> to stop a fixture straddling the boundary at slot 512.</li>
+          <li>Name them once. They are numbered for you, continuing the series already in the rig &mdash; patch four more <code>SlimPAR</code> and you get 5, 6, 7, 8.</li>
+        </ol>
+
+        <h3>Where the batch lands</h3>
+        <p>
+          The <strong>Place</strong> row lays the new lights out as it patches them:
+          <strong>Keep</strong> leaves them where the patch put them, <strong>Line X</strong> and
+          <strong>Line Z</strong> run them across or up the stage, then <strong>Grid</strong>,
+          <strong>Arc</strong>, <strong>Circle</strong>, and <strong>Floor</strong>. Choose
+          <strong>Truss</strong> or <strong>Tower</strong> instead and they hang straight onto the
+          rig &mdash; on an existing element, or on a new one the tab builds to fit the batch.
+        </p>
+
+        <h3>The rig summary</h3>
+        <p>
+          Underneath, every light in the rig grouped by fixture definition: how many of each, the
+          address range they cover, and how full each universe is. Per row you can add one more of
+          that type, select them all, or unpatch them. Unpatching is a two-step confirm that arms
+          for four seconds, so a mis-click costs you nothing.
+        </p>
+        <p>
+          The <strong>ShowBuddy</strong> section switches the imported patch in and out of the rig
+          without losing it, exactly as the <a href="#rig/patch">Patch window</a> does &mdash; the
+          two share the same state, so they never disagree.
+        </p>
+
+        <div class="tip">
+          <h4>Patch straight onto a truss</h4>
+          <p>Set the count to eight, pick <strong>Truss</strong>, and let it build the run: you get
+          eight lights patched at consecutive addresses, hung on half-metre centres, selected and
+          ready for a position palette. That is a whole upstage bar in one press.</p>
         </div>
       </article>
 
@@ -685,6 +1276,10 @@ cargo test</code></pre>
           The lower half of the center panel. This <em>is</em> the Programmer. What it shows
           depends on how many fixtures are selected.
         </p>
+
+        <div class="panel-shot">
+          <img src="images/shot-channels.webp" alt="The channel control grid with several fixtures selected, rows armed, and level bars part-lit" loading="lazy" decoding="async">
+        </div>
 
         <h3>One fixture selected</h3>
         <p>
@@ -733,6 +1328,10 @@ cargo test</code></pre>
           A group is a saved fixture <em>selection</em> — no values. Build the ones you keep
           coming back to and everything downstream gets faster.
         </p>
+
+        <div class="panel-shot">
+          <img src="images/shot-groups.webp" alt="The Groups window with several groups stored as tiles" loading="lazy" decoding="async">
+        </div>
 
         <h3>How to build and use groups</h3>
         <ol class="howto">
@@ -787,6 +1386,10 @@ cargo test</code></pre>
           An order is the <em>path</em> an effect travels. Without one, every spread fans out in
           fixture number order, which is rarely the shape you actually want on stage.
         </p>
+
+        <div class="panel-shot">
+          <img src="images/shot-orders.webp" alt="The Orders window showing a stored fixture order and the route its steps describe" loading="lazy" decoding="async">
+        </div>
 
         <h3>What an order is made of</h3>
         <p>
@@ -858,7 +1461,7 @@ cargo test</code></pre>
         </p>
 
         <div class="panel-shot tall">
-          <img src="images/palettes.png" alt="The Palettes window with feature tabs, color tiles, the cycle engine, and the Send to Deck toggle">
+          <img src="images/palettes.webp" alt="The Palettes window with feature tabs, color tiles, the cycle engine, and the Send to Deck toggle" loading="lazy" decoding="async">
         </div>
 
         <h3>The six feature tabs</h3>
@@ -914,12 +1517,20 @@ cargo test</code></pre>
           image, rotated by the fixture's gobo rotation channel.
         </p>
 
+        <div class="panel-shot">
+          <img src="images/shot-gobos.webp" alt="The Gobos window with rows of gobo thumbnails, grouped by fixture type, and the currently selected slot outlined" loading="lazy" decoding="async">
+        </div>
+
         <h3>How to pick a gobo</h3>
         <ol class="howto">
           <li>Select some lights, then open <strong>Gobos</strong> from the toolbar. With nothing selected it lists every fixture type in the rig.</li>
           <li>Each gobo wheel appears as a row of picture tiles, grouped by fixture type, with the slot each light is currently on outlined.</li>
           <li>Click a tile to send those lights to that slot. The wheel channel lands in the Programmer, exactly like recalling a palette.</li>
         </ol>
+
+        <div class="panel-shot">
+          <img src="images/shot-stage-gobos.webp" alt="The 3D stage with gobo projection visible: the haze inside each beam broken into the pattern's rays rather than a flat cone" loading="lazy" decoding="async">
+        </div>
 
         <h3>Where the pictures come from</h3>
         <p>
@@ -948,37 +1559,74 @@ cargo test</code></pre>
         <h2>Presets</h2>
         <p class="lede">
           Where a palette stores one feature, a preset stores the whole look — every Programmer
-          value plus any running oscillations. Presets live at the top of the Inspector.
+          value plus any running oscillations. Presets live on the Inspector's
+          <a href="#insp/presets">Presets tab</a>, which is where they are stored and organised,
+          and on the Presets board, which is where they are played.
         </p>
 
         <h3>How to store and organize presets</h3>
         <ol class="howto">
           <li>Build a look in the Programmer.</li>
-          <li>Type a name and press <strong>Store look</strong>.</li>
-          <li>Press <strong>Folder</strong> to add a folder.</li>
-          <li>Tick <strong>drag</strong>, then drag presets onto a folder to file them, onto another preset to reorder, or onto the Presets heading to unfile them.</li>
-          <li>Untick <strong>drag</strong> so clicks apply presets again.</li>
-          <li>Right-click a preset for <strong>Overwrite with current look</strong> or <strong>Delete</strong>.</li>
+          <li>Open the Inspector's <strong>Presets</strong> tab (<strong>Alt-1</strong>), type a name, and press <strong>Store look</strong>.</li>
+          <li>Add a folder, or pick one in the store card first to file the look straight into it.</li>
+          <li>Drag pads onto a folder to file them, or onto each other to reorder.</li>
+          <li><strong>Pin</strong> the ones you reach for constantly — they get a strip of their own at the top.</li>
+          <li>Right-click a pad for <strong>Duplicate</strong>, <strong>Move to</strong>, <strong>Set as chase source</strong>, <strong>To board</strong>, <strong>Edit pad</strong>, and <strong>Delete</strong>.</li>
+          <li>Recall one, change it, then press <strong>Update with current look</strong> to overwrite it.</li>
         </ol>
+        <p>
+          A preset holds a stable id rather than a name, so a board pad, a deck key, an audio
+          trigger, or the chase source all keep pointing at the right look through a rename or a
+          reorder.
+        </p>
+
+        <h3>How a recall arrives</h3>
+        <p>
+          The recall row decides what a plain click does: <strong>Cut</strong> is instant,
+          <strong>Fade</strong> takes the seconds set beside it, and <strong>As set</strong>
+          follows the <a href="#program/transition">Transition</a> window. A preset given a time
+          of its own overrides the row, and shift-clicking any pad always cuts.
+          <strong>Recall onto selection</strong> applies only the channels belonging to the lights
+          you have selected.
+        </p>
+
+        <h3>The Presets board</h3>
+        <p>
+          A 4 &times; 9 page of pads, laid out exactly like the Stream Deck's Presets page — the
+          same slots, the same reserved corners for select-all, Clear, and Tap. Turn
+          <strong>Arrange</strong> on to point a pad at a preset, drag pads to swap them, and give
+          each one its own colour, four-letter label, and artwork. <strong>Fill</strong> lays a
+          whole folder out in one press. A show with no deck plugged in gets the same board on
+          screen.
+        </p>
+
+        <div class="panel-shot">
+          <img src="images/shot-preset-board.webp" alt="The Presets board in Arrange mode: a page of coloured pads with the slot editor open beside it" loading="lazy" decoding="async">
+        </div>
 
         <h3>ShowBuddy banks</h3>
         <p>
           If your ShowBuddy show has preset banks, they appear in their own section below.
           One bank opens at a time; clicking a preset inside applies it to the whole rig. This is
-          the fastest way to drop into a known look before you start editing.
+          the fastest way to drop into a known look before you start editing. Import a bank preset
+          — or a whole bank into a folder — and you can edit it like anything else you stored.
         </p>
 
-        <h3>Blackout all</h3>
+        <h3>Blackout, Clear, and Release</h3>
         <p>
-          The <strong>Blackout all</strong> button writes a black frame and releases everything:
-          the active preset, all running phasers, holds, any transition in progress, and the
-          chase. It is the panic button, and unlike the Grand Master it also drops effects.
+          <strong>Blackout</strong>, at the bottom of the Presets tab, writes a black frame and
+          releases everything: the active preset, all running phasers, holds, any transition in
+          progress, and the chase. It is the panic button, and unlike the Grand Master it also
+          drops effects. <strong>Clear</strong> beside it is a staged version — encoders first,
+          then effects, then blackout, one stage per press. <strong>Release</strong> only drops
+          the lit-preset highlight and changes no output at all.
         </p>
 
         <div class="tip">
           <h4>Presets feed the Chases window</h4>
           <p>The Chases window injects a preset across the rig, so store the looks you want to
-          sweep before you go build a chase.</p>
+          sweep before you go build a chase. Right-click any pad and choose
+          <strong>Set as chase source</strong> to point the chase at it without leaving the tab.</p>
         </div>
       </article>
 
@@ -990,6 +1638,10 @@ cargo test</code></pre>
           wave, with its phase — and plays it back as its own mixer layer. Where two preset
           recalls fight over the Programmer, several scenes genuinely run at once.
         </p>
+
+        <div class="panel-shot">
+          <img src="images/shot-scenes.webp" alt="The Scenes window with captured scenes, each with its own level and merge mode" loading="lazy" decoding="async">
+        </div>
 
         <h3>How to capture and play one</h3>
         <ol class="howto">
@@ -1074,7 +1726,11 @@ cargo test</code></pre>
         </p>
 
         <div class="panel-shot tall">
-          <img src="images/phaser-1.png" alt="The phaser editor with channel component cards, spread controls, and the tile pool">
+          <img src="images/phaser-1.webp" alt="The phaser editor with channel component cards, spread controls, and the tile pool" loading="lazy" decoding="async">
+        </div>
+
+        <div class="panel-shot">
+          <img src="images/shot-phasers.webp" alt="The Phasers window with a phaser built: its channel components, the path shape, and the live preview" loading="lazy" decoding="async">
         </div>
 
         <h3>Building a phaser</h3>
@@ -1173,7 +1829,7 @@ cargo test</code></pre>
         </p>
 
         <div class="panel-shot">
-          <img src="images/chases-2.png" alt="The chase editor beside the 3D stage with the chase sphere visible">
+          <img src="images/chases-2.webp" alt="The chase editor beside the 3D stage with the chase sphere visible" loading="lazy" decoding="async">
         </div>
 
         <h3>The twelve shapes</h3>
@@ -1194,6 +1850,10 @@ cargo test</code></pre>
             <tr><td>Checker</td><td>The rig split into banks that flip on and off against each other.</td></tr>
           </tbody>
         </table>
+
+        <div class="panel-shot">
+          <img src="images/shot-chases.webp" alt="The Chases window with a chase configured: the inject preset, the shape chips, and the band, speed and direction controls" loading="lazy" decoding="async">
+        </div>
 
         <h3>How to run a chase</h3>
         <ol class="howto">
@@ -1224,6 +1884,10 @@ cargo test</code></pre>
           Inside the Palettes window is a small engine that rolls through a list of palettes.
           It is the fastest way to get moving color across a rig without building a phaser.
         </p>
+
+        <div class="panel-shot">
+          <img src="images/shot-palettes.webp" alt="The Palettes window with colour palettes stored and a cycle running across the rig" loading="lazy" decoding="async">
+        </div>
 
         <h3>How to build a cycle</h3>
         <ol class="howto">
@@ -1261,6 +1925,10 @@ cargo test</code></pre>
           press TAP for you, and draw trigger bands on the graph — when the bass crosses this
           line, throw this palette at that group.
         </p>
+
+        <div class="panel-shot">
+          <img src="images/shot-audio.webp" alt="The Audio window with the live spectrum drawn and a trigger band set across part of it" loading="lazy" decoding="async">
+        </div>
 
         <h3>Picking a source</h3>
         <ul class="checklist">
@@ -1304,7 +1972,7 @@ cargo test</code></pre>
         </p>
 
         <div class="panel-shot tall">
-          <img src="images/beat-matching.png" alt="The Beat window with tap tempo, the bar indicator, and the time machine transport">
+          <img src="images/beat-matching.webp" alt="The Beat window with tap tempo, the bar indicator, and the time machine transport" loading="lazy" decoding="async">
         </div>
 
         <h3>How to sync to a band</h3>
@@ -1330,6 +1998,11 @@ cargo test</code></pre>
           time itself. Everything on a clock &mdash; phasers, oscillators, chases, palette cycles
           &mdash; follows, and status pills across the top always say what is currently in force.
         </p>
+
+        <div class="panel-shot">
+          <img src="images/shot-beat.webp" alt="The Beat window's time machine controls: the reverse and forward transport, the rate presets, hold, nudge, pendulum and stutter" loading="lazy" decoding="async">
+        </div>
+
         <table class="kv">
           <thead><tr><th>Control</th><th>What it does</th></tr></thead>
           <tbody>
@@ -1362,6 +2035,10 @@ cargo test</code></pre>
           A stack is a cue list: an ordered set of looks you step through with Go. This is
           theatre-style playback, and it is where tracking lives.
         </p>
+
+        <div class="panel-shot">
+          <img src="images/shot-stacks.webp" alt="The Stacks window with a cue list recorded, showing cue numbers, names and per-cue fade times" loading="lazy" decoding="async">
+        </div>
 
         <h3>How to build a stack</h3>
         <ol class="howto">
@@ -1414,6 +2091,10 @@ cargo test</code></pre>
           running the show live.
         </p>
 
+        <div class="panel-shot">
+          <img src="images/shot-decks.webp" alt="The executor bar across the bottom of the window: the Grand Master fader on the left and one strip per stack beside it" loading="lazy" decoding="async">
+        </div>
+
         <h3>Grand Master</h3>
         <p>
           One vertical fader on the left, labelled <strong>GM</strong>, scaling every dimmer in
@@ -1453,7 +2134,7 @@ cargo test</code></pre>
         </p>
 
         <div class="panel-shot">
-          <img src="images/streamdeck-phasers.png" alt="The Stream Deck phaser page editor in DMXpress: a grid of color-coded key tiles with per-slot phaser, color, and artwork controls">
+          <img src="images/streamdeck-phasers.webp" alt="The Stream Deck phaser page editor in DMXpress: a grid of color-coded key tiles with per-slot phaser, color, and artwork controls" loading="lazy" decoding="async">
         </div>
 
         <h3>Turning it on</h3>
@@ -1513,6 +2194,26 @@ cargo test</code></pre>
           <li>Pages persist in <code>phaser_deck.json</code>, so your busking surface survives restarts.</li>
         </ol>
 
+        <h3>The same board, on screen</h3>
+        <p>
+          You do not need the hardware to get the surface. The <strong>Phaser board</strong> is the
+          same 4 &times; 9 page of pads the deck's Phaser page shows — the same slots, the same
+          reserved corners for select-all, Clear, and Tap — drawn in a window you can pop onto a
+          second monitor. Pressing a pad starts or stops its phaser. Turn <strong>Arrange</strong>
+          on to assign a phaser, symbol, and colour to a pad, drag pads to swap them, and
+          right-click to clear one.
+        </p>
+
+        <div class="panel-shot">
+          <img src="images/shot-phaser-board.webp" alt="The Phaser board: a 4 by 9 page of coloured pads with the reserved corner keys for select-all, Clear and Tap" loading="lazy" decoding="async">
+        </div>
+
+        <p>
+          The <a href="#program/presets">Presets board</a> is its twin for looks, and works the
+          same way. Design in the Phasers window, play from the board — the two sit side by side
+          nicely with one of them popped out.
+        </p>
+
         <div class="tip">
           <h4>Every model works</h4>
           <p>Original, Mini, MK2, XL, Neo, Plus, and Plus XL are all recognised. The key grid
@@ -1528,6 +2229,10 @@ cargo test</code></pre>
           A single text box at the very bottom. Type a verb, press Enter. Much faster than the
           mouse once the vocabulary is in your fingers. Numbers are 1-based and in pool order.
         </p>
+
+        <div class="panel-shot">
+          <img src="images/shot-command.webp" alt="The command line bar across the bottom of the window" loading="lazy" decoding="async">
+        </div>
 
         <table class="kv cmd">
           <thead><tr><th>Command</th><th>Aliases</th><th>What it does</th></tr></thead>
@@ -1605,6 +2310,10 @@ cargo test</code></pre>
           destination.
         </p>
 
+        <div class="panel-shot">
+          <img src="images/shot-artnet.webp" alt="The Art-Net panel docked at the top of the window, listing discovered nodes with their IP addresses and names" loading="lazy" decoding="async">
+        </div>
+
         <h3>How to get output running</h3>
         <ol class="howto">
           <li>Set <strong>Universe</strong> in the top toolbar. Slots 1&ndash;512 go there, 513&ndash;1024 to the next universe.</li>
@@ -1624,6 +2333,80 @@ cargo test</code></pre>
           <h4>Before you connect to a real rig</h4>
           <p>Confirm the interface, the universe, the patch, and the Grand Master position. Do not
           rely on DMXexpress as the sole safety mechanism for a live production.</p>
+        </div>
+
+        <div class="tip">
+          <h4>When this panel is not enough</h4>
+          <p>The <a href="#out/network">Network screen</a> is the full version: it picks the
+          network interface, switches between Art-Net and sACN (or runs both), lists every node
+          and source it hears, and has a checklist that tells you in sentences why nothing is
+          arriving. Open it from <strong>Settings</strong> &rarr;
+          <strong>Network&hellip;</strong>.</p>
+        </div>
+      </article>
+
+      <article class="panel" data-panel="out/network">
+        <p class="crumb">Output &amp; Fixes &middot; Network</p>
+        <h2>The Network screen</h2>
+        <p class="lede">
+          Everything needed to get lighting data out of the console and into a node &mdash; and to
+          see why it is not arriving. Protocol setup, live diagnostics, a troubleshooting
+          checklist, test patterns, and a packet monitor, in four tabs. Open it from
+          <strong>Settings</strong> &rarr; <strong>Network&hellip;</strong>.
+        </p>
+
+        <div class="panel-shot">
+          <img src="images/shot-network.webp" alt="The Network screen with its status strip above four tabs, listing the Art-Net nodes discovered on the wire" loading="lazy" decoding="async">
+        </div>
+
+        <h3>The status strip</h3>
+        <p>
+          It sits above the tabs and stays there whichever one you are on, because those are the
+          four numbers that matter: is it sending, how fast, to where, and any errors. Frames
+          actually sent in the last second should read about 40. <code>Enabled, but no frame has
+          left in the last second</code> and <code>Nothing is being sent</code> are the two
+          readings worth acting on.
+        </p>
+
+        <h3>Setup</h3>
+        <ul class="checklist">
+          <li>Choose the protocol: <strong>Art-Net</strong>, <strong>sACN (E1.31)</strong>, or both at once.</li>
+          <li>Pick the network interface to send from, or leave it on any interface.</li>
+          <li>Choose how Art-Net packets are addressed &mdash; automatic (unicast to the picked node, else broadcast), limited broadcast, or multicast.</li>
+          <li>Set the base universe. The screen spells out the Art-Net Port-Address it maps to, Net switch and Sub-Net switch included, so you can match a node's front panel without arithmetic.</li>
+        </ul>
+        <p>Settings are saved to <code>network.json</code> and pushed to the output thread as one change.</p>
+
+        <h3>Nodes &amp; sources</h3>
+        <p>
+          Every Art-Net node and sACN source heard on the wire, with its IP address, names,
+          firmware, and which universes its ports are set to. A node that has not answered for
+          five minutes drops off the list; a silent sACN source drops after thirty seconds. The
+          table flags the common mismatch out loud: <em>none of this node's output ports is set to
+          a universe we send</em>.
+        </p>
+
+        <h3>Checklist</h3>
+        <p>
+          Live checks that say what is wrong and what to do about it, one finding per row, each
+          marked OK, warning, or fail. It is the first place to look when a rig is dark and you do
+          not yet know why &mdash; it reads the same state the other tabs show, and turns it into
+          sentences. <strong>Copy diagnostics</strong> puts the whole report on the clipboard for a
+          bug report or a message to whoever runs the network.
+        </p>
+
+        <h3>Test &amp; monitor</h3>
+        <ol class="howto">
+          <li>Run <strong>Full on</strong> &mdash; every channel at 255 &mdash; to answer the first question: does anything light at all?</li>
+          <li>Or run a <strong>chase</strong> pattern to walk the universe channel by channel and find a mis-addressed fixture.</li>
+          <li>Set how long the pattern holds before the show comes back, or end it at once.</li>
+          <li>Watch the packet monitor underneath: the last fifty packets with their direction, kind, and destination. Freeze the list to read it while packets keep flowing underneath.</li>
+        </ol>
+
+        <div class="warn">
+          <h4>A test pattern is real output</h4>
+          <p>Full on drives the actual rig. Confirm the universe and the interface first, and be
+          sure nobody is standing in a beam.</p>
         </div>
       </article>
 
@@ -1675,11 +2458,18 @@ cargo test</code></pre>
           you go fix something.
         </p>
 
-        <h3>Blackout all</h3>
+        <h3>Blackout</h3>
         <p>
-          The <strong>Blackout all</strong> button in the Inspector writes a black frame and
-          releases the active preset, all running phasers, holds, the transition, and the chase.
-          This is the full stop.
+          The <strong>Blackout</strong> button at the bottom of the Inspector's
+          <a href="#insp/presets">Presets tab</a> writes a black frame and releases the active
+          preset, all running phasers, holds, the transition, and the chase. This is the full
+          stop. A <code>BLACKOUT</code> pill appears in the Inspector's context line while it is
+          in force, so you always know.
+        </p>
+        <p>
+          <strong>Clear</strong>, beside it, is the gentler version: one press drops the encoders,
+          a second drops the effects, a third blacks out. Reach for it when you want the stage
+          back a layer at a time rather than all at once.
         </p>
 
         <h3>Command line blackout</h3>
@@ -1701,9 +2491,17 @@ cargo test</code></pre>
             <tr><td>Freeze</td><td>Pauses</td><td>Pauses</td><td>Yes, in phase</td></tr>
             <tr><td>Grand Master to 0</td><td>No</td><td>No</td><td>Yes</td></tr>
             <tr><td><code>black</code> command</td><td>No</td><td>Yes</td><td>Re-fire cues</td></tr>
-            <tr><td>Blackout all</td><td>Yes</td><td>Partly</td><td>Rebuild the look</td></tr>
+            <tr><td>Blackout (Presets tab)</td><td>Yes</td><td>Partly</td><td>Rebuild the look</td></tr>
+            <tr><td>Clear (Presets tab)</td><td>On the second press</td><td>No</td><td>Rebuild the look</td></tr>
           </tbody>
         </table>
+
+        <div class="tip">
+          <h4>Freeze is the one to reach for mid-show</h4>
+          <p>It is the only stop on this list that gives you back exactly what you had, in phase.
+          Use it while you fix a fixture or re-aim a light; use the others when you actually want
+          the stage dark.</p>
+        </div>
       </article>
 
       <article class="panel" data-panel="out/log">
@@ -1749,19 +2547,32 @@ cargo test</code></pre>
           <thead><tr><th>File</th><th>Contents</th></tr></thead>
           <tbody>
             <tr><td><code>groups.json</code></td><td>Your groups</td></tr>
+            <tr><td><code>orders.json</code></td><td>Your fixture orders</td></tr>
             <tr><td><code>palettes.json</code></td><td>Your palettes</td></tr>
             <tr><td><code>phasers.json</code></td><td>Your phasers</td></tr>
             <tr><td><code>sequences.json</code></td><td>Saved palette sequences</td></tr>
             <tr><td><code>presets.json</code></td><td>Your stored looks and preset folders</td></tr>
+            <tr><td><code>scenes.json</code></td><td>Captured scenes with their phases</td></tr>
             <tr><td><code>stacks.json</code></td><td>Your stacks and cues</td></tr>
             <tr><td><code>views.json</code></td><td>Your saved views</td></tr>
+            <tr><td><code>cameras.json</code></td><td>Saved camera bookmarks and their number keys</td></tr>
+            <tr><td><code>preset_deck.json</code></td><td>The Presets board and the Stream Deck's Presets page</td></tr>
+            <tr><td><code>phaser_deck.json</code></td><td>The Phaser board and the deck's Phaser pages</td></tr>
+            <tr><td><code>gobos_user.json</code></td><td>Your own gobo-picture assignments, keyed by fixture type</td></tr>
             <tr><td><code>patch_user.json</code></td><td>Fixtures patched inside DMXexpress</td></tr>
-            <tr><td><code>stage_layout.json</code></td><td>Light placement, duplicates, and towers</td></tr>
-            <tr><td><code>settings.json</code></td><td>Stage dimensions and visualizer settings</td></tr>
+            <tr><td><code>stage_layout.json</code></td><td>Light placement, duplicates, towers, and truss</td></tr>
+            <tr><td><code>settings.json</code></td><td>Stage dimensions, visualizer settings, and the Fixtures panel's tile look</td></tr>
+            <tr><td><code>network.json</code></td><td>Protocol, interface, and addressing for output</td></tr>
+            <tr><td><code>inspector.json</code></td><td>Your workspace: the open Inspector tab, its width, folded sections, and the stage display toggles</td></tr>
             <tr><td><code>configs/</code></td><td>Whole-show configurations</td></tr>
             <tr><td><code>setups/</code></td><td>Saved stage arrangements</td></tr>
           </tbody>
         </table>
+        <p>
+          <code>inspector.json</code> and <code>network.json</code> describe the machine rather
+          than the show, and are deliberately kept out of saved configurations. That is why
+          loading a colleague's show never moves your panels or re-points your output.
+        </p>
 
         <div class="tip">
           <h4>Easy to extend</h4>
@@ -1780,6 +2591,10 @@ cargo test</code></pre>
           theme. Scripts are sandboxed — no file, network, or system access, and runaway loops
           are stopped with an error instead of a hang.
         </p>
+
+        <div class="panel-shot">
+          <img src="images/shot-plugins.webp" alt="The Plugins window listing the loaded scripts with their enable checkboxes and per-plugin buttons" loading="lazy" decoding="async">
+        </div>
 
         <h3>Installing one</h3>
         <ol class="howto">
@@ -1864,9 +2679,26 @@ cargo test</code></pre>
 
         <h3>Nothing reaches my node</h3>
         <p>
-          Confirm the universe in the toolbar, press <strong>ArtPoll</strong> and select the node,
-          or set a manual target IP. Verify the fixture's address falls inside slots 1&ndash;1024,
-          and read the Log for the last target change.
+          Open the <a href="#out/network">Network screen</a> and read the
+          <strong>Checklist</strong> tab — it names the fault and the fix in a sentence. Failing
+          that: confirm the universe in the toolbar, press <strong>ArtPoll</strong> and select the
+          node, or set a manual target IP. Verify the fixture's address falls inside slots
+          1&ndash;1024, and read the Log for the last target change.
+        </p>
+
+        <h3>Packets are going out but the rig is dark</h3>
+        <p>
+          The node is probably listening on a different universe. The Network screen's
+          <strong>Nodes &amp; sources</strong> tab says so outright when a node's output ports do
+          not match anything you send. Run <strong>Full on</strong> from the
+          <strong>Test &amp; monitor</strong> tab to settle whether the problem is on the wire or
+          in your patch.
+        </p>
+
+        <h3>I cannot find the Setups button any more</h3>
+        <p>
+          It moved. Setups now live in the Inspector's <a href="#insp/build">Build tab</a>, under
+          the outliner, along with <strong>Clear rig</strong> and <strong>Reset lights</strong>.
         </p>
 
         <h3>Everything is moving but nothing responds to edits</h3>
@@ -1890,7 +2722,7 @@ cargo test</code></pre>
   <footer class="footer">
     <div class="container footer-inner">
       <div>
-        <img src="images/logo.png" alt="DMXexpress" class="logo-footer">
+        <img src="images/logo.webp" alt="DMXexpress" class="logo-footer" loading="lazy" decoding="async">
         <p class="fine">A native, all-in-one DMX fixture visualizer and live lighting controller built in Rust.</p>
       </div>
       <div class="footer-links">

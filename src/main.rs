@@ -23,6 +23,9 @@ mod sacn;
 mod audio;
 mod scene;
 mod showbuddy;
+/// Website screenshots, rendered headlessly (see `site_shots.rs`).
+#[cfg(test)]
+mod site_shots;
 mod stack;
 mod stage;
 mod streamdeck;

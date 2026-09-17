@@ -8,14 +8,14 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
-  <link rel="icon" type="image/png" href="images/logo.png">
+  <link rel="icon" type="image/png" href="images/favicon.png">
   <link rel="stylesheet" href="styles.css">
 </head>
 <body>
   <header class="nav">
     <div class="container nav-inner">
       <a href="index.html" class="brand">
-        <img src="images/logo.png" alt="DMXexpress" class="logo-nav">
+        <img src="images/logo.webp" alt="DMXexpress" class="logo-nav">
       </a>
       <nav class="nav-links">
         <a href="index.html#features">Features</a>
@@ -38,6 +38,25 @@
           Questions, show files, screenshots, plugin links, bug reports — this is the place.
           Sign in with Google, pick a username, and post. You can delete anything you wrote.
         </p>
+      </div>
+    </section>
+
+    <!-- ===================== BOARD OR ISSUE TRACKER ===================== -->
+    <section class="section" style="padding: 40px 0 0">
+      <div class="container">
+        <div class="cards cards-2">
+          <article class="card">
+            <div class="card-icon">HR</div>
+            <h3>Post it here</h3>
+            <p>Anything with a human on the other end: how do I get this fixture patched, why is my Art-Net not arriving, here is a show file, here is a look I built, here is a plugin I wrote, is this a bug or is it me. Screenshots welcome — they usually answer the question faster than the words do.</p>
+          </article>
+          <article class="card">
+            <div class="card-icon">GH</div>
+            <h3>Open a GitHub issue instead</h3>
+            <p>Once something is reproducible and clearly wrong — a crash, a fixture profile with the wrong channel order, a feature that does not do what the guide says — it belongs in the tracker where it can be closed by a commit. Post here first if you are not sure; someone will tell you which it is.</p>
+            <a class="card-more" href="https://github.com/michaelmandich/DMXpress/issues" target="_blank" rel="noopener">Open the tracker</a>
+          </article>
+        </div>
       </div>
     </section>
 
@@ -98,12 +117,198 @@
         <div id="thread-view" hidden></div>
       </div>
     </section>
+
+    <!-- ===================== CATEGORIES ===================== -->
+    <section class="section section-alt">
+      <div class="container">
+        <div class="section-head">
+          <p class="eyebrow">The five chips</p>
+          <h2>Where your thread goes.</h2>
+          <p class="section-sub">
+            Pick a category when you post and the chips above the thread list will filter to it.
+            None of them are policed — pick the closest one and carry on.
+          </p>
+        </div>
+
+        <div class="split">
+          <div class="split-text">
+            <h2>What belongs in each.</h2>
+            <ul class="checklist">
+              <li><strong>General</strong> — rigs you are proud of, gear you are eyeing, what you ran last weekend, everything that is not one of the four below.</li>
+              <li><strong>Help</strong> — "this is not doing what I expect." Say what you did, what happened, and what you wanted instead, and attach the screenshot.</li>
+              <li><strong>Show files</strong> — a config or a stage setup you want other people to open. Say what rig it assumes and how many universes it fills.</li>
+              <li><strong>Plugins</strong> — scripts you wrote or found. Post the link here for feedback; submit it to the registry when it is ready for everyone.</li>
+              <li><strong>Bugs</strong> — something is broken and you can make it happen again. Include your platform and roughly what you were doing.</li>
+            </ul>
+          </div>
+          <div class="split-media">
+            <img src="images/shot-console.webp" alt="The DMXexpress console with the Fixtures panel, the lit 3D stage, the Inspector and channel control all visible in one window" loading="lazy" decoding="async">
+            <figcaption class="caption">A screenshot of the whole window says more than three paragraphs. Attach one.</figcaption>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ===================== HOW THE BOARD WORKS ===================== -->
+    <section class="section">
+      <div class="container">
+        <div class="section-head">
+          <p class="eyebrow">House rules</p>
+          <h2>How the board works.</h2>
+          <p class="section-sub">
+            Four things to know before your first post. There is no application, no moderation
+            queue and no email list.
+          </p>
+        </div>
+
+        <div class="cards cards-2">
+          <article class="card">
+            <div class="card-icon">RD</div>
+            <h3>Reading needs no account</h3>
+            <p>Every thread is public. Browse, search by category, open anything, link to it. Signing in only matters when you want to write something — and a thread's link works for anyone you send it to.</p>
+          </article>
+          <article class="card">
+            <div class="card-icon">ID</div>
+            <h3>One username, chosen by you</h3>
+            <p>Sign in with Google, then pick a handle: 3 to 24 letters, numbers, dashes or underscores. That handle is what appears on your posts. Your Google account name never does.</p>
+          </article>
+          <article class="card">
+            <div class="card-icon">IMG</div>
+            <h3>One screenshot per post</h3>
+            <p>PNG, JPEG or WebP, up to 4 MB, on a thread or on any reply. Click the image in a post to open it full size. Crop to the part that matters — the Inspector, the channel row, the Network checklist.</p>
+          </article>
+          <article class="card">
+            <div class="card-icon">DEL</div>
+            <h3>You can delete your own</h3>
+            <p>A delete link sits on anything you wrote. Removing a thread takes its replies with it. Nobody else can touch your posts, and nothing you delete stays behind in someone else's view.</p>
+          </article>
+        </div>
+
+        <p class="fine" style="margin-top:28px">Posts are plain text and line breaks are kept, so
+        paste a log excerpt or a snippet of JSON straight in. Titles run to 120 characters and a post
+        to 10,000. Threads sort by the most recent reply, so a good answer pulls an old question back
+        to the top.</p>
+      </div>
+    </section>
+
+    <!-- ===================== SHARING A SHOW ===================== -->
+    <section class="section section-alt">
+      <div class="container">
+        <div class="section-head">
+          <p class="eyebrow">Show files</p>
+          <h2>Share a rig or a whole show.</h2>
+          <p class="section-sub">
+            DMXexpress writes everything as human-readable JSON, so sharing a show is a matter of
+            finding the right file and pasting it into a post.
+          </p>
+        </div>
+
+        <ol class="steps">
+          <li><span class="step-num">1</span><div><h3>Save it first</h3><p>A complete show is saved as a config; a reusable arrangement of fixtures, truss and towers is saved as a setup. Give it a name you would recognise in a list of other people's rigs.</p></div></li>
+          <li><span class="step-num">2</span><div><h3>Find the file</h3><p>Configs live under <code>configs/</code> and setups under <code>setups/</code>, inside your show-data folder. Both are plain JSON you can open in any editor before you hand them over.</p></div></li>
+          <li><span class="step-num">3</span><div><h3>Post it where it can be downloaded</h3><p>The board takes text and one image per post, not arbitrary files — put the JSON in a GitHub gist or repository and paste the link into a <strong>Show files</strong> thread.</p></div></li>
+          <li><span class="step-num">4</span><div><h3>Say what it assumes</h3><p>Which fixtures it patches, how many universes it fills, whether the stage layout matters. A setup built around eight movers on a truss is useless to someone with four pars unless you say so.</p></div></li>
+        </ol>
+
+        <div class="code-block">
+          <div class="code-title">Where your show data lives</div>
+          <pre><code><span class="c"># Windows</span>
+%APPDATA%\DMXpress\configs\
+%APPDATA%\DMXpress\setups\
+
+<span class="c"># macOS</span>
+~/Library/Application Support/DMXpress/configs/
+
+<span class="c"># Linux</span>
+~/.local/share/DMXpress/configs/</code></pre>
+        </div>
+
+        <div class="callout">
+          <h3>Leave <code>inspector.json</code> out of it.</h3>
+          <p>Panel preferences — which Inspector tab is open, how wide it sits, which sections are folded, what the stage draws — belong to your machine, not to your show. They are kept out of saved configurations on purpose, so a show you download never rearranges your workspace.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- ===================== GALLERY ===================== -->
+    <section class="section">
+      <div class="container">
+        <div class="section-head">
+          <p class="eyebrow">Worth posting</p>
+          <h2>Show the rig, not just the problem.</h2>
+          <p class="section-sub">
+            Half the useful threads on a board like this are somebody showing what they built.
+            These are the windows people most often screenshot.
+          </p>
+        </div>
+
+        <figure class="shot shot-wide">
+          <img src="images/shot-stage-beams.webp" alt="A DMXexpress 3D stage filled with movers and pars throwing coloured volumetric beams and pools of light on the floor" loading="lazy" decoding="async">
+          <figcaption class="caption">The stage view on its own — the shot to post when the look is the point.</figcaption>
+        </figure>
+
+        <div class="shot-grid">
+          <figure class="shot">
+            <img src="images/shot-phasers.webp" alt="The DMXexpress Phasers window with a phaser built from components, a path shape and a live preview" loading="lazy" decoding="async">
+            <figcaption class="caption">A phaser you are pleased with, components and all — somebody will want to rebuild it.</figcaption>
+          </figure>
+          <figure class="shot">
+            <img src="images/shot-palettes.webp" alt="The DMXexpress Palettes window with stored colour palettes and a colour cycle running" loading="lazy" decoding="async">
+            <figcaption class="caption">Colour palettes are the easiest thing on this list to copy from a screenshot.</figcaption>
+          </figure>
+          <figure class="shot">
+            <img src="images/shot-network.webp" alt="The DMXexpress Network window listing discovered Art-Net nodes and the output checklist" loading="lazy" decoding="async">
+            <figcaption class="caption">If output is your problem, post this window. The checklist usually names the fault already.</figcaption>
+          </figure>
+          <figure class="shot">
+            <img src="images/shot-inspector-patch.webp" alt="The DMXexpress Inspector on its Patch tab with fixture library search results, a preview card and the address plan" loading="lazy" decoding="async">
+            <figcaption class="caption">Patch questions answer themselves once the address plan is visible.</figcaption>
+          </figure>
+        </div>
+      </div>
+    </section>
+
+    <!-- ===================== ELSEWHERE ===================== -->
+    <section class="section section-alt">
+      <div class="container">
+        <div class="section-head">
+          <p class="eyebrow">Elsewhere</p>
+          <h2>Before you ask, and after you are answered.</h2>
+        </div>
+        <div class="cards cards-3">
+          <a class="card" href="guide.html">
+            <div class="card-icon">GD</div>
+            <h3>The guide</h3>
+            <p>Every window and concept in the console, written out: patching, the Programmer, palettes, phasers, stacks, decks, output and troubleshooting. Most "how do I" questions are already answered there.</p>
+            <span class="card-more">Read the guide</span>
+          </a>
+          <a class="card" href="plugins.html">
+            <div class="card-icon">PL</div>
+            <h3>The plugin registry</h3>
+            <p>Scripts that add effect layers, control windows or a whole console re-tint. Post a rough draft on the board for feedback, then submit the finished link to the registry, where it is reviewed before it appears.</p>
+            <span class="card-more">Browse plugins</span>
+          </a>
+          <a class="card" href="download.html">
+            <div class="card-icon">DL</div>
+            <h3>The current build</h3>
+            <p>Before you report a bug, check you are on the latest release — the download is one standalone file and installing over the old one changes nothing about your show data.</p>
+            <span class="card-more">Get the download</span>
+          </a>
+        </div>
+
+        <p class="fine" style="text-align:center; margin-top:40px">Fixture profiles, documentation
+        fixes and code are welcome too. See
+        <a href="https://github.com/michaelmandich/DMXpress" target="_blank" rel="noopener">the repository</a>
+        for how to contribute, and verify channel mappings against the manufacturer's documentation
+        before you submit a profile.</p>
+      </div>
+    </section>
   </main>
 
   <footer class="footer">
     <div class="container footer-inner">
       <div>
-        <img src="images/logo.png" alt="DMXexpress" class="logo-footer">
+        <img src="images/logo.webp" alt="DMXexpress" class="logo-footer" loading="lazy" decoding="async">
         <p class="fine">A native, all-in-one DMX fixture visualizer and live lighting controller built in Rust.</p>
       </div>
       <div class="footer-links">

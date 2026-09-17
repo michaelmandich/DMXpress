@@ -4,18 +4,18 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Download DMXexpress</title>
-  <meta name="description" content="Download DMXexpress for Windows, macOS, or Linux.">
+  <meta name="description" content="Download DMXexpress for Windows, macOS, or Linux. One standalone file, the fixture library and gobo catalogue built in, no installer.">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
-  <link rel="icon" type="image/png" href="images/logo.png">
+  <link rel="icon" type="image/png" href="images/favicon.png">
   <link rel="stylesheet" href="styles.css">
 </head>
 <body>
   <header class="nav">
     <div class="container nav-inner">
       <a href="index.html" class="brand">
-        <img src="images/logo.png" alt="DMXexpress" class="logo-nav">
+        <img src="images/logo.webp" alt="DMXexpress" class="logo-nav">
       </a>
       <nav class="nav-links">
         <a href="index.html#features">Features</a>
@@ -38,7 +38,8 @@
       </div>
     </section>
 
-    <section class="section">
+    <!-- ===================== PLATFORMS ===================== -->
+    <section class="section" style="padding-top: 40px">
       <div class="container">
         <div class="cards cards-3">
           <article class="card">
@@ -64,15 +65,352 @@
           </article>
         </div>
 
-        <div class="callout">
-          <h3>Show files stay separate from the app.</h3>
-          <p>On first launch, DMXexpress creates its show-data folder and seeds it with sample rigs, stage setups, the 2,200-model fixture library, and the gobo catalogue. Your work persists there, rather than being written beside the downloaded application.</p>
+        <figure class="shot shot-wide" style="margin-top:40px">
+          <img src="images/shot-console.webp" alt="The DMXexpress console after launch: the Fixtures panel on the left, the 3D stage with lit beams in the centre, the Inspector on the right, and channel control below" loading="lazy" decoding="async">
+          <figcaption class="caption">This is the whole app, one window, straight out of the download — fixtures left, 3D stage centre, Inspector right, channel control below.</figcaption>
+        </figure>
+
+        <p class="fine" style="text-align:center; margin-top:24px">All three builds come out of the same tagged release, compiled by GitHub Actions from the public source. Nothing is repackaged by hand.</p>
+      </div>
+    </section>
+
+    <!-- ===================== WHAT YOU GET ===================== -->
+    <section class="section section-alt">
+      <div class="container">
+        <div class="section-head">
+          <p class="eyebrow">What you get</p>
+          <h2>One file. Everything inside it.</h2>
+          <p class="section-sub">
+            There is no installer, no redistributable, and no folder of assets sitting next to the
+            app. The fixture library, the gobo catalogue, the fonts, the sample shows and the
+            starter plugins are all compiled into the binary.
+          </p>
         </div>
+
+        <div class="split">
+          <div class="split-text">
+            <h2>Built in, not bundled.</h2>
+            <p>Everything the app needs to patch a rig and light it is inside the executable you downloaded:</p>
+            <ul class="checklist">
+              <li><strong>The fixture library</strong> — about 7,400 patchable modes from roughly 2,200 models across 210 manufacturers, compressed into the binary and unpacked on first run.</li>
+              <li><strong>The gobo catalogue</strong> — around 1,000 gobo images plus the wheel maps that say which image sits in which DMX range, so beams project real patterns.</li>
+              <li><strong>The interface fonts</strong> — Inter and JetBrains Mono ship inside the app, so the console looks the same on a machine with nothing installed.</li>
+              <li><strong>Two sample shows and three stage setups</strong> — a rig you can open and run before you have patched anything of your own.</li>
+              <li><strong>Three starter plugins</strong> — the <code>.rhai</code> scripts that ship with the app, written to the plugins folder on first run.</li>
+              <li><strong>On Windows, the C runtime</strong> — statically linked, so a clean Windows install needs no Visual C++ redistributable.</li>
+            </ul>
+          </div>
+          <div class="split-media">
+            <img src="images/shot-patch-window.webp" alt="The DMXexpress Patch window with the built-in fixture library open and search results listing fixture modes" loading="lazy" decoding="async">
+            <figcaption class="caption">The Patch window searching the built-in library — no download, no account, no internet.</figcaption>
+          </div>
+        </div>
+
+        <div class="code-block">
+          <div class="code-title">Release assets</div>
+          <pre><code>DMXpress-windows-x86_64.exe          <span class="c"># the app — run it, that is all</span>
+DMXpress-windows-x86_64.exe.sha256   <span class="c"># checksum for the line above</span>
+DMXpress-macos-universal.zip         <span class="c"># DMXpress.app, Apple Silicon + Intel</span>
+DMXpress-linux-x86_64.tar.gz         <span class="c"># one binary named dmxpress</span></code></pre>
+        </div>
+
+        <div class="shot-grid" style="margin-top:32px">
+          <figure class="shot">
+            <img src="images/shot-gobos.webp" alt="The DMXexpress Gobos window showing a grid of gobo thumbnails from the built-in catalogue" loading="lazy" decoding="async">
+            <figcaption class="caption">The gobo catalogue ships inside the app — no image packs to hunt down.</figcaption>
+          </figure>
+          <figure class="shot">
+            <img src="images/shot-stage-beams.webp" alt="The DMXexpress 3D stage filling the frame with movers and pars throwing coloured volumetric beams and floor pools" loading="lazy" decoding="async">
+            <figcaption class="caption">The visualizer runs on your GPU through wgpu. No physical lights needed to program a show.</figcaption>
+          </figure>
+        </div>
+      </div>
+    </section>
+
+    <!-- ===================== REQUIREMENTS ===================== -->
+    <section class="section">
+      <div class="container">
+        <div class="section-head">
+          <p class="eyebrow">Before you download</p>
+          <h2>What it needs from your machine.</h2>
+          <p class="section-sub">
+            DMXexpress renders its 3D stage on the GPU, so a working graphics driver matters more
+            than a fast CPU. Everything else is modest.
+          </p>
+        </div>
+
+        <div class="cards cards-3">
+          <article class="card">
+            <div class="card-icon">WIN</div>
+            <h3>Windows</h3>
+            <ul class="checklist">
+              <li>Windows 10 or later, 64-bit</li>
+              <li>A GPU and driver that <code>wgpu</code> supports</li>
+              <li>No Visual C++ redistributable</li>
+              <li>No administrator rights to run it</li>
+            </ul>
+          </article>
+          <article class="card">
+            <div class="card-icon">MAC</div>
+            <h3>macOS</h3>
+            <ul class="checklist">
+              <li>macOS 11 Big Sur or later</li>
+              <li>Apple Silicon or Intel — one universal build</li>
+              <li>Microphone permission if you use audio triggers</li>
+              <li>ShowBuddy patch import is optional, not required</li>
+            </ul>
+          </article>
+          <article class="card">
+            <div class="card-icon">LNX</div>
+            <h3>Linux</h3>
+            <ul class="checklist">
+              <li>x86_64 desktop on Wayland or X11</li>
+              <li>ALSA for audio input</li>
+              <li>udev for the Stream Deck over USB</li>
+              <li>Working Vulkan or OpenGL drivers</li>
+            </ul>
+          </article>
+        </div>
+
+        <div class="callout">
+          <h3>The window opens at 1440 &times; 900 and will not go below 960 &times; 640.</h3>
+          <p>The console packs a fixture list, a 3D stage, a five-tab Inspector and a channel grid into one window, so it wants room. A laptop screen works; a small one will have you folding panels. The Inspector's width and folded sections are remembered per machine, not per show.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- ===================== WHAT IT TALKS TO ===================== -->
+    <section class="section section-alt">
+      <div class="container">
+        <div class="section-head">
+          <p class="eyebrow">Connections</p>
+          <h2>What the app talks to.</h2>
+          <p class="section-sub">
+            Three things leave the machine: DMX over the network, key images to a Stream Deck over
+            USB, and audio coming in. Nothing else.
+          </p>
+        </div>
+
+        <div class="cards cards-3">
+          <article class="card">
+            <div class="card-icon">NET</div>
+            <h3>Art-Net and sACN</h3>
+            <p>Two contiguous universes — 1,024 channels — sent at 40 frames per second. Art-Net goes out on UDP 6454, sACN multicasts on UDP 5568, and you can run either or both at once. Art-Net node discovery finds what is on the wire.</p>
+            <a class="card-more" href="guide.html#out/artnet">Output in the guide</a>
+          </article>
+          <article class="card">
+            <div class="card-icon">USB</div>
+            <h3>Elgato Stream Deck</h3>
+            <p>Plugged straight into USB and picked up by the app itself — no Elgato software, no plugin to install. Original, Mini, MK2, XL, Neo, Pedal, Plus and Plus XL are all recognised, and unplugging mid-show just makes the app rescan until one comes back.</p>
+            <a class="card-more" href="index.html#streamdeck">See the deck pages</a>
+          </article>
+          <article class="card">
+            <div class="card-icon">AUD</div>
+            <h3>Audio input</h3>
+            <p>Any input device the system offers drives the sound-reactive triggers. On Windows the app can also open an <em>output</em> device in loopback, so it listens to whatever the computer is already playing and lights to it.</p>
+            <a class="card-more" href="guide.html#fx/audio">Audio in the guide</a>
+          </article>
+        </div>
+
+        <div class="shot-grid" style="margin-top:32px">
+          <figure class="shot">
+            <img src="images/shot-network.webp" alt="The DMXexpress Network window listing discovered Art-Net nodes alongside the output checklist" loading="lazy" decoding="async">
+            <figcaption class="caption">The Network window: discovered nodes, per-universe traffic, and a checklist that names what is wrong before a show does.</figcaption>
+          </figure>
+          <figure class="shot">
+            <img src="images/shot-audio.webp" alt="The DMXexpress Audio window showing a live frequency spectrum with a trigger band selected" loading="lazy" decoding="async">
+            <figcaption class="caption">The Audio window: pick a device, drag a band across the spectrum, and trigger from it.</figcaption>
+          </figure>
+        </div>
+
         <div class="callout">
           <h3>Hardware is plug and play.</h3>
           <p>An Elgato Stream Deck is detected the moment it is plugged in — no Elgato software or plugins needed. Audio input works out of the box too: on Windows, DMXexpress can listen to the computer's own output and light whatever is playing.</p>
         </div>
-        <p class="fine" style="text-align:center; margin-top:28px">Need a previous version or a checksum? Visit <a href="https://github.com/michaelmandich/DMXpress/releases" target="_blank" rel="noopener">all releases on GitHub</a>.</p>
+
+        <div class="warn" style="margin-top:28px">
+          <h4>Check the patch before you touch a live rig</h4>
+          <p>DMXexpress transmits real lighting data. Confirm the network interface, the universe,
+          the patch and the Grand Master before you connect it to anything with a lamp in it.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- ===================== FIRST RUN ===================== -->
+    <section class="section">
+      <div class="container">
+        <div class="section-head">
+          <p class="eyebrow">First run</p>
+          <h2>What happens when you open it.</h2>
+          <p class="section-sub">
+            Nothing to configure, nothing to register. The app works out where your show data
+            belongs, seeds it, and opens on a rig you can already play with.
+          </p>
+        </div>
+
+        <ol class="steps">
+          <li><span class="step-num">1</span><div><h3>It looks for a show beside itself</h3><p>If the folder it was launched from already holds a <code>settings.json</code> or a <code>stage_layout.json</code>, that is your show and the app uses it. A folder per show works exactly the way you would hope.</p></div></li>
+          <li><span class="step-num">2</span><div><h3>Otherwise it picks a per-user folder</h3><p>A binary run from Downloads has no show beside it, so the app switches to a per-user data folder instead of scattering JSON through your Downloads — or losing it inside a translocated macOS app bundle.</p></div></li>
+          <li><span class="step-num">3</span><div><h3>It seeds that folder</h3><p><code>configs/</code>, <code>setups/</code>, <code>fixtures/</code> and <code>plugins/</code> are created, then filled with the two sample shows, the three stage setups, the three starter plugins, the fixture library and the gobo catalogue.</p></div></li>
+          <li><span class="step-num">4</span><div><h3>The console opens</h3><p>Load a sample setup, select the rig, and push some channels. Everything in the 3D stage responds live, with or without a single fixture plugged in.</p></div></li>
+        </ol>
+
+        <div class="code-block">
+          <div class="code-title">Where show data lands</div>
+          <pre><code><span class="c"># Windows</span>
+%APPDATA%\DMXpress
+
+<span class="c"># macOS</span>
+~/Library/Application Support/DMXpress
+
+<span class="c"># Linux</span>
+~/.local/share/DMXpress</code></pre>
+        </div>
+
+        <div class="callout">
+          <h3>Show files stay separate from the app.</h3>
+          <p>On first launch, DMXexpress creates its show-data folder and seeds it with sample rigs, stage setups, the 2,200-model fixture library, and the gobo catalogue. Your work persists there, rather than being written beside the downloaded application.</p>
+        </div>
+
+        <div class="split" style="margin-top:56px">
+          <div class="split-text">
+            <h2>Your show is plain JSON.</h2>
+            <p>Palettes, groups, presets, phasers, sequences, stacks, views, patch data, the stage
+            layout, saved cameras, the Presets board and settings are all human-readable files you
+            can open, read, diff and keep in version control.</p>
+            <p>Complete shows live under <code>configs/</code>; reusable stage arrangements live
+            under <code>setups/</code>. Panel preferences that belong to the machine rather than the
+            show — the Inspector's open tab and width, which sections are folded, what the stage
+            draws — sit apart in <code>inspector.json</code> and are deliberately left out of saved
+            configurations, so loading someone else's show never rearranges your workspace.</p>
+            <p class="fine">Formats may still change while the project is under active development.
+            Keep a backup of anything valuable, or put the folder under version control.</p>
+          </div>
+          <div class="split-media">
+            <img src="images/shot-settings.webp" alt="The DMXexpress Settings window showing application options and file locations" loading="lazy" decoding="async">
+            <figcaption class="caption">Settings, like everything else, is written back as readable JSON in the show folder.</figcaption>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ===================== VERIFY ===================== -->
+    <section class="section section-alt">
+      <div class="container">
+        <div class="section-head">
+          <p class="eyebrow">Verify</p>
+          <h2>Check what you downloaded.</h2>
+          <p class="section-sub">
+            The Windows executable ships with a SHA-256 checksum written by the build job that
+            produced it. Download both, hash the file yourself, compare the two strings.
+          </p>
+        </div>
+
+        <div class="code-block">
+          <div class="code-title">Windows &mdash; PowerShell</div>
+          <pre><code><span class="c"># the checksum the release published</span>
+curl.exe -LO https://github.com/michaelmandich/DMXpress/releases/latest/download/DMXpress-windows-x86_64.exe.sha256
+
+<span class="c"># the checksum of the file on your disk</span>
+(Get-FileHash .\DMXpress-windows-x86_64.exe -Algorithm SHA256).Hash.ToLower()
+
+<span class="c"># they must match, character for character</span>
+Get-Content .\DMXpress-windows-x86_64.exe.sha256</code></pre>
+        </div>
+
+        <p class="fine" style="margin-top:20px">The macOS and Linux archives do not carry a
+        checksum file yet. GitHub serves them over HTTPS from the release that built them, and the
+        macOS app is ad-hoc signed during the build so the bundle's own contents cannot be swapped
+        without macOS noticing.</p>
+
+        <p class="fine" style="margin-top:12px">Every asset is produced by the
+        <a href="https://github.com/michaelmandich/DMXpress/blob/main/.github/workflows/release.yml" target="_blank" rel="noopener">release workflow</a>
+        on GitHub's runners from the tagged commit — you can read exactly how each file was built.</p>
+      </div>
+    </section>
+
+    <!-- ===================== BUILD FROM SOURCE ===================== -->
+    <section class="section">
+      <div class="container">
+        <div class="section-head">
+          <p class="eyebrow">From source</p>
+          <h2>Or build it yourself.</h2>
+          <p class="section-sub">
+            DMXexpress is MPL-2.0 and the whole tree is public. If you would rather compile it than
+            trust a binary, it is one <code>cargo</code> command away.
+          </p>
+        </div>
+
+        <div class="split">
+          <div class="split-text">
+            <h2>What you need first.</h2>
+            <ul class="checklist">
+              <li>A current stable Rust toolchain with Cargo</li>
+              <li>A GPU and driver supported by <code>wgpu</code></li>
+              <li>On Linux: <code>libasound2-dev</code>, <code>libudev-dev</code> and <code>pkg-config</code></li>
+              <li>Nothing else — every asset is in the repository</li>
+            </ul>
+            <p>A release build links with <code>lto = "thin"</code> and a single codegen unit, so the
+            first compile takes a while and the result runs like the download does. Run the app from
+            a folder that holds your show files and it will use them directly.</p>
+            <p style="margin-top:20px"><a href="https://github.com/michaelmandich/DMXpress" class="btn btn-outline" target="_blank" rel="noopener">Read the source on GitHub</a></p>
+          </div>
+          <div class="split-media">
+            <img src="images/shot-stage-truss.webp" alt="The DMXexpress 3D stage showing truss and tower structures with fixtures hung on them" loading="lazy" decoding="async">
+            <figcaption class="caption">Same app either way — built from source or downloaded, the rig is identical.</figcaption>
+          </div>
+        </div>
+
+        <div class="code-block">
+          <div class="code-title">Clone, build, run</div>
+          <pre><code>git clone https://github.com/michaelmandich/DMXpress
+cd DMXpress
+
+<span class="c"># Debian/Ubuntu only</span>
+sudo apt-get install -y libasound2-dev libudev-dev pkg-config
+
+<span class="c"># run it</span>
+cargo run
+
+<span class="c"># optimized build</span>
+cargo build --release
+./target/release/dmxpress
+
+<span class="c"># run the tests</span>
+cargo test</code></pre>
+        </div>
+      </div>
+    </section>
+
+    <!-- ===================== NEXT ===================== -->
+    <section class="section section-alt">
+      <div class="container">
+        <div class="section-head">
+          <p class="eyebrow">Next</p>
+          <h2>Downloaded it. Now what?</h2>
+        </div>
+        <div class="cards cards-3">
+          <a class="card" href="guide.html#start/first-show">
+            <div class="card-icon">GD</div>
+            <h3>Build your first show</h3>
+            <p>Patch a rig, arrange it on stage, put a look in the Programmer and record it. The guide walks the whole path in order.</p>
+            <span class="card-more">Open the guide</span>
+          </a>
+          <a class="card" href="plugins.html">
+            <div class="card-icon">PL</div>
+            <h3>Add a plugin</h3>
+            <p>One script file adds an effect layer, a window of controls or a whole console re-tint. Three ship with the app; more are in the registry.</p>
+            <span class="card-more">Browse the registry</span>
+          </a>
+          <a class="card" href="community.html">
+            <div class="card-icon">CO</div>
+            <h3>Ask on the board</h3>
+            <p>Stuck on a patch, a network setting or a fixture the library does not have? Post it, screenshot and all, and someone will have hit it too.</p>
+            <span class="card-more">Join the community</span>
+          </a>
+        </div>
+
+        <p class="fine" style="text-align:center; margin-top:40px">Need a previous version or a checksum? Visit <a href="https://github.com/michaelmandich/DMXpress/releases" target="_blank" rel="noopener">all releases on GitHub</a>.</p>
       </div>
     </section>
   </main>
@@ -80,7 +418,7 @@
   <footer class="footer">
     <div class="container footer-inner">
       <div>
-        <img src="images/logo.png" alt="DMXexpress" class="logo-footer">
+        <img src="images/logo.webp" alt="DMXexpress" class="logo-footer" loading="lazy" decoding="async">
         <p class="fine">A native, all-in-one DMX fixture visualizer and live lighting controller built in Rust.</p>
       </div>
       <div class="footer-links">

@@ -4,11 +4,11 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>DMXexpress — DMX Visualizer &amp; Live Lighting Controller</title>
-  <meta name="description" content="DMXexpress is a native, all-in-one DMX fixture visualizer and live lighting controller built in Rust. A 2,200-model fixture library, gobo projection, audio-reactive triggers, Elgato Stream Deck control, and a real-time 3D stage — no physical rig required.">
+  <meta name="description" content="DMXexpress is a native, all-in-one DMX fixture visualizer and live lighting controller built in Rust. A 2,200-model fixture library, a five-tab Inspector for presets, selection, cameras, rig building and patching, gobo projection, audio-reactive triggers, Elgato Stream Deck control, Art-Net and sACN output, and a real-time 3D stage — no physical rig required.">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
-  <link rel="icon" type="image/png" href="images/logo.png">
+  <link rel="icon" type="image/png" href="images/favicon.png">
   <link rel="stylesheet" href="styles.css">
 </head>
 <body>
@@ -17,7 +17,7 @@
   <header class="nav">
     <div class="container nav-inner">
       <a href="#" class="brand">
-        <img src="images/logo.png" alt="DMXexpress" class="logo-nav">
+        <img src="images/logo.webp" alt="DMXexpress" class="logo-nav">
       </a>
       <nav class="nav-links">
         <a href="#features">Features</a>
@@ -34,7 +34,7 @@
   <!-- ===================== HERO ===================== -->
   <section class="hero">
     <div class="container">
-      <img src="images/logo.png" alt="DMXexpress" class="logo-hero">
+      <img src="images/logo.webp" alt="DMXexpress" class="logo-hero" loading="lazy" decoding="async">
       <p class="hero-eyebrow">Native &middot; Built in Rust &middot; Open Source</p>
       <h1>Design, program, and run<br>light shows — <span class="accent">all in one place.</span></h1>
       <p class="hero-sub">
@@ -49,7 +49,7 @@
         <a href="https://github.com/michaelmandich/DMXpress" class="btn btn-outline" target="_blank" rel="noopener">View on GitHub</a>
       </div>
       <div class="hero-shot">
-        <img src="images/pretty-colors.png" alt="DMXexpress visualizing a full rig of colored volumetric beams on the 3D stage">
+        <img src="images/pretty-colors.webp" alt="DMXexpress visualizing a full rig of colored volumetric beams on the 3D stage" loading="lazy" decoding="async">
       </div>
     </div>
   </section>
@@ -72,6 +72,117 @@
       <div class="strip-item">
         <span class="strip-num">0</span>
         <span class="strip-label">Physical lights needed to practice a full show</span>
+      </div>
+      <div class="strip-item">
+        <span class="strip-num">200+</span>
+        <span class="strip-label">Manufacturers, from 5Star Systems to Robe and Clay Paky</span>
+      </div>
+      <div class="strip-item">
+        <span class="strip-num">5</span>
+        <span class="strip-label">Inspector tabs: Presets, Selection, Stage, Build, Patch</span>
+      </div>
+      <div class="strip-item">
+        <span class="strip-num">8</span>
+        <span class="strip-label">Truss and tower structures a single key press builds</span>
+      </div>
+      <div class="strip-item">
+        <span class="strip-num">10</span>
+        <span class="strip-label">Steps of undo, for anything you do anywhere in the console</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===================== THE CONSOLE ===================== -->
+  <section id="console" class="section">
+    <div class="container">
+      <div class="section-head">
+        <p class="eyebrow">The screen at a glance</p>
+        <h2>One window. Everything where a console keeps it.</h2>
+        <p class="section-sub">
+          Fixtures down the left, the 3D stage in the middle, the Inspector down the right,
+          channel control under the stage. Pools like Palettes and Phasers float on top when
+          you want them. Any panel folds away to a thin rail, or tears off into its own OS
+          window for a second monitor.
+        </p>
+      </div>
+      <figure class="shot shot-wide">
+        <img src="images/shot-console.webp" alt="The full DMXexpress console: the Fixtures tile panel on the left, the 3D stage with lit beams in the centre, the Inspector on the right, and the channel control grid underneath" loading="lazy" decoding="async">
+        <figcaption class="caption">The whole console in one frame — Fixtures left, stage centre, Inspector right, channel control below.</figcaption>
+      </figure>
+      <div class="shot-grid">
+        <figure class="shot">
+          <img src="images/shot-stage-beams.webp" alt="The DMXexpress 3D stage with the side panels folded to rails, a rig of moving heads and pars throwing coloured volumetric beams onto floor pools" loading="lazy" decoding="async">
+          <figcaption class="caption">Panels folded to rails, stage across the whole window: volumetric beams, floor pools, real colours.</figcaption>
+        </figure>
+        <figure class="shot">
+          <img src="images/shot-channels.webp" alt="The DMXexpress channel control grid with several fixtures selected, some rows armed, and level bars part-lit" loading="lazy" decoding="async">
+          <figcaption class="caption">Channel control: one row per channel for the selection, with armed rows ready for the oscillator.</figcaption>
+        </figure>
+        <figure class="shot">
+          <img src="images/shot-stage-truss.webp" alt="The DMXexpress 3D stage showing lights hung on overhead bars and standing towers above the outlined stage box, with the floor grid behind them" loading="lazy" decoding="async">
+          <figcaption class="caption">Lights on towers and overhead runs, the stage box outlined beneath and the floor grid behind.</figcaption>
+        </figure>
+        <figure class="shot">
+          <img src="images/shot-raid-looks.webp" alt="The six tile looks of the DMXexpress Fixtures panel side by side: Lit, Amp jewel, Future, Glass, Chrome and Pillow" loading="lazy" decoding="async">
+          <figcaption class="caption">Six ways to draw the Fixtures tiles — Lit, Amp jewel, Future, Glass, Chrome, Pillow.</figcaption>
+        </figure>
+      </div>
+      <div class="cards cards-3">
+        <a class="card" href="guide.html#rig/fixtures">
+          <div class="card-icon">FI</div>
+          <h3>Fixtures, on the left</h3>
+          <p>One tile per patched light, carrying its name, its DMX address, its live colour and how bright it is right now. Click to select, shift-click for more, ctrl-click to grab every light of that type.</p>
+          <span class="card-more">How to use it</span>
+        </a>
+        <a class="card" href="guide.html#rig/stage">
+          <div class="card-icon">3D</div>
+          <h3>The stage, in the middle</h3>
+          <p>Click a light to select it, drag the gizmo to move or aim it, and watch the beams answer. The arrow keys nudge a selection; the number keys fly the camera to an angle you saved.</p>
+          <span class="card-more">How to use it</span>
+        </a>
+        <a class="card" href="guide.html#rig/inspector">
+          <div class="card-icon">IN</div>
+          <h3>The Inspector, on the right</h3>
+          <p>Five tabs — Presets, Selection, Stage, Build, Patch. Alt&nbsp;+&nbsp;1…5 jumps between them, Alt&nbsp;+&nbsp;I folds the whole panel away, and a context line under the strip always says what is picked.</p>
+          <span class="card-more">How to use it</span>
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===================== INSPECTOR OVERVIEW ===================== -->
+  <section id="inspector" class="section section-alt">
+    <div class="container split">
+      <div class="split-text">
+        <p class="eyebrow">New &middot; The right-hand panel</p>
+        <h2>The Inspector: five tabs that run the rig.</h2>
+        <p>
+          Stored looks, the selection you are holding, the camera, the truss, the patch — all of it
+          in one column you never have to go hunting for. Press <strong>Alt&nbsp;+&nbsp;1…5</strong>
+          to jump between tabs, <strong>Alt&nbsp;+&nbsp;I</strong> to fold the panel away, or roll
+          the wheel over the tab strip.
+        </p>
+        <p>
+          Under the strip a context line always says what is picked &mdash; “6 lights · SlimPAR ×6”,
+          “F34 truss 2 · 4 / 24 slots” &mdash; with the live colour beside it. Click it to jump to
+          Selection, press the ✕ to drop the selection, or right-click it for select-all and same-type.
+        </p>
+        <ul class="checklist">
+          <li><strong>Presets</strong> &mdash; stored looks as coloured pads, filed in folders, with a board that matches the deck</li>
+          <li><strong>Selection</strong> &mdash; move, align, aim and hang the lights you have picked</li>
+          <li><strong>Stage</strong> &mdash; cameras, quick views, and what the stage draws</li>
+          <li><strong>Build</strong> &mdash; towers, truss and whole structures in one press</li>
+          <li><strong>Patch</strong> &mdash; library, addressing, naming and placement in one pass</li>
+        </ul>
+        <p class="fine">
+          The panel's own state &mdash; the open tab, the width, which sections are folded, what the
+          stage draws &mdash; lives in <code>inspector.json</code> and is deliberately left out of
+          saved show configurations. Loading another show never rearranges your workspace.
+        </p>
+      </div>
+      <div class="split-media">
+        <img src="images/shot-inspector-tabs.webp" alt="The DMXexpress Inspector tab strip showing Presets, Selection, Stage, Build and Patch, with the context line beneath naming the current selection" loading="lazy" decoding="async">
+        <p class="caption">The tab strip and the context line — the line under the tabs always says what is picked.</p>
       </div>
     </div>
   </section>
@@ -99,8 +210,69 @@
         </ul>
       </div>
       <div class="split-media">
-        <img src="images/all-50-starting-position.png" alt="DMXexpress showing the full fixture rig in an All 50 starting position with pan and tilt controls">
+        <img src="images/all-50-starting-position.webp" alt="DMXexpress showing the full fixture rig in an All 50 starting position with pan and tilt controls" loading="lazy" decoding="async">
         <p class="caption">A full rig in an “All 50” starting position — shaped with pan and tilt while watching the 3D result.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===================== INSPECTOR · PRESETS ===================== -->
+  <section id="inspector-presets" class="section section-alt">
+    <div class="container split">
+      <div class="split-media">
+        <img src="images/shot-inspector-presets.webp" alt="The Presets tab of the DMXexpress Inspector: a grid of pads each coloured from its own stored look, an open folder, a strip of pinned presets and the recall row" loading="lazy" decoding="async">
+        <p class="caption">The Presets tab — every stored look is a pad, coloured by what the look actually does.</p>
+      </div>
+      <div class="split-text">
+        <p class="eyebrow">Inspector &middot; Presets</p>
+        <h2>Your looks, as pads you can read at a glance.</h2>
+        <p>
+          Build a look in the Programmer, type a name, press <strong>Store look</strong>. It lands as
+          a pad that takes its colour from the values inside it — a warm wash is amber, a cold blue is
+          blue — so you find the one you want by looking, not by reading.
+        </p>
+        <p>
+          Drop pads into folders, pin the handful you reach for all night, and search the rest. Recall
+          is yours to set: cut straight to it, fade over a number of seconds you choose, or follow
+          whatever the Transition window is doing. Blackout sits at the bottom of the tab.
+        </p>
+        <ul class="checklist">
+          <li>Pad colour comes from the stored values, not from a swatch you had to pick</li>
+          <li>Badges mark the looks carrying an oscillator, a phaser or a colour cycle</li>
+          <li>Folders, pins and a search box for a night's worth of looks</li>
+          <li>Recall cuts, fades over <em>n</em> seconds, or follows the transition setting</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===================== PRESETS BOARD ===================== -->
+  <section id="preset-board" class="section">
+    <div class="container split">
+      <div class="split-text">
+        <p class="eyebrow">Inspector &middot; Presets board</p>
+        <h2>A board that matches the deck under your hands.</h2>
+        <p>
+          The <strong>board</strong> button opens a page of pads laid out exactly like the Stream
+          Deck's Presets page. What you arrange on screen is what your thumbs will find on the keys —
+          and if there is no deck plugged in, you still get the board.
+        </p>
+        <p>
+          Turn <strong>Arrange</strong> on and the page edits itself in place. Click a pad to point it
+          at a preset. Drag one pad onto another to swap them. Right-click to clear one. Every pad
+          gets its own colour, a four-letter label and a picture.
+        </p>
+        <ul class="checklist">
+          <li>Click a pad to choose which preset it fires</li>
+          <li>Drag pads to swap them, right-click to clear a slot</li>
+          <li>Per-pad colour, four-letter label and artwork</li>
+          <li><strong>Fill</strong> lays a whole folder out across the page in one go</li>
+          <li>Pads hold preset IDs, so renaming or reordering the pool never re-points one at the wrong look</li>
+        </ul>
+      </div>
+      <div class="split-media">
+        <img src="images/shot-preset-board.webp" alt="The DMXexpress Presets board in Arrange mode: a page of coloured preset pads with the slot editor open beside them" loading="lazy" decoding="async">
+        <p class="caption">The Presets board in Arrange mode, one slot's colour, label and artwork open for editing.</p>
       </div>
     </div>
   </section>
@@ -131,8 +303,83 @@
         </ul>
       </div>
       <div class="split-media">
-        <img src="images/streamdeck-phasers.png" alt="The Stream Deck phaser page editor in DMXpress: a grid of color-coded key tiles with per-slot phaser, color, and artwork controls">
+        <img src="images/streamdeck-phasers.webp" alt="The Stream Deck phaser page editor in DMXpress: a grid of color-coded key tiles with per-slot phaser, color, and artwork controls" loading="lazy" decoding="async">
         <p class="caption">Designing the deck's Phaser pages in the app — one tile per key, each with its own phaser, color, label, and artwork.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===================== INSPECTOR · SELECTION ===================== -->
+  <section id="inspector-selection" class="section">
+    <div class="container split">
+      <div class="split-text">
+        <p class="eyebrow">Inspector &middot; Selection</p>
+        <h2>Move a dozen lights like they were one.</h2>
+        <p>
+          The top card sums up what you have picked. Under it a transform grid edits X, Y and Z, yaw,
+          pitch and size for the whole selection at once — and marks a row <strong>mixed</strong> when
+          the selected lights disagree, so you never flatten a value you meant to keep.
+        </p>
+        <p>
+          Below that is the tool strip. Nudge with the pad, or with the arrow keys over the stage.
+          Align and distribute on any axis. Mirror. Arrange the selection into a line, an arc, a circle
+          or a grid. Aim it straight down, level, at stage centre, at a point you pick, or fanned. Set
+          one common height for the lot. Then hang them onto a tower or a truss, choosing which face
+          they go on and how they fill the free slots.
+        </p>
+        <ul class="checklist">
+          <li>A transform grid that admits when the selection disagrees</li>
+          <li>Nudge, align, distribute and mirror on any axis</li>
+          <li>Arrange into a line, arc, circle or grid</li>
+          <li>Aim down, level, at stage centre, at a point, or fanned</li>
+          <li>Hang a whole selection onto a tower or truss and pick the face</li>
+        </ul>
+        <p class="fine">Pick a tower or a truss on its own and the tab becomes that structure's editor instead.</p>
+      </div>
+      <div class="split-media">
+        <img src="images/shot-inspector-selection.webp" alt="The Selection tab of the DMXexpress Inspector with several lights selected: the summary card at the top, the transform grid showing a row marked mixed, and the tool strip underneath" loading="lazy" decoding="async">
+        <p class="caption">Several lights picked: the summary card, a transform row reading “mixed”, and the tools below.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===================== INSPECTOR · STAGE ===================== -->
+  <section id="inspector-stage" class="section section-alt">
+    <div class="container split">
+      <div class="split-media">
+        <img src="images/shot-inspector-stage.webp" alt="The Stage tab of the DMXexpress Inspector: the Orbit and Fly switch, the Iso, Front, Back, Left, Right, Top and front-of-house pads, the saved cameras block, and the row of display toggles" loading="lazy" decoding="async">
+        <p class="caption">The Stage tab: camera mode, the seven quick views, saved cameras, and what the stage draws.</p>
+      </div>
+      <div class="split-text">
+        <p class="eyebrow">Inspector &middot; Stage</p>
+        <h2>Look at the rig from anywhere, in one key press.</h2>
+        <p>
+          Switch between <strong>Orbit</strong> and <strong>Fly</strong>, then jump to an angle with
+          the quick-view pads. Frame the selection to fill the screen with the six lights you are
+          working on, or frame the whole rig to see where you have got to.
+        </p>
+        <p>
+          Save an angle you like as a named camera, give it a number key, and press it over the stage
+          to fly back. The <strong>Show</strong> block turns individual things on and off, with
+          <strong>All</strong>, <strong>Clean</strong> and <strong>Plan</strong> presets that change
+          the whole look in a click — Plan puts a name on every light and takes the beams away.
+        </p>
+        <ul class="checklist">
+          <li>Twelve switches: floor grid, stage box, beams, pools, labels, towers, truss, slot rings, gizmo, aim ticks, effect overlays, corner help</li>
+          <li>Name tags cycle off, then selected lights, then every light</li>
+          <li>Cameras 1&ndash;9 on the number keys, straight over the stage</li>
+          <li>The stage box's own width, depth and height sit right underneath</li>
+          <li>Grid pitch, body size and beam haze dial in how heavy the picture looks</li>
+        </ul>
+        <div class="chips">
+          <span class="chip is-static">Iso</span>
+          <span class="chip is-static">Front</span>
+          <span class="chip is-static">Back</span>
+          <span class="chip is-static">Left</span>
+          <span class="chip is-static">Right</span>
+          <span class="chip is-static">Top</span>
+          <span class="chip is-static">Front of house</span>
+        </div>
       </div>
     </div>
   </section>
@@ -181,7 +428,7 @@
   <section id="audio" class="section section-alt">
     <div class="container split">
       <div class="split-media tall">
-        <img src="images/beat-matching.png" alt="The DMXexpress Beat window with tap tempo, bar indicator, and the time machine transport">
+        <img src="images/beat-matching.webp" alt="The DMXexpress Beat window with tap tempo, bar indicator, and the time machine transport" loading="lazy" decoding="async">
         <p class="caption">The Beat window: tap along, watch the bar, then bend time with the transport below.</p>
       </div>
       <div class="split-text">
@@ -205,6 +452,88 @@
           <li>Manual tap always works — the space bar taps whenever the Beat window is open</li>
           <li>The time machine bends it all: reverse, half-rate, pendulum, stutter</li>
         </ul>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===================== INSPECTOR · BUILD ===================== -->
+  <section id="inspector-build" class="section">
+    <div class="container split">
+      <div class="split-text">
+        <p class="eyebrow">Inspector &middot; Build</p>
+        <h2>Put the rig up in eight presses.</h2>
+        <p>
+          Eight pads build the structures a real stage is made of: a tower, a straight F34 run, a
+          radius run, or a whole goalpost, box, ring, tower pair or arch in one press. The number keys
+          <strong>1…8</strong> do the same. Standard lengths, radii, arcs and heights are one tap
+          each, so you are picking a truss rather than typing millimetres.
+        </p>
+        <p>
+          Under the pads, an outliner lists every element in the rig, folding a composite's parts
+          under one heading with the lights hung on them. Click a row to select it, then rename, hide,
+          mirror or duplicate it, or point the camera at it. <strong>Setups</strong> at the bottom
+          save and reload a whole named rig.
+        </p>
+        <ul class="checklist">
+          <li>Eight structures, eight number keys, no mouse needed</li>
+          <li>An outliner that nests a composite's parts and the lights on them</li>
+          <li>Rename, hide, mirror, duplicate, or fly the camera to any element</li>
+          <li>Named setups save and reload the whole rig</li>
+        </ul>
+        <div class="chips">
+          <span class="chip is-static">Tower</span>
+          <span class="chip is-static">F34 straight</span>
+          <span class="chip is-static">Radius</span>
+          <span class="chip is-static">Goalpost</span>
+          <span class="chip is-static">Box</span>
+          <span class="chip is-static">Ring</span>
+          <span class="chip is-static">Tower pair</span>
+          <span class="chip is-static">Arch</span>
+        </div>
+      </div>
+      <div class="split-media">
+        <img src="images/shot-inspector-build.webp" alt="The Build tab of the DMXexpress Inspector: eight element pads, a parameter card for the picked structure, and an outliner nesting a composite's parts and the lights hung on them" loading="lazy" decoding="async">
+        <p class="caption">The Build tab: the eight element pads, the parameter card for the one you picked, the outliner below.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===================== INSPECTOR · PATCH ===================== -->
+  <section id="inspector-patch" class="section section-alt">
+    <div class="container split">
+      <div class="split-media">
+        <img src="images/shot-inspector-patch.webp" alt="The Patch tab of the DMXexpress Inspector mid-flow: a library search with hits listed, a preview card showing the mode and what each channel does, and the address plan below" loading="lazy" decoding="async">
+        <p class="caption">The Patch tab mid-flow — search hits, the preview card with its channel roles, then the address plan.</p>
+      </div>
+      <div class="split-text">
+        <p class="eyebrow">Inspector &middot; Patch</p>
+        <h2>From the library to hung on the truss, without leaving the panel.</h2>
+        <p>
+          Start from your recents, a built-in profile, or the library — 2,200 models and 7,400
+          patchable modes from more than 200 makers, searchable by name and filtered down to moving
+          heads, pars, bars or strobes. A preview card shows the mode, the channel count, the pan and
+          tilt ranges, and what every channel does before you commit to it.
+        </p>
+        <p>
+          Set a count and a start address. <strong>Next free</strong> and <strong>first gap</strong>
+          find one for you, skipping addresses already taken and refusing to let a fixture straddle
+          the two universes. Name them once and they are numbered for you, continuing the series
+          already in the rig.
+        </p>
+        <ul class="checklist">
+          <li>Land a batch in a line, a grid, an arc, a circle, or on the floor</li>
+          <li>Or hang it straight onto a truss — which it will build to fit if you ask</li>
+          <li>The rig underneath is grouped by type, with how full each universe is</li>
+          <li>Add one more of something, select them all, or unpatch them in two clicks</li>
+        </ul>
+        <div class="tip">
+          <h4>It will not let a fixture straddle the join</h4>
+          <p>
+            Slots 1&ndash;512 go to the universe you set, 513&ndash;1024 to the next one. A fixture
+            that would sit across that line is refused the address instead of quietly breaking in
+            the middle of a show.
+          </p>
+        </div>
       </div>
     </div>
   </section>
@@ -329,7 +658,143 @@
           <p>F34 straight runs and curved radius truss with snap-on mount slots, plus towers &mdash; placed with 3D gizmos. And any window pops out to its own OS window for a second monitor.</p>
           <span class="card-more">How to use it</span>
         </a>
+        <a class="card" href="guide.html#rig/inspector">
+          <div class="card-icon">IN</div>
+          <h3>Inspector <span class="badge-new">New</span></h3>
+          <p>Five tabs down the right: stored looks as pads, a transform kit for the selection, cameras and display switches, the rig builder, and patching. Alt&nbsp;+&nbsp;1…5 to jump, Alt&nbsp;+&nbsp;I to fold it away.</p>
+          <span class="card-more">How to use it</span>
+        </a>
+        <a class="card" href="guide.html#rig/fixtures">
+          <div class="card-icon">FI</div>
+          <h3>Fixtures Panel</h3>
+          <p>One tile per light with its name, address, live colour and level, drawn in whichever of six looks you like. Click to select, shift for more, ctrl for the whole type.</p>
+          <span class="card-more">How to use it</span>
+        </a>
+        <a class="card" href="guide.html#out/artnet">
+          <div class="card-icon">NW</div>
+          <h3>Network Screen <span class="badge-new">New</span></h3>
+          <p>Art-Net, sACN, or both at once. Discover nodes, choose the interface and how packets are addressed, run a checklist that says what is wrong, fire a test pattern, watch the packets go by.</p>
+          <span class="card-more">How to use it</span>
+        </a>
+        <a class="card" href="guide.html#play/command">
+          <div class="card-icon">CL</div>
+          <h3>Command Line</h3>
+          <p>One box at the bottom, one verb, Enter. <code>go 2</code>, <code>gm 80</code>, <code>group 1</code>, <code>store</code>, <code>black</code>. Faster than the mouse the moment you know it.</p>
+          <span class="card-more">How to use it</span>
+        </a>
+        <a class="card" href="guide.html#play/views">
+          <div class="card-icon">VW</div>
+          <h3>Views</h3>
+          <p>Arrange the windows for programming and save it. Arrange them for playback and save that. Click a view to snap every window back where it belongs.</p>
+          <span class="card-more">How to use it</span>
+        </a>
+        <a class="card" href="guide.html#out/files">
+          <div class="card-icon">UN</div>
+          <h3>Undo &amp; Backups</h3>
+          <p>Ctrl+Shift+Z takes back the last thing you did anywhere &mdash; a slider, a stored palette, a recorded cue, a light you moved &mdash; ten steps deep. The show backs itself up every minute it changes, newest twenty kept.</p>
+          <span class="card-more">How to use it</span>
+        </a>
       </div>
+    </div>
+  </section>
+
+  <!-- ===================== PROGRAMMING ===================== -->
+  <section id="program" class="section section-alt">
+    <div class="container">
+      <div class="section-head">
+        <p class="eyebrow">Programming</p>
+        <h2>Build the look. Store it. Reuse it all night.</h2>
+        <p class="section-sub">
+          Every reusable thing in DMXexpress has its own pool window, and every pool works the same
+          way: make it in the Programmer, name it, store it. Here is what that actually looks like.
+        </p>
+      </div>
+      <figure class="shot shot-wide">
+        <img src="images/shot-phasers.webp" alt="The DMXexpress Phasers window with a phaser built from channel components, its path shape set, and a live preview running" loading="lazy" decoding="async">
+        <figcaption class="caption">The Phasers window: stack components on a channel, shape the path, watch the preview move.</figcaption>
+      </figure>
+      <div class="shot-grid">
+        <figure class="shot">
+          <img src="images/shot-groups.webp" alt="The DMXexpress Groups window with several stored fixture groups listed" loading="lazy" decoding="async">
+          <figcaption class="caption">Groups: save a selection once, then recall it with one tap for the rest of the night.</figcaption>
+        </figure>
+        <figure class="shot">
+          <img src="images/shot-orders.webp" alt="The DMXexpress Orders window showing a custom fixture route that effects travel along" loading="lazy" decoding="async">
+          <figcaption class="caption">Orders: chain groups into your own route, and every spread and phaser follows it.</figcaption>
+        </figure>
+        <figure class="shot">
+          <img src="images/shot-palettes.webp" alt="The DMXexpress Palettes window with stored colour palettes and a colour cycle running" loading="lazy" decoding="async">
+          <figcaption class="caption">Palettes are referenced: edit one, and every look built on it follows along.</figcaption>
+        </figure>
+        <figure class="shot">
+          <img src="images/shot-scenes.webp" alt="The DMXexpress Scenes window listing captured scenes with their merge modes" loading="lazy" decoding="async">
+          <figcaption class="caption">Scenes: capture the Programmer mid-wave, phase and all, and run it as its own layer.</figcaption>
+        </figure>
+      </div>
+      <div class="callout">
+        <h3>The one thing that trips everybody up.</h3>
+        <p>
+          The Programmer sits on top of all playback. While a channel is in it, you control that
+          channel — not the cues. So when the faders and the Go button seem to do nothing, it is
+          almost always the Programmer still holding those channels. Press <strong>Clear prog</strong>,
+          or type <code>clear</code>, and playback takes the stage back.
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===================== PLAYBACK ===================== -->
+  <section id="playback" class="section">
+    <div class="container">
+      <div class="section-head">
+        <p class="eyebrow">Playback</p>
+        <h2>Run it with faders, with pads, or with eight keystrokes.</h2>
+        <p class="section-sub">
+          Record your looks as cues, then play the show however the night wants it: a bottom strip of
+          faders, a page of pads you busk from, or a command line you can drive without looking.
+        </p>
+      </div>
+      <figure class="shot shot-wide">
+        <img src="images/shot-decks.webp" alt="The DMXexpress executor bar across the bottom of the screen: a Grand Master fader on the left and one fader strip per stack" loading="lazy" decoding="async">
+        <figcaption class="caption">The executor bar: Grand Master on the left, then a strip per stack with its level, Go and Off.</figcaption>
+      </figure>
+      <figure class="shot shot-wide">
+        <img src="images/shot-command.webp" alt="The DMXexpress command line bar at the bottom of the window with a command typed in" loading="lazy" decoding="async">
+        <figcaption class="caption">The command line: a verb, then Enter. Anything it does not understand shows up in the Log.</figcaption>
+      </figure>
+      <div class="shot-grid">
+        <figure class="shot">
+          <img src="images/shot-stacks.webp" alt="The DMXexpress Stacks window with a list of recorded cues and their fade times" loading="lazy" decoding="async">
+          <figcaption class="caption">Stacks: cues with tracking and fade timing, stepped through one Go at a time.</figcaption>
+        </figure>
+        <figure class="shot">
+          <img src="images/shot-phaser-board.webp" alt="The DMXexpress phaser board: a four by nine page of coloured pads with the corner keys reserved" loading="lazy" decoding="async">
+          <figcaption class="caption">The phaser board — four by nine pads, corners reserved for select-all, Clear and Tap.</figcaption>
+        </figure>
+      </div>
+      <div class="callout">
+        <h3>Type it faster than you can click it.</h3>
+        <p>
+          One box at the bottom of the window, one verb, Enter. Numbers are 1-based and in pool
+          order, and anything the command line does not understand is reported in the Log rather
+          than swallowed.
+        </p>
+      </div>
+      <table class="kv">
+        <thead>
+          <tr><th>Type this</th><th>And it does</th></tr>
+        </thead>
+        <tbody>
+          <tr><td><code>go</code> &middot; <code>go 2</code></td><td>Go on the current stack, or on stack 2</td></tr>
+          <tr><td><code>off</code> &middot; <code>off 2</code></td><td>Release every stack, or release just that one</td></tr>
+          <tr><td><code>cue 3</code></td><td>Jump the current stack to cue position 3</td></tr>
+          <tr><td><code>store</code></td><td>Store a cue into the current stack</td></tr>
+          <tr><td><code>group 1</code></td><td>Recall group 1 as your selection</td></tr>
+          <tr><td><code>gm 80</code> &middot; <code>full</code></td><td>Grand Master to 80%, or back up to 100%</td></tr>
+          <tr><td><code>clear</code></td><td>Release the Programmer so playback takes the output back</td></tr>
+          <tr><td><code>black</code> &middot; <code>bo</code></td><td>Blackout: release every stack and clear the Programmer</td></tr>
+        </tbody>
+      </table>
     </div>
   </section>
 
@@ -396,6 +861,26 @@
         <li><span class="step-num">7</span><div><h3>Play</h3><p>Run the show from the Decks with faders and Grand Master — or busk it from a Stream Deck.</p></div></li>
         <li><span class="step-num">8</span><div><h3>Output</h3><p>Select an Art-Net interface and send DMX to a node or visualizer.</p></div></li>
       </ol>
+      <div class="tip">
+        <h4>Learn a handful of keys and you can stop reaching for the mouse</h4>
+        <p>Most of the console answers to the keyboard, and the ones below are the ones you will wear out first.</p>
+      </div>
+      <table class="kv">
+        <thead>
+          <tr><th>Keys</th><th>What they do</th></tr>
+        </thead>
+        <tbody>
+          <tr><td>Alt + 1…5</td><td>Jump to an Inspector tab — Presets, Selection, Stage, Build, Patch</td></tr>
+          <tr><td>Alt + I</td><td>Fold the Inspector away, or bring it back</td></tr>
+          <tr><td>1…9 over the stage</td><td>Fly the camera to the angle you saved on that key</td></tr>
+          <tr><td>1…8 in Build</td><td>Build a tower, straight or radius truss, goalpost, box, ring, tower pair or arch</td></tr>
+          <tr><td>Arrow keys</td><td>Nudge the selected lights across the stage</td></tr>
+          <tr><td>Shift-click</td><td>Add a light to the selection; ctrl-click takes every light of that type</td></tr>
+          <tr><td>Space bar</td><td>Tap the tempo, whenever the Beat window is open</td></tr>
+          <tr><td>Ctrl + Shift + Z</td><td>Undo the last thing you did anywhere in the console, ten steps deep</td></tr>
+          <tr><td>Ctrl + Shift + Y</td><td>Redo it</td></tr>
+        </tbody>
+      </table>
     </div>
   </section>
 
@@ -411,26 +896,123 @@
         </p>
       </div>
       <figure class="shot shot-wide">
-        <img src="images/phaser-advanced-imaging.png" alt="DMXexpress tracing every fixture's movement path in 3D while phasers run across the rig">
+        <img src="images/phaser-advanced-imaging.webp" alt="DMXexpress tracing every fixture's movement path in 3D while phasers run across the rig" loading="lazy" decoding="async">
         <figcaption class="caption">Advanced imaging: every beam's movement path traced live in 3D while phasers roll the rig.</figcaption>
       </figure>
       <div class="shot-grid">
         <figure class="shot">
-          <img src="images/chases-1.png" alt="A spatial chase sweeping across the DMXexpress 3D stage">
+          <img src="images/chases-1.webp" alt="A spatial chase sweeping across the DMXexpress 3D stage" loading="lazy" decoding="async">
           <figcaption class="caption">A chase mid-sweep — the band injects a preset and the rig reverts as it passes.</figcaption>
         </figure>
         <figure class="shot">
-          <img src="images/palettes.png" alt="The DMXexpress Palettes window with color tiles and the cycle engine">
+          <img src="images/palettes.webp" alt="The DMXexpress Palettes window with color tiles and the cycle engine" loading="lazy" decoding="async">
           <figcaption class="caption">The Palettes pool: referenced looks, color cycles, and the Stream Deck mirror toggle.</figcaption>
         </figure>
         <figure class="shot">
-          <img src="images/chases-2.png" alt="The chase editor open beside the live 3D stage in DMXexpress">
+          <img src="images/chases-2.webp" alt="The chase editor open beside the live 3D stage in DMXexpress" loading="lazy" decoding="async">
           <figcaption class="caption">The chase editor beside the live result — drag the sphere on stage to aim the pattern.</figcaption>
         </figure>
         <figure class="shot">
-          <img src="images/phaser-1.png" alt="The DMXexpress phaser editor with component cards and the tile pool">
+          <img src="images/phaser-1.webp" alt="The DMXexpress phaser editor with component cards and the tile pool" loading="lazy" decoding="async">
           <figcaption class="caption">The phaser editor: channel components, spread and wings, and the busking tile pool.</figcaption>
         </figure>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===================== NETWORK & OUTPUT ===================== -->
+  <section id="network" class="section">
+    <div class="container">
+      <div class="section-head">
+        <p class="eyebrow">Out of the computer</p>
+        <h2>Art-Net, sACN, and a screen that says why it isn't working.</h2>
+        <p class="section-sub">
+          Pick a protocol — Art-Net, sACN, or both at once — and an interface, and DMXexpress streams
+          two contiguous universes at about 40 frames a second. When a node stays dark, the Network
+          screen tells you what is wrong in plain words instead of leaving you to guess.
+        </p>
+      </div>
+      <div class="shot-grid">
+        <figure class="shot">
+          <img src="images/shot-patch-window.webp" alt="The DMXexpress Patch window with the built-in fixture library browsed and a model selected" loading="lazy" decoding="async">
+          <figcaption class="caption">The Patch window with the library open — search by name or maker, then pick the mode.</figcaption>
+        </figure>
+        <figure class="shot">
+          <img src="images/shot-network.webp" alt="The DMXexpress Network window listing Art-Net nodes and sACN sources discovered on the network, with the diagnostics checklist alongside" loading="lazy" decoding="async">
+          <figcaption class="caption">Every node and source heard on the wire, with the checklist one tab away.</figcaption>
+        </figure>
+        <figure class="shot">
+          <img src="images/shot-artnet.webp" alt="The DMXexpress Art-Net output panel with the interface, universe numbers and addressing mode set" loading="lazy" decoding="async">
+          <figcaption class="caption">The Art-Net panel: interface, universe numbers, and how the packets are addressed.</figcaption>
+        </figure>
+        <figure class="shot">
+          <img src="images/shot-settings.webp" alt="The DMXexpress Settings window" loading="lazy" decoding="async">
+          <figcaption class="caption">Settings, where the Network screen and the rest of the machine-side preferences live.</figcaption>
+        </figure>
+      </div>
+      <div class="cards cards-3">
+        <div class="card">
+          <div class="card-icon">NW</div>
+          <h3>Two protocols</h3>
+          <p>Art-Net, sACN, or both together. Broadcast, directed broadcast to the interface's own subnet, unicast to one node, or a unicast copy to every node that answered an ArtPoll.</p>
+        </div>
+        <div class="card">
+          <div class="card-icon">CK</div>
+          <h3>A live checklist</h3>
+          <p>One finding per row, graded by how bad it is, saying what is wrong and what to do about it. It reads the same state the rest of the screen shows, so it is never out of date.</p>
+        </div>
+        <div class="card">
+          <div class="card-icon">TM</div>
+          <h3>Test and monitor</h3>
+          <p>Send every slot full on, walk one slot up the universe, or hold a single channel — for as long as you set, then the show comes back. The monitor keeps the last fifty packets.</p>
+        </div>
+      </div>
+      <div class="warn">
+        <h4>Check the patch before you check the lights</h4>
+        <p>
+          DMXexpress transmits live lighting data. Confirm the interface, the universe numbers, the
+          patch and the Grand Master before you plug into a rig with people standing under it.
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===================== GOBOS ===================== -->
+  <section id="gobos" class="section section-alt">
+    <div class="container">
+      <div class="section-head">
+        <p class="eyebrow">Gobos</p>
+        <h2>The beam is the picture, not a cone.</h2>
+        <p class="section-sub">
+          The visualizer renders each beam through the gobo that light is actually showing. Haze inside
+          the cone breaks into the gobo's rays, and the pool where the beam lands is the projected
+          image, turning with the fixture's gobo rotation channel.
+        </p>
+      </div>
+      <figure class="shot shot-wide">
+        <img src="images/shot-stage-gobos.webp" alt="The DMXexpress 3D stage with gobo projection visible in the beams: breakup patterns in the haze and patterned pools on the floor" loading="lazy" decoding="async">
+        <figcaption class="caption">Gobo projection on stage — breakup in the air and the pattern on the floor, not flat cones.</figcaption>
+      </figure>
+      <figure class="shot shot-wide">
+        <img src="images/shot-gobos.webp" alt="The DMXexpress Gobos window showing rows of gobo picture tiles, one row per wheel, with the slot each light is currently on outlined" loading="lazy" decoding="async">
+        <figcaption class="caption">The Gobos window: a row of picture tiles per wheel, with the slot each light sits on outlined.</figcaption>
+      </figure>
+      <div class="cards cards-3">
+        <div class="card">
+          <div class="card-icon">CT</div>
+          <h3>A thousand pictures</h3>
+          <p>The catalogue is built from QLC+ and the Open Fixture Library: about a thousand images filed by maker — Chauvet, Clay Paky, GLP, Robe, SGM and a generic set — plus a named set with keywords.</p>
+        </div>
+        <div class="card">
+          <div class="card-icon">WH</div>
+          <h3>Wheels matched for you</h3>
+          <p>When the patch is built, every gobo wheel channel is matched against those definitions by maker and model, so your lights arrive with their real slots already on them. A slot with no picture throws a plain cone.</p>
+        </div>
+        <div class="card">
+          <div class="card-icon">PN</div>
+          <h3>Or bring your own</h3>
+          <p>Press <strong>Assign pictures</strong> and click a tile to choose what that slot projects, searching the catalogue by name, keyword and maker. Drop a PNG into <code>fixtures/gobos/</code> and it turns up there too.</p>
+        </div>
       </div>
     </div>
   </section>
@@ -446,6 +1028,10 @@
           on the site — a message board plus a reviewed plugin registry.
         </p>
       </div>
+      <figure class="shot shot-wide">
+        <img src="images/shot-plugins.webp" alt="The DMXexpress Plugins window listing the installed script plugins with their enable switches" loading="lazy" decoding="async">
+        <figcaption class="caption">The Plugins window: every script in the folder, each with its own switch and its own controls.</figcaption>
+      </figure>
       <div class="cards cards-2">
         <a class="card" href="plugins.html">
           <div class="card-icon">PL</div>
@@ -529,12 +1115,16 @@ cargo test</code></pre>
   <footer class="footer">
     <div class="container footer-inner">
       <div>
-        <img src="images/logo.png" alt="DMXexpress" class="logo-footer">
+        <img src="images/logo.webp" alt="DMXexpress" class="logo-footer" loading="lazy" decoding="async">
         <p class="fine">A native, all-in-one DMX fixture visualizer and live lighting controller built in Rust.</p>
       </div>
       <div class="footer-links">
         <a href="#features">Features</a>
+        <a href="#inspector">Inspector</a>
         <a href="#streamdeck">Stream Deck</a>
+        <a href="#program">Programming</a>
+        <a href="#playback">Playback</a>
+        <a href="#network">Network</a>
         <a href="#practice">Practice at Home</a>
         <a href="#sample-rigs">Sample Rigs</a>
         <a href="plugins.html">Plugins</a>

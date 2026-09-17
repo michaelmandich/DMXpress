@@ -8,14 +8,14 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
-  <link rel="icon" type="image/png" href="images/logo.png">
+  <link rel="icon" type="image/png" href="images/favicon.png">
   <link rel="stylesheet" href="styles.css">
 </head>
 <body>
   <header class="nav">
     <div class="container nav-inner">
       <a href="index.html" class="brand">
-        <img src="images/logo.png" alt="DMXexpress" class="logo-nav">
+        <img src="images/logo.webp" alt="DMXexpress" class="logo-nav">
       </a>
       <nav class="nav-links">
         <a href="index.html#features">Features</a>
@@ -62,6 +62,48 @@
           </div>
         </div>
 
+        <figure class="shot shot-wide" style="margin-top: 32px">
+          <img src="images/shot-plugins.webp" alt="The DMXexpress Plugins window listing the installed Rhai scripts, each with a tick box, version, author and its Window, Reload and Remove buttons" loading="lazy" decoding="async">
+          <figcaption class="caption">The Plugins window: every script in the folder, with its version, author, one-line description, and what it provides.</figcaption>
+        </figure>
+
+        <div class="split" style="margin-top: 40px">
+          <div class="split-text">
+            <h3 style="margin-top: 0">The window, control by control</h3>
+            <table class="kv">
+              <thead><tr><th>Control</th><th>What it does</th></tr></thead>
+              <tbody>
+                <tr><td>Tick box</td><td>Enables the plugin. Its layer starts mixing, its theme applies, its window becomes available. The name beside it comes from the script's <code>name:</code> header.</td></tr>
+                <tr><td><strong>Window</strong></td><td>Shows the plugin's own control window. Only appears when the script declares controls.</td></tr>
+                <tr><td><strong>Reload</strong></td><td>Recompiles that one script from disk. Edit, save, reload — the enabled state and your slider positions survive.</td></tr>
+                <tr><td><strong>Remove</strong></td><td>Deletes the script file, after a <strong>Delete file</strong> confirmation you have to press.</td></tr>
+                <tr><td><strong>Open folder</strong></td><td>Reveals the <code>plugins</code> folder in your file manager.</td></tr>
+                <tr><td><strong>Reload all</strong></td><td>Re-scans the folder and recompiles every script. This is how new files get noticed.</td></tr>
+                <tr><td><strong>Get plugins</strong></td><td>Opens this page in your browser.</td></tr>
+              </tbody>
+            </table>
+          </div>
+          <div class="split-text">
+            <h3 style="margin-top: 0">What each row tells you</h3>
+            <p>Under the name, the window prints a small tag line for what the script actually
+            contains — some plugins are all three, most are one:</p>
+            <ul class="checklist">
+              <li><strong>layer</strong> — the script defines <code>frame()</code>, so it paints DMX</li>
+              <li><strong>window</strong> — it declares controls, so it has a panel of its own</li>
+              <li><strong>theme</strong> — it returns a theme tint, so it recolours the console</li>
+            </ul>
+            <p>Anything that went wrong is printed in red on the row itself. A script that will
+            not compile still lists here with its headers intact, so you can see which file
+            needs the fix.</p>
+            <div class="tip">
+              <h4>Where the files live</h4>
+              <p>Scripts sit in a <code>plugins</code> folder beside your show files, and which
+              ones are ticked is remembered in <code>plugins.json</code> next to it. Plugins load
+              in file-name order, which is also the order their layers stack.</p>
+            </div>
+          </div>
+        </div>
+
         <div class="warn" style="margin-top: 28px">
           <h4>Plugins are sandboxed, but read them anyway</h4>
           <p>Scripts run inside the app's sandbox: no file, network, or system access, and a
@@ -74,6 +116,45 @@
     <section class="section section-alt">
       <div class="container">
         <div class="section-head">
+          <p class="eyebrow">Three kinds</p>
+          <h2>What a plugin can be.</h2>
+          <p class="section-sub">
+            The registry sorts plugins by what they do to the console. A script is free to do
+            all three at once, but the useful ones usually pick a lane.
+          </p>
+        </div>
+        <div class="cards cards-3">
+          <div class="card">
+            <div class="card-icon">EF</div>
+            <h3>Effect</h3>
+            <p>Defines <code>frame(t, rig, state)</code> and returns address/value pairs every
+            tick. The app paints them onto a mixer layer of the plugin's own, using the blend
+            its header asked for.</p>
+            <p class="fine">Bundled example: Breathing Floor, Strobe Burst.</p>
+          </div>
+          <div class="card">
+            <div class="card-icon">TO</div>
+            <h3>Tool</h3>
+            <p>Declares <code>controls()</code> — sliders, tick boxes, buttons and labels — and
+            gets a floating window built for it. The values land in the <code>state</code> map
+            the script reads back.</p>
+            <p class="fine">Both bundled effects put up a window.</p>
+          </div>
+          <div class="card">
+            <div class="card-icon">LO</div>
+            <h3>Look</h3>
+            <p>Returns a <code>theme()</code> map of hex colours. While it is enabled, the
+            accent, surface and text colours of the whole console follow it — no layer, no
+            window, just a re-tint.</p>
+            <p class="fine">Bundled example: Neon Night.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="section">
+      <div class="container">
+        <div class="section-head">
           <p class="eyebrow">Registry</p>
           <h2>Browse plugins.</h2>
           <p class="section-sub">
@@ -83,10 +164,14 @@
         </div>
         <div id="registry-status" class="notice" hidden></div>
         <div class="cards cards-3" id="plugin-grid"></div>
+        <p class="fine" style="margin-top: 20px">
+          Every download is a plain text file. Open it in any editor before you install it —
+          that is the whole point of shipping scripts instead of binaries.
+        </p>
       </div>
     </section>
 
-    <section class="section">
+    <section class="section section-alt">
       <div class="container">
         <div class="section-head">
           <p class="eyebrow">Share yours</p>
@@ -133,10 +218,37 @@
             </div>
           </form>
         </div>
+
+        <div class="split" style="margin-top: 40px">
+          <div class="split-text">
+            <h3 style="margin-top: 0">Before you press submit</h3>
+            <ul class="checklist">
+              <li>Sign in with Google, and pick a username on the <a href="community.html">community page</a> first — the registry credits that name as the author</li>
+              <li>The slug is the plugin's permanent id: lowercase letters, digits and hyphens, starting with a letter or digit</li>
+              <li>The download link must point straight at the <code>.rhai</code> file, not at a page about it</li>
+              <li>Keep the description under 500 characters and say what it does <em>on stage</em></li>
+              <li>Ship the same headers inside the file — the app reads its own name, version and author from the script, not from this form</li>
+            </ul>
+          </div>
+          <div class="split-text">
+            <h3 style="margin-top: 0">What happens next</h3>
+            <p>A submission is stored unapproved and does not show in the registry until it is
+            reviewed. Nothing you submit is executed by this website; the file stays wherever
+            you host it and the registry only ever hands out the link.</p>
+            <p>Push a fix to the same URL and everyone who downloads after that gets it. Bump
+            the <code>version:</code> header in the file so people can see which one they have
+            in the Plugins window.</p>
+            <div class="tip">
+              <h4>No account yet?</h4>
+              <p>Post the GitHub link on the <a href="community.html">forum</a> instead. Plenty
+              of plugins start life as a paste in a thread.</p>
+            </div>
+          </div>
+        </div>
       </div>
     </section>
 
-    <section class="section section-alt" id="dev">
+    <section class="section" id="dev">
       <div class="container">
         <div class="section-head">
           <p class="eyebrow">For developers</p>
@@ -148,27 +260,56 @@
           </p>
         </div>
 
-        <h3 style="margin-top: 0">The shape of a plugin</h3>
+        <h3 style="margin-top: 0">The smallest plugin that works</h3>
+        <p class="fine" style="margin-top: 10px">
+          This is <code>neon_night.rhai</code>, shipped with the app, in full. No layer, no
+          window — twelve lines that recolour the console.
+        </p>
         <div class="code-block">
-          <div class="code-title">wave_floor.rhai</div>
-          <pre><code><span class="c">//! name: Wave Floor</span>
+          <div class="code-title">plugins/neon_night.rhai</div>
+          <pre><code><span class="c">//! name: Neon Night</span>
+<span class="c">//! version: 1.0</span>
+<span class="c">//! author: DMXpress</span>
+<span class="c">//! description: Tints the whole console hot pink for late-set energy.</span>
+
+<span class="c">// A theme-only plugin: no layer, no window - just a look.</span>
+fn theme() {
+    #{
+        accent: "#E23A8E",
+        text: "#F6EFF4",
+    }
+}</code></pre>
+        </div>
+
+        <h3 style="margin-top: 40px">The shape of a plugin</h3>
+        <p class="fine" style="margin-top: 10px">
+          Headers first, then any of the four functions. Everything is optional — a file with
+          only <code>theme()</code> is a plugin, and so is one with only <code>frame()</code>.
+        </p>
+        <div class="code-block">
+          <div class="code-title">The whole format</div>
+          <pre><code><span class="c">//! name: My Plugin</span>
 <span class="c">//! version: 1.0</span>
 <span class="c">//! author: you</span>
-<span class="c">//! description: A sine wave across every dimmer.</span>
-<span class="c">//! blend: highest      // mix | highest | add</span>
+<span class="c">//! description: One line, shown under the name in the Plugins window.</span>
+<span class="c">//! blend: highest          // mix (default) | highest | add</span>
 
+<span class="c">// The window. Runs once when the file loads or reloads.</span>
 fn controls() {
     [
-        #{ kind: "slider", id: "rate", label: "Rate", min: 0.1, max: 4.0, value: 1.0 },
-        #{ kind: "button", id: "kick", label: "KICK" },
+        #{ kind: "slider",   id: "rate", label: "Rate", min: 0.1, max: 4.0, value: 1.0 },
+        #{ kind: "checkbox", id: "fan",  label: "Fan across the stage", value: true },
+        #{ kind: "button",   id: "kick", label: "KICK" },
+        #{ kind: "label",    text: "A line of help text." },
     ]
 }
 
-<span class="c">// Called ~40x a second while enabled. Return [address, value] pairs.</span>
+<span class="c">// The layer. Called about 40 times a second while the plugin is ticked.</span>
+<span class="c">// Return [address, value] pairs: 1-based DMX addresses, values 0..255.</span>
 fn frame(t, rig, state) {
     let out = [];
     for f in rig {
-        if f.dimmer > 0 {
+        if f.dimmer &gt; 0 {
             let v = (1.0 + sin(t * state.rate + f.x)) / 2.0;
             out.push([f.dimmer, (v * 255.0).to_int()]);
         }
@@ -176,46 +317,447 @@ fn frame(t, rig, state) {
     out
 }
 
-<span class="c">// A window button was pressed. Stash anything you like in state.</span>
+<span class="c">// A window button was pressed. Return the new state map to keep changes.</span>
 fn button(id, t, state) {
     if id == "kick" { state.kicked_at = t; }
     state
+}
+
+<span class="c">// The look. Any subset of accent, surface and text, as #RRGGBB.</span>
+fn theme() {
+    #{ accent: "#E23A8E" }
 }</code></pre>
         </div>
 
         <div class="split" style="margin-top: 40px">
           <div class="split-text">
+            <h3>The headers</h3>
+            <table class="kv">
+              <thead><tr><th>Key</th><th>Meaning</th></tr></thead>
+              <tbody>
+                <tr><td><code>name</code></td><td>Shown in the Plugins window. Defaults to the file name with underscores turned into spaces.</td></tr>
+                <tr><td><code>version</code></td><td>Free text beside the name. Defaults to <code>0.1</code>.</td></tr>
+                <tr><td><code>author</code></td><td>Shown beside the version when present.</td></tr>
+                <tr><td><code>description</code></td><td>One line under the name in the list.</td></tr>
+                <tr><td><code>blend</code></td><td>How the layer folds into the mix: <code>mix</code> (default), <code>highest</code> (or <code>max</code>), <code>add</code>.</td></tr>
+              </tbody>
+            </table>
+            <p class="fine" style="margin-top: 14px">
+              Headers are <code>//!</code> lines and must come before the first line of code —
+              parsing stops there. Keys the app does not know are ignored, so a newer header
+              never breaks an older build.
+            </p>
+          </div>
+          <div class="split-text">
             <h3>The four hooks</h3>
             <table class="kv">
               <thead><tr><th>Function</th><th>What it does</th></tr></thead>
               <tbody>
-                <tr><td><code>controls()</code></td><td>Declares the plugin's window: sliders, checkboxes, buttons, labels. Values arrive in <code>state</code>.</td></tr>
-                <tr><td><code>frame(t, rig, state)</code></td><td>Called every tick. Returns <code>[address, value]</code> pairs painted onto the plugin's own mixer layer.</td></tr>
-                <tr><td><code>button(id, t, state)</code></td><td>Runs when a window button is pressed; return the new state map.</td></tr>
-                <tr><td><code>theme()</code></td><td>Returns <code>#RRGGBB</code> strings for <code>accent</code>, <code>surface</code>, <code>text</code> — a console re-tint while enabled.</td></tr>
+                <tr><td><code>controls()</code></td><td>Declares the plugin's window: sliders, tick boxes, buttons, labels. Runs once at load and at Reload, enabled or not. Values live in <code>state</code>, keyed by control id.</td></tr>
+                <tr><td><code>frame(t, rig, state)</code></td><td>Called every tick while enabled. Returns <code>[address, value]</code> pairs painted onto the plugin's own mixer layer.</td></tr>
+                <tr><td><code>button(id, t, state)</code></td><td>Runs when a window button is pressed. Return the state map to keep what you changed.</td></tr>
+                <tr><td><code>theme()</code></td><td>Returns any subset of <code>accent</code>, <code>surface</code> and <code>text</code> as <code>#RRGGBB</code>. Also runs at load, and re-tints the console while enabled.</td></tr>
               </tbody>
             </table>
+            <div class="warn" style="margin-top: 22px">
+              <h4>state is read-only inside frame()</h4>
+              <p>Your <code>frame()</code> gets a copy. Anything you assign to <code>state</code>
+              there is thrown away when the call returns. <code>button()</code> is the only hook
+              whose returned state is kept — that is why the strobe below stores its trigger
+              time in <code>button()</code> and only reads it in <code>frame()</code>.</p>
+            </div>
           </div>
+        </div>
+
+        <h3 style="margin-top: 48px">The controls you can declare</h3>
+        <table class="kv">
+          <thead><tr><th>kind</th><th>Fields</th><th>What lands in state</th></tr></thead>
+          <tbody>
+            <tr><td><code>"slider"</code></td><td><code>id</code>, <code>label</code>, <code>min</code>, <code>max</code>, <code>value</code></td><td>A float under <code>id</code>. <code>value</code> is the starting position — <code>default</code> is a reserved word in Rhai, which is why it is spelled <code>value</code>. Omit it and the slider starts at <code>min</code>.</td></tr>
+            <tr><td><code>"checkbox"</code></td><td><code>id</code>, <code>label</code>, <code>value</code></td><td>A bool under <code>id</code>, starting <code>false</code> unless <code>value: true</code>.</td></tr>
+            <tr><td><code>"button"</code></td><td><code>id</code>, <code>label</code></td><td>Nothing. Pressing it calls <code>button(id, t, state)</code>.</td></tr>
+            <tr><td><code>"label"</code></td><td><code>text</code></td><td>Nothing — a line of dimmed help text in the window.</td></tr>
+          </tbody>
+        </table>
+        <p class="fine" style="margin-top: 14px">
+          Leave <code>label</code> out and the id is used instead. Leave <code>id</code> out and
+          one is generated, which is fine for labels and useless for anything you want to read.
+        </p>
+
+        <div class="split" style="margin-top: 48px">
           <div class="split-text">
-            <h3>Each rig entry</h3>
+            <h3 style="margin-top: 0">Each rig entry</h3>
+            <p>The <code>rig</code> argument is an array of maps, one per patched fixture, in
+            patch order. It is rebuilt every frame from the live patch and the stage layout, so
+            repatching or moving a light shows up on the next tick.</p>
             <table class="kv">
               <thead><tr><th>Field</th><th>Meaning</th></tr></thead>
               <tbody>
                 <tr><td><code>i</code>, <code>name</code></td><td>Fixture index and display name</td></tr>
                 <tr><td><code>addr</code>, <code>channels</code></td><td>1-based base address and channel count</td></tr>
-                <tr><td><code>dimmer red green blue white</code></td><td>Absolute address of that channel, 0 if the fixture has none</td></tr>
+                <tr><td><code>dimmer red green blue white</code></td><td>Absolute address of the <em>first</em> channel with that role, 0 if the fixture has none</td></tr>
                 <tr><td><code>x y z</code></td><td>Stage position in metres — fan effects across space</td></tr>
               </tbody>
             </table>
-            <h3>Rules of the sandbox</h3>
+            <p class="fine" style="margin-top: 14px">
+              Always guard on zero. A moving head with no white channel reports
+              <code>white: 0</code>, and address 0 does not exist — writes to it are dropped.
+              Anything the rig map does not name, like pan, tilt or a gobo wheel, you reach by
+              arithmetic on <code>addr</code>.
+            </p>
+          </div>
+          <div class="split-media">
+            <img src="images/shot-patch-window.webp" alt="The DMXexpress Patch window with the fixture library browsed and fixtures addressed in the rig" loading="lazy" decoding="async">
+            <p class="caption">The patch is where <code>addr</code>, <code>channels</code> and the role addresses come from. Patch a light and it appears in <code>rig</code> on the next frame.</p>
+          </div>
+        </div>
+
+        <div class="split" style="margin-top: 48px">
+          <div class="split-text">
+            <h3 style="margin-top: 0">What the sandbox gives you</h3>
             <ul class="checklist">
-              <li>No file, network, or process access — scripts only compute values</li>
-              <li>An operation budget stops infinite loops with an error, not a hang</li>
-              <li>Errors park the hook and show in the Plugins window; fix and press Reload</li>
-              <li><code>print("...")</code> goes to the app's Log window</li>
-              <li><code>hsv(h, s, v)</code> is built in and returns <code>[r, g, b]</code></li>
+              <li><code>hsv(h, s, v)</code> takes three 0..1 floats and returns <code>[r, g, b]</code> as 0..255 integers — hue wraps, so <code>1.2</code> is the same as <code>0.2</code></li>
+              <li><code>print("...")</code> lands in the app's Log window, prefixed <code>Plugin:</code></li>
+              <li>Rhai's own library: <code>sin</code>, <code>cos</code>, <code>sqrt</code>, <code>abs</code>, <code>to_int</code>, <code>len()</code>, <code>push</code>, maps, arrays, <code>in</code></li>
+              <li>Addresses run <code>1</code> to <code>1024</code> — two universes of 512, so 513 is channel 1 of the second</li>
+              <li>Values are clamped to 0..255 for you, and out-of-range addresses are dropped rather than erroring</li>
             </ul>
           </div>
+          <div class="split-text">
+            <h3 style="margin-top: 0">Rules of the sandbox</h3>
+            <ul class="checklist">
+              <li>No file, network, or process access — scripts only compute values</li>
+              <li>Every call gets a budget of 250,000 operations, so an accidental <code>while true</code> aborts with an error instead of hanging the desk</li>
+              <li>An array can hold 8,192 entries and a map 1,024 keys — comfortably more than one pair per channel, but not unlimited</li>
+              <li>Strings cap at 16,384 characters and calls nest 24 deep</li>
+              <li>A <code>frame()</code> that errors has that hook parked until you press Reload — it will not spam and it will not stall the frame rate</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="section section-alt">
+      <div class="container">
+        <div class="section-head">
+          <p class="eyebrow">Worked examples</p>
+          <h2>The three that ship with the app.</h2>
+          <p class="section-sub">
+            These are the real files, in full, from the <code>plugins</code> folder of the
+            repository. Download them from the registry above, open them side by side with
+            this page, and change one number at a time.
+          </p>
+        </div>
+
+        <h3 style="margin-top: 0">Breathing Floor — a layer that reads the stage</h3>
+        <p class="fine" style="margin-top: 10px">
+          A sine breath over every dimmer in the rig, phase-offset by where each light stands.
+          It is the shortest path to something that looks deliberate rather than random: use
+          the <code>x</code> the stage already knows.
+        </p>
+        <div class="code-block">
+          <div class="code-title">plugins/breathing_floor.rhai</div>
+          <pre><code><span class="c">//! name: Breathing Floor</span>
+<span class="c">//! version: 1.0</span>
+<span class="c">//! author: DMXpress</span>
+<span class="c">//! description: A slow sine breath over every dimmer in the rig, spread across the stage.</span>
+<span class="c">//! blend: highest</span>
+
+fn controls() {
+    [
+        #{ kind: "label",    id: "hint",  text: "Breathes every dimmer, fanned across the stage." },
+        #{ kind: "slider",   id: "rate",  label: "Rate (cycles/min)", min: 2.0,  max: 60.0, value: 12.0 },
+        #{ kind: "slider",   id: "depth", label: "Depth",             min: 0.0,  max: 1.0,  value: 0.6 },
+        #{ kind: "slider",   id: "floor", label: "Floor level",       min: 0.0,  max: 1.0,  value: 0.05 },
+        #{ kind: "checkbox", id: "fan",   label: "Fan across the stage", value: true },
+    ]
+}
+
+fn frame(t, rig, state) {
+    let rate = state.rate;
+    let depth = state.depth;
+    let floor = state.floor;
+    let out = [];
+    if rig.len() == 0 { return out; }
+
+    <span class="c">// Stage extent, for the left-to-right fan.</span>
+    let min_x = 1e9; let max_x = -1e9;
+    for f in rig {
+        if f.x &lt; min_x { min_x = f.x; }
+        if f.x &gt; max_x { max_x = f.x; }
+    }
+    let span = max_x - min_x;
+
+    let w = rate / 60.0 * 2.0 * 3.14159265;
+    for f in rig {
+        if f.dimmer &lt; 1 { continue; }
+        let phase = 0.0;
+        if state.fan &amp;&amp; span &gt; 0.001 {
+            phase = (f.x - min_x) / span * 3.14159265;
+        }
+        <span class="c">// 0..1 breath, shaped so the swell is soft.</span>
+        let breath = (1.0 + sin(t * w + phase)) / 2.0;
+        let level = floor + (1.0 - floor) * breath * depth;
+        out.push([f.dimmer, (level * 255.0).to_int()]);
+    }
+    out
+}</code></pre>
+        </div>
+        <div class="split" style="margin-top: 32px">
+          <div class="split-text">
+            <h3 style="margin-top: 0">What to notice</h3>
+            <ul class="checklist">
+              <li>The sliders are read straight off <code>state</code> by their ids — no wiring, no callbacks</li>
+              <li><code>rate</code> is in cycles per minute because that is what a lighting person thinks in; the maths converts once, into radians per second</li>
+              <li>The fan is a half-turn of phase spread over the width of the rig, so the far side is exhaling while the near side inhales</li>
+              <li><code>blend: highest</code> means it can only ever add light — it will never pull a cue down</li>
+              <li><code>floor</code> keeps a trickle of light in so the stage never goes fully black between breaths</li>
+            </ul>
+            <p class="fine" style="margin-top: 14px">
+              Change first: swap <code>f.x</code> for <code>f.z</code> and it breathes
+              upstage to downstage instead. Swap it for <code>f.i</code> and it fans by patch
+              order.
+            </p>
+          </div>
+          <div class="split-media">
+            <img src="images/shot-stage-beams.webp" alt="The DMXexpress 3D stage filled with volumetric beams and floor pools from a rig of movers and pars" loading="lazy" decoding="async">
+            <p class="caption">Dimmers are all this plugin touches — the colours come from whatever cue, scene or palette is already running beneath it.</p>
+          </div>
+        </div>
+
+        <h3 style="margin-top: 56px">Strobe Burst — a button that remembers</h3>
+        <p class="fine" style="margin-top: 10px">
+          A one-shot white flash that decays back out. It is the pattern for every triggered
+          effect: the press stores a timestamp, the frame hook does the arithmetic.
+        </p>
+        <div class="code-block">
+          <div class="code-title">plugins/strobe_burst.rhai</div>
+          <pre><code><span class="c">//! name: Strobe Burst</span>
+<span class="c">//! version: 1.0</span>
+<span class="c">//! author: DMXpress</span>
+<span class="c">//! description: A one-shot white flash over the whole rig that decays back out.</span>
+<span class="c">//! blend: add</span>
+
+fn controls() {
+    [
+        #{ kind: "label",  id: "hint",  text: "Fire a decaying white burst over the rig." },
+        #{ kind: "button", id: "burst", label: "BURST" },
+        #{ kind: "slider", id: "decay", label: "Decay (s)", min: 0.1, max: 2.0, value: 0.5 },
+    ]
+}
+
+fn button(id, t, state) {
+    if id == "burst" {
+        state.fired_at = t;
+    }
+    state
+}
+
+fn frame(t, rig, state) {
+    let out = [];
+    if !("fired_at" in state) { return out; }
+    let decay = state.decay;
+    let age = t - state.fired_at;
+    if age &lt; 0.0 || age &gt; decay { return out; }
+
+    <span class="c">// 1 at the hit, easing out to 0.</span>
+    let k = 1.0 - age / decay;
+    let v = (255.0 * k * k).to_int();
+    for f in rig {
+        if f.dimmer &gt; 0 { out.push([f.dimmer, v]); }
+        if f.red   &gt; 0 { out.push([f.red,   v]); }
+        if f.green &gt; 0 { out.push([f.green, v]); }
+        if f.blue  &gt; 0 { out.push([f.blue,  v]); }
+    }
+    out
+}</code></pre>
+        </div>
+        <ul class="checklist" style="margin-top: 22px">
+          <li><code>button()</code> returns <code>state</code>, so <code>fired_at</code> survives to the next frame. Drop that <code>state</code> on the last line and the button does nothing at all.</li>
+          <li><code>frame()</code> returns an empty array until the button has been pressed once — an empty return means the plugin contributes no layer that frame, not a black one.</li>
+          <li><code>blend: add</code> sums onto what is beneath and saturates at 255, which is what makes it read as a hit rather than a takeover.</li>
+          <li>Squaring <code>k</code> is the whole difference between a flash and a fade. Try <code>k</code>, <code>k * k</code> and <code>k * k * k</code> with the same decay time.</li>
+          <li>Both <code>t</code> values — the one the press was stamped with and the one the frame reads — come from the same clock, so the subtraction is safe.</li>
+        </ul>
+
+        <h3 style="margin-top: 56px">Neon Night — a look with no code in it</h3>
+        <p class="fine" style="margin-top: 10px">
+          Printed in full further up the page. Two keys, no layer, no window. Worth knowing
+          what it actually moves:
+        </p>
+        <ul class="checklist">
+          <li><code>accent</code> repaints selection fills, active widgets, focus strokes and link colour</li>
+          <li><code>surface</code> repaints panel and window backgrounds, and the raised and hovered variants are derived from it</li>
+          <li><code>text</code> repaints label and widget text, with a dimmed variant derived for the quiet lines</li>
+          <li>Enable two look plugins at once and they merge key by key — later file name wins on any key both set</li>
+          <li>Untick it and the console snaps straight back to the built-in theme</li>
+        </ul>
+      </div>
+    </section>
+
+    <section class="section">
+      <div class="container">
+        <div class="section-head">
+          <p class="eyebrow">The mix</p>
+          <h2>Where your layer lands.</h2>
+          <p class="section-sub">
+            Every frame, DMXexpress rebuilds all 1024 channels from scratch out of a fixed
+            stack. Knowing your slot in it is the difference between an effect that works on
+            the night and one that mysteriously does nothing.
+          </p>
+        </div>
+
+        <figure class="shot shot-wide">
+          <img src="images/shot-console.webp" alt="The full DMXexpress console: the fixture list at the left, the 3D stage with lit beams in the centre, the Inspector at the right and the channel grid below" loading="lazy" decoding="async">
+          <figcaption class="caption">One flattened frame feeds all of it — the 3D stage, the fixture list, the channel grid and the Art-Net output. Your plugin is one layer inside it.</figcaption>
+        </figure>
+
+        <div class="code-block">
+          <div class="code-title">The mixer, bottom to top</div>
+          <pre><code>  8  Chase                 the injected look, weighted by the band
+  7  Audio triggers        sound-reactive flashes
+  6  Effect lanes          gobo, prism, beam wheels
+  5  Palette cycle         colour stepping on the beat
+  4  Programmer            what you are holding live
+<span class="c">  3  PLUGINS               &lt;- you are here</span>
+  2  Scenes                the scene pool
+  1  Stacks                cue lists, at their fader levels
+  0  Black                 the floor
+
+     ...then the post-mix passes, in order:
+     encoder, grand master, throb, dim-range, add
+     phasers, hold phasers, DMX test, blackout</code></pre>
+        </div>
+
+        <div class="split" style="margin-top: 40px">
+          <div class="split-text">
+            <h3 style="margin-top: 0">What that means for your script</h3>
+            <ul class="checklist">
+              <li>You sit above scenes and stacks, so you paint over recorded playback wherever you write a value</li>
+              <li>You sit below the programmer, so anything the operator is actively holding wins on those channels</li>
+              <li>You paint <em>logical</em> values. A dimmer at 255 lands at that fixture's usable maximum after dim-range compression, not in its strobe band</li>
+              <li>The grand master, the dimmer throb, hold phasers and the DMX test window all still apply on top of you</li>
+              <li>Several enabled plugins stack in file-name order, so <code>a_haze.rhai</code> sits under <code>b_wash.rhai</code></li>
+              <li>Whatever you do not write falls through untouched — return the shortest array you can</li>
+            </ul>
+          </div>
+          <div class="split-text">
+            <h3 style="margin-top: 0">The two that surprise people</h3>
+            <p><strong>A preset recall covers everything.</strong> Recalling a preset sets the
+            programmer's mask to all 1024 channels. Until Clear is pressed, the programmer
+            covers every stack, scene and plugin — including channels the preset leaves at
+            zero. If your effect vanishes the moment someone recalls a preset, that is why.</p>
+            <p><strong>Your clock is not the show's clock.</strong> The <code>t</code> passed to
+            <code>frame()</code> is wall-clock seconds since the app started. It does not follow
+            the master BPM or the time machine, and it only pauses because Freeze stops the
+            frame from being rebuilt at all.</p>
+            <div class="tip">
+              <h4>Want the beat?</h4>
+              <p>Do it yourself for now: add a rate slider in cycles per minute, as Breathing
+              Floor does, and set it to the tempo you are running.</p>
+            </div>
+          </div>
+        </div>
+
+        <div class="shot-grid" style="margin-top: 40px">
+          <figure class="shot">
+            <img src="images/shot-decks.webp" alt="The DMXexpress executor bar along the bottom of the console with the grand master and per-stack faders" loading="lazy" decoding="async">
+            <figcaption class="caption">The grand master scales every Dimmer-role channel after the mix — including yours. Pure RGB fixtures do not dim with it.</figcaption>
+          </figure>
+          <figure class="shot">
+            <img src="images/shot-inspector-presets.webp" alt="The Presets tab of the DMXexpress Inspector with preset pads coloured from their own values and the recall row beneath" loading="lazy" decoding="async">
+            <figcaption class="caption">Recall one of these and the programmer masks all 1024 channels, hiding your layer until Clear.</figcaption>
+          </figure>
+        </div>
+      </div>
+    </section>
+
+    <section class="section section-alt">
+      <div class="container">
+        <div class="section-head">
+          <p class="eyebrow">When it breaks</p>
+          <h2>Errors, and where to find them.</h2>
+          <p class="section-sub">
+            A bad plugin cannot crash the desk and cannot stall the frame rate. It fails in one
+            of a small number of ways, and every one of them is printed somewhere you can see.
+          </p>
+        </div>
+
+        <div class="cards cards-2">
+          <div class="card">
+            <h3>The file will not compile</h3>
+            <p>Nothing runs. The plugin still lists with whatever its headers said, and the
+            compiler's message — line and all — sits in red on the row.</p>
+          </div>
+          <div class="card">
+            <h3><code>controls()</code> throws</h3>
+            <p>The window comes up empty and no control values are seeded, so every
+            <code>state</code> lookup in your other hooks misses. Red text on the row.</p>
+          </div>
+          <div class="card">
+            <h3><code>theme()</code> throws</h3>
+            <p>The tint is dropped and the <strong>theme</strong> tag disappears from the row.
+            The rest of the plugin carries on.</p>
+          </div>
+          <div class="card">
+            <h3><code>frame()</code> throws, or runs out of operations</h3>
+            <p>That hook is <em>parked</em>: it stops being called and the layer disappears, but
+            the plugin stays enabled. The row shows the error prefixed <code>frame:</code>.
+            Reload brings it back.</p>
+          </div>
+          <div class="card">
+            <h3><code>button()</code> throws</h3>
+            <p>The press is ignored and state is left alone, but the hook is not parked — the
+            next press tries again. The error shows on the row and inside the plugin's own
+            window, prefixed <code>button:</code>.</p>
+          </div>
+          <div class="card">
+            <h3>Nothing shows an error at all</h3>
+            <p>Addresses outside 1–1024 are dropped and values are clamped into 0–255, both
+            silently. If a channel is not moving and the row is clean, check your arithmetic
+            and check nothing above you in the mix is covering it.</p>
+          </div>
+        </div>
+
+        <div class="split" style="margin-top: 40px">
+          <div class="split-text">
+            <h3 style="margin-top: 0">The edit loop</h3>
+            <ol class="howto">
+              <li><strong>Edit and save.</strong> Keep the file open in your editor. There is no build step and nothing to restart.</li>
+              <li><strong>Press Reload on the row.</strong> That one script recompiles from disk. Its enabled state, its open window and your slider positions all survive, as long as the control ids do.</li>
+              <li><strong>Read the row.</strong> Red text means it failed. A parked <code>frame</code> comes back to life the moment the reload succeeds.</li>
+            </ol>
+            <p class="fine" style="margin-top: 18px">
+              <strong>Reload all</strong> does the same for every file at once, and is also how
+              a brand-new file in the folder gets picked up.
+            </p>
+          </div>
+          <div class="split-text">
+            <h3 style="margin-top: 0">Printing your way out</h3>
+            <p><code>print("...")</code> is the debugger. Output appears in the Log window with
+            a <code>Plugin:</code> prefix, so open the Log before you start hunting.</p>
+            <ul class="checklist">
+              <li>Print once, not every frame — at 40 frames a second you will drown yourself. Gate it behind a tick box.</li>
+              <li>At most 64 lines are kept between frames; anything past that is dropped.</li>
+              <li><code>print(rig[0])</code> dumps a whole fixture map, which is the fastest way to confirm what your patch actually looks like to the script.</li>
+              <li>A quick sanity check for addressing: return one pair with a known address and watch that channel in the channel grid.</li>
+            </ul>
+          </div>
+        </div>
+
+        <figure class="shot shot-wide" style="margin-top: 40px">
+          <img src="images/shot-channels.webp" alt="The DMXexpress channel control grid with several fixtures selected, rows armed and level bars part-lit" loading="lazy" decoding="async">
+          <figcaption class="caption">The channel grid is the ground truth for a plugin author — the value your script returned, after every layer and master above it.</figcaption>
+        </figure>
+
+        <div class="callout">
+          <h3>Then send it out.</h3>
+          <p>
+            Once it survives a set, push the file somewhere public and submit the link above.
+            Ideas, half-finished scripts and requests for a hook that does not exist yet all
+            belong on the <a href="community.html">forum</a> — the format grew out of those
+            threads, and the four hooks are not the end of it.
+          </p>
         </div>
       </div>
     </section>
@@ -224,7 +766,7 @@ fn button(id, t, state) {
   <footer class="footer">
     <div class="container footer-inner">
       <div>
-        <img src="images/logo.png" alt="DMXexpress" class="logo-footer">
+        <img src="images/logo.webp" alt="DMXexpress" class="logo-footer" loading="lazy" decoding="async">
         <p class="fine">A native, all-in-one DMX fixture visualizer and live lighting controller built in Rust.</p>
       </div>
       <div class="footer-links">
