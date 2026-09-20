@@ -159,7 +159,7 @@ impl Default for Settings {
 
 impl Settings {
     pub fn load() -> Self {
-        std::fs::read_to_string(SETTINGS_FILE)
+        std::fs::read_to_string(crate::paths::data_path(SETTINGS_FILE))
             .ok()
             .and_then(|s| serde_json::from_str(&s).ok())
             .unwrap_or_default()
@@ -167,7 +167,7 @@ impl Settings {
 
     pub fn save(&self) {
         if let Ok(json) = serde_json::to_string_pretty(self) {
-            let _ = std::fs::write(SETTINGS_FILE, json);
+            let _ = std::fs::write(crate::paths::data_path(SETTINGS_FILE), json);
         }
     }
 }

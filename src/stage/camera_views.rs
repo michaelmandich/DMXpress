@@ -47,12 +47,12 @@ pub struct CameraBookmark {
 
 /// The bookmarks in `cameras.json`; empty when absent or unreadable.
 pub fn load_cameras() -> Vec<CameraBookmark> {
-    load_cameras_from(Path::new(CAMERAS_FILE))
+    load_cameras_from(&crate::paths::data_path(CAMERAS_FILE))
 }
 
 /// Write the bookmarks to `cameras.json`; errors are swallowed.
 pub fn save_cameras(list: &[CameraBookmark]) {
-    save_cameras_to(Path::new(CAMERAS_FILE), list)
+    save_cameras_to(&crate::paths::data_path(CAMERAS_FILE), list)
 }
 
 pub(crate) fn load_cameras_from(path: &Path) -> Vec<CameraBookmark> {

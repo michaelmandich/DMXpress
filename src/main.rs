@@ -15,6 +15,7 @@ mod net;
 mod order;
 mod oscillator;
 mod palette;
+mod paths;
 mod phaser;
 mod plugin;
 mod preset;
@@ -42,6 +43,11 @@ use eframe::egui;
 // switch to a per-user data dir so show files aren't written to Downloads —
 // or lost entirely inside a Gatekeeper-translocated .app on macOS.
 fn resolve_data_dir() {
+    // Anything that named the data directory outright — `DMXPRESS_DATA_DIR`
+    // — has already said where the show lives; don't move somewhere else.
+    if !paths::data_dir().as_os_str().is_empty() {
+        return;
+    }
     if std::path::Path::new("settings.json").exists()
         || std::path::Path::new("stage_layout.json").exists()
     {

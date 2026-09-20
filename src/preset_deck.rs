@@ -41,7 +41,7 @@ fn slot_is_reachable(k: usize) -> bool {
 /// Read the board from disk (empty when absent or unreadable), padded to
 /// whole pages.
 pub fn load_preset_deck() -> Vec<Option<PresetSlot>> {
-    let mut slots: Vec<Option<PresetSlot>> = std::fs::read_to_string(PRESET_DECK_FILE)
+    let mut slots: Vec<Option<PresetSlot>> = std::fs::read_to_string(crate::paths::data_path(PRESET_DECK_FILE))
         .ok()
         .and_then(|s| serde_json::from_str(&s).ok())
         .unwrap_or_default();
@@ -72,7 +72,7 @@ pub fn first_free_slot(slots: &[Option<PresetSlot>], from_page: usize) -> Option
 /// Write the board; errors are swallowed like every other state file.
 pub fn save_preset_deck(slots: &[Option<PresetSlot>]) {
     if let Ok(json) = serde_json::to_string_pretty(slots) {
-        let _ = std::fs::write(PRESET_DECK_FILE, json);
+        let _ = std::fs::write(crate::paths::data_path(PRESET_DECK_FILE), json);
     }
 }
 

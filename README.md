@@ -76,6 +76,8 @@ Run the test suite with:
 cargo test
 ```
 
+The tests never touch the show in the working directory: they copy it into a scratch directory of their own first and work on that, so a test run cannot overwrite your presets, your stage layout or your settings.
+
 > **Network safety:** DMXpress can transmit live lighting data over Art-Net. Confirm the selected network interface, universe, patch, and Grand Master before connecting it to a live rig.
 
 ## Basic Workflow
@@ -98,6 +100,8 @@ DMXpress stores show data as human-readable JSON files in the working directory.
 Panel preferences that belong to the machine rather than the show — the Inspector's open tab and width, which sections are folded, and what the stage draws — live separately in `inspector.json` and are deliberately left out of saved configurations, so switching shows never rearranges your workspace.
 
 Complete show configurations are stored under `configs/`, while reusable stage arrangements are stored under `setups/`.
+
+Set `DMXPRESS_DATA_DIR` to read and write the show somewhere other than the working directory. A release binary started outside a show folder picks a per-user data directory by itself; `DMXPRESS_DATA_DIR` overrides both.
 
 Before experimenting with a valuable show file, keep a backup or use version control. File formats may evolve while the project is under active development.
 

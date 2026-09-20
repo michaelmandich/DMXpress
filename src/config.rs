@@ -103,12 +103,12 @@ fn path(name: &str) -> PathBuf {
         .chars()
         .map(|c| if c.is_alphanumeric() || " -_().".contains(c) { c } else { '_' })
         .collect();
-    PathBuf::from(CONFIGS_DIR).join(format!("{safe}.json"))
+    crate::paths::data_path(CONFIGS_DIR).join(format!("{safe}.json"))
 }
 
 pub fn list() -> Vec<String> {
     let mut out = Vec::new();
-    if let Ok(rd) = std::fs::read_dir(CONFIGS_DIR) {
+    if let Ok(rd) = std::fs::read_dir(crate::paths::data_path(CONFIGS_DIR)) {
         for e in rd.flatten() {
             let p = e.path();
             if p.extension().is_some_and(|x| x == "json") {
@@ -126,7 +126,7 @@ pub fn save(name: &str, cfg: &Configuration) -> bool {
     if name.trim().is_empty() {
         return false;
     }
-    let _ = std::fs::create_dir_all(CONFIGS_DIR);
+    let _ = std::fs::create_dir_all(crate::paths::data_path(CONFIGS_DIR));
     serde_json::to_string_pretty(cfg)
         .ok()
         .and_then(|json| std::fs::write(path(name), json).ok())

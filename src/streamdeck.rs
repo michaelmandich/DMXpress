@@ -202,7 +202,7 @@ pub const PHASER_DECK_SLOTS: usize = 36;
 const PHASER_DECK_FILE: &str = "phaser_deck.json";
 
 pub fn load_phaser_deck() -> Vec<Option<PhaserSlot>> {
-    let mut slots: Vec<Option<PhaserSlot>> = std::fs::read_to_string(PHASER_DECK_FILE)
+    let mut slots: Vec<Option<PhaserSlot>> = std::fs::read_to_string(crate::paths::data_path(PHASER_DECK_FILE))
         .ok()
         .and_then(|s| serde_json::from_str(&s).ok())
         .unwrap_or_default();
@@ -223,7 +223,7 @@ pub fn phaser_deck_pages(slots: &[Option<PhaserSlot>]) -> usize {
 
 pub fn save_phaser_deck(slots: &[Option<PhaserSlot>]) {
     if let Ok(json) = serde_json::to_string_pretty(slots) {
-        let _ = std::fs::write(PHASER_DECK_FILE, json);
+        let _ = std::fs::write(crate::paths::data_path(PHASER_DECK_FILE), json);
     }
 }
 

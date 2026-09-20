@@ -356,7 +356,7 @@ pub fn load_default() -> Result<Patch> {
 
 /// Fixtures from the last successful ShowBuddy import, if one was cached.
 pub fn load_cache() -> Vec<Fixture> {
-    std::fs::read_to_string(CACHE_FILE)
+    std::fs::read_to_string(crate::paths::data_path(CACHE_FILE))
         .ok()
         .and_then(|text| serde_json::from_str::<Vec<Fixture>>(&text).ok())
         .unwrap_or_default()
@@ -369,7 +369,7 @@ pub fn save_cache(fixtures: &[Fixture]) {
         return;
     }
     if let Ok(json) = serde_json::to_string_pretty(fixtures) {
-        let _ = std::fs::write(CACHE_FILE, json);
+        let _ = std::fs::write(crate::paths::data_path(CACHE_FILE), json);
     }
 }
 
@@ -605,7 +605,7 @@ pub fn hydrate_presets(banks: &mut [PresetBank]) -> usize {
 
 /// Preset banks from the last successful ShowBuddy import, if cached.
 pub fn load_preset_cache() -> Vec<PresetBank> {
-    std::fs::read_to_string(PRESET_CACHE_FILE)
+    std::fs::read_to_string(crate::paths::data_path(PRESET_CACHE_FILE))
         .ok()
         .and_then(|text| serde_json::from_str::<Vec<PresetBank>>(&text).ok())
         .unwrap_or_default()
@@ -618,7 +618,7 @@ pub fn save_preset_cache(banks: &[PresetBank]) {
         return;
     }
     if let Ok(json) = serde_json::to_string_pretty(banks) {
-        let _ = std::fs::write(PRESET_CACHE_FILE, json);
+        let _ = std::fs::write(crate::paths::data_path(PRESET_CACHE_FILE), json);
     }
 }
 

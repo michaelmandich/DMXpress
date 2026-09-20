@@ -108,7 +108,7 @@ pub fn assign_ids(orders: &mut [Order]) {
 
 /// Load the saved orders (empty if the file is missing or unreadable).
 pub fn load_orders() -> Vec<Order> {
-    let mut orders: Vec<Order> = std::fs::read_to_string(ORDERS_FILE)
+    let mut orders: Vec<Order> = std::fs::read_to_string(crate::paths::data_path(ORDERS_FILE))
         .ok()
         .and_then(|s| serde_json::from_str(&s).ok())
         .unwrap_or_default();
@@ -119,7 +119,7 @@ pub fn load_orders() -> Vec<Order> {
 /// Persist the orders to disk (best-effort).
 pub fn save_orders(orders: &[Order]) {
     if let Ok(json) = serde_json::to_string_pretty(orders) {
-        let _ = std::fs::write(ORDERS_FILE, json);
+        let _ = std::fs::write(crate::paths::data_path(ORDERS_FILE), json);
     }
 }
 

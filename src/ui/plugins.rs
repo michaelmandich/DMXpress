@@ -11,7 +11,7 @@ use crate::plugin::{self, Control};
 fn open_plugins_folder() {
     let path = std::env::current_dir()
         .unwrap_or_default()
-        .join(plugin::PLUGINS_DIR);
+        .join(crate::paths::data_path(plugin::PLUGINS_DIR));
     let _ = std::fs::create_dir_all(&path);
     #[cfg(target_os = "windows")]
     let _ = std::process::Command::new("explorer").arg(&path).spawn();
@@ -48,10 +48,10 @@ impl App {
                 .collect()
         });
         if !dropped.is_empty() {
-            let _ = std::fs::create_dir_all(plugin::PLUGINS_DIR);
+            let _ = std::fs::create_dir_all(crate::paths::data_path(plugin::PLUGINS_DIR));
             for src in &dropped {
                 if let Some(name) = src.file_name() {
-                    let dst = std::path::Path::new(plugin::PLUGINS_DIR).join(name);
+                    let dst = crate::paths::data_path(plugin::PLUGINS_DIR).join(name);
                     match std::fs::copy(src, &dst) {
                         Ok(_) => self.log.push(format!("Plugins: installed {}", name.to_string_lossy())),
                         Err(e) => self.log.push(format!("Plugins: install failed — {e}")),

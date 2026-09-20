@@ -1091,7 +1091,7 @@ impl Default for UserPatch {
 }
 
 pub fn load_user_patch() -> UserPatch {
-    let Ok(text) = std::fs::read_to_string(USER_PATCH_FILE) else {
+    let Ok(text) = std::fs::read_to_string(crate::paths::data_path(USER_PATCH_FILE)) else {
         return UserPatch::default();
     };
     if let Ok(p) = serde_json::from_str::<UserPatch>(&text) {
@@ -1108,7 +1108,7 @@ pub fn load_user_patch() -> UserPatch {
 
 pub fn save_user_patch(patch: &UserPatch) {
     if let Ok(json) = serde_json::to_string_pretty(patch) {
-        let _ = std::fs::write(USER_PATCH_FILE, json);
+        let _ = std::fs::write(crate::paths::data_path(USER_PATCH_FILE), json);
     }
 }
 

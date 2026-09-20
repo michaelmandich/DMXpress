@@ -40,8 +40,9 @@ impl App {
                 .on_hover_text("Open the backups folder in your file manager")
                 .clicked()
             {
-                let _ = std::fs::create_dir_all(backup::BACKUPS_DIR);
-                backup::reveal(Path::new(backup::BACKUPS_DIR));
+                let dir = crate::paths::data_path(backup::BACKUPS_DIR);
+                let _ = std::fs::create_dir_all(&dir);
+                backup::reveal(&dir);
             }
             if let Some((path, at)) = &self.autosave.last_written {
                 let name = path.file_stem().map(|s| s.to_string_lossy().into_owned());

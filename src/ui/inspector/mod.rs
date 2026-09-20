@@ -229,7 +229,7 @@ impl Default for InspectorPrefs {
 
 impl InspectorPrefs {
     pub fn load() -> Self {
-        std::fs::read_to_string(INSPECTOR_FILE)
+        std::fs::read_to_string(crate::paths::data_path(INSPECTOR_FILE))
             .ok()
             .and_then(|s| serde_json::from_str(&s).ok())
             .unwrap_or_default()
@@ -237,7 +237,7 @@ impl InspectorPrefs {
 
     pub fn save(&self) {
         if let Ok(json) = serde_json::to_string_pretty(self) {
-            let _ = std::fs::write(INSPECTOR_FILE, json);
+            let _ = std::fs::write(crate::paths::data_path(INSPECTOR_FILE), json);
         }
     }
 }

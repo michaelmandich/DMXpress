@@ -251,7 +251,7 @@ impl NetConfig {
     /// Read `network.json`, or start from defaults. A missing file is
     /// written straight away so the freshly generated CID is pinned.
     pub fn load() -> Self {
-        match std::fs::read_to_string(NETWORK_FILE) {
+        match std::fs::read_to_string(crate::paths::data_path(NETWORK_FILE)) {
             Ok(text) => match serde_json::from_str::<Self>(&text) {
                 Ok(mut cfg) => {
                     cfg.normalize();
@@ -270,7 +270,7 @@ impl NetConfig {
                     // new identity is at least pinned rather than re-rolled
                     // on every launch, and leave the unreadable file's
                     // contents behind in a sibling so nothing is lost.
-                    let _ = std::fs::write(format!("{NETWORK_FILE}.bad"), &text);
+                    let _ = std::fs::write(crate::paths::data_path(format!("{NETWORK_FILE}.bad")), &text);
                     let cfg = Self::default();
                     cfg.save();
                     cfg
@@ -308,7 +308,7 @@ impl NetConfig {
 
     pub fn save(&self) {
         if let Ok(json) = serde_json::to_string_pretty(self) {
-            let _ = std::fs::write(NETWORK_FILE, json);
+            let _ = std::fs::write(crate::paths::data_path(NETWORK_FILE), json);
         }
     }
 

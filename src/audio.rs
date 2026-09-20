@@ -723,7 +723,7 @@ pub struct AudioFile {
 }
 
 pub fn load_audio() -> AudioFile {
-    std::fs::read_to_string(AUDIO_FILE)
+    std::fs::read_to_string(crate::paths::data_path(AUDIO_FILE))
         .ok()
         .and_then(|s| serde_json::from_str(&s).ok())
         .unwrap_or_default()
@@ -731,7 +731,7 @@ pub fn load_audio() -> AudioFile {
 
 pub fn save_audio(file: &AudioFile) {
     if let Ok(json) = serde_json::to_string_pretty(file) {
-        let _ = std::fs::write(AUDIO_FILE, json);
+        let _ = std::fs::write(crate::paths::data_path(AUDIO_FILE), json);
     }
 }
 

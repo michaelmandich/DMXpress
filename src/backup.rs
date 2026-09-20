@@ -90,8 +90,9 @@ pub struct Entry {
 
 /// Write `cfg` as `backups/<kind>-<stamp>.json` and prune to [`KEEP`].
 pub fn write(kind: &str, cfg: &Configuration) -> std::io::Result<PathBuf> {
-    std::fs::create_dir_all(BACKUPS_DIR)?;
-    let path = Path::new(BACKUPS_DIR).join(format!("{kind}-{}.json", stamp(SystemTime::now())));
+    let dir = crate::paths::data_path(BACKUPS_DIR);
+    std::fs::create_dir_all(&dir)?;
+    let path = dir.join(format!("{kind}-{}.json", stamp(SystemTime::now())));
     let bytes = serde_json::to_vec(cfg).map_err(std::io::Error::other)?;
     // Write beside, then rename: a crash mid-write never leaves a half file
     // under the name a restore would pick.
@@ -104,7 +105,7 @@ pub fn write(kind: &str, cfg: &Configuration) -> std::io::Result<PathBuf> {
 
 /// Every backup, newest first.
 pub fn list() -> Vec<Entry> {
-    let Ok(dir) = std::fs::read_dir(BACKUPS_DIR) else { return Vec::new() };
+    let Ok(dir) = std::fs::read_dir(crate::paths::data_path(BACKUPS_DIR)) else { return Vec::new() };
     let mut out: Vec<Entry> = dir
         .flatten()
         .filter_map(|e| {
@@ -140,14 +141,14 @@ pub fn read(path: &Path) -> Result<Configuration, String> {
 
 /// Write `cfg` as one readable file in `exports/`, named after the show.
 pub fn export(name: &str, cfg: &Configuration) -> std::io::Result<PathBuf> {
-    std::fs::create_dir_all(EXPORTS_DIR)?;
+    std::fs::create_dir_all(crate::paths::data_path(EXPORTS_DIR))?;
     let safe: String = name
         .trim()
         .chars()
         .map(|c| if c.is_alphanumeric() || " -_()".contains(c) { c } else { '_' })
         .collect();
     let safe = if safe.trim().is_empty() { "show".to_string() } else { safe.trim().to_string() };
-    let path = Path::new(EXPORTS_DIR)
+    let path = crate::paths::data_path(EXPORTS_DIR)
         .join(format!("{safe} {}.dmxpress.json", stamp(SystemTime::now())));
     let text = serde_json::to_string_pretty(cfg).map_err(std::io::Error::other)?;
     std::fs::write(&path, text)?;

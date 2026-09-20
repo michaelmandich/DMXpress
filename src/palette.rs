@@ -130,7 +130,7 @@ impl Palette {
 
 /// Load saved palettes (empty if the file is missing or unreadable).
 pub fn load_palettes() -> Vec<Palette> {
-    std::fs::read_to_string(PALETTES_FILE)
+    std::fs::read_to_string(crate::paths::data_path(PALETTES_FILE))
         .ok()
         .and_then(|s| serde_json::from_str(&s).ok())
         .unwrap_or_default()
@@ -139,7 +139,7 @@ pub fn load_palettes() -> Vec<Palette> {
 /// Persist palettes to disk (best-effort).
 pub fn save_palettes(palettes: &[Palette]) {
     if let Ok(json) = serde_json::to_string_pretty(palettes) {
-        let _ = std::fs::write(PALETTES_FILE, json);
+        let _ = std::fs::write(crate::paths::data_path(PALETTES_FILE), json);
     }
 }
 
@@ -214,7 +214,7 @@ pub struct SeqStore {
 
 /// Load saved palette sequences (empty if the file is missing/unreadable).
 pub fn load_seqs() -> SeqStore {
-    std::fs::read_to_string(SEQUENCES_FILE)
+    std::fs::read_to_string(crate::paths::data_path(SEQUENCES_FILE))
         .ok()
         .and_then(|s| serde_json::from_str(&s).ok())
         .unwrap_or_default()
@@ -227,7 +227,7 @@ pub fn save_seqs(folders: &[String], seqs: &[PaletteSeq]) {
         seqs: seqs.to_vec(),
     };
     if let Ok(json) = serde_json::to_string_pretty(&store) {
-        let _ = std::fs::write(SEQUENCES_FILE, json);
+        let _ = std::fs::write(crate::paths::data_path(SEQUENCES_FILE), json);
     }
 }
 

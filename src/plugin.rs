@@ -407,13 +407,14 @@ impl Plugin {
 
 /// Scan `plugins/` and compile everything, applying saved enabled flags.
 pub fn load_all(engine: &Engine) -> Vec<Plugin> {
-    let _ = std::fs::create_dir_all(PLUGINS_DIR);
-    let saved: Vec<SavedState> = std::fs::read_to_string(STATE_FILE)
+    let dir = crate::paths::data_path(PLUGINS_DIR);
+    let _ = std::fs::create_dir_all(&dir);
+    let saved: Vec<SavedState> = std::fs::read_to_string(crate::paths::data_path(STATE_FILE))
         .ok()
         .and_then(|s| serde_json::from_str(&s).ok())
         .unwrap_or_default();
     let mut out = Vec::new();
-    let Ok(entries) = std::fs::read_dir(PLUGINS_DIR) else {
+    let Ok(entries) = std::fs::read_dir(&dir) else {
         return out;
     };
     let mut files: Vec<PathBuf> = entries
@@ -443,7 +444,7 @@ pub fn save_state(plugins: &[Plugin]) {
         })
         .collect();
     if let Ok(text) = serde_json::to_string_pretty(&saved) {
-        let _ = std::fs::write(STATE_FILE, text);
+        let _ = std::fs::write(crate::paths::data_path(STATE_FILE), text);
     }
 }
 

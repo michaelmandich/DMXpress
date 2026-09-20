@@ -111,7 +111,7 @@ impl StageView {
             snap_preview: HashMap::new(),
             gizmo_last_angle: 0.0,
             hover_element: None,
-            layout_path: PathBuf::from(LAYOUT_FILE),
+            layout_path: crate::paths::data_path(LAYOUT_FILE),
             gobo_atlas: Default::default(),
         }
     }
@@ -299,7 +299,7 @@ impl StageView {
             .chars()
             .map(|c| if c.is_alphanumeric() || " -_().".contains(c) { c } else { '_' })
             .collect();
-        PathBuf::from(SETUPS_DIR).join(format!("{safe}.json"))
+        crate::paths::data_path(SETUPS_DIR).join(format!("{safe}.json"))
     }
 
     /// Save the current arrangement (positions, duplicates, towers) under a
@@ -308,7 +308,7 @@ impl StageView {
         if name.trim().is_empty() {
             return false;
         }
-        let _ = std::fs::create_dir_all(SETUPS_DIR);
+        let _ = std::fs::create_dir_all(crate::paths::data_path(SETUPS_DIR));
         serde_json::to_string_pretty(&self.layout_data(patch))
             .ok()
             .and_then(|json| std::fs::write(Self::setup_path(name), json).ok())

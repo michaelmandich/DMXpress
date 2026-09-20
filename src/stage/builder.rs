@@ -1669,7 +1669,7 @@ impl StageView {
     // ---- setups ----
 
     fn setups_dir() -> PathBuf {
-        PathBuf::from(SETUPS_DIR)
+        crate::paths::data_path(SETUPS_DIR)
     }
 
     /// Every setup in the app's folder, described. The Build tab caches
@@ -1705,7 +1705,7 @@ impl StageView {
         if name.trim().is_empty() {
             return false;
         }
-        let _ = std::fs::create_dir_all(SETUPS_DIR);
+        let _ = std::fs::create_dir_all(crate::paths::data_path(SETUPS_DIR));
         let mut lf = self.export_layout(patch);
         lf.instances.clear();
         serde_json::to_string_pretty(&lf)

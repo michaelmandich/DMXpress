@@ -5,7 +5,6 @@
 //! and "Patch" workspaces in one click.
 
 use std::fs;
-use std::path::Path;
 
 use serde::{Deserialize, Serialize};
 
@@ -64,7 +63,7 @@ fn yes() -> bool {
 }
 
 pub fn load_views() -> Vec<View> {
-    match fs::read_to_string(Path::new(VIEWS_FILE)) {
+    match fs::read_to_string(crate::paths::data_path(VIEWS_FILE)) {
         Ok(text) => serde_json::from_str(&text).unwrap_or_default(),
         Err(_) => Vec::new(),
     }
@@ -72,6 +71,6 @@ pub fn load_views() -> Vec<View> {
 
 pub fn save_views(views: &[View]) {
     if let Ok(text) = serde_json::to_string_pretty(views) {
-        let _ = fs::write(Path::new(VIEWS_FILE), text);
+        let _ = fs::write(crate::paths::data_path(VIEWS_FILE), text);
     }
 }

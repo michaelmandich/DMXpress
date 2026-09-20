@@ -149,7 +149,7 @@ pub struct PresetStore {
 }
 
 pub fn load_presets() -> PresetStore {
-    let Ok(s) = std::fs::read_to_string(PRESETS_FILE) else {
+    let Ok(s) = std::fs::read_to_string(crate::paths::data_path(PRESETS_FILE)) else {
         return PresetStore::default();
     };
     let mut store = if let Ok(store) = serde_json::from_str::<PresetStore>(&s) {
@@ -167,7 +167,7 @@ pub fn load_presets() -> PresetStore {
 pub fn save_presets(folders: &[String], presets: &[UserPreset]) {
     let store = PresetStore { folders: folders.to_vec(), presets: presets.to_vec() };
     if let Ok(json) = serde_json::to_string_pretty(&store) {
-        let _ = std::fs::write(PRESETS_FILE, json);
+        let _ = std::fs::write(crate::paths::data_path(PRESETS_FILE), json);
     }
 }
 

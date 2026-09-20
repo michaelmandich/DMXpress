@@ -3109,24 +3109,36 @@ mod tests {
     use crate::stage::headless::{render_frames, save};
     use crate::ui::inspector::InspectorTab;
 
-    /// State files the App-level tests touch, put back when the test ends.
-    struct Files(Vec<(&'static str, Option<Vec<u8>>)>);
+    /// State files the App-level tests touch, put back when the test ends
+    /// so the next test starts from the same pools this one did. They live
+    /// in the run's scratch directory, never the operator's show — see
+    /// `crate::paths`.
+    struct Files(Vec<(std::path::PathBuf, Option<Vec<u8>>)>);
 
     impl Files {
-        fn hold(names: &[&'static str]) -> Self {
-            Self(names.iter().map(|n| (*n, std::fs::read(n).ok())).collect())
+        fn hold(names: &[&str]) -> Self {
+            Self(
+                names
+                    .iter()
+                    .map(|n| {
+                        let path = crate::paths::data_path(n);
+                        let bytes = std::fs::read(&path).ok();
+                        (path, bytes)
+                    })
+                    .collect(),
+            )
         }
     }
 
     impl Drop for Files {
         fn drop(&mut self) {
-            for (name, bytes) in &self.0 {
+            for (path, bytes) in &self.0 {
                 match bytes {
                     Some(b) => {
-                        let _ = std::fs::write(name, b);
+                        let _ = std::fs::write(path, b);
                     }
                     None => {
-                        let _ = std::fs::remove_file(name);
+                        let _ = std::fs::remove_file(path);
                     }
                 }
             }

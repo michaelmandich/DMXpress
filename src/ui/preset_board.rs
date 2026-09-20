@@ -929,12 +929,17 @@ mod tests {
     use crate::showbuddy::{PresetBank, PresetData, PresetRef};
 
     /// The tests here write `preset_deck.json` (as the Phaser board's do
-    /// with `phaser_deck.json`), so each one puts the file back.
+    /// with `phaser_deck.json`), so each one puts the file back. It is the
+    /// copy in the run's scratch directory — see `crate::paths`.
     struct DeckFile(Option<Vec<u8>>);
 
     impl DeckFile {
+        fn path() -> std::path::PathBuf {
+            crate::paths::data_path("preset_deck.json")
+        }
+
         fn snapshot() -> Self {
-            Self(std::fs::read("preset_deck.json").ok())
+            Self(std::fs::read(Self::path()).ok())
         }
     }
 
@@ -942,10 +947,10 @@ mod tests {
         fn drop(&mut self) {
             match &self.0 {
                 Some(bytes) => {
-                    let _ = std::fs::write("preset_deck.json", bytes);
+                    let _ = std::fs::write(Self::path(), bytes);
                 }
                 None => {
-                    let _ = std::fs::remove_file("preset_deck.json");
+                    let _ = std::fs::remove_file(Self::path());
                 }
             }
         }

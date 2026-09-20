@@ -62,7 +62,7 @@ pub fn assign_ids(groups: &mut [Group]) {
 
 /// Load the saved groups (empty if the file is missing or unreadable).
 pub fn load_groups() -> Vec<Group> {
-    let mut groups: Vec<Group> = std::fs::read_to_string(GROUPS_FILE)
+    let mut groups: Vec<Group> = std::fs::read_to_string(crate::paths::data_path(GROUPS_FILE))
         .ok()
         .and_then(|s| serde_json::from_str(&s).ok())
         .unwrap_or_default();
@@ -73,6 +73,6 @@ pub fn load_groups() -> Vec<Group> {
 /// Persist the groups to disk (best-effort).
 pub fn save_groups(groups: &[Group]) {
     if let Ok(json) = serde_json::to_string_pretty(groups) {
-        let _ = std::fs::write(GROUPS_FILE, json);
+        let _ = std::fs::write(crate::paths::data_path(GROUPS_FILE), json);
     }
 }

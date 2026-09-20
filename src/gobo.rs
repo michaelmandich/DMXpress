@@ -415,7 +415,7 @@ pub struct UserGobos {
 
 impl UserGobos {
     pub fn load() -> Self {
-        std::fs::read_to_string(USER_FILE)
+        std::fs::read_to_string(crate::paths::data_path(USER_FILE))
             .ok()
             .and_then(|t| serde_json::from_str(&t).ok())
             .unwrap_or_default()
@@ -423,7 +423,7 @@ impl UserGobos {
 
     pub fn save(&self) {
         if let Ok(text) = serde_json::to_string_pretty(self) {
-            let _ = std::fs::write(USER_FILE, text);
+            let _ = std::fs::write(crate::paths::data_path(USER_FILE), text);
         }
     }
 

@@ -149,6 +149,9 @@ enum FrameAction {
     Snapshot,
 }
 
+/// Where "Snapshot" drops its PNGs, beside the show.
+const SNAPSHOTS_DIR: &str = "screenshots";
+
 /// The camera keys, for the "Stage controls" fold.
 const CAMERA_HELP: &[(&str, &str)] = &[
     ("F", "Frame the selection (or the rig)"),
@@ -1492,10 +1495,11 @@ impl App {
         let secs = std::time::SystemTime::now()
             .duration_since(std::time::UNIX_EPOCH)
             .map_or(0, |d| d.as_secs());
-        let path = format!("screenshots/stage-{secs}.png");
-        let _ = std::fs::create_dir_all("screenshots");
+        let dir = crate::paths::data_path(SNAPSHOTS_DIR);
+        let path = dir.join(format!("stage-{secs}.png"));
+        let _ = std::fs::create_dir_all(&dir);
         match img.save(&path) {
-            Ok(()) => self.log.push(format!("Stage snapshot saved to {path}")),
+            Ok(()) => self.log.push(format!("Stage snapshot saved to {}", path.display())),
             Err(e) => self.log.push(format!("Stage snapshot failed: {e}")),
         }
     }

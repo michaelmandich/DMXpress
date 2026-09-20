@@ -801,7 +801,7 @@ pub fn movement_variety_phasers() -> Vec<Phaser> {
 
 /// Load saved phasers, seeding the defaults the first time (no file yet).
 pub fn load_phasers() -> Vec<Phaser> {
-    let mut phasers: Vec<Phaser> = match std::fs::read_to_string(PHASERS_FILE) {
+    let mut phasers: Vec<Phaser> = match std::fs::read_to_string(crate::paths::data_path(PHASERS_FILE)) {
         Ok(s) => serde_json::from_str(&s).unwrap_or_else(|_| default_phasers()),
         Err(_) => default_phasers(),
     };
@@ -826,7 +826,7 @@ pub fn load_phasers() -> Vec<Phaser> {
 /// Persist phasers to disk (best-effort).
 pub fn save_phasers(phasers: &[Phaser]) {
     if let Ok(json) = serde_json::to_string_pretty(phasers) {
-        let _ = std::fs::write(PHASERS_FILE, json);
+        let _ = std::fs::write(crate::paths::data_path(PHASERS_FILE), json);
     }
 }
 

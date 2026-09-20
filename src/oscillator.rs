@@ -111,7 +111,7 @@ impl Default for CustomWaveform {
 }
 
 pub fn load_waveforms() -> Vec<CustomWaveform> {
-    std::fs::read_to_string(WAVEFORMS_FILE)
+    std::fs::read_to_string(crate::paths::data_path(WAVEFORMS_FILE))
         .ok()
         .and_then(|s| serde_json::from_str(&s).ok())
         .unwrap_or_default()
@@ -119,7 +119,7 @@ pub fn load_waveforms() -> Vec<CustomWaveform> {
 
 pub fn save_waveforms(waves: &[CustomWaveform]) {
     if let Ok(json) = serde_json::to_string_pretty(waves) {
-        let _ = std::fs::write(WAVEFORMS_FILE, json);
+        let _ = std::fs::write(crate::paths::data_path(WAVEFORMS_FILE), json);
     }
 }
 

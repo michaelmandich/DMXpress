@@ -271,7 +271,7 @@ impl Scene {
 }
 
 pub fn load_scenes() -> Vec<Scene> {
-    std::fs::read_to_string(SCENES_FILE)
+    std::fs::read_to_string(crate::paths::data_path(SCENES_FILE))
         .ok()
         .and_then(|s| serde_json::from_str(&s).ok())
         .unwrap_or_default()
@@ -279,6 +279,6 @@ pub fn load_scenes() -> Vec<Scene> {
 
 pub fn save_scenes(scenes: &[Scene]) {
     if let Ok(json) = serde_json::to_string_pretty(scenes) {
-        let _ = std::fs::write(SCENES_FILE, json);
+        let _ = std::fs::write(crate::paths::data_path(SCENES_FILE), json);
     }
 }
