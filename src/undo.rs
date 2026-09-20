@@ -382,23 +382,23 @@ mod tests {
         app.undo.observe(json);
 
         let gm = app.grand_master;
-        let fade = app.cue_fade;
+        let fade = app.transition.duration;
         app.grand_master = (gm * 0.5 + 0.1).min(1.0);
-        app.cue_fade = fade + 4.5;
+        app.transition.duration = fade + 4.5;
         app.live.base.0[3] = 200;
         app.live_active.insert(3);
         assert!(app.undo.observe(app.snapshot_json()), "the change was noticed");
 
         app.undo();
         assert_eq!(app.grand_master, gm);
-        assert_eq!(app.cue_fade, fade);
+        assert_eq!(app.transition.duration, fade);
         assert_eq!(app.live.base.0[3], 0);
         assert!(!app.live_active.contains(&3));
         assert_eq!(app.undo.undo_len(), 0);
         assert_eq!(app.undo.redo_len(), 1);
 
         app.redo();
-        assert_eq!(app.cue_fade, fade + 4.5);
+        assert_eq!(app.transition.duration, fade + 4.5);
         assert_eq!(app.live.base.0[3], 200);
     }
 }

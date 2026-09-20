@@ -9,6 +9,7 @@ use serde::{Deserialize, Serialize};
 use std::path::PathBuf;
 
 use crate::group::Group;
+use crate::layer::ProgLayer;
 use crate::order::Order;
 use crate::palette::Palette;
 use crate::phaser::Phaser;
@@ -18,6 +19,7 @@ use crate::scene::Scene;
 use crate::showbuddy::Fixture;
 use crate::stack::Stack;
 use crate::stage::{CameraBookmark, LayoutFile, Settings};
+use crate::transition::TransitionFile;
 use crate::view::View;
 
 pub const CONFIGS_DIR: &str = "configs";
@@ -66,6 +68,10 @@ pub struct Configuration {
     /// before scenes existed.
     #[serde(default)]
     pub scenes: Vec<Scene>,
+    /// Programmer layers, bottom→top. Absent in configurations written
+    /// before layers existed, which restore as a single base layer.
+    #[serde(default)]
+    pub layers: Vec<ProgLayer>,
     #[serde(default)]
     pub views: Vec<View>,
     /// Saved stage-camera bookmarks (Inspector → Stage → Saved cameras).
@@ -76,8 +82,11 @@ pub struct Configuration {
     pub universe: u16,
     #[serde(default = "one")]
     pub grand_master: f32,
-    #[serde(default = "default_fade")]
-    pub cue_fade: f32,
+    /// Every fade time in the console: the global transition, advanced
+    /// mode, and the per-action slots. Absent in configurations written
+    /// before the transition desk, which start from the defaults.
+    #[serde(default)]
+    pub transition: TransitionFile,
 }
 
 fn one() -> f32 {
@@ -86,10 +95,6 @@ fn one() -> f32 {
 
 fn yes() -> bool {
     true
-}
-
-fn default_fade() -> f32 {
-    3.0
 }
 
 fn path(name: &str) -> PathBuf {

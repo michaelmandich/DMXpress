@@ -10,6 +10,7 @@ mod engine;
 mod fixturedb;
 mod gobo;
 mod group;
+mod layer;
 mod net;
 mod order;
 mod oscillator;

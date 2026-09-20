@@ -226,9 +226,14 @@ impl App {
                 ui.horizontal(|ui| {
                     ui.label("Address:");
                     ui.add(
-                        egui::DragValue::new(&mut self.patch_addr).range(1..=1024),
+                        egui::DragValue::new(&mut self.patch_addr)
+                            .range(1..=crate::net::DMX_SLOTS as u16),
                     )
-                    .on_hover_text("1-based DMX start address (513+ = second universe)");
+                    .on_hover_text(format!(
+                        "1-based DMX start address, 1–{} across {} universes",
+                        crate::net::DMX_SLOTS,
+                        crate::net::DMX_UNIVERSES
+                    ));
                     ui.label("Count:");
                     ui.add(egui::DragValue::new(&mut self.patch_count).range(1..=32));
                 });

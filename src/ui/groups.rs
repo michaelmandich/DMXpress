@@ -24,6 +24,7 @@ impl App {
         self.log
             .push(format!("Stored group \"{name}\" ({} fixtures)", fixtures.len()));
         self.groups.push(Group {
+            id: group::next_id(&self.groups),
             name,
             fixtures,
             mode: GroupMode::Individual,

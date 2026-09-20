@@ -44,12 +44,36 @@ impl App {
     /// changed channels into `live.base` so oscillators keep animating
     /// around them. Every touched channel joins the programmer and stops
     /// tracking whatever palette it used to reference.
-    pub(crate) fn commit_channel_edit(&mut self, buf: net::Frame, orig: &net::Frame) {
+    ///
+    /// `fade` is the Attributes "channel jump" time: a button or typed value
+    /// travels there over it, while hand drags (which pass 0) track the
+    /// pointer with no lag.
+    pub(crate) fn commit_channel_edit(&mut self, buf: net::Frame, orig: &net::Frame, fade: f32) {
         if self.transition_run.take().is_some() {
+            // A run mid-flight settles to the edited output; only a plain
+            // edit with nothing else moving gets to ease.
             self.live = Look::from_frame(buf);
+        } else if fade > 0.01 {
+            let now = std::time::Instant::now();
+            for i in 0..net::DMX_SLOTS {
+                if buf[i] != orig[i] {
+                    self.base_fades.insert(
+                        i,
+                        crate::app::Ramp {
+                            from: self.live.base[i] as f32,
+                            to: buf[i] as f32,
+                            start: now,
+                            dur: fade,
+                            stepped: self.channel_is_stepped(i),
+                            remove_after: false,
+                        },
+                    );
+                }
+            }
         } else {
             for i in 0..net::DMX_SLOTS {
                 if buf[i] != orig[i] {
+                    self.base_fades.remove(&i);
                     self.live.base[i] = buf[i];
                 }
             }
@@ -60,7 +84,11 @@ impl App {
                 self.live_refs.remove(&i);
             }
         }
-        *self.net.dmx.lock() = buf;
+        // An eased jump reaches the wire through the render tick; a cut is
+        // published now so the row never shows a value the rig hasn't got.
+        if fade <= 0.01 {
+            *self.net.dmx.lock() = buf;
+        }
     }
 
     /// The value a relative move (arrow key, Alt+wheel, fine drag) starts
@@ -807,6 +835,9 @@ impl App {
                 }
             });
 
+        // Buttons and menu picks are jumps and get the Attributes fade;
+        // anything the pointer dragged stays instant under the hand.
+        let jumped = !level_ops.is_empty();
         for (idxs, v) in level_ops {
             for i in idxs {
                 if i < net::DMX_SLOTS {
@@ -820,7 +851,12 @@ impl App {
             apply_arm(&mut self.sel_channels, anchor.as_deref(), op, &rows, &visible, &candidates);
         }
         if changed {
-            self.commit_channel_edit(buf, &orig);
+            let fade = if jumped {
+                self.transition.fade(crate::transition::TransitionTarget::ChannelJump)
+            } else {
+                0.0
+            };
+            self.commit_channel_edit(buf, &orig, fade);
             for (i, v) in base_edits {
                 self.live.base[i] = v;
                 self.live_active.insert(i);

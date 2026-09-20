@@ -30,7 +30,9 @@ pub enum CueVal {
 pub struct Cue {
     pub number: f32,
     pub name: String,
-    /// Fade time in seconds used when this cue is fired.
+    /// The Cues Go time as it stood when the cue was recorded. Kept in the
+    /// show file for the record; firing reads the Transition window, which
+    /// owns every fade time.
     pub fade: f32,
     /// 0-based DMX index → stored value. Only the channels this cue changes.
     pub values: Vec<(usize, CueVal)>,
@@ -81,6 +83,16 @@ pub struct Stack {
     /// Output master 0..1 (the executor fader, driven by a Deck in Phase 5).
     #[serde(skip, default = "full_level")]
     pub level: f32,
+    /// A release in progress: when it began and how long it takes. The stack
+    /// keeps asserting its cue, thinning out, until this lands.
+    #[serde(skip)]
+    leaving: Option<(Instant, f32)>,
+    /// Cached channel cover and the cue count it was built for; see
+    /// [`Stack::covered`].
+    #[serde(skip)]
+    covered_cache: Vec<usize>,
+    #[serde(skip)]
+    covered_upto: Option<usize>,
 }
 
 impl Stack {
@@ -92,12 +104,17 @@ impl Stack {
             run: None,
             settled: Frame::black(),
             level: 1.0,
+            leaving: None,
+            covered_cache: Vec::new(),
+            covered_upto: None,
         }
     }
 
-    /// Jump to cue `idx`, fading its `frame` in over `fade` seconds.
+    /// Jump to cue `idx`, fading its `frame` in over `fade` seconds. A Go
+    /// mid-release cancels the release: the stack is wanted after all.
     pub fn fire(&mut self, idx: usize, frame: Frame, fade: f32) {
         self.current = Some(idx);
+        self.leaving = None;
         if fade <= 0.0 {
             self.settled = frame;
             self.run = None;
@@ -113,7 +130,7 @@ impl Stack {
 
     /// Whether the stack is currently fading (needs fast repaints).
     pub fn is_fading(&self) -> bool {
-        self.run.is_some()
+        self.run.is_some() || self.leaving.is_some()
     }
 
     /// Keep an in-flight cue fade at the exact sample held during a global
@@ -122,24 +139,56 @@ impl Stack {
         if let Some(run) = &mut self.run {
             run.started += paused;
         }
+        if let Some((started, _)) = &mut self.leaving {
+            *started += paused;
+        }
     }
 
-    /// Stop playing: release the stack so it asserts nothing.
-    pub fn release(&mut self) {
-        self.current = None;
-        self.run = None;
+    /// Stop playing: release the stack so it asserts nothing — at once, or
+    /// thinning out over `fade` seconds.
+    pub fn release(&mut self, fade: f32) {
+        if fade <= 0.0 || self.current.is_none() {
+            self.current = None;
+            self.run = None;
+            self.leaving = None;
+        } else if self.leaving.is_none() {
+            self.leaving = Some((Instant::now(), fade));
+        }
     }
 
-    /// Channels the stack asserts: everything its cues up to `current` touch.
-    fn covered(&self) -> Vec<usize> {
-        let upto = self.current.map(|c| c + 1).unwrap_or(0);
-        let mut set = std::collections::BTreeSet::new();
-        for c in self.cues.iter().take(upto) {
-            for &(a, _) in &c.values {
-                set.insert(a);
+    /// How much of the stack is still on stage through a release, 0..1.
+    fn presence(&self) -> f32 {
+        match self.leaving {
+            None => 1.0,
+            Some((started, dur)) => {
+                1.0 - (started.elapsed().as_secs_f32() / dur.max(0.001)).clamp(0.0, 1.0)
             }
         }
-        set.into_iter().collect()
+    }
+
+    /// Channels the stack asserts: everything its cues up to `current`
+    /// touch. Cached, because it only changes when `current` does — it was
+    /// rebuilding a `BTreeSet` over every cue on every frame, which for a
+    /// long list recorded over a whole rig is tens of thousands of inserts
+    /// inside a 25 ms budget.
+    fn covered(&mut self) -> &[usize] {
+        let upto = self.current.map(|c| c + 1).unwrap_or(0);
+        if self.covered_upto != Some(upto) {
+            let mut set = std::collections::BTreeSet::new();
+            for c in self.cues.iter().take(upto) {
+                for &(a, _) in &c.values {
+                    set.insert(a);
+                }
+            }
+            self.covered_cache = set.into_iter().collect();
+            self.covered_upto = Some(upto);
+        }
+        &self.covered_cache
+    }
+
+    /// Drop the cached cover after anything that edits the cue list.
+    pub(crate) fn invalidate_cover(&mut self) {
+        self.covered_upto = None;
     }
 
     /// This stack's contribution to the output frame, or `None` when it is not
@@ -147,6 +196,12 @@ impl Stack {
     /// faders work and untouched channels fall through to other layers.
     pub fn render_layer(&mut self) -> Option<Layer> {
         if self.current.is_none() {
+            return None;
+        }
+        let presence = self.presence();
+        if presence <= 0.0 {
+            // The release has landed: let go for good.
+            self.release(0.0);
             return None;
         }
         let frame = if let Some(run) = &self.run {
@@ -159,8 +214,8 @@ impl Stack {
         } else {
             self.settled
         };
-        let level = self.level.clamp(0.0, 1.0);
-        let weights: Vec<(usize, f32)> = self.covered().into_iter().map(|a| (a, level)).collect();
+        let level = self.level.clamp(0.0, 1.0) * presence;
+        let weights: Vec<(usize, f32)> = self.covered().iter().map(|&a| (a, level)).collect();
         Some(Layer::overlay(frame, weights))
     }
 }

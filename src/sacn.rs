@@ -130,7 +130,16 @@ pub fn build_discovery(
     last_page: u8,
     universes: &[u16],
 ) -> Vec<u8> {
-    let n = universes.len().min(512);
+    // E1.31-2018 requires the list ascending with no repeats. The sender
+    // hands these over in page order, which for an explicitly-mapped console
+    // is arbitrary — and the more universes there are, the less likely page
+    // order happens to be sorted.
+    let mut universes: Vec<u16> = universes.to_vec();
+    universes.sort_unstable();
+    universes.dedup();
+    universes.truncate(512);
+    let universes = &universes[..];
+    let n = universes.len();
     let total = DISCOVERY_LAYER_AT + 8 + 2 * n;
     let mut p = Vec::with_capacity(total);
     root_layer(&mut p, total, VECTOR_ROOT_EXTENDED, cid);

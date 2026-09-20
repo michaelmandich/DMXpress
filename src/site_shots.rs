@@ -344,6 +344,7 @@ fn quiet(app: &mut App) {
     app.show_chases = false;
     app.show_groups = false;
     app.show_orders = false;
+    app.show_layers = false;
     app.show_scenes = false;
     app.show_audio = false;
     app.show_beat = false;
@@ -493,7 +494,7 @@ fn furnish(app: &mut App) {
         .iter()
         .filter(|g| !g.fixtures.is_empty())
         .take(5)
-        .map(|g| OrderStep { label: g.name.clone(), fixtures: g.fixtures.clone() })
+        .map(OrderStep::from_group)
         .collect();
     if steps.is_empty() {
         steps = app
@@ -502,16 +503,108 @@ fn furnish(app: &mut App) {
             .iter()
             .enumerate()
             .take(5)
-            .map(|(i, f)| OrderStep { label: f.display.clone(), fixtures: vec![i] })
+            .map(|(i, f)| OrderStep::from_fixtures(f.display.clone(), vec![i]))
             .collect();
     }
     let reversed: Vec<OrderStep> = steps.iter().rev().cloned().collect();
     app.orders = vec![
-        Order { name: "Back to front".into(), steps },
-        Order { name: "Outside in".into(), steps: reversed },
+        Order { id: 1, name: "Back to front".into(), steps },
+        Order { id: 2, name: "Outside in".into(), steps: reversed },
     ];
     app.active_order = Some(0);
     app.order_edit = Some(0);
+
+    // A layer stack mid-show: the base carrying the look, a movement layer
+    // over it, and a blackout chop on top — the shape of the thing layers
+    // exist for. Only *live state* is set here; the boxes come out of
+    // `refresh_layer_boxes`, so the shot proves the derivation rather than
+    // a hand-written list.
+    {
+        use crate::layer::ProgLayer;
+        let fx: Vec<String> = app.phasers.iter().take(3).map(|p| p.name.clone()).collect();
+
+        let mut base = ProgLayer::new(1, "Base".into());
+        base.preset_id = app.user_presets.first().map(|p| p.id);
+        base.active = (0..96).collect();
+        for (k, pal) in app.palettes.iter().take(2).enumerate() {
+            for a in (24 + k * 8)..(32 + k * 8) {
+                base.refs.insert(a, pal.reference());
+            }
+        }
+
+        let mut sweep = ProgLayer::new(2, "Movement".into());
+        sweep.order = app.orders.first().map(|o| o.id);
+        sweep.targets = (0..12).collect();
+        sweep.active = (100..142).collect();
+
+        let mut chop = ProgLayer::new(3, "Blackout chop".into());
+        chop.order = app.orders.get(1).map(|o| o.id);
+        chop.targets = (0..24).collect();
+        chop.active = (200..240).collect();
+
+        for (k, name) in fx.iter().take(2).enumerate() {
+            app.active_phasers
+                .insert(name.clone(), (100 + k * 18..118 + k * 18).collect());
+        }
+        if let Some(name) = fx.get(2) {
+            app.active_phasers.insert(name.clone(), (200..240).collect());
+        }
+
+        app.layers = vec![base, sweep, chop];
+        app.active_layer = 1;
+        app.next_layer_id = 4;
+        // The selected layer reads its state from the live programmer.
+        app.live_active = std::mem::take(&mut app.layers[1].active);
+        app.refresh_layer_boxes();
+    }
+
+    app.active_order = Some(0);
+    app.order_edit = Some(0);
+
+    // A layer stack mid-show: the base carrying the look, a movement layer
+    // over it, and a blackout chop on top — the shape of the thing layers
+    // exist for.
+    {
+        use crate::layer::{BoxKind, ProgLayer};
+        let mut base = ProgLayer::new(1, "Base".into());
+        base.boxes.push(crate::layer::LayerBox::new(
+            BoxKind::Preset(1),
+            "Blue 50".into(),
+            (0..96).collect(),
+        ));
+        for (k, pal) in app.palettes.iter().take(2).enumerate() {
+            base.boxes.push(crate::layer::LayerBox::new(
+                BoxKind::Palette(pal.id),
+                pal.name.clone(),
+                (0..24 + k * 8).collect(),
+            ));
+        }
+        // Real pool phasers, so the tiles carry their real pool colours.
+        let fx: Vec<String> = app.phasers.iter().take(3).map(|p| p.name.clone()).collect();
+        let mut sweep = ProgLayer::new(2, "Movement".into());
+        sweep.order = app.orders.first().map(|o| o.id);
+        sweep.targets = (0..12).collect();
+        for (k, name) in fx.iter().take(2).enumerate() {
+            sweep.boxes.push(crate::layer::LayerBox::new(
+                BoxKind::Phaser(name.clone()),
+                name.clone(),
+                (0..18 + k * 6).collect(),
+            ));
+        }
+        let mut chop = ProgLayer::new(3, "Blackout chop".into());
+        chop.order = app.orders.get(1).map(|o| o.id);
+        chop.targets = (0..24).collect();
+        if let Some(name) = fx.get(2) {
+            chop.boxes.push(crate::layer::LayerBox::new(
+                BoxKind::Phaser(name.clone()),
+                name.clone(),
+                (0..40).collect(),
+            ));
+        }
+        app.layers = vec![base, sweep, chop];
+        app.active_layer = 1;
+        app.next_layer_id = 4;
+    }
 
     // Cue lists on three stacks, recorded off the look on stage.
     let buf = app.net.dmx.lock().0;
@@ -558,7 +651,7 @@ fn furnish(app: &mut App) {
     haze.level = 0.6;
     app.stacks = vec![main, fx, haze];
     app.grand_master = 0.88;
-    app.cue_fade = 2.5;
+    app.transition.duration = 2.5;
 
     // Captured scenes.
     let scene = |name: &str, color: [u8; 3], level: f32, hold: f32| Scene {
@@ -576,6 +669,8 @@ fn furnish(app: &mut App) {
         hold,
         order: Some("Back to front".into()),
         run: None,
+        run_fade: 0.0,
+        leaving: None,
     };
     app.scenes = vec![
         scene("Deep blue sweep", [70, 110, 235], 1.0, 8.0),
@@ -758,6 +853,57 @@ fn furnish(app: &mut App) {
 }
 
 /// Every picture the site's manifest asks for, in one GPU session.
+/// Development preview of the Transition window, simple and advanced, plus
+/// the Palettes window's fade readout. Not part of the site; run on demand
+/// with `cargo test transition_window_preview -- --ignored`.
+#[test]
+#[ignore]
+fn transition_window_preview() {
+    let mut app = App::new();
+    app.stage.layout_path = std::env::temp_dir().join("dmxpress_transition_preview_layout.json");
+    let _ = std::fs::remove_file(&app.stage.layout_path);
+    let mut sheet = Sheet { made: Vec::new() };
+    stage_look(&mut app, false);
+    furnish(&mut app);
+    if draw(&mut app, WIDE).is_none() {
+        eprintln!("no GPU adapter — skipping the preview");
+        return;
+    }
+    app.transition.duration = 2.5;
+    window_shot(
+        &mut app,
+        &mut sheet,
+        "preview-transition-simple",
+        |a| a.show_transition = true,
+        |_, _| {},
+    );
+    app.transition.advanced = true;
+    {
+        use crate::transition::{TransitionBinding, TransitionTarget};
+        let slot = app.transition.slot_mut(TransitionTarget::PhaserEdit);
+        slot.binding = TransitionBinding::Custom;
+        slot.custom = 0.3;
+        app.transition.slot_mut(TransitionTarget::GoboChange).binding = TransitionBinding::None;
+    }
+    window_shot(
+        &mut app,
+        &mut sheet,
+        "preview-transition-advanced",
+        |a| a.show_transition = true,
+        |a, z| a.zoom.transition = z,
+    );
+    window_shot(
+        &mut app,
+        &mut sheet,
+        "preview-palettes-readout",
+        |a| a.show_palettes = true,
+        |a, z| a.zoom.palettes = z,
+    );
+    for (name, size) in &sheet.made {
+        eprintln!("wrote {name} at {}x{}", size[0], size[1]);
+    }
+}
+
 #[test]
 fn site_shots_render() {
     let mut app = App::new();
@@ -954,6 +1100,13 @@ fn site_shots_render() {
     window_shot(
         &mut app,
         &mut sheet,
+        "shot-layers",
+        |a| a.show_layers = true,
+        |a, z| a.zoom.layers = z,
+    );
+    window_shot(
+        &mut app,
+        &mut sheet,
         "shot-scenes",
         |a| a.show_scenes = true,
         |a, z| a.zoom.scenes = z,
@@ -1086,7 +1239,7 @@ fn site_shots_render() {
         |a, z| a.zoom.plugins = z,
     );
 
-    // The six Fixtures-panel looks, side by side — each column keeps the
+    // Every Fixtures-panel look, side by side — each column keeps the
     // panel's own look picker above it, so the strip labels itself.
     quiet(&mut app);
     app.collapsed.insert("inspector");

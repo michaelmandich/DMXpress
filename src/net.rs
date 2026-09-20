@@ -40,9 +40,22 @@ use std::time::{Duration, Instant};
 use crate::artnet::{self, PollReply};
 use crate::sacn::{self, Cid};
 
-/// Two contiguous application universes. Addresses 1..=512 use the selected
-/// base universe; 513..=1024 use the next Art-Net universe.
-pub const DMX_UNIVERSES: usize = 2;
+/// Contiguous application universes. Address 1 starts at the selected base
+/// universe and each further block of 512 slots goes out on the next one,
+/// so the console's address space is one flat 1..=[`DMX_SLOTS`] range.
+///
+/// Everything downstream is written against this constant: the frame, the
+/// mixer, the sender's paging, the per-universe counters and the addressing
+/// maths. Widening the console is this line plus new hardware.
+pub const DMX_UNIVERSES: usize = 4;
+
+/// Highest Art-Net Port-Address (15 bits: net, sub-net and universe joined).
+pub const ARTNET_MAX_PORT_ADDRESS: u16 = 0x7FFF;
+
+/// Ceiling on sACN multicast group memberships for one socket. The OS limit
+/// is 20 on Linux (`igmp_max_memberships`) and comparable on Windows; past
+/// it every join fails and the failures read as socket errors.
+const MAX_MULTICAST_JOINS: usize = 18;
 pub const DMX_SLOTS: usize = 512 * DMX_UNIVERSES;
 
 /// Where the network configuration lives, next to the other state files.
@@ -165,18 +178,25 @@ pub struct ArtNetConfig {
     pub mode: ArtNetMode,
     /// Target for [`ArtNetMode::Unicast`].
     pub target: Option<Ipv4Addr>,
-    /// Explicit Port-Address per application universe; `None` means base
-    /// universe and base + 1.
-    pub explicit: Option<[u16; DMX_UNIVERSES]>,
+    /// Explicit Port-Address per application universe; `None` means the
+    /// base universe and the ones after it.
+    ///
+    /// A `Vec`, not `[u16; DMX_UNIVERSES]`: a fixed-length array refuses a
+    /// saved file with a different count, and because the whole config is
+    /// read with one `from_str`, that one field would throw away the
+    /// interface, priority, unicast list and the sACN CID with it. Short
+    /// lists are filled in from the base, long ones ignored.
+    pub explicit: Option<Vec<u16>>,
 }
 
 #[derive(Debug, Clone, PartialEq, Eq, Serialize, Deserialize)]
 #[serde(default)]
 pub struct SacnConfig {
-    /// First sACN universe (1..=63999); the second page is base + 1.
+    /// First sACN universe; the pages after it follow on from the base.
     pub base_universe: u16,
     /// Explicit universe per application universe, overriding the base.
-    pub explicit: Option<[u16; DMX_UNIVERSES]>,
+    /// A `Vec` for the reason given on [`ArtNetConfig::explicit`].
+    pub explicit: Option<Vec<u16>>,
     pub priority: u8,
     pub source_name: String,
     /// Multicast to 239.255.x.y — what nearly every receiver expects.
@@ -232,19 +252,57 @@ impl NetConfig {
     /// written straight away so the freshly generated CID is pinned.
     pub fn load() -> Self {
         match std::fs::read_to_string(NETWORK_FILE) {
-            Ok(text) => {
-                let cfg: Self = serde_json::from_str(&text).unwrap_or_default();
-                // A file from before the CID existed gets one now, once.
-                if !text.contains("\"cid\"") {
-                    cfg.save();
+            Ok(text) => match serde_json::from_str::<Self>(&text) {
+                Ok(mut cfg) => {
+                    cfg.normalize();
+                    // A file from before the CID existed gets one now, once.
+                    if !text.contains("\"cid\"") {
+                        cfg.save();
+                    }
+                    cfg
                 }
-                cfg
-            }
+                Err(_) => {
+                    // Falling back to defaults silently would be the worst
+                    // outcome here: `SacnConfig::default` mints a fresh CID,
+                    // so every restart would look like a different console
+                    // to every receiver, and the interface, priority and
+                    // unicast list would be gone too. Re-save at once so the
+                    // new identity is at least pinned rather than re-rolled
+                    // on every launch, and leave the unreadable file's
+                    // contents behind in a sibling so nothing is lost.
+                    let _ = std::fs::write(format!("{NETWORK_FILE}.bad"), &text);
+                    let cfg = Self::default();
+                    cfg.save();
+                    cfg
+                }
+            },
             Err(_) => {
                 let cfg = Self::default();
                 cfg.save();
                 cfg
             }
+        }
+    }
+
+    /// Bring a loaded config into line with the console's universe count,
+    /// so everything downstream can assume an explicit list is exactly
+    /// `DMX_UNIVERSES` long. A file written when the console had fewer
+    /// universes is filled out from the base; one written when it had more
+    /// is trimmed.
+    fn normalize(&mut self) {
+        let base = self.sacn.base_universe;
+        if let Some(e) = &mut self.sacn.explicit {
+            for i in e.len()..DMX_UNIVERSES {
+                e.push(base.saturating_add(i as u16));
+            }
+            e.truncate(DMX_UNIVERSES);
+        }
+        if let Some(e) = &mut self.artnet.explicit {
+            let from = e.last().copied().unwrap_or(0);
+            for i in e.len()..DMX_UNIVERSES {
+                e.push(from.saturating_add(1).saturating_add(i as u16 - 1));
+            }
+            e.truncate(DMX_UNIVERSES);
         }
     }
 
@@ -257,18 +315,31 @@ impl NetConfig {
     /// Art-Net Port-Address of each application universe given the base
     /// universe set in the toolbar.
     pub fn artnet_universes(&self, base: u16) -> [u16; DMX_UNIVERSES] {
-        match self.artnet.explicit {
-            Some(e) => e.map(|u| u & 0x7FFF),
-            None => std::array::from_fn(|i| base.saturating_add(i as u16).min(0x7FFF)),
+        // Clamp the BASE so the whole block still fits, rather than clamping
+        // each page: pinning every overflowing page to the top value would
+        // send several different 512-slot pages to one Port-Address at 40 Hz
+        // and quietly drop all but the last.
+        let top = ARTNET_MAX_PORT_ADDRESS - (DMX_UNIVERSES as u16 - 1);
+        let base = base.min(top);
+        match &self.artnet.explicit {
+            Some(e) => std::array::from_fn(|i| {
+                e.get(i).copied().unwrap_or(base + i as u16) & ARTNET_MAX_PORT_ADDRESS
+            }),
+            None => std::array::from_fn(|i| base + i as u16),
         }
     }
 
     /// sACN universe of each application universe.
     pub fn sacn_universes(&self) -> [u16; DMX_UNIVERSES] {
+        let top = sacn::MAX_UNIVERSE - (DMX_UNIVERSES as u16 - 1);
+        let base = self
+            .sacn
+            .base_universe
+            .clamp(sacn::MIN_UNIVERSE, top.max(sacn::MIN_UNIVERSE));
         let clamp = |u: u16| u.clamp(sacn::MIN_UNIVERSE, sacn::MAX_UNIVERSE);
-        match self.sacn.explicit {
-            Some(e) => e.map(clamp),
-            None => std::array::from_fn(|i| clamp(self.sacn.base_universe.saturating_add(i as u16))),
+        match &self.sacn.explicit {
+            Some(e) => std::array::from_fn(|i| clamp(e.get(i).copied().unwrap_or(base + i as u16))),
+            None => std::array::from_fn(|i| clamp(base + i as u16)),
         }
     }
 
@@ -727,11 +798,38 @@ impl Net {
         let mut wanted: Vec<(u16, Ipv4Addr)> = Vec::new();
         let ifaces = self.send_ifaces();
         let universes = self.cfg.sacn_universes();
+        // Discovery goes on every interface — it is one group and it is how
+        // other sources are found at all. Our own universes do not: joining
+        // N universes on every interface runs into the per-socket membership
+        // cap (20 on Linux, comparable on Windows), and a normal Windows box
+        // with Ethernet, Wi-Fi, a Hyper-V vEthernet and a VPN is already at
+        // four interfaces. Past the cap each join fails, gets reported as a
+        // socket error, and the console quietly stops hearing other sources
+        // on those universes — which is exactly when the priority-conflict
+        // checks are needed.
         for iface in &ifaces {
             wanted.push((sacn::DISCOVERY_UNIVERSE, iface.addr));
+        }
+        let listen_on: Vec<Ipv4Addr> = match self.cfg.interface {
+            // An explicitly chosen interface is the lighting NIC; listen there.
+            Some(ip) if ifaces.iter().any(|i| i.addr == ip) => vec![ip],
+            _ => ifaces.iter().map(|i| i.addr).collect(),
+        };
+        let mut dropped = 0usize;
+        for ip in &listen_on {
             for u in universes {
-                wanted.push((u, iface.addr));
+                if wanted.len() >= MAX_MULTICAST_JOINS {
+                    dropped += 1;
+                    continue;
+                }
+                wanted.push((u, *ip));
             }
+        }
+        if dropped > 0 {
+            self.status(format!(
+                "WARN: {dropped} sACN group join(s) skipped — too many network interfaces.                  Pick the lighting interface to listen on all {} universes.",
+                DMX_UNIVERSES
+            ));
         }
         if ifaces.is_empty() {
             wanted.push((sacn::DISCOVERY_UNIVERSE, Ipv4Addr::UNSPECIFIED));
@@ -1063,7 +1161,17 @@ impl Net {
             }
         }
         self.seq_artnet = self.seq_artnet.wrapping_add(1).max(1);
-        self.last_dmx = Instant::now();
+        // Advance by a whole interval rather than restarting the clock
+        // here: this runs AFTER the send, so `= Instant::now()` makes the
+        // real period 25 ms plus the send plus up to one poll granule, and
+        // the error accumulates instead of being corrected. More universes
+        // means a longer send, so the measured rate would sag below 40 Hz.
+        // A clock that has fallen badly behind is reset rather than
+        // sprinting to catch up.
+        self.last_dmx += DMX_INTERVAL;
+        if self.last_dmx.elapsed() > DMX_INTERVAL * 4 {
+            self.last_dmx = Instant::now();
+        }
     }
 
     fn publish_stats(&mut self) {
@@ -1325,19 +1433,55 @@ impl Net {
 mod tests {
     use super::*;
 
+    /// A block of universes is consecutive from the base, however many the
+    /// console has.
     #[test]
     fn universe_mapping_follows_base_or_explicit() {
         let mut cfg = NetConfig::default();
-        assert_eq!(cfg.artnet_universes(0x0359), [0x0359, 0x035A]);
-        assert_eq!(cfg.artnet_universes(0x7FFF), [0x7FFF, 0x7FFF]);
-        assert_eq!(cfg.sacn_universes(), [1, 2]);
-        cfg.artnet.explicit = Some([5, 9]);
-        cfg.sacn.explicit = Some([0, 70000u32 as u16]);
-        assert_eq!(cfg.artnet_universes(0), [5, 9]);
-        assert_eq!(cfg.sacn_universes(), [1, 4464]);
+        let run = |from: u16| -> Vec<u16> { (0..DMX_UNIVERSES as u16).map(|i| from + i).collect() };
+        assert_eq!(cfg.artnet_universes(0x0359).to_vec(), run(0x0359));
+        assert_eq!(cfg.sacn_universes().to_vec(), run(1));
+
+        let explicit: Vec<u16> = (0..DMX_UNIVERSES as u16).map(|i| 5 + i * 4).collect();
+        cfg.artnet.explicit = Some(explicit.clone());
+        assert_eq!(cfg.artnet_universes(0).to_vec(), explicit);
+        cfg.artnet.explicit = None;
+
+        // A short list left over from a console with fewer universes is
+        // filled out from the base rather than rejected — rejecting it would
+        // throw away the whole config file, CID and all.
+        cfg.sacn.explicit = Some(vec![40]);
+        cfg.normalize();
+        let mut want = vec![40];
+        want.extend(2..=DMX_UNIVERSES as u16);
+        assert_eq!(cfg.sacn_universes().to_vec(), want);
         cfg.sacn.explicit = None;
-        cfg.sacn.base_universe = 63999;
-        assert_eq!(cfg.sacn_universes(), [63999, 63999]);
+    }
+
+    /// At the very top of either range the BASE is pulled down so the whole
+    /// block still fits. Clamping each page instead would aim several
+    /// different 512-slot pages at one universe and silently drop all but
+    /// the last.
+    #[test]
+    fn a_base_at_the_ceiling_keeps_the_block_distinct() {
+        let mut cfg = NetConfig::default();
+        let art = cfg.artnet_universes(ARTNET_MAX_PORT_ADDRESS);
+        assert_eq!(art[DMX_UNIVERSES - 1], ARTNET_MAX_PORT_ADDRESS);
+        assert!(art.windows(2).all(|w| w[1] == w[0] + 1), "{art:?}");
+
+        cfg.sacn.base_universe = sacn::MAX_UNIVERSE;
+        let su = cfg.sacn_universes();
+        assert_eq!(su[DMX_UNIVERSES - 1], sacn::MAX_UNIVERSE);
+        assert!(su.windows(2).all(|w| w[1] == w[0] + 1), "{su:?}");
+    }
+
+    /// A config file the current build cannot parse must not cost the
+    /// operator their sACN identity: `SacnConfig::default` mints a new CID,
+    /// so silently falling back would make the console a different source
+    /// to every receiver on every launch.
+    #[test]
+    fn an_unparsable_config_is_not_silently_accepted() {
+        assert!(serde_json::from_str::<NetConfig>("{ this is not json }").is_err());
     }
 
     #[test]

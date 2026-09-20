@@ -60,6 +60,7 @@ pub(crate) use math::{dir_from_angles, v3, V3};
 pub(crate) use math::CameraSnapshot;
 pub use settings::{DisplayToggles, RaidLook, Settings};
 pub use view::StageView;
+pub(crate) use view::{Sweep, SweepShape};
 pub(crate) use volumetric::initialize as initialize_volumetric;
 pub use camera_views::{load_cameras, save_cameras, CameraBookmark};
 pub(crate) use fixture::{classify, Archetype};

@@ -309,10 +309,12 @@ through with **Go**.
 ### Build a stack
 1. Click **＋ New** and give the stack a name (e.g. `Main`).
 2. Build a look in the Programmer (Group + palettes + dimmer + maybe a phaser).
-3. Set a **Fade** time (seconds).
-4. Press **⏺ Store cue**. That snapshots the **active Programmer channels** into
+3. Press **⏺ Store cue**. That snapshots the **active Programmer channels** into
    Cue 1.
-5. Change the look, **Store cue** again → Cue 2. Repeat.
+4. Change the look, **Store cue** again → Cue 2. Repeat.
+
+How long Go takes is set in **⏱ Transition** (the global slider, or the
+*Cues → Go* row in advanced mode), not per cue.
 
 ### Tracking (why only active channels are stored)
 A cue only records the channels you **touched** (the active Programmer). Channels
@@ -325,8 +327,9 @@ The **Record:** row of feature toggles (🔆 ✛ 🎨 🔦 🔍 ⚙) decides whi
 instance. All on = record everything.
 
 ### Play a stack
-- **⏭ Go** advances to the next cue (wraps at the end), fading over its time.
-- The cue grid lists every cue (`# / Name / Fade / ▶ go / 🗑`); click **▶** to
+- **⏭ Go** advances to the next cue (wraps at the end), fading over the
+  Transition window's Cues time.
+- The cue grid lists every cue (`# / Name / ▶ go / 🗑`); click **▶** to
   jump straight to a cue. The current cue is highlighted green.
 - **Clear prog** empties the Programmer so the stack's output shows through (do
   this after recording, or you'll only ever see your scratch pad!).
@@ -418,7 +421,8 @@ A complete run-through. Assumes a few moving heads are patched.
 4. **🎬 Stacks** → **＋ New** → name `Main`.
 5. `group 1` (or click the Movers group) → click **Blue** → click **Center** →
    set Dimmer **Full**.
-6. Fade `3` s → **⏺ Store cue**. That's Cue 1.
+6. **⏺ Store cue**. That's Cue 1. (Set **⏱ Transition** to `3` s so Go
+   fades between cues.)
 
 **D. Cue 2 (red, pointed at the crowd)**
 7. Click **Red** → click **Audience** → **⏺ Store cue**. That's Cue 2.
@@ -446,8 +450,14 @@ automatically (see below) — reopen DMXpress and it's all still there.
 📜 Log · ⚙ Settings
 
 ### Other tools
-- **⏱ Transition** — crossfade the Programmer smoothly from its current look to a
-  new one (great for busking).
+- **⏱ Transition** — the console's one fade time. The **global transition**
+  slider makes every action fade instead of jump: palette recalls, adding or
+  dropping a colour from a lane, starting/stopping/editing phasers, chases,
+  scenes, cue Go/Release, preset recalls, gobo changes, channel jumps and the
+  Clear stages. Tick **Advanced** for a bigger box with one row per action,
+  each bound to the global (**M**), its own time (**C**) or a cut (**—**).
+  Holds and blackout cut by default until you bind them. No other window has
+  a fade fader any more — they all read this one.
 - **🌀 Chases** — quick step-based chases across fixtures.
 - **🌊 Oscillator** — hand-build per-channel motion on channels you've "armed"
   from the Channel control rows.

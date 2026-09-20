@@ -11,6 +11,7 @@ use eframe::egui;
 use crate::app::{App, CycleFade, Ramp};
 use crate::palette::{self, Feature, Palette, PaletteSeq, SeqPattern};
 use crate::showbuddy::Role;
+use crate::transition::TransitionTarget;
 
 impl App {
     /// Reverse-lookup the channel role at a 0-based DMX index.
@@ -107,12 +108,19 @@ impl App {
         if self.transition_run.take().is_some() {
             self.live = crate::oscillator::Look::from_frame(*self.net.dmx.lock());
         }
-        let fade = self
-            .palette_transition
-            .duration(self.transition.duration, self.palette_fade_s);
+        let fade = self.transition.fade(TransitionTarget::PaletteRecall);
         let now = std::time::Instant::now();
         let reference = p.reference();
-        for &(addr0, v) in &p.values {
+        // With lights selected the palette is re-aimed at them channel by
+        // channel; with nothing selected it paints the addresses it was
+        // stored from, which is what it has always done.
+        let targets = self.stage.selected_fixtures();
+        let values = if targets.is_empty() {
+            p.values.clone()
+        } else {
+            self.fan_palette(&p, &targets)
+        };
+        for &(addr0, v) in &values {
             if fade > 0.01 {
                 self.base_fades.insert(
                     addr0,
@@ -141,6 +149,11 @@ impl App {
         } else {
             format!("Recalled {} palette \"{}\"", p.feature.label(), p.name)
         });
+    }
+
+    /// Re-aim a palette at `targets`. See [`crate::palette::fan`].
+    pub(crate) fn fan_palette(&self, p: &Palette, targets: &[usize]) -> Vec<(usize, u8)> {
+        crate::palette::fan(&p.values, &self.patch.fixtures, &self.effect_units(targets))
     }
 
     /// Overwrite palette `id` with the current selection's feature channels.
@@ -245,12 +258,15 @@ impl App {
     }
 
     /// One button for both: off → start, on → stop. Pressed mid-fade it
-    /// turns the fade round from wherever it is.
-    pub(crate) fn toggle_cycle(&mut self, fade: f32) {
+    /// turns the fade round from wherever it is. `cut` forces a hard switch
+    /// whatever the Transition window says — the deck's plain Go key.
+    pub(crate) fn toggle_cycle(&mut self, cut: bool) {
+        let fade = |t| if cut { 0.0 } else { self.transition.fade(t) };
         if !self.cycle_on {
-            self.start_cycle(fade);
+            self.start_cycle(fade(TransitionTarget::CycleIn));
             return;
         }
+        let fade = fade(TransitionTarget::CycleOut);
         if fade > 0.01 && self.cycle_fade.is_some() {
             let k = self.cycle_fade_k();
             let out = !self.cycle_fading_out();
@@ -304,15 +320,55 @@ impl App {
         }
     }
 
-    /// Empty the programmer: nothing held, nothing active.
+    /// Empty the programmer: nothing held, nothing active. With a Programmer
+    /// clear time set, every channel eases to zero and every wave's depth
+    /// eases out; the bookkeeping is dropped at once either way.
     pub(crate) fn clear_programmer(&mut self) {
-        self.live = crate::oscillator::Look::black();
+        let fade = self.transition.fade(TransitionTarget::ProgrammerClear);
+        // Settle a run in flight so the fade starts from what is on stage.
+        if self.transition_run.take().is_some() {
+            self.live = crate::oscillator::Look::from_frame(*self.net.dmx.lock());
+        }
         self.live_active.clear();
         self.live_refs.clear();
-        self.transition_run = None;
+        if fade <= 0.01 {
+            self.live = crate::oscillator::Look::black();
+            self.base_fades.clear();
+            self.osc_ramps.clear();
+            self.log.push("Programmer cleared".into());
+            return;
+        }
+        let now = Instant::now();
         self.base_fades.clear();
-        self.osc_ramps.clear();
-        self.log.push("Programmer cleared".into());
+        for (a, &v) in self.live.base.0.iter().enumerate() {
+            if v != 0 {
+                self.base_fades.insert(
+                    a,
+                    Ramp {
+                        from: v as f32,
+                        to: 0.0,
+                        start: now,
+                        dur: fade,
+                        stepped: self.channel_is_stepped(a),
+                        remove_after: false,
+                    },
+                );
+            }
+        }
+        for (&a, o) in &self.live.oscs {
+            self.osc_ramps.insert(
+                a,
+                Ramp {
+                    from: o.amount,
+                    to: 0.0,
+                    start: now,
+                    dur: fade,
+                    stepped: false,
+                    remove_after: true,
+                },
+            );
+        }
+        self.log.push(format!("Programmer clearing ({fade:.1}s)"));
     }
 
     /// Representative colour for a palette tile (real colour for Color palettes,
@@ -424,28 +480,14 @@ impl App {
                         }
                     });
                 });
-                ui.horizontal(|ui| {
-                    ui.label("Fade");
-                    if ui
-                        .small_button(self.palette_transition.short_label())
-                        .on_hover_text(
-                            "Transition binding: M = master transition, C = custom \
-                             duration, — = none. Click to cycle.",
-                        )
-                        .clicked()
-                    {
-                        self.palette_transition = self.palette_transition.next();
-                    }
-                    ui.add(
-                        egui::Slider::new(&mut self.palette_fade_s, 0.0..=10.0)
-                            .suffix(" s")
-                            .max_decimals(1),
-                    )
-                    .on_hover_text(
-                        "Custom palette transition duration. It is used when the \
-                         square says C; M follows the master Transition window.",
-                    );
-                });
+                self.fade_readout(
+                    ui,
+                    &[
+                        TransitionTarget::PaletteRecall,
+                        TransitionTarget::CycleIn,
+                        TransitionTarget::CycleOut,
+                    ],
+                );
                 ui.separator();
 
                 ui.horizontal(|ui| {
@@ -551,7 +593,7 @@ impl App {
                         .on_hover_text("Rotate all lights through the picked palettes on the beat")
                         .clicked()
                     {
-                        self.toggle_cycle(0.0);
+                        self.toggle_cycle(false);
                     }
                     const STEPS: [(&str, f32); 6] = [
                         ("4 bars", 16.0),

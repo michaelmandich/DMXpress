@@ -151,11 +151,18 @@ pub struct Channel {
 impl Channel {
     /// What this channel controls: the library's own answer when it has one,
     /// otherwise inferred from the name.
+    ///
+    /// Inferring is not cheap — [`Channel::role_from_name`] lowercases the
+    /// name onto the heap and runs a couple of dozen substring scans — and
+    /// per the field's own note it is the *normal* path for ShowBuddy
+    /// imports and the built-in profiles. Several per-frame loops call this
+    /// for every channel in the rig, so [`Patch::resolve_roles`] fills the
+    /// field in once when a patch is built and this becomes a field read.
     pub fn role(&self) -> Role {
         self.role.unwrap_or_else(|| self.role_from_name())
     }
 
-    fn role_from_name(&self) -> Role {
+    pub(crate) fn role_from_name(&self) -> Role {
         let n = self.name.to_lowercase();
         // "Pan"/"Pan fine" pairs sometimes share a name and mark fine via the
         // first band label (e.g. `V,0,255,Fine`); "Panf"/"Tiltf" also occur.
@@ -326,6 +333,21 @@ impl Fixture {
 pub struct Patch {
     pub fixtures: Vec<Fixture>,
     pub warnings: Vec<String>,
+}
+
+impl Patch {
+    /// Answer every channel's role once, so the per-frame loops that ask
+    /// for it read a field instead of re-deriving it from the name. Called
+    /// when the patch is assembled; see [`Channel::role`].
+    pub fn resolve_roles(&mut self) {
+        for f in &mut self.fixtures {
+            for ch in &mut f.channels {
+                if ch.role.is_none() {
+                    ch.role = Some(ch.role_from_name());
+                }
+            }
+        }
+    }
 }
 
 pub fn load_default() -> Result<Patch> {
@@ -629,7 +651,7 @@ pub fn load_preset(path: &Path) -> Result<PresetData> {
         let Some(v) = attr(chunk, "v").and_then(|v| v.parse::<f32>().ok()) else {
             continue;
         };
-        if (1..=1024).contains(&addr) {
+        if (1..=crate::net::DMX_SLOTS as u16).contains(&addr) {
             data.values.push((addr, (v.clamp(0.0, 1.0) * 255.0).round() as u8));
         }
     }
@@ -640,7 +662,7 @@ pub fn load_preset(path: &Path) -> Result<PresetData> {
         let Some(n) = attr_here(chunk, "n").and_then(|v| v.parse::<u16>().ok()) else {
             continue;
         };
-        if n >= 1024 {
+        if n as usize >= crate::net::DMX_SLOTS {
             continue;
         }
         let amount = attr_here(chunk, "a")

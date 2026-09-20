@@ -8,6 +8,7 @@ use super::{apply_zoom, theme, zoom_controls};
 use crate::app::App;
 use crate::preset::SavedOsc;
 use crate::scene::{self, MergeMode, Scene};
+use crate::transition::TransitionTarget;
 
 /// Deferred row action, applied after the pool has been drawn.
 #[derive(Clone, Copy)]
@@ -75,6 +76,8 @@ impl App {
             level: 1.0,
             fade: 0.0,
             hold: 0.0,
+            run_fade: 0.0,
+            leaving: None,
             order: self
                 .active_order
                 .and_then(|i| self.orders.get(i))
@@ -107,7 +110,7 @@ impl App {
         fresh.hold = keep.hold;
         self.scenes[idx] = fresh;
         if was_running {
-            self.scenes[idx].start();
+            self.scenes[idx].start(0.0);
         }
         scene::save_scenes(&self.scenes);
         self.log
@@ -115,22 +118,25 @@ impl App {
     }
 
     pub(crate) fn start_scene(&mut self, idx: usize) {
+        let fade = self.transition.fade(TransitionTarget::SceneStart);
         if let Some(sc) = self.scenes.get_mut(idx) {
-            sc.start();
+            sc.start(fade);
             let name = sc.name.clone();
             self.log.push(format!("Scene \"{name}\" go"));
         }
     }
 
     pub(crate) fn stop_scene(&mut self, idx: usize) {
+        let fade = self.transition.fade(TransitionTarget::SceneStop);
         if let Some(sc) = self.scenes.get_mut(idx) {
-            sc.stop();
+            sc.stop(fade);
         }
     }
 
     pub(crate) fn stop_all_scenes(&mut self) {
+        let fade = self.transition.fade(TransitionTarget::SceneStop);
         for sc in &mut self.scenes {
-            sc.stop();
+            sc.stop(fade);
         }
         self.scene_chain = false;
         self.log.push("All scenes released".into());
@@ -146,9 +152,13 @@ impl App {
             return;
         };
         let next = (done + 1) % self.scenes.len();
-        self.scenes[done].stop();
+        let (out, in_) = (
+            self.transition.fade(TransitionTarget::SceneStop),
+            self.transition.fade(TransitionTarget::SceneStart),
+        );
+        self.scenes[done].stop(out);
         if next != done {
-            self.scenes[next].start();
+            self.scenes[next].start(in_);
         }
         let name = self.scenes[next].name.clone();
         self.log.push(format!("Chain -> \"{name}\""));
@@ -159,10 +169,14 @@ impl App {
         if self.scenes.is_empty() {
             return;
         }
+        let (out, in_) = (
+            self.transition.fade(TransitionTarget::SceneStop),
+            self.transition.fade(TransitionTarget::SceneStart),
+        );
         for sc in &mut self.scenes {
-            sc.stop();
+            sc.stop(out);
         }
-        self.scenes[0].start();
+        self.scenes[0].start(in_);
         self.scene_chain = true;
         self.log.push("Scene chain running".into());
     }
@@ -361,19 +375,6 @@ impl App {
 
                             ui.horizontal(|ui| {
                                 let sc = &mut self.scenes[i];
-                                ui.label("fade");
-                                if ui
-                                    .add(
-                                        egui::DragValue::new(&mut sc.fade)
-                                            .range(0.0..=30.0)
-                                            .speed(0.1)
-                                            .suffix(" s"),
-                                    )
-                                    .on_hover_text("Seconds to ease in on Go")
-                                    .changed()
-                                {
-                                    dirty = true;
-                                }
                                 ui.label("hold");
                                 if ui
                                     .add(

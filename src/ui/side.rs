@@ -3,7 +3,7 @@
 
 use eframe::egui;
 
-use super::{apply_zoom, icons, raid, theme, zoom_controls};
+use super::{apply_zoom, divider, icons, raid, theme, zoom_controls};
 use crate::app::App;
 use crate::stage::{self, RaidLook};
 
@@ -161,9 +161,11 @@ impl App {
             }
             None
         } else if collapsed {
-            if side_rail(ctx, key, title, side) {
+            let (clicked, rail) = side_rail(ctx, key, title, side);
+            if clicked {
                 self.collapsed.remove(key);
             }
+            self.seams.push(edge_seam(rail, side, &None));
             None
         } else {
             let mut pop = false;
@@ -171,6 +173,9 @@ impl App {
             let frame = super::theme::panel_frame(&ctx.style());
             let inner = egui::SidePanel::new(side, key)
                 .min_width(min_width)
+                // The seam is painted at the end of the frame instead, in
+                // whichever style the console is set to (see `ui::divider`).
+                .show_separator_line(false)
                 .default_width(default_width)
                 .frame(frame)
                 .show(ctx, |ui| {
@@ -204,7 +209,12 @@ impl App {
             if fold {
                 self.collapsed.insert(key);
             }
-            Some(inner.response.rect.width())
+            let rect = inner.response.rect;
+            // egui runs the resize strip as `id.with("__resize")`; reading
+            // it back is how the seam knows it is being pulled.
+            let grab = ctx.read_response(egui::Id::new(key).with("__resize"));
+            self.seams.push(edge_seam(rect, side, &grab));
+            Some(rect.width())
         };
         *self.panel_zoom(key) = zoom_level;
         width
@@ -213,13 +223,20 @@ impl App {
 
 /// The thin strip a folded side panel leaves behind: a chevron pointing
 /// back into the stage and the panel's name written down the strip. The
-/// whole strip is one button; returns true when it is clicked.
-fn side_rail(ctx: &egui::Context, key: &str, title: &str, side: egui::panel::Side) -> bool {
+/// whole strip is one button; returns whether it was clicked, and the
+/// rect it took, so the seam alongside it can be placed.
+fn side_rail(
+    ctx: &egui::Context,
+    key: &str,
+    title: &str,
+    side: egui::panel::Side,
+) -> (bool, egui::Rect) {
     const RAIL_W: f32 = 26.0;
     let mut clicked = false;
-    egui::SidePanel::new(side, egui::Id::new(key).with("rail"))
+    let inner = egui::SidePanel::new(side, egui::Id::new(key).with("rail"))
         .exact_width(RAIL_W)
         .resizable(false)
+        .show_separator_line(false)
         .frame(egui::Frame::none().fill(theme::SURFACE))
         .show(ctx, |ui| {
             let rect = ui.available_rect_before_wrap();
@@ -254,5 +271,25 @@ fn side_rail(ctx: &egui::Context, key: &str, title: &str, side: egui::panel::Sid
             ));
             clicked = resp.on_hover_text(format!("Show {title}")).clicked();
         });
-    clicked
+    (clicked, inner.response.rect)
+}
+
+/// The seam along a side panel's outer edge: a thin rect straddling the
+/// line, carrying the resize handle's state so the style can answer it.
+fn edge_seam(
+    panel: egui::Rect,
+    side: egui::panel::Side,
+    grab: &Option<egui::Response>,
+) -> divider::Seam {
+    let x = match side {
+        egui::panel::Side::Left => panel.right(),
+        egui::panel::Side::Right => panel.left(),
+    };
+    let half = divider::THICKNESS * 0.5;
+    divider::Seam {
+        rect: egui::Rect::from_x_y_ranges((x - half)..=(x + half), panel.y_range()),
+        vertical: true,
+        hovered: grab.as_ref().is_some_and(|r| r.hovered()),
+        active: grab.as_ref().is_some_and(|r| r.dragged()),
+    }
 }

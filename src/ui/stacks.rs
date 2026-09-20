@@ -27,6 +27,14 @@ impl App {
         };
         for c in st.cues.iter().take(cue_idx + 1) {
             for &(a, val) in &c.values {
+                // Addresses come straight out of stacks.json, so they can
+                // outrun this build's universe count — a show recorded on a
+                // wider console, or rolled back to a narrower one. Every
+                // other sparse-to-Frame loader guards; this one did not, and
+                // indexing past the end panics the UI thread on Go.
+                if a >= f.len() {
+                    continue;
+                }
                 f[a] = match val {
                     CueVal::Absolute(x) => x,
                     CueVal::Palette { reference, value } => {
@@ -70,7 +78,8 @@ impl App {
                 .push("Store cue: record mask filtered out every active channel".into());
             return;
         }
-        let fade = self.cue_fade;
+        // Stamped for the record only: Go reads the Transition window.
+        let fade = self.transition.fade(crate::transition::TransitionTarget::CueGo);
         let Some(st) = self.stacks.get_mut(stack_idx) else {
             return;
         };
@@ -83,21 +92,22 @@ impl App {
             fade,
             values,
         });
+        st.invalidate_cover();
         stack::save_stacks(&self.stacks);
         self.log
             .push(format!("Stored cue {number:.0} ({n} ch) in \"{}\"", self.stacks[stack_idx].name));
     }
 
-    /// Fade stack `stack_idx` to cue `cue_idx`.
+    /// Fade stack `stack_idx` to cue `cue_idx` over the Cues Go time.
     pub(crate) fn fire_cue(&mut self, stack_idx: usize, cue_idx: usize) {
         let frame = self.tracked_frame(stack_idx, cue_idx);
+        let fade = self.transition.fade(crate::transition::TransitionTarget::CueGo);
         let Some(st) = self.stacks.get_mut(stack_idx) else {
             return;
         };
         if cue_idx >= st.cues.len() {
             return;
         }
-        let fade = st.cues[cue_idx].fade;
         let label = format!("{} · {}", st.name, st.cues[cue_idx].name);
         st.fire(cue_idx, frame, fade);
         self.cur_stack = Some(stack_idx);
@@ -147,6 +157,7 @@ impl App {
             return;
         }
         st.cues.remove(cue_idx);
+        st.invalidate_cover();
         if let Some(c) = st.current {
             if c >= st.cues.len() {
                 st.current = None;
@@ -227,13 +238,6 @@ impl App {
                         do_go = Some(si);
                     }
                     ui.separator();
-                    ui.label("Fade:");
-                    ui.add(
-                        egui::DragValue::new(&mut self.cue_fade)
-                            .range(0.0..=60.0)
-                            .speed(0.1)
-                            .suffix(" s"),
-                    );
                     if ui
                         .add_enabled(
                             !self.live_active.is_empty(),
@@ -300,14 +304,6 @@ impl App {
                                             &mut self.stacks[si].cues[ci].name,
                                         )
                                         .desired_width(130.0),
-                                    )
-                                    .changed();
-                                dirty |= ui
-                                    .add(
-                                        egui::DragValue::new(&mut self.stacks[si].cues[ci].fade)
-                                            .range(0.0..=60.0)
-                                            .speed(0.1)
-                                            .suffix(" s"),
                                     )
                                     .changed();
                                 if ui.button("Go").on_hover_text("Go to this cue").clicked() {

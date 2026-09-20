@@ -1,11 +1,13 @@
 //! Pure address / name / recents maths for the Patch tab (area F). No egui.
 //!
-//! Addresses are 1-based and absolute: 1–512 is universe 1, 513–1024 is
-//! universe 2, and [`crate::net::DMX_SLOTS`] (1024) is the hard ceiling. A
-//! fixture at `from` with a span of `n` channels occupies `from..=from+n-1`.
+//! Addresses are 1-based and absolute: universe 1 is 1–512, universe 2
+//! starts at 513, and so on up to [`crate::net::DMX_SLOTS`], the hard
+//! ceiling. A fixture at `from` with a span of `n` channels occupies
+//! `from..=from+n-1`. Nothing here hardcodes a universe count — see
+//! [`universe`] and [`universe_base`].
 
 use super::type_stem;
-use crate::net::DMX_SLOTS;
+use crate::net::{DMX_SLOTS, DMX_UNIVERSES};
 use crate::showbuddy::Fixture;
 
 /// Slots in one DMX universe.
@@ -16,7 +18,7 @@ const UNIVERSE: u16 = 512;
 pub(crate) enum PlanStop {
     /// Every copy got an address.
     Complete,
-    /// Only this many fit before slot 1024.
+    /// Only this many fit before the last slot.
     Overflow(usize),
 }
 
@@ -56,14 +58,37 @@ pub(crate) fn first_free(
     start: u16,
     same_universe: bool,
 ) -> Option<u16> {
+    first_free_in_map(&occupancy(ranges), span, start, same_universe)
+}
+
+/// [`first_free`] against an occupancy map the caller already has.
+///
+/// `plan_addresses` places up to `count` copies, and asking `first_free`
+/// each time rebuilt the whole `DMX_SLOTS + 1` map from scratch per copy —
+/// on the UI thread, every frame the Patch tab is open. One map, reused and
+/// marked as copies are placed, does the same work once.
+fn first_free_in_map(
+    used: &[bool],
+    span: u16,
+    start: u16,
+    same_universe: bool,
+) -> Option<u16> {
     let span = span.max(1);
-    let used = occupancy(ranges);
     let last = DMX_SLOTS as u16;
     let mut a = start.max(1);
     while a as usize + span as usize - 1 <= last as usize {
         let end = a + span - 1;
         if same_universe && universe(a) != universe(end) {
-            a = UNIVERSE + 1;
+            // Straddling the edge: jump to the start of the next universe.
+            // This used to be a hard `UNIVERSE + 1`, which only ever meant
+            // "universe 2" — past that it is a *backward* jump with no
+            // increment, and `first_free` runs on the UI thread every frame
+            // the Patch tab is open.
+            let next = universe_base(universe(a) + 1);
+            if next <= a {
+                return None;
+            }
+            a = next;
             continue;
         }
         if (a..=end).all(|s| !used[s as usize]) {
@@ -78,16 +103,16 @@ pub(crate) fn first_free(
 /// `span`-channel fixture *inside* universe `u`, or that universe's own
 /// first address when nothing fits in it.
 ///
-/// [`first_free`] scans on to slot 1024 and, with `same_universe`, hops the
-/// 512/513 edge outright — so a universe-1 question would otherwise be
-/// answered with a universe-2 address.
+/// [`first_free`] scans on to the last slot and, with `same_universe`, hops
+/// to the next universe outright — so a question about one universe would
+/// otherwise be answered with an address in a later one.
 pub(crate) fn first_free_in(
     ranges: &[(u16, u16)],
     span: u16,
     u: u8,
     same_universe: bool,
 ) -> u16 {
-    let base = if u <= 1 { 1 } else { UNIVERSE + 1 };
+    let base = universe_base(u);
     first_free(ranges, span, base, same_universe)
         .filter(|&a| universe(a) == u)
         .unwrap_or(base)
@@ -125,19 +150,25 @@ pub(crate) fn plan_addresses(
         return (starts, PlanStop::Complete);
     }
     if skip_taken {
-        let mut taken: Vec<(u16, u16)> = ranges.to_vec();
+        let mut used = occupancy(ranges);
         let mut cursor = start.max(1);
         for _ in 0..count {
-            let Some(a) = first_free(&taken, span, cursor, same_universe) else { break };
+            let Some(a) = first_free_in_map(&used, span, cursor, same_universe) else { break };
             starts.push(a);
-            taken.push((a, a + span - 1));
+            for slot in a..=(a + span - 1).min(DMX_SLOTS as u16) {
+                used[slot as usize] = true;
+            }
             cursor = a + span;
         }
     } else {
         let mut from = start.max(1);
         for _ in 0..count {
             if same_universe && universe(from) != universe(from + span - 1) {
-                from = UNIVERSE + 1;
+                let next = universe_base(universe(from) + 1);
+                if next <= from {
+                    break;
+                }
+                from = next;
             }
             if from as usize + span as usize - 1 > DMX_SLOTS {
                 break;
@@ -166,19 +197,20 @@ pub(crate) fn fits(from: u16, span: u16, count: u16) -> u16 {
     n
 }
 
-/// 1 for the first universe, 2 for the second.
+/// Which universe an absolute address falls in, counting from 1.
 pub(crate) fn universe(addr: u16) -> u8 {
-    if addr <= UNIVERSE {
-        1
-    } else {
-        2
-    }
+    ((addr.max(1) - 1) / UNIVERSE + 1).min(DMX_UNIVERSES as u16) as u8
+}
+
+/// The first absolute address of universe `u`.
+pub(crate) fn universe_base(u: u8) -> u16 {
+    (u.max(1) as u16 - 1) * UNIVERSE + 1
 }
 
 /// Distinct slots in use per universe (an overlap counts once).
-pub(crate) fn universe_usage(ranges: &[(u16, u16)]) -> [u16; 2] {
+pub(crate) fn universe_usage(ranges: &[(u16, u16)]) -> [u16; DMX_UNIVERSES] {
     let used = occupancy(ranges);
-    let mut out = [0u16, 0];
+    let mut out = [0u16; DMX_UNIVERSES];
     for (slot, on) in used.iter().enumerate().skip(1) {
         if *on {
             out[universe(slot as u16) as usize - 1] += 1;
@@ -293,7 +325,7 @@ mod tests {
     fn next_free_is_one_for_empty_rig_and_max_to_plus_one_otherwise() {
         assert_eq!(next_free(&[]), 1);
         assert_eq!(next_free(&[(1, 16), (33, 40)]), 41);
-        assert_eq!(next_free(&[(1017, 1024)]), 1024);
+        assert_eq!(next_free(&[(DMX_SLOTS as u16 - 7, DMX_SLOTS as u16)]), DMX_SLOTS as u16);
     }
 
     #[test]
@@ -303,8 +335,49 @@ mod tests {
         assert_eq!(first_free(&r, 9, 1, false), Some(33));
         assert_eq!(first_free(&[], 8, 510, true), Some(513));
         assert_eq!(first_free(&[], 8, 510, false), Some(510));
-        assert_eq!(first_free(&[], 8, 1020, false), None);
-        assert_eq!(first_free(&[(1, 1024)], 1, 1, false), None);
+        // Right against the last slot, wherever that now is.
+        assert_eq!(first_free(&[], 8, DMX_SLOTS as u16 - 4, false), None);
+        assert_eq!(first_free(&[], 8, DMX_SLOTS as u16 - 7, false), Some(DMX_SLOTS as u16 - 7));
+        assert_eq!(first_free(&[(1, DMX_SLOTS as u16)], 1, 1, false), None);
+    }
+
+    /// `universe` used to be `if addr <= 512 { 1 } else { 2 }`, so every
+    /// address above 512 claimed to be in universe 2. Everything else here
+    /// is built on it.
+    #[test]
+    fn an_address_reports_the_universe_it_is_actually_in() {
+        assert_eq!(universe(1), 1);
+        assert_eq!(universe(UNIVERSE), 1);
+        assert_eq!(universe(UNIVERSE + 1), 2);
+        for u in 1..=DMX_UNIVERSES as u8 {
+            let base = universe_base(u);
+            assert_eq!(universe(base), u, "first slot of universe {u}");
+            assert_eq!(universe(base + UNIVERSE - 1), u, "last slot of universe {u}");
+        }
+        assert_eq!(universe(DMX_SLOTS as u16), DMX_UNIVERSES as u8);
+        // Past the end it saturates rather than indexing off the end of a
+        // per-universe array.
+        assert_eq!(universe(u16::MAX), DMX_UNIVERSES as u8);
+    }
+
+    /// With `same_universe` on, a span that straddles an edge jumps to the
+    /// start of the NEXT universe. It used to jump to a hardcoded 513 —
+    /// which past universe 2 is *backwards*, and with no increment that is
+    /// an infinite loop on the UI thread, which calls this every frame.
+    #[test]
+    fn a_straddling_span_moves_forward_and_terminates() {
+        // Universes 1 and 2 completely full: the answer must be in 3 (or
+        // None on a two-universe build), and it must arrive at all.
+        let full = vec![(1, 2 * UNIVERSE)];
+        let got = first_free(&full, 32, 1, true);
+        if DMX_UNIVERSES >= 3 {
+            assert_eq!(got, Some(2 * UNIVERSE + 1));
+        } else {
+            assert_eq!(got, None);
+        }
+        // Starting inside the last universe with everything taken simply
+        // runs out, rather than looping.
+        assert_eq!(first_free(&[(1, DMX_SLOTS as u16)], 4, 1, true), None);
     }
 
     #[test]
@@ -319,6 +392,10 @@ mod tests {
         // Universe 1 completely full: still universe 1.
         assert_eq!(first_free_in(&[(1, 512)], 4, 1, true), 1);
         assert_eq!(first_free_in(&[], 32, 2, true), 513);
+        // Every universe the console has, not just the first two.
+        for u in 1..=DMX_UNIVERSES as u8 {
+            assert_eq!(first_free_in(&[], 32, u, true), universe_base(u), "universe {u}");
+        }
         assert_eq!(first_free_in(&[(513, 600)], 8, 2, true), 601);
     }
 
@@ -332,8 +409,10 @@ mod tests {
 
     #[test]
     fn plan_addresses_contiguous_stops_at_slot_limit() {
-        let (starts, stop) = plan_addresses(&[], 16, 4, 1000, false, false);
-        assert_eq!((starts.as_slice(), stop), (&[1000u16][..], PlanStop::Overflow(1)));
+        // One copy fits before the last slot, the rest do not.
+        let near = DMX_SLOTS as u16 - 24;
+        let (starts, stop) = plan_addresses(&[], 16, 4, near, false, false);
+        assert_eq!((starts.as_slice(), stop), (&[near][..], PlanStop::Overflow(1)));
         let (starts, stop) = plan_addresses(&[], 16, 3, 1, false, false);
         assert_eq!((starts.as_slice(), stop), (&[1u16, 17, 33][..], PlanStop::Complete));
         // An overlapping plan is still a plan: the pill warns, Patch works.
@@ -349,7 +428,7 @@ mod tests {
         let (starts, _) = plan_addresses(&[], 4, 3, 1, true, false);
         assert_eq!(starts, vec![1, 5, 9]);
         // Nothing free at all.
-        let (starts, stop) = plan_addresses(&[(1, 1024)], 4, 2, 1, true, false);
+        let (starts, stop) = plan_addresses(&[(1, DMX_SLOTS as u16)], 4, 2, 1, true, false);
         assert!(starts.is_empty());
         assert_eq!(stop, PlanStop::Overflow(0));
     }
@@ -364,8 +443,8 @@ mod tests {
 
     #[test]
     fn fits_stops_at_dmx_slots() {
-        assert_eq!(fits(1000, 16, 5), 1);
-        assert_eq!(fits(1024, 2, 1), 0);
+        assert_eq!(fits(DMX_SLOTS as u16 - 24, 16, 5), 1);
+        assert_eq!(fits(DMX_SLOTS as u16, 2, 1), 0);
         assert_eq!(fits(1, 8, 4), 4);
     }
 
@@ -373,8 +452,14 @@ mod tests {
     fn universe_and_usage() {
         assert_eq!(universe(512), 1);
         assert_eq!(universe(513), 2);
-        assert_eq!(universe_usage(&[(1, 16), (10, 20), (500, 520)]), [33, 8]);
-        assert_eq!(universe_usage(&[]), [0, 0]);
+        let u = universe_usage(&[(1, 16), (10, 20), (500, 520)]);
+        assert_eq!((u[0], u[1]), (33, 8));
+        assert_eq!(u.len(), DMX_UNIVERSES);
+        assert!(universe_usage(&[]).iter().all(|&n| n == 0));
+        // Slots in the upper universes are counted against their own entry,
+        // not folded into universe 2.
+        let top = universe_usage(&[(DMX_SLOTS as u16 - 3, DMX_SLOTS as u16)]);
+        assert_eq!(top[DMX_UNIVERSES - 1], 4);
     }
 
     #[test]

@@ -227,6 +227,10 @@ impl App {
 
     /// Put a palette into an island's lane, or take it out again. An empty
     /// lane is dropped so the readouts stay honest.
+    ///
+    /// A colour arriving on an empty lane fades up and the last one leaving
+    /// fades away, both over the Palettes transition times — the lane keeps
+    /// playing out of sight until its release lands.
     pub(crate) fn toggle_lane_palette(&mut self, island: &str, id: u32) {
         let name = self
             .palettes
@@ -234,7 +238,10 @@ impl App {
             .find(|p| p.id == id)
             .map(|p| p.name.clone())
             .unwrap_or_else(|| format!("#{id}"));
+        let was_empty = !self.effect_lanes.contains_key(island);
         let lane = self.effect_lanes.entry(island.to_string()).or_default();
+        // What the lane was playing, kept for the release fade.
+        let before = lane.clone();
         let on = match lane.iter().position(|x| *x == id) {
             Some(pos) => {
                 lane.remove(pos);
@@ -246,8 +253,35 @@ impl App {
             }
         };
         let count = lane.len();
+        let departing = (count == 0).then_some(before);
         if count == 0 {
             self.effect_lanes.remove(island);
+        }
+        match departing {
+            // The lane emptied: keep rendering what it was doing, fading out.
+            Some(ids) => {
+                let from = self.lane_gain(island);
+                self.lane_fades.remove(island);
+                self.begin_lane_exit(
+                    island,
+                    ids,
+                    from,
+                    crate::transition::TransitionTarget::PaletteRelease,
+                );
+            }
+            // The lane woke up: bring it in from wherever it currently sits,
+            // so re-picking mid-release catches the fade rather than jumping.
+            None if was_empty => {
+                let from = self.lane_gain(island);
+                self.lane_exits.remove(island);
+                self.begin_lane_fade(
+                    island,
+                    from,
+                    1.0,
+                    crate::transition::TransitionTarget::PaletteRecall,
+                );
+            }
+            None => {}
         }
         self.log.push(match (on, count) {
             (true, 1) => format!("{island}: holding \"{name}\""),

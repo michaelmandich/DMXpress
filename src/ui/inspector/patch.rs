@@ -1213,9 +1213,10 @@ impl App {
             ui.horizontal_wrapped(|ui| {
                 // Which universe the batch is in, and one click to move it.
                 let here = addressing::universe(self.patch_addr);
-                for (u, label, base) in [(1u8, "U1", 1u16), (2, "U2", 513)] {
+                for u in 1..=crate::net::DMX_UNIVERSES as u8 {
+                    let (label, base) = (format!("U{u}"), addressing::universe_base(u));
                     ui.push_id(("insp_patch_uni", u), |ui| {
-                        if theme::chip(ui, label, theme::ACCENT_SOFT, here == u)
+                        if theme::chip(ui, &label, theme::ACCENT_SOFT, here == u)
                             .on_hover_text(format!(
                                 "Universe {u}: addresses {}–{}. Click to start at its first free \
                                  address.",
@@ -2922,14 +2923,17 @@ mod tests {
         app.insp.patch.element = ElementChoice::NewTruss(TrussKind::Straight);
         let trusses = app.stage.trusses.len();
         let patched = app.user_fixtures.len();
-        app.patch_addr = 1024;
+        // The last slot, wherever the console's ceiling now is: a 2-channel
+        // light starting there has nowhere for its second channel.
+        let last = crate::net::DMX_SLOTS as u16;
+        app.patch_addr = last;
         app.patch_profile = profile_at("Fogger (2ch)");
-        assert!(app.patch_request().is_none(), "1024 + 2ch runs past slot 1024");
+        assert!(app.patch_request().is_none(), "{last} + 2ch runs past slot {last}");
         assert!(app.log.iter().any(|l| l.contains("Patch stopped")), "{:?}", app.log.last());
         assert_eq!(app.stage.trusses.len(), trusses, "no orphan truss");
         assert_eq!(app.user_fixtures.len(), patched, "and nothing patched");
         // One slot lower it fits, and the request comes back.
-        app.patch_addr = 1023;
+        app.patch_addr = last - 1;
         assert!(app.patch_request().is_some());
     }
 

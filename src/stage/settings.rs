@@ -19,20 +19,35 @@ pub enum RaidLook {
     Future,
     /// A pane of tinted glass with a specular streak.
     Glass,
-    /// A domed lens set into a brushed-steel frame.
+    /// A colour lens sunk behind a machined chrome bezel that mirrors a
+    /// bright source, a hard horizon and the dark room under it.
     Chrome,
-    /// A soft convex button, deep-rounded and shadowed.
+    /// A backlit silicone pad sunk into a hole in the chassis.
     Pillow,
+    /// An LED batten: emitters behind a dark diffuser, filling left to
+    /// right with the fixture's level.
+    Pixel,
+    /// A sheet of colour gel clipped into a black steel frame.
+    Gel,
+    /// A strip of gaffer tape on the fixture's own face, written on in
+    /// silver marker.
+    Tape,
+    /// A neon tube bent on a dark board, in its own coloured wash.
+    Neon,
 }
 
 impl RaidLook {
-    pub const ALL: [RaidLook; 6] = [
+    pub const ALL: [RaidLook; 10] = [
         RaidLook::Lit,
         RaidLook::Jewel,
         RaidLook::Future,
         RaidLook::Glass,
         RaidLook::Chrome,
         RaidLook::Pillow,
+        RaidLook::Pixel,
+        RaidLook::Gel,
+        RaidLook::Tape,
+        RaidLook::Neon,
     ];
 
     pub fn label(self) -> &'static str {
@@ -42,7 +57,11 @@ impl RaidLook {
             RaidLook::Future => "Future",
             RaidLook::Glass => "Glass",
             RaidLook::Chrome => "Chrome",
-            RaidLook::Pillow => "Pillow",
+            RaidLook::Pillow => "Silicone",
+            RaidLook::Pixel => "Pixel bar",
+            RaidLook::Gel => "Gel",
+            RaidLook::Tape => "Tape",
+            RaidLook::Neon => "Neon",
         }
     }
 
@@ -52,8 +71,12 @@ impl RaidLook {
             RaidLook::Jewel => "Faceted pilot-light jewels in chrome bezels on a dark faceplate",
             RaidLook::Future => "Chamfered black slabs with a glowing colour bar",
             RaidLook::Glass => "Tinted glass panes with a specular streak",
-            RaidLook::Chrome => "Domed lenses in brushed-steel frames",
-            RaidLook::Pillow => "Soft convex buttons with deep shadows",
+            RaidLook::Chrome => "Colour lenses behind machined chrome bezels",
+            RaidLook::Pillow => "Backlit silicone pads sunk into a chassis, drum-machine style",
+            RaidLook::Pixel => "LED battens whose emitter grid fills left to right with the level",
+            RaidLook::Gel => "Colour gel in a steel frame, lit through from behind",
+            RaidLook::Tape => "Gaffer tape and a silver marker, stuck on crooked",
+            RaidLook::Neon => "A bent neon tube on a dark board, glowing in its own wash",
         }
     }
 }
@@ -112,6 +135,9 @@ pub struct Settings {
     /// How the Fixtures panel draws its raid grid.
     #[serde(default)]
     pub raid_look: RaidLook,
+    /// How the seams between the panes are drawn.
+    #[serde(default)]
+    pub divider: crate::ui::divider::DividerStyle,
 }
 
 impl Default for Settings {
@@ -126,6 +152,7 @@ impl Default for Settings {
             default_yaw: 0.0,
             default_pitch: -90.0,
             raid_look: RaidLook::Lit,
+            divider: crate::ui::divider::DividerStyle::default(),
         }
     }
 }

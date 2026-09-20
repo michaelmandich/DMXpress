@@ -88,7 +88,9 @@ impl App {
             return;
         }
         let mut submit = false;
-        egui::TopBottomPanel::bottom("command").show(ctx, |ui| {
+        let panel = egui::TopBottomPanel::bottom("command")
+            .show_separator_line(false)
+            .show(ctx, |ui| {
             ui.horizontal(|ui| {
                 ui.strong(">");
                 let resp = ui.add(
@@ -103,6 +105,8 @@ impl App {
                 }
             });
         });
+        self.seams
+            .push(super::divider::top_edge_seam(panel.response.rect));
         if submit {
             let line = std::mem::take(&mut self.command);
             self.run_command(&line);

@@ -9,7 +9,10 @@ use crate::oscillator::{
     self, custom_wave, subdiv_label, CustomWaveform, Look, Osc, SegmentKind, WavePoint,
     WaveTraversal, SPEED_CHOICES,
 };
-use crate::transition::{TransitionCurve, TransitionMode};
+use crate::transition::{
+    TransitionBinding, TransitionConfig, TransitionCurve, TransitionGroup, TransitionMode,
+    TransitionTarget,
+};
 
 impl App {
     pub(crate) fn confirm_reset_window(&mut self, ctx: &egui::Context) {
@@ -148,6 +151,27 @@ impl App {
                     ui.end_row();
                 });
                 ui.weak("Pitch -90 = down, 90 = up, 0 = toward audience.");
+                ui.add_space(6.0);
+                ui.heading("Console");
+                ui.horizontal(|ui| {
+                    ui.label("Pane dividers");
+                    let mut d = s.divider;
+                    egui::ComboBox::from_id_salt("divider_style")
+                        .selected_text(d.label())
+                        .width(140.0)
+                        .show_ui(ui, |ui| {
+                            for style in super::divider::DividerStyle::ALL {
+                                ui.selectable_value(&mut d, style, style.label())
+                                    .on_hover_text(style.hint());
+                            }
+                        })
+                        .response
+                        .on_hover_text("How the seams between the panes are drawn");
+                    if d != s.divider {
+                        s.divider = d;
+                        changed = true;
+                    }
+                });
                 ui.add_space(10.0);
                 ui.separator();
                 if ui
@@ -174,6 +198,81 @@ impl App {
         }
     }
 
+    /// The one-line fade readout a pool window shows in place of the fader
+    /// it used to own: what each of its actions currently takes, and a way
+    /// to the Transition window, which is where every time now lives.
+    pub(crate) fn fade_readout(&mut self, ui: &mut egui::Ui, targets: &[TransitionTarget]) {
+        ui.horizontal_wrapped(|ui| {
+            ui.weak("Fade");
+            for &t in targets {
+                let secs = self.transition.fade(t);
+                let text = if secs <= 0.01 {
+                    format!("{} cut", t.label())
+                } else {
+                    format!("{} {secs:.1} s", t.label())
+                };
+                let color = if secs <= 0.01 {
+                    super::theme::TEXT_DIM
+                } else {
+                    super::theme::ACCENT_SOFT
+                };
+                ui.label(egui::RichText::new(text).color(color))
+                    .on_hover_text(t.hint());
+            }
+            if ui
+                .small_button("Transition ↗")
+                .on_hover_text(
+                    "Every fade time lives in the Transition window: one global \
+                     slider, or a time per action in advanced mode.",
+                )
+                .clicked()
+            {
+                self.show_transition = true;
+            }
+        });
+    }
+
+    /// One advanced-mode row: the action, its M / C / — binding, its own
+    /// time (live only under C) and what it will actually take.
+    fn transition_slot_row(ui: &mut egui::Ui, tr: &mut TransitionConfig, t: TransitionTarget) {
+        ui.label(t.label()).on_hover_text(t.hint());
+        let global = tr.duration;
+        let slot = tr.slot_mut(t);
+        ui.horizontal(|ui| {
+            for b in [
+                TransitionBinding::Master,
+                TransitionBinding::Custom,
+                TransitionBinding::None,
+            ] {
+                if ui
+                    .selectable_label(slot.binding == b, b.short_label())
+                    .on_hover_text(b.hint())
+                    .clicked()
+                {
+                    slot.binding = b;
+                }
+            }
+        });
+        ui.add_enabled(
+            slot.binding == TransitionBinding::Custom,
+            egui::Slider::new(&mut slot.custom, 0.0..=20.0)
+                .suffix(" s")
+                .fixed_decimals(1)
+                .show_value(false),
+        );
+        let secs = slot.binding.duration(global, slot.custom);
+        let (text, color) = match slot.binding {
+            TransitionBinding::None => ("cut".to_owned(), super::theme::TEXT_DIM),
+            TransitionBinding::Master if secs <= 0.01 => {
+                ("cut (global)".to_owned(), super::theme::TEXT_DIM)
+            }
+            TransitionBinding::Master => (format!("{secs:.1} s (global)"), super::theme::TEXT_DIM),
+            TransitionBinding::Custom => (format!("{secs:.1} s"), super::theme::ACCENT_SOFT),
+        };
+        ui.label(egui::RichText::new(text).color(color));
+        ui.end_row();
+    }
+
     pub(crate) fn transition_window(&mut self, ctx: &egui::Context) {
         if !self.show_transition {
             self.transition.selected = false;
@@ -185,6 +284,12 @@ impl App {
         let mut popped = self.popped_out.contains("transition");
         let mut stop_at_current = false;
         let mut zoom_level = self.zoom.transition;
+        // Advanced mode is a bigger box: room for a row per action.
+        let default_size = if self.transition.advanced {
+            [560.0, 640.0]
+        } else {
+            [360.0, 340.0]
+        };
         super::floating_panel(
             ctx,
             "transition",
@@ -192,8 +297,8 @@ impl App {
             &mut open,
             &mut popped,
             Some(&mut zoom_level),
-            [340.0, 320.0],
-            [screen.right() - 390.0, 430.0],
+            default_size,
+            [screen.right() - 410.0, 430.0],
             |ui| {
 
                 if let Some(progress) = active_progress {
@@ -209,18 +314,41 @@ impl App {
                 }
 
                 let tr = &mut self.transition;
+
+                // The global transition: the one fader the whole console
+                // follows. Everything that can fade — palettes, phasers,
+                // chases, scenes, cues, presets, wheels, clears — takes this
+                // long unless advanced mode says otherwise.
+                super::theme::section(ui, "Global transition");
+                ui.horizontal(|ui| {
+                    ui.add(
+                        egui::Slider::new(&mut tr.duration, 0.0..=20.0)
+                            .suffix(" s")
+                            .fixed_decimals(1)
+                            .show_value(false),
+                    );
+                    let (text, color) = if tr.duration <= 0.01 {
+                        ("cut".to_owned(), super::theme::WARN)
+                    } else {
+                        (format!("{:.1} s", tr.duration), super::theme::ACCENT_SOFT)
+                    };
+                    ui.label(egui::RichText::new(text).strong().color(color));
+                });
+                super::theme::hint(
+                    ui,
+                    if tr.advanced {
+                        "Rows marked M below follow this; C rows run their own time; — rows cut."
+                    } else {
+                        "Every action fades over this instead of jumping: palettes, phasers, \
+                         chases, scenes, cues, presets, wheels and clears."
+                    },
+                );
+
+                ui.add_space(4.0);
                 egui::Grid::new("transition_basic")
                     .num_columns(2)
                     .spacing([10.0, 6.0])
                     .show(ui, |ui| {
-                        ui.label("Duration");
-                        ui.add(
-                            egui::Slider::new(&mut tr.duration, 0.0..=20.0)
-                                .suffix(" s")
-                                .fixed_decimals(1),
-                        );
-                        ui.end_row();
-
                         ui.label("Mode");
                         egui::ComboBox::from_id_salt("transition_mode")
                             .selected_text(tr.mode.label())
@@ -245,6 +373,66 @@ impl App {
                             });
                         ui.end_row();
                     });
+
+                ui.separator();
+                ui.checkbox(&mut tr.advanced, "Advanced — a time per action")
+                    .on_hover_text(
+                        "Break the global out into one row per action. Each row can \
+                         follow the global (M), run its own time (C) or cut (—).",
+                    );
+                if tr.advanced {
+                    ui.horizontal(|ui| {
+                        ui.weak("All rows:");
+                        if ui
+                            .small_button("follow global")
+                            .on_hover_text("Bind every row to the global slider")
+                            .clicked()
+                        {
+                            tr.bind_all(TransitionBinding::Master);
+                        }
+                        if ui
+                            .small_button("own time")
+                            .on_hover_text("Every row runs its own slider")
+                            .clicked()
+                        {
+                            tr.bind_all(TransitionBinding::Custom);
+                        }
+                        if ui
+                            .small_button("cut")
+                            .on_hover_text("Nothing fades")
+                            .clicked()
+                        {
+                            tr.bind_all(TransitionBinding::None);
+                        }
+                        if ui
+                            .small_button("reset")
+                            .on_hover_text("Back to the defaults: everything follows the global, holds and blackout cut")
+                            .clicked()
+                        {
+                            tr.reset_slots();
+                        }
+                    });
+                    egui::ScrollArea::vertical()
+                        .max_height(480.0)
+                        .auto_shrink([false, true])
+                        .show(ui, |ui| {
+                            for group in TransitionGroup::ALL {
+                                ui.add_space(6.0);
+                                super::theme::section(ui, group.label());
+                                egui::Grid::new(("transition_slots", group.label()))
+                                    .num_columns(4)
+                                    .spacing([10.0, 4.0])
+                                    .min_col_width(0.0)
+                                    .show(ui, |ui| {
+                                        for t in TransitionTarget::ALL {
+                                            if t.group() == group {
+                                                Self::transition_slot_row(ui, tr, t);
+                                            }
+                                        }
+                                    });
+                            }
+                        });
+                }
 
                 if tr.mode.uses_sphere() {
                     ui.separator();

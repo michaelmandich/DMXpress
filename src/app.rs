@@ -14,17 +14,18 @@ use crate::order::{self, Order};
 use crate::oscillator::{self, CustomWaveform, Look};
 use crate::palette::{self, Feature, Palette, PaletteRef, PaletteSeq, SeqPattern};
 use crate::phaser::{self, Phaser};
-use crate::preset::{self, SavedCycle, SavedOsc, UserPreset};
+use crate::preset::{self, SavedOsc, UserPreset};
 use crate::profiles::{self, UserFixture};
 use crate::scene::{self, Scene};
 use crate::stack::{self, Stack};
 use crate::view::{self, View};
 use crate::showbuddy::{self, Patch, PresetBank, Role};
 use crate::stage::{self, StageView, V3};
-use crate::transition::{TransitionBinding, TransitionConfig, TransitionRun};
+use crate::transition::{TransitionConfig, TransitionRun, TransitionTarget};
 use crate::chase::{ChaseConfig, ChaseRun, ChaseSource};
 use crate::engine::{Layer, Mixer};
 use crate::group::{self, Group, GroupMode};
+use crate::layer::{BoxKind, ProgLayer};
 /// A timed per-channel ramp used to fade palettes and phasers in and out.
 #[derive(Debug, Clone, Copy)]
 pub struct Ramp {
@@ -57,6 +58,31 @@ impl Ramp {
             self.from + (self.to - self.from) * k
         };
         (v, k >= 1.0)
+    }
+}
+
+/// A forced hold easing on or off one channel. Holds are applied to the
+/// finished output rather than to the programmer, so there is no "from"
+/// value to store — the ramp just says how far between what the show is
+/// doing and the held value the channel currently sits.
+#[derive(Debug, Clone, Copy)]
+pub struct HoldRamp {
+    pub start: Instant,
+    pub dur: f32,
+    /// Whether the hold is coming off, in which case the channel travels
+    /// back toward whatever the show underneath is doing.
+    pub leaving: bool,
+}
+
+impl HoldRamp {
+    /// Blend weight toward the hold, and whether the ramp has landed.
+    fn weight(&self, now: Instant) -> (f32, bool) {
+        let k = if self.dur <= 0.0 {
+            1.0
+        } else {
+            (now.duration_since(self.start).as_secs_f32() / self.dur).clamp(0.0, 1.0)
+        };
+        (if self.leaving { 1.0 - k } else { k }, k >= 1.0)
     }
 }
 
@@ -119,6 +145,26 @@ pub(crate) struct App {
     /// clicking group after group builds this chain, which the Orders window
     /// turns into a custom effect route.
     pub group_chain: Vec<usize>,
+    /// Programmer layers, bottom→top (see `layer.rs`). Always non-empty:
+    /// index 0 is the base layer, and a desk with only that one behaves
+    /// exactly as it did before layers existed.
+    pub layers: Vec<ProgLayer>,
+    /// Which layer is being programmed. Its `Look`, record mask and palette
+    /// provenance live in `live`/`live_active`/`live_refs` rather than in the
+    /// layer itself, so every existing writer targets it without knowing
+    /// layers exist (see `select_layer`).
+    pub active_layer: usize,
+    /// Next stable `ProgLayer::id` to hand out.
+    pub next_layer_id: u32,
+    /// Layer awaiting a name in the panel's rename field.
+    pub layer_rename: Option<(usize, String)>,
+    /// Contributions that sit *above* the whole layer stack: forced holds
+    /// and flat adds, which `update` stamps onto the flat frame after the
+    /// mixer and after the grand master. They belong to no layer — showing
+    /// one inside a layer would say it can be overridden by the layer above,
+    /// and nothing can override them. Derived each frame alongside the
+    /// layers' own boxes.
+    pub(crate) above_stack: Vec<crate::layer::LayerBox>,
     /// Custom effect routes (see `order.rs`).
     pub orders: Vec<Order>,
     /// Which order effects currently travel along; `None` = patch order.
@@ -207,12 +253,16 @@ pub(crate) struct App {
     pub osc_ramps: HashMap<usize, Ramp>,
     /// Level ramps fading flat-add phasers in and out.
     pub add_ramps: HashMap<usize, Ramp>,
-    /// Palette recall fade time in seconds (the Palettes window fader); 0 = snap.
-    pub palette_fade_s: f32,
-    pub palette_transition: TransitionBinding,
-    /// Phaser apply/stop fade time in seconds (the Phasers window fader); 0 = snap.
-    pub phaser_fade_s: f32,
-    pub phaser_transition: TransitionBinding,
+    /// Ramps easing forced holds (smoke on, strobe on) in and out. Unlike
+    /// the other fades these ride on the *output*, because a hold overrides
+    /// everything beneath it rather than living in the programmer.
+    pub hold_ramps: HashMap<usize, HoldRamp>,
+    /// Overlay gain per effect lane while a colour is fading into it.
+    /// Missing = the lane is at full.
+    pub(crate) lane_fades: BTreeMap<String, Ramp>,
+    /// Lanes that have been emptied but are still fading away: what they
+    /// were playing, and the ramp taking them out.
+    pub(crate) lane_exits: BTreeMap<String, (Vec<u32>, Ramp)>,
     /// User-crafted oscillator waveforms shared by the oscillator and phaser builders.
     pub custom_waveforms: Vec<CustomWaveform>,
     pub waveform_edit: CustomWaveform,
@@ -282,6 +332,13 @@ pub(crate) struct App {
     /// forces the wire to black without touching the programmer/stacks, so
     /// lifting it picks the show back up exactly where it was.
     pub blackout: bool,
+    /// How dark the blackout override currently is, 0 = show through,
+    /// 1 = fully black. Eased toward `blackout` over the Masters transition
+    /// times so going to black can be a dip rather than a slam.
+    pub blackout_k: f32,
+    /// The dip in flight: when it started, the darkness it started from, and
+    /// whether it is heading into black or back out.
+    pub(crate) blackout_ramp: Option<(Instant, f32, bool)>,
     /// Which deck page is showing — flipped by the Mode knob.
     pub deck_page: crate::streamdeck::DeckPage,
     /// Which of the Palettes page's sub-pages (colours, gobos, prisms) the
@@ -326,8 +383,6 @@ pub(crate) struct App {
     pub audio_device_pref: Option<(String, bool)>,
     /// Stack shown/edited in the Stacks window.
     pub cur_stack: Option<usize>,
-    /// Default fade applied to newly recorded cues.
-    pub cue_fade: f32,
     /// Grand master 0..1 — scales every dimmer channel in the final output.
     pub grand_master: f32,
     /// Record filter: which features Store captures into a cue (all on = full).
@@ -349,6 +404,7 @@ pub(crate) struct App {
     pub show_chases: bool,
     pub show_groups: bool,
     pub show_orders: bool,
+    pub show_layers: bool,
     pub show_scenes: bool,
     pub show_audio: bool,
     pub show_beat: bool,
@@ -358,10 +414,15 @@ pub(crate) struct App {
     pub show_decks: bool,
     pub show_command: bool,
     pub show_views: bool,
-    /// Floating Log window visible.
+    /// Floating Log window visible. Closed on a fresh launch — the log is
+    /// a diagnostic, and most nights nobody opens it.
     pub show_log: bool,
     /// Floating Oscillator window visible.
     pub show_osc: bool,
+    /// Seams between the panes, collected as the panels lay themselves out
+    /// and painted in one pass at the end of the frame (see
+    /// [`crate::ui::divider`]). Cleared at the top of every `draw_ui`.
+    pub seams: Vec<crate::ui::divider::Seam>,
     /// Keys (see [`crate::ui::floating_panel`]) of panels currently popped
     /// out into their own native OS window instead of docked as a floating
     /// `egui::Window` inside the main window.
@@ -476,6 +537,7 @@ pub(crate) struct PanelZoom {
     pub transition: f32,
     pub groups: f32,
     pub orders: f32,
+    pub layers: f32,
     pub scenes: f32,
     pub audio: f32,
     pub palettes: f32,
@@ -498,6 +560,7 @@ impl Default for PanelZoom {
             transition: 1.0,
             groups: 1.0,
             orders: 1.0,
+            layers: 1.0,
             scenes: 1.0,
             audio: 1.0,
             palettes: 1.0,
@@ -683,6 +746,11 @@ impl App {
             groups: group::load_groups(),
             group_name: String::new(),
             group_chain: Vec::new(),
+            layers: vec![ProgLayer::new(1, "Base".into())],
+            active_layer: 0,
+            next_layer_id: 2,
+            layer_rename: None,
+            above_stack: Vec::new(),
             orders: order::load_orders(),
             active_order: None,
             order_edit: None,
@@ -724,10 +792,9 @@ impl App {
             base_fades: HashMap::new(),
             osc_ramps: HashMap::new(),
             add_ramps: HashMap::new(),
-            palette_fade_s: 0.0,
-            palette_transition: TransitionBinding::Custom,
-            phaser_fade_s: 0.0,
-            phaser_transition: TransitionBinding::Custom,
+            hold_ramps: HashMap::new(),
+            lane_fades: BTreeMap::new(),
+            lane_exits: BTreeMap::new(),
             custom_waveforms: oscillator::load_waveforms(),
             waveform_edit: CustomWaveform::default(),
             waveform_edit_sel: None,
@@ -762,6 +829,8 @@ impl App {
             send_to_deck: true,
             deck_active: false,
             blackout: false,
+            blackout_k: 0.0,
+            blackout_ramp: None,
             deck_page: crate::streamdeck::DeckPage::default(),
             palette_sub: crate::streamdeck::PaletteSub::default(),
             phaser_deck: crate::streamdeck::load_phaser_deck(),
@@ -783,7 +852,6 @@ impl App {
             audio_devices: Vec::new(),
             audio_device_pref: audio_file.device.map(|d| (d, audio_file.loopback)),
             cur_stack: None,
-            cue_fade: 3.0,
             grand_master: 1.0,
             record_mask: Feature::ALL.iter().copied().collect(),
             views: view::load_views(),
@@ -797,6 +865,7 @@ impl App {
             show_chases: false,
             show_groups: false,
             show_orders: false,
+            show_layers: false,
             show_scenes: false,
             show_audio: false,
             show_beat: false,
@@ -806,8 +875,9 @@ impl App {
             show_decks: false,
             show_command: false,
             show_views: false,
-            show_log: true,
+            show_log: false,
             show_osc: true,
+            seams: Vec::new(),
             popped_out: HashSet::new(),
             collapsed: HashSet::new(),
             show_phaser_board: false,
@@ -862,6 +932,17 @@ impl App {
     /// re-sync the stage. Used at startup, after patch edits, and when a
     /// configuration is loaded.
     pub fn rebuild_patch(&mut self) {
+        // Groups and orders hold raw indices into `patch.fixtures`, the very
+        // Vec this is about to rebuild. Patching one light in the middle
+        // renumbers everything above it, so without this every group and
+        // route would silently repoint at its neighbours. Keys are what the
+        // rest of the app already stores durably (`profiles::fixture_key`).
+        let before: Vec<String> = self
+            .patch
+            .fixtures
+            .iter()
+            .map(|f| profiles::fixture_key(&f.display, f.from))
+            .collect();
         let cache = std::mem::take(&mut self.showbuddy_patch);
         let mut patch = if self.include_showbuddy {
             let (p, fixtures) = load_showbuddy(&cache, &mut self.log);
@@ -882,8 +963,12 @@ impl App {
             patch.fixtures.len(),
             self.user_fixtures.len()
         ));
+        // Resolve every channel's role now rather than re-deriving it from
+        // the name in the per-frame loops (grand master, throb, dim-range).
+        patch.resolve_roles();
         self.sel_fixture = if patch.fixtures.is_empty() { None } else { Some(0) };
         self.patch = patch;
+        self.remap_fixture_indices(&before);
         self.stage.sync(&self.patch, &self.settings);
         self.sel_channels.clear();
         self.chan_ui.anchor = None;
@@ -893,6 +978,8 @@ impl App {
         self.hold_overrides.clear();
         self.encoder_layer.clear();
         self.effect_lanes.clear();
+        self.lane_fades.clear();
+        self.lane_exits.clear();
         // ShowBuddy's preset banks follow its patch: no ShowBuddy, no banks.
         if self.include_showbuddy {
             self.banks = load_banks(&mut self.log);
@@ -953,6 +1040,8 @@ impl App {
         self.hold_overrides.clear();
         self.encoder_layer.clear();
         self.effect_lanes.clear();
+        self.lane_fades.clear();
+        self.lane_exits.clear();
         self.transition_run = None;
         self.chase_run = None;
         self.active_preset = None;
@@ -972,6 +1061,30 @@ impl App {
         ));
     }
 
+    /// The layer stack with the selected layer's live programmer state
+    /// folded back in and every layer's runtime distilled into its
+    /// serializable snapshot — what actually gets written to a show file.
+    fn layers_for_save(&self) -> Vec<ProgLayer> {
+        // Built field by field rather than cloning the stack: a clone deep-
+        // copies exactly the runtime that is about to be thrown away — the
+        // whole `Look` (a frame plus every oscillator and its custom
+        // waveform), the record mask, the palette map and the derived
+        // boxes. This runs four times a second behind undo, and again on
+        // every autosave.
+        let order = self.active_order.and_then(|i| self.orders.get(i)).map(|o| o.id);
+        self.layers
+            .iter()
+            .enumerate()
+            .map(|(i, l)| {
+                if i == self.active_layer {
+                    l.saved(&self.live, &self.live_active, &self.live_refs, order)
+                } else {
+                    l.saved(&l.look, &l.active, &l.refs, l.order)
+                }
+            })
+            .collect()
+    }
+
     /// Bundle every persisted piece of state into a [`Configuration`].
     pub fn snapshot_configuration(&self) -> crate::config::Configuration {
         crate::config::Configuration {
@@ -984,6 +1097,7 @@ impl App {
             excluded_fixtures: self.excluded_fixtures.clone(),
             groups: self.groups.clone(),
             orders: self.orders.clone(),
+            layers: self.layers_for_save(),
             palettes: self.palettes.clone(),
             phasers: self.phasers.clone(),
             user_presets: self.user_presets.clone(),
@@ -994,7 +1108,7 @@ impl App {
             cameras: self.cameras.clone(),
             universe: self.universe,
             grand_master: self.grand_master,
-            cue_fade: self.cue_fade,
+            transition: self.transition.to_file(),
         }
     }
 
@@ -1035,6 +1149,11 @@ impl App {
             .import_layout(&self.patch, &self.settings, cfg.layout);
         self.groups = cfg.groups;
         self.orders = cfg.orders;
+        // Shows written before groups and orders carried ids restore with
+        // `id: 0` throughout, which is also the unset marker — hand them
+        // real ones before anything can store a reference to one.
+        group::assign_ids(&mut self.groups);
+        order::assign_ids(&mut self.orders);
         order::save_orders(&self.orders);
         self.active_order = None;
         self.order_edit = None;
@@ -1064,16 +1183,112 @@ impl App {
         self.universe = cfg.universe;
         let _ = self.net.cmd_tx.send(NetCmd::SetUniverse(self.universe));
         self.grand_master = cfg.grand_master;
-        self.cue_fade = cfg.cue_fade;
+        self.transition.apply_file(cfg.transition);
         // Everything referencing old fixture indices is invalid now.
         self.live = Look::black();
         self.active_phasers.clear();
         self.hold_overrides.clear();
         self.encoder_layer.clear();
         self.effect_lanes.clear();
+        self.lane_fades.clear();
+        self.lane_exits.clear();
         self.transition_run = None;
         self.chase_run = None;
         self.active_preset = None;
+        // Programmer layers come back as structure plus their snapshots.
+        // This lands *after* the clears above, because the base layer is the
+        // one being programmed: its parked state moves straight into the
+        // live programmer fields, and blacking those out again afterwards
+        // would leave the record mask asserting channels at zero.
+        //
+        // A show written before layers existed restores one empty base
+        // layer, which leaves the programmer blacked out exactly as it was.
+        self.layers = if cfg.layers.is_empty() {
+            vec![ProgLayer::new(1, "Base".into())]
+        } else {
+            cfg.layers
+        };
+        for l in self.layers.iter_mut() {
+            l.restore();
+        }
+        self.next_layer_id = self.layers.iter().map(|l| l.id).max().unwrap_or(0) + 1;
+        self.active_layer = 0;
+        self.layer_rename = None;
+        self.live_active = std::mem::take(&mut self.layers[0].active);
+        self.live_refs = std::mem::take(&mut self.layers[0].refs);
+        self.live = std::mem::replace(&mut self.layers[0].look, Look::black());
+        self.live.resume_clock();
+        self.active_order = self.layers[0].order.and_then(|id| self.order_index(id));
+    }
+
+    /// Move every stored fixture index onto the rebuilt patch.
+    ///
+    /// `before` is the key of each fixture at its old index. Nothing is
+    /// deleted for coming up empty: unticking ShowBuddy unpatches its whole
+    /// rig, and a pool that pruned itself here would take the operator's
+    /// groups and routes with it — permanently, for what is meant to be a
+    /// toggle. An empty group is harmless, because `effect_units` skips
+    /// empty steps and `super_fixtures` ignores anything shorter than two
+    /// lights, so they sit idle until their fixtures come back.
+    fn remap_fixture_indices(&mut self, before: &[String]) {
+        let map = profiles::index_remap(before, &self.patch.fixtures);
+        let remap = |v: &mut Vec<usize>| {
+            let mut out: Vec<usize> = v.iter().filter_map(|fi| map.get(fi).copied()).collect();
+            out.dedup();
+            *v = out;
+        };
+        for g in &mut self.groups {
+            remap(&mut g.fixtures);
+        }
+        for o in &mut self.orders {
+            for step in &mut o.steps {
+                remap(&mut step.fixtures);
+            }
+        }
+        for l in &mut self.layers {
+            remap(&mut l.targets);
+        }
+    }
+
+    /// The lights an effect applied right now would touch: the live
+    /// selection, else the layer's stored targets, else the whole rig.
+    ///
+    /// This is the same rule `apply_phaser` follows, lifted out so the chase
+    /// can follow it too. An order *sequences* lights; it does not choose
+    /// them — what a layer is aimed at does.
+    pub(crate) fn effect_targets(&self) -> Vec<usize> {
+        let sel = self.stage.selected_fixtures();
+        if !sel.is_empty() {
+            return sel;
+        }
+        let stored = self
+            .layers
+            .get(self.active_layer)
+            .map(|l| l.targets.clone())
+            .unwrap_or_default();
+        if !stored.is_empty() {
+            return stored;
+        }
+        (0..self.patch.fixtures.len()).collect()
+    }
+
+    /// Stage positions for just the lights an effect would touch.
+    ///
+    /// The chase is geometric — it sweeps a band of space — so restricting
+    /// it is a matter of only handing it the lights it is allowed to move.
+    /// Positions still come from `fixture_positions`, so a super-fixture is
+    /// still one averaged point and the band passes it as a single light.
+    pub(crate) fn effect_positions(&self) -> Vec<(usize, V3)> {
+        let targets = self.effect_targets();
+        // The whole rig selected is the common case and needs no filtering.
+        if targets.len() == self.patch.fixtures.len() {
+            return self.fixture_positions();
+        }
+        let keep: HashSet<usize> = targets.into_iter().collect();
+        self.fixture_positions()
+            .into_iter()
+            .filter(|(fi, _)| keep.contains(fi))
+            .collect()
     }
 
     /// Fixtures that have a resolved stage position, paired with that position.
@@ -1154,8 +1369,11 @@ impl App {
     pub(crate) fn order_bound_fixtures(&self) -> HashSet<usize> {
         let mut out = HashSet::new();
         if let Some(o) = self.active_order.and_then(|i| self.orders.get(i)) {
-            for step in o.steps.iter().filter(|s| s.is_unit()) {
-                out.extend(step.fixtures.iter().copied());
+            for step in &o.steps {
+                let members = step.members(&self.groups);
+                if members.len() > 1 {
+                    out.extend(members.iter().copied());
+                }
             }
         }
         out
@@ -1171,9 +1389,10 @@ impl App {
         let mut claimed: HashSet<usize> = HashSet::new();
         if let Some(o) = self.active_order.and_then(|i| self.orders.get(i)) {
             for step in &o.steps {
-                if step.is_unit() && step.fixtures.iter().all(|fi| !claimed.contains(fi)) {
-                    claimed.extend(step.fixtures.iter().copied());
-                    out.push(&step.fixtures);
+                let members = step.members(&self.groups);
+                if members.len() > 1 && members.iter().all(|fi| !claimed.contains(fi)) {
+                    claimed.extend(members.iter().copied());
+                    out.push(members);
                 }
             }
         }
@@ -1228,6 +1447,351 @@ impl App {
             .collect()
     }
 
+    // ---- Programmer layers -------------------------------------------
+
+    /// The layer currently being programmed.
+    pub(crate) fn layer_mut(&mut self) -> &mut ProgLayer {
+        let i = self.active_layer.min(self.layers.len().saturating_sub(1));
+        &mut self.layers[i]
+    }
+
+    /// Rebuild every layer's box list from what is actually live.
+    ///
+    /// Called each frame whether or not the Layers window is open, so
+    /// opening it always shows what is on stage right now rather than a log
+    /// of what happened to be recorded while it was visible.
+    pub(crate) fn refresh_layer_boxes(&mut self) {
+        let sel = self.active_layer;
+        // Which preset each layer is carrying: the selected one's is live.
+        let live_preset = self
+            .active_user_preset
+            .and_then(|k| self.user_presets.get(k))
+            .map(|p| p.id);
+        let live_bank = self.active_preset;
+        let ids: Vec<Option<u32>> = self
+            .layers
+            .iter()
+            .enumerate()
+            .map(|(i, l)| if i == sel { live_preset } else { l.preset_id })
+            .collect();
+        // Resolved before the loop, which borrows the stack mutably. Only
+        // the presets actually in use, because a preset's address list is
+        // as long as the rig.
+        let mut presets: HashMap<u32, (String, Vec<usize>)> = HashMap::new();
+        for id in ids.iter().flatten() {
+            if presets.contains_key(id) {
+                continue;
+            }
+            if let Some(p) = self.user_presets.iter().find(|p| p.id == *id) {
+                let mut a: Vec<usize> = p
+                    .values
+                    .iter()
+                    .map(|&(x, _)| x)
+                    .chain(p.oscs.iter().map(|(x, _)| *x))
+                    .collect();
+                a.sort_unstable();
+                a.dedup();
+                presets.insert(*id, (p.name.clone(), a));
+            }
+        }
+        // ShowBuddy bank presets: the channels come from the parsed .prt,
+        // so a bank recall reads on the layer exactly like a native one.
+        let mut banked: HashMap<(usize, usize), (String, Vec<usize>)> = HashMap::new();
+        for (i, l) in self.layers.iter().enumerate() {
+            let slot = if i == sel { live_bank } else { l.preset_bank };
+            let Some((b, k)) = slot else { continue };
+            if banked.contains_key(&(b, k)) {
+                continue;
+            }
+            if let Some(r) = self.banks.get(b).and_then(|bank| bank.presets.get(k)) {
+                // `PresetData` addresses are 1-based, the programmer's are
+                // 0-based — the same shift `Look::from_preset` applies.
+                let mut a: Vec<usize> = r
+                    .data
+                    .as_ref()
+                    .map(|d| {
+                        d.values
+                            .iter()
+                            .map(|&(x, _)| x as usize - 1)
+                            .chain(d.mods.iter().map(|m| m.addr as usize - 1))
+                            .collect()
+                    })
+                    .unwrap_or_default();
+                a.sort_unstable();
+                a.dedup();
+                banked.insert((b, k), (r.name.clone(), a));
+            }
+        }
+        let names: HashMap<u32, String> =
+            self.palettes.iter().map(|p| (p.id, p.name.clone())).collect();
+        // Sorted, so the panel's box order does not depend on hash order.
+        let mut phasers: Vec<(String, Vec<usize>)> = self
+            .active_phasers
+            .iter()
+            .map(|(k, v)| (k.clone(), v.clone()))
+            .collect();
+        phasers.sort_by(|a, b| a.0.cmp(&b.0));
+        // Split off whatever is actually being stamped over the top. This is
+        // decided by what a phaser currently *owns* rather than by how its
+        // pool entry is defined, because the pool entry can have been edited
+        // since it was fired — and the question the panel answers is what is
+        // on the rig now.
+        let mut above: Vec<crate::layer::LayerBox> = Vec::new();
+        for (name, addrs) in &mut phasers {
+            let forced: Vec<usize> = addrs
+                .iter()
+                .copied()
+                .filter(|a| self.hold_overrides.contains_key(a) || self.add_overrides.contains_key(a))
+                .collect();
+            if forced.is_empty() {
+                continue;
+            }
+            addrs.retain(|a| !forced.contains(a));
+            above.push(crate::layer::LayerBox::new(
+                BoxKind::Phaser(name.clone()),
+                name.clone(),
+                forced,
+            ));
+        }
+        // A phaser reduced to nothing was holding only forced channels.
+        phasers.retain(|(_, a)| !a.is_empty());
+        for b in &mut above {
+            if let Some(old) = self.above_stack.iter().find(|o| o.kind == b.kind) {
+                b.selected = old.selected;
+            }
+        }
+        self.above_stack = above;
+
+        for (i, l) in self.layers.iter_mut().enumerate() {
+            // The selected layer's state is the live programmer's, so lend
+            // it those fields for the length of the derivation.
+            let parked = (i == sel).then(|| {
+                (
+                    std::mem::replace(&mut l.active, self.live_active.clone()),
+                    std::mem::replace(&mut l.refs, self.live_refs.clone()),
+                    std::mem::replace(&mut l.preset_id, live_preset),
+                    std::mem::replace(&mut l.preset_bank, live_bank),
+                )
+            });
+            // A native preset wins over a bank one: recalling either clears
+            // the other, so at most one of these is ever set.
+            let preset = l
+                .preset_id
+                .and_then(|id| presets.get(&id).map(|(n, a)| (BoxKind::Preset(id), n, a)))
+                .or_else(|| {
+                    l.preset_bank.and_then(|(b, k)| {
+                        banked.get(&(b, k)).map(|(n, a)| (BoxKind::BankPreset(b, k), n, a))
+                    })
+                })
+                .map(|(kind, n, a)| (kind, n.clone(), a.as_slice()));
+            l.derive_boxes(preset, &names, &phasers);
+            if let Some((a, r, id, bank)) = parked {
+                l.active = a;
+                l.refs = r;
+                l.preset_id = id;
+                l.preset_bank = bank;
+            }
+        }
+    }
+
+    /// Pool position of the order with `id`.
+    pub(crate) fn order_index(&self, id: u32) -> Option<usize> {
+        self.orders.iter().position(|o| o.id == id)
+    }
+
+    /// Park the selected layer's programmer state and make `idx` current.
+    ///
+    /// The swap is the whole trick: because the live programmer fields hold
+    /// whichever layer is selected, every writer, capture path and pool
+    /// button in the app targets the right layer without knowing layers
+    /// exist. The layer's route rides along with it, so picking a layer
+    /// picks the order its effects fan down.
+    pub(crate) fn select_layer(&mut self, idx: usize) {
+        if idx >= self.layers.len() || idx == self.active_layer {
+            return;
+        }
+        // A fade in flight belongs to the layer it started on. Land it there
+        // rather than let it go on painting a layer it was never aimed at.
+        if let Some(run) = self.transition_run.take() {
+            let armed_mid_run = std::mem::take(&mut self.live.oscs);
+            self.live = run.finish();
+            self.live.oscs.extend(armed_mid_run);
+        }
+        // Clamped rather than indexed raw: `active_layer` is an index into a
+        // Vec that add/remove/move all rewrite, and a desk should not go down
+        // because one of them left it a frame behind.
+        let cur = self.active_layer.min(self.layers.len() - 1);
+        self.layers[cur].look = std::mem::replace(&mut self.live, Look::black());
+        self.layers[cur].active = std::mem::take(&mut self.live_active);
+        self.layers[cur].refs = std::mem::take(&mut self.live_refs);
+        self.layers[cur].order = self.active_order.and_then(|i| self.orders.get(i)).map(|o| o.id);
+        self.layers[cur].preset_id = self
+            .active_user_preset
+            .and_then(|k| self.user_presets.get(k))
+            .map(|p| p.id);
+        self.layers[cur].preset_bank = self.active_preset;
+
+        self.live = std::mem::replace(&mut self.layers[idx].look, Look::black());
+        // The parked look's clock stopped when it was parked; restarting it
+        // stops a layer jumping a whole beat forward the moment it is picked.
+        self.live.resume_clock();
+        self.live_active = std::mem::take(&mut self.layers[idx].active);
+        self.live_refs = std::mem::take(&mut self.layers[idx].refs);
+        self.active_order = self.layers[idx].order.and_then(|id| self.order_index(id));
+        self.active_user_preset = self.layers[idx]
+            .preset_id
+            .and_then(|id| self.user_presets.iter().position(|p| p.id == id));
+        self.active_preset = self.layers[idx].preset_bank;
+        self.active_layer = idx;
+        self.log
+            .push(format!("Layer: {}", self.layers[idx].name));
+    }
+
+    /// Add an empty layer above the selected one and program into it.
+    pub(crate) fn add_layer(&mut self, fade: f32) -> usize {
+        let id = self.next_layer_id;
+        self.next_layer_id += 1;
+        // Directly above the selected layer, so a new layer always lands
+        // where the operator is looking. That is never at or below
+        // `active_layer`, so the live programmer fields stay pointed at the
+        // same layer and nothing has to be re-parked before selecting.
+        let at = (self.active_layer + 1).min(self.layers.len());
+        let mut l = ProgLayer::new(id, format!("Layer {id}"));
+        l.start(fade);
+        self.layers.insert(at, l);
+        self.select_layer(at);
+        at
+    }
+
+    /// Take a layer out, over `fade` seconds. The base layer never leaves —
+    /// there has to be something to program into.
+    pub(crate) fn remove_layer(&mut self, idx: usize, fade: f32) {
+        if idx >= self.layers.len() || self.layers.len() <= 1 {
+            return;
+        }
+        if self.layers[idx].stop(fade) {
+            self.drop_layer(idx);
+        } else if idx == self.active_layer {
+            // A layer on its way out should not keep taking new programming.
+            let to = if idx == 0 { 1 } else { idx - 1 };
+            self.select_layer(to);
+        }
+    }
+
+    /// Drop a layer from the stack, keeping `active_layer` on the same one.
+    fn drop_layer(&mut self, idx: usize) {
+        if idx >= self.layers.len() || self.layers.len() <= 1 {
+            return;
+        }
+        if idx == self.active_layer {
+            // Park the live programmer somewhere real before the slot goes.
+            let to = if idx == 0 { 1 } else { idx - 1 };
+            self.select_layer(to);
+        }
+        let gone = self.layers.remove(idx);
+        if self.active_layer > idx {
+            self.active_layer -= 1;
+        }
+        self.log.push(format!("Layer out: {}", gone.name));
+    }
+
+    /// Retire any layer whose release has landed.
+    fn retire_released_layers(&mut self) {
+        while let Some(i) = self.layers.iter().position(|l| l.released()) {
+            if self.layers.len() <= 1 {
+                self.layers[0].leaving = None;
+                break;
+            }
+            self.drop_layer(i);
+        }
+    }
+
+    /// Drop the boxes marked in the panel from layer `idx`, releasing the
+    /// channels they alone were claiming so whatever sits beneath comes
+    /// back. A box that shares a channel with another box on the same layer
+    /// leaves that channel behind for the survivor.
+    pub(crate) fn drop_layer_boxes(&mut self, idx: usize, picks: &[usize]) {
+        if idx >= self.layers.len() || picks.is_empty() {
+            return;
+        }
+        // Everything is read off the layer first: dropping one box changes
+        // the live state the rest are derived from.
+        let mut release: Vec<usize> = Vec::new();
+        let mut phasers: Vec<(String, Vec<usize>)> = Vec::new();
+        let mut drop_preset = false;
+        let mut names: Vec<String> = Vec::new();
+        for &bi in picks {
+            let exclusive = self.layers[idx].exclusive_addrs(bi);
+            let Some(b) = self.layers[idx].boxes.get(bi) else {
+                continue;
+            };
+            names.push(b.label.clone());
+            match &b.kind {
+                // A phaser is let go through `stop_phaser`, the only thing
+                // that knows how to release all three things a phaser can be
+                // holding: oscillators, a flat add, and a forced hold.
+                // Clearing the bookkeeping entry by hand — as this used to —
+                // left a hold stamping the output forever with nothing on
+                // screen to show it.
+                //
+                // Its channels stay out of `release`: the stop eases them
+                // out over the fade time, and blanking them here would undo
+                // that on the same frame.
+                BoxKind::Phaser(n) => phasers.push((n.clone(), b.addrs.clone())),
+                // Boxes are derived from live state, so a dropped one has to
+                // be dropped at the source too — otherwise the next frame
+                // simply derives it straight back.
+                BoxKind::Preset(_) | BoxKind::BankPreset(..) => {
+                    drop_preset = true;
+                    release.extend(exclusive);
+                }
+                BoxKind::Palette(_) => release.extend(exclusive),
+            }
+        }
+        if names.is_empty() {
+            return;
+        }
+        let live = idx == self.active_layer;
+        for a in release {
+            if a >= net::DMX_SLOTS {
+                continue;
+            }
+            if live {
+                self.live_active.remove(&a);
+                self.live_refs.remove(&a);
+                self.live.oscs.remove(&a);
+                self.live.base[a] = 0;
+            } else {
+                self.layers[idx].active.remove(&a);
+                self.layers[idx].refs.remove(&a);
+                self.layers[idx].look.oscs.remove(&a);
+                self.layers[idx].look.base[a] = 0;
+            }
+        }
+        for (n, addrs) in phasers {
+            self.stop_phaser(&n);
+            // A parked layer's oscillators live in its own look, which
+            // `stop_phaser` cannot reach — it only sees the live programmer.
+            if !live {
+                for a in addrs {
+                    self.layers[idx].look.oscs.remove(&a);
+                    self.layers[idx].active.remove(&a);
+                }
+            }
+        }
+        if drop_preset {
+            if live {
+                self.active_user_preset = None;
+                self.active_preset = None;
+            }
+            self.layers[idx].preset_id = None;
+            self.layers[idx].preset_bank = None;
+        }
+        // No need to prune `boxes` by hand: the next frame derives them from
+        // the state this just changed.
+        self.log.push(format!("Layer: dropped {}", names.join(", ")));
+    }
+
     /// Split `fixtures` into effect units — the slots a spread fans across.
     ///
     /// The active order goes first: its steps decide both the sequence and
@@ -1240,7 +1804,7 @@ impl App {
         if let Some(o) = self.active_order.and_then(|i| self.orders.get(i)) {
             for step in &o.steps {
                 let unit: Vec<usize> = step
-                    .fixtures
+                    .members(&self.groups)
                     .iter()
                     .copied()
                     .filter(|fi| remaining.remove(fi))
@@ -1364,6 +1928,7 @@ impl App {
     }
 
     pub(crate) fn draw_ui(&mut self, ctx: &egui::Context) {
+        self.seams.clear();
         for line in crate::plugin::drain_prints() {
             self.log.push(format!("Plugin: {line}"));
         }
@@ -1378,6 +1943,7 @@ impl App {
         self.beat_window(ctx);
         self.groups_window(ctx);
         self.orders_window(ctx);
+        self.layers_window(ctx);
         self.scenes_window(ctx);
         self.audio_window(ctx);
         self.palettes_window(ctx);
@@ -1406,6 +1972,20 @@ impl App {
         self.safety_windows(ctx);
         // With every edit of the frame in, see whether one happened.
         self.undo_tick(ctx);
+        // Every seam the panels left behind, painted over them: egui draws
+        // its own line under a panel's contents, so the only way past it is
+        // to cover it. Windows are on their own layers and stay clear.
+        let painter = ctx.layer_painter(egui::LayerId::background());
+        for s in &self.seams {
+            crate::ui::divider::paint(
+                &painter,
+                self.settings.divider,
+                s.rect,
+                s.vertical,
+                s.hovered,
+                s.active,
+            );
+        }
         // Last: lift every button drawn above (see `ui::theme::relief_pass`).
         crate::ui::relief_pass(ctx);
     }
@@ -1484,24 +2064,6 @@ impl App {
             speed: source.speed,
             tempo: source.tempo,
             master_speed: source.master_speed,
-            active_phasers: self
-                .active_phasers
-                .iter()
-                .map(|(name, addrs)| (name.clone(), addrs.clone()))
-                .collect(),
-            add_overrides: self.add_overrides.iter().map(|(&a, &v)| (a, v)).collect(),
-            hold_overrides: self.hold_overrides.iter().map(|(&a, &v)| (a, v)).collect(),
-            lanes: self.effect_lanes.iter().map(|(k, v)| (k.clone(), v.clone())).collect(),
-            cycle: self.cycle_on.then(|| SavedCycle {
-                ids: self.cycle_ids.clone(),
-                weights: self.cycle_weights.clone(),
-                beats_per: self.cycle_beats_per,
-                spread: self.cycle_spread,
-                pattern: self.cycle_pattern,
-                shape: self.cycle_shape,
-                master_beat: self.cycle_master_beat,
-                tempo: self.cycle_tempo,
-            }),
             color: None,
             symbol: String::new(),
             icon: crate::streamdeck::KeyIcon::None,
@@ -1551,50 +2113,34 @@ impl App {
         target.speed = p.speed;
         target.tempo = p.tempo;
         target.master_speed = p.master_speed;
-        // A preset is a whole-rig recall: the programmer takes over every
-        // channel, so anything the preset doesn't set goes to zero and all
-        // previous oscillators are replaced.
-        self.live_active = (0..net::DMX_SLOTS).collect();
+        // A preset asserts the channels it carries and no others. It used
+        // to take all 1024 on the bottom layer, so recalling one blacked out
+        // every light it did not mention — including whatever a cue, scene
+        // or lower layer was doing. As the base of a stack it replaces the
+        // layer's own contents (the whole `Look` is swapped below, so no
+        // leftovers of the previous preset survive) without burying anything
+        // underneath it.
+        self.live_active = p
+            .values
+            .iter()
+            .map(|&(a, _)| a)
+            .chain(p.oscs.iter().map(|(a, _)| *a))
+            .filter(|&a| a < net::DMX_SLOTS)
+            .collect();
         self.live_refs.clear();
         self.active_preset = None;
         self.active_user_preset = Some(idx);
         // Running phasers ride across preset changes: waves, poses and holds
         // are all carried onto the new look.
         self.carry_phasers_into(&mut target);
-        // Saved runtime sources become the underlying snapshot; anything
-        // already live remains authoritative above them.
-        for (name, addrs) in &p.active_phasers {
-            self.active_phasers
-                .entry(name.clone())
-                .or_insert_with(|| addrs.clone());
-        }
-        for &(a, v) in &p.add_overrides {
-            self.add_overrides.entry(a).or_insert(v);
-        }
-        for &(a, v) in &p.hold_overrides {
-            self.hold_overrides.entry(a).or_insert(v);
-        }
-        if !self.cycle_on {
-            if let Some(cycle) = &p.cycle {
-                self.cycle_ids = cycle.ids.clone();
-                self.cycle_weights = cycle.weights.clone();
-                while self.cycle_weights.len() < self.cycle_ids.len() {
-                    self.cycle_weights.push(1.0);
-                }
-                self.cycle_beats_per = cycle.beats_per;
-                self.cycle_spread = cycle.spread;
-                self.cycle_pattern = cycle.pattern;
-                self.cycle_shape = cycle.shape;
-                self.cycle_master_beat = cycle.master_beat;
-                self.cycle_tempo = cycle.tempo;
-                self.cycle_beats = 0.0;
-                self.cycle_last = None;
-                self.cycle_on = cycle.ids.len() >= 2;
-            }
-        }
-        // The stacked effect lanes come with the look, replacing whatever
-        // was stacked before.
-        self.effect_lanes = p.lanes.iter().cloned().collect();
+        // Nothing else comes back with a preset. It carries a look — the
+        // values and the oscillators around them — and that is all it has
+        // ever meant to carry. Palettes, the colour cycle, the effect lanes,
+        // forced holds and flat adds are their own things, living above the
+        // preset in the stack, and a look recall has no business switching
+        // them on. Running phasers ride across on their own (see
+        // `carry_phasers_into`), which is them overriding the new base
+        // rather than the preset restoring them.
 
         if self.transition.duration <= 0.0 {
             self.transition_run = None;
@@ -1734,7 +2280,8 @@ impl App {
         };
         match loaded {
             Some((look, name)) => {
-                self.chase_run = Some(ChaseRun::new(look));
+                let fade_in = self.transition.fade(TransitionTarget::ChaseStart);
+                self.chase_run = Some(ChaseRun::new(look, fade_in));
                 self.chase.enabled = true;
                 let what = match self.chase.kind {
                     crate::chase::ChaseKind::Glitter => "Glitter started".to_string(),
@@ -1747,9 +2294,17 @@ impl App {
         }
     }
 
+    /// Stop the chase — at once, or thinning the band out over the Chases
+    /// stop time, during which it keeps moving.
     pub fn stop_chase(&mut self) {
-        self.chase.enabled = false;
-        self.chase_run = None;
+        let fade = self.transition.fade(TransitionTarget::ChaseStop);
+        match &mut self.chase_run {
+            Some(run) if fade > 0.01 && self.chase.enabled => run.fade_out(fade),
+            _ => {
+                self.chase.enabled = false;
+                self.chase_run = None;
+            }
+        }
     }
 
     /// Advance the palette/phaser fade ramps: programmer base values,
@@ -1819,7 +2374,10 @@ impl App {
     /// One island's lane: a single pick holds that palette on every light
     /// it covers; two or more step through them on the cycle clock, with
     /// the cycle's own rate, pattern and spacing.
-    fn lane_layer(&self, ids: &[u32]) -> Option<Layer> {
+    fn lane_layer(&self, ids: &[u32], gain: f32) -> Option<Layer> {
+        if gain <= 0.0 {
+            return None;
+        }
         match ids {
             [] => None,
             [id] => {
@@ -1829,13 +2387,83 @@ impl App {
                 for &(a, v) in &p.values {
                     if a < net::DMX_SLOTS {
                         frame[a] = v;
-                        weights.push((a, 1.0));
+                        weights.push((a, gain));
                     }
                 }
                 (!weights.is_empty()).then(|| Layer::overlay(frame, weights))
             }
-            _ => self.cycle_layer_of(ids, &[], 1.0),
+            _ => self.cycle_layer_of(ids, &[], gain),
         }
+    }
+
+    /// Where an effect lane's overlay currently sits, 0..1. A lane with no
+    /// fade in flight is simply at full; one that has been emptied is
+    /// wherever its release has got to.
+    pub(crate) fn lane_gain(&self, island: &str) -> f32 {
+        let now = Instant::now();
+        if let Some(r) = self.lane_fades.get(island) {
+            return r.value(now).0;
+        }
+        if let Some((_, r)) = self.lane_exits.get(island) {
+            return r.value(now).0;
+        }
+        self.effect_lanes.contains_key(island) as u8 as f32
+    }
+
+    /// Ease an effect lane's overlay from `from` to `to` over `target`'s time.
+    pub(crate) fn begin_lane_fade(
+        &mut self,
+        island: &str,
+        from: f32,
+        to: f32,
+        target: TransitionTarget,
+    ) {
+        let dur = self.transition.fade(target);
+        if dur <= 0.01 {
+            self.lane_fades.remove(island);
+            return;
+        }
+        self.lane_fades.insert(
+            island.to_string(),
+            Ramp {
+                from,
+                to,
+                start: Instant::now(),
+                dur,
+                stepped: false,
+                remove_after: false,
+            },
+        );
+    }
+
+    /// Keep playing what a lane was doing while it fades away. At 0 s the
+    /// lane simply stops, which is the old behaviour.
+    pub(crate) fn begin_lane_exit(
+        &mut self,
+        island: &str,
+        ids: Vec<u32>,
+        from: f32,
+        target: TransitionTarget,
+    ) {
+        let dur = self.transition.fade(target);
+        if dur <= 0.01 || from <= 0.0 || ids.is_empty() {
+            self.lane_exits.remove(island);
+            return;
+        }
+        self.lane_exits.insert(
+            island.to_string(),
+            (
+                ids,
+                Ramp {
+                    from,
+                    to: 0.0,
+                    start: Instant::now(),
+                    dur,
+                    stepped: false,
+                    remove_after: false,
+                },
+            ),
+        );
     }
 
     /// The cycle machinery over any list of palettes: `ids` in order, each
@@ -1859,15 +2487,44 @@ impl App {
         let widths: Vec<f32> = entries.iter().map(|(_, width)| *width).collect();
         let n = pals.len();
         let total_width: f32 = widths.iter().sum();
-        let get = |p: &Palette, a: usize| {
-            if a >= net::DMX_SLOTS {
-                return 0;
-            }
-            p.values
-                .iter()
-                .find(|(pa, _)| *pa == a)
-                .map_or(0, |&(_, v)| v)
+        // One dense lookup per palette instead of a linear scan per address.
+        //
+        // This closure used to walk `p.values` for every address it was
+        // asked about, and it is asked twice per address in the inner loop
+        // below, over the union of every palette in the cycle. That is
+        // O(addresses x values) — QUADRATIC in rig size, so it grows four
+        // times over when the console doubles. With rig-wide palettes at
+        // 2048 slots it was millions of comparisons inside a 25 ms frame.
+        let tables: Vec<Vec<u8>> = pals
+            .iter()
+            .map(|p| {
+                let mut t = vec![0u8; net::DMX_SLOTS];
+                for &(a, v) in &p.values {
+                    if a < net::DMX_SLOTS {
+                        t[a] = v;
+                    }
+                }
+                t
+            })
+            .collect();
+        let get = |i: usize, a: usize| -> u8 {
+            tables.get(i).and_then(|t| t.get(a).copied()).unwrap_or(0)
         };
+        // Same story: `channel_is_stepped` walks every patched fixture, and
+        // the inner loop asks it once per address. Answer it once each.
+        let mut stepped = vec![false; net::DMX_SLOTS];
+        for f in &self.patch.fixtures {
+            let from0 = f.from as usize - 1;
+            for (ci, c) in f.channels.iter().enumerate() {
+                let Some(slot) = stepped.get_mut(from0 + ci) else {
+                    continue;
+                };
+                *slot = c.dim_range().is_none()
+                    && c.bands
+                        .iter()
+                        .any(|b| b.kind == 'S' && !(b.min == 0 && b.max == 255));
+            }
+        }
         // Union of every address any palette in the cycle touches.
         let mut addrs: HashSet<usize> = HashSet::new();
         for p in &pals {
@@ -1933,7 +2590,7 @@ impl App {
                 start += *width;
             }
             let frac = ((pk - start) / widths[idx]).clamp(0.0, 1.0);
-            let (cur, next) = (pals[idx], pals[(idx + 1) % n]);
+            let (cur, next) = (idx, (idx + 1) % n);
             // Blend amount: hold, then fade into the next colour across the
             // last `fade_w` of the step (b stays 0 the whole step at snap).
             let b = if fade_w < 0.001 {
@@ -1944,7 +2601,7 @@ impl App {
             for &a in mine {
                 let va = get(cur, a) as f32;
                 let vb = get(next, a) as f32;
-                let v = if self.channel_is_stepped(a) {
+                let v = if stepped.get(a).copied().unwrap_or(false) {
                     if b < 0.5 {
                         va
                     } else {
@@ -1999,6 +2656,9 @@ impl eframe::App for App {
         self.undo_keys(ctx);
         // Keep super-fixtures whole before anything reads the selection.
         self.sync_selection_units();
+        // The live route belongs to the layer being programmed, so picking an
+        // order in the Orders window sticks to the layer it was picked on.
+        self.sync_layer_order();
 
         // Elgato Stream Deck: drain presses/encoder turns and republish key
         // images before the possible early return below, so a knob (e.g.
@@ -2026,13 +2686,20 @@ impl eframe::App for App {
             }
         }
 
+        // What each layer is carrying, read off the live desk rather than
+        // recorded as it was applied — so the panel is right the first time
+        // it is opened, and after an undo. Below the frozen early-return:
+        // a frozen desk keeps transmitting an unchanged buffer, so nothing
+        // it could report has moved.
+        self.refresh_layer_boxes();
+
         // Direction, rate, pendulum and stutter, published for every clock.
         self.advance_time_machine();
 
         // Fixture world positions are only needed to place the chase band.
         let chase_active = self.chase.enabled && self.chase_run.is_some();
         let positions = if chase_active {
-            self.fixture_positions()
+            self.effect_positions()
         } else {
             Vec::new()
         };
@@ -2077,17 +2744,20 @@ impl eframe::App for App {
         }
         let mut finished_transition = false;
         // Programmer source: a running fade, else the settled `live` look.
-        let prog_frame = if let Some(run) = &mut self.transition_run {
+        // A fade is already a finished picture, so it carries no separate
+        // motion; a settled look hands its oscillator swing to the mixer
+        // apart from its base so it can sum with the layers around it.
+        let (prog_frame, prog_deltas) = if let Some(run) = &mut self.transition_run {
             let (rendered, done) = run.render();
             finished_transition = done;
             repaint_ms = 25;
-            rendered
+            (rendered, Vec::new())
         } else {
-            let f = self.live.render();
+            let (f, d) = self.live.render_parts();
             if self.live.is_animated() {
                 repaint_ms = 25;
             }
-            f
+            (f, d)
         };
 
         let mut chase_layer = None;
@@ -2096,7 +2766,10 @@ impl eframe::App for App {
             if let Some(run) = &mut self.chase_run {
                 chase_layer = Some(run.layer(&self.chase, &self.patch, &positions));
                 repaint_ms = 25;
-                pulse_done = run.pulse_done(&self.chase);
+                // A pulse that has run its course, or a stop whose fade has
+                // landed, retires the run.
+                pulse_done = run.pulse_done(&self.chase)
+                    || (run.is_leaving() && run.presence() <= 0.0);
             }
         }
         if pulse_done {
@@ -2142,12 +2815,26 @@ impl eframe::App for App {
             }
             repaint_ms = repaint_ms.min(25);
         }
-        // The programmer asserts only the channels it is actively holding.
-        if !self.live_active.is_empty() {
-            let weights: Vec<(usize, f32)> =
-                self.live_active.iter().map(|&a| (a, 1.0)).collect();
-            self.mixer.push(Layer::overlay(prog_frame, weights));
+        // The programmer layers stack bottom→top, each asserting only the
+        // channels it is actively holding so the layer beneath shows through
+        // everywhere it is not working. The selected layer *is* the live
+        // programmer (see `select_layer`); the rest render their parked
+        // looks, which keeps their clocks running so nothing jumps when the
+        // selection moves back to them.
+        let (pushes, layers_busy) = crate::layer::stack_layers(
+            &mut self.layers,
+            self.active_layer,
+            prog_frame,
+            prog_deltas,
+            &self.live_active,
+        );
+        for layer in pushes {
+            self.mixer.push(layer);
         }
+        if layers_busy {
+            repaint_ms = repaint_ms.min(25);
+        }
+        self.retire_released_layers();
         // The palette cycle overlays its colour steps above the programmer.
         self.settle_cycle_fade();
         if self.cycle_on {
@@ -2157,12 +2844,28 @@ impl eframe::App for App {
             }
         }
         // Effect lanes stack above the cycle: an island with one pick holds
-        // it, with two or more steps through them on the same clock.
-        let lanes: Vec<Layer> = self
+        // it, with two or more steps through them on the same clock. Lanes
+        // coming and going carry an overlay gain, and an emptied lane keeps
+        // rendering until its release lands.
+        let now = Instant::now();
+        let mut lanes: Vec<Layer> = self
             .effect_lanes
-            .values()
-            .filter_map(|ids| self.lane_layer(ids))
+            .iter()
+            .filter_map(|(island, ids)| {
+                let gain = self.lane_fades.get(island).map_or(1.0, |r| r.value(now).0);
+                self.lane_layer(ids, gain)
+            })
             .collect();
+        lanes.extend(
+            self.lane_exits
+                .values()
+                .filter_map(|(ids, r)| self.lane_layer(ids, r.value(now).0)),
+        );
+        if !self.lane_fades.is_empty() || !self.lane_exits.is_empty() {
+            repaint_ms = repaint_ms.min(25);
+            self.lane_fades.retain(|_, r| !r.value(now).1);
+            self.lane_exits.retain(|_, (_, r)| !r.value(now).1);
+        }
         if self.lanes_cycling() {
             repaint_ms = repaint_ms.min(25);
         }
@@ -2320,10 +3023,38 @@ impl eframe::App for App {
 
         // Hold phasers (e.g. smoke on) sit on top of everything — presets,
         // blackout fades and the grand master — except the DMX test window.
+        // A hold with a ramp still running is mixed against the show beneath
+        // it rather than forced, so it can be dialled in and out.
         if !self.hold_overrides.is_empty() {
+            let now = Instant::now();
             for (&a, &v) in &self.hold_overrides {
-                if a < out.len() {
-                    out[a] = v;
+                if a >= out.len() {
+                    continue;
+                }
+                out[a] = match self.hold_ramps.get(&a) {
+                    Some(r) => {
+                        let (k, _) = r.weight(now);
+                        (out[a] as f32 + (v as f32 - out[a] as f32) * k).round() as u8
+                    }
+                    None => v,
+                };
+            }
+        }
+        // Retire landed ramps. A hold that has finished arriving simply
+        // forces its value from here on; one that has finished leaving lets
+        // go of the channel entirely.
+        if !self.hold_ramps.is_empty() {
+            let now = Instant::now();
+            let landed: Vec<(usize, bool)> = self
+                .hold_ramps
+                .iter()
+                .filter(|(_, r)| r.weight(now).1)
+                .map(|(&a, r)| (a, r.leaving))
+                .collect();
+            for (a, leaving) in landed {
+                self.hold_ramps.remove(&a);
+                if leaving {
+                    self.hold_overrides.remove(&a);
                 }
             }
         }
@@ -2339,9 +3070,48 @@ impl eframe::App for App {
 
         // Blackout (Stream Deck Master Dimmer press) wins over everything,
         // including DMX test overrides — a non-destructive override, not a
-        // clear, so the show picks back up untouched once it's lifted.
-        if self.blackout {
-            out = net::Frame::black();
+        // clear, so the show picks back up untouched once it's lifted. It
+        // travels there over the Masters transition times, which default to
+        // a cut: an operator reaching for blackout usually wants it now.
+        // Start the dip, or turn it round, as soon as the button stops
+        // matching where the dip is heading.
+        if self.blackout_ramp.map(|(_, _, to)| to) != Some(self.blackout) {
+            let settled = if self.blackout {
+                self.blackout_k >= 1.0
+            } else {
+                self.blackout_k <= 0.0
+            };
+            self.blackout_ramp =
+                (!settled).then(|| (Instant::now(), self.blackout_k, self.blackout));
+        }
+        if let Some((start, from, to)) = self.blackout_ramp {
+            let secs = self.transition.fade(if to {
+                TransitionTarget::BlackoutIn
+            } else {
+                TransitionTarget::BlackoutOut
+            });
+            let goal = if to { 1.0 } else { 0.0 };
+            // Scale by the distance left so turning round halfway through
+            // travels at the same rate rather than taking the full time for
+            // half the journey.
+            let span = secs * (goal - from).abs();
+            let k = if span <= 0.01 {
+                1.0
+            } else {
+                (start.elapsed().as_secs_f32() / span).clamp(0.0, 1.0)
+            };
+            self.blackout_k = from + (goal - from) * k;
+            if k >= 1.0 {
+                self.blackout_ramp = None;
+            } else {
+                repaint_ms = repaint_ms.min(16);
+            }
+        }
+        if self.blackout_k > 0.0 {
+            let keep = 1.0 - self.blackout_k;
+            for v in out.0.iter_mut() {
+                *v = (*v as f32 * keep).round() as u8;
+            }
         }
         *self.net.dmx.lock() = out;
 

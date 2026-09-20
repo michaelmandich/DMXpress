@@ -135,7 +135,7 @@ impl App {
                 }
                 ui.separator();
                 // Every pool and panel toggle, in one consistent icon row.
-                let tabs: [(icons::Icon, &str, &mut bool, &str); 24] = [
+                let tabs: [(icons::Icon, &str, &mut bool, &str); 25] = [
                     (
                         icons::Icon::Artnet,
                         "Art-Net",
@@ -171,6 +171,12 @@ impl App {
                         "Orders",
                         &mut self.show_orders,
                         "Custom routes effects travel along",
+                    ),
+                    (
+                        icons::Icon::Layer,
+                        "Layers",
+                        &mut self.show_layers,
+                        "Stacked programmer layers and what is on each",
                     ),
                     (
                         icons::Icon::Scene,

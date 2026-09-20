@@ -8,13 +8,20 @@
 use eframe::egui;
 
 use crate::app::App;
+use crate::transition::TransitionTarget;
 
 impl App {
-    /// Release stack `idx` so it stops contributing to the output.
+    /// Release stack `idx` so it stops contributing to the output, thinning
+    /// out over the Cues release time.
     pub(crate) fn release_stack(&mut self, idx: usize) {
+        let fade = self.transition.fade(TransitionTarget::CueRelease);
         if let Some(st) = self.stacks.get_mut(idx) {
-            st.release();
-            self.log.push(format!("Released \"{}\"", st.name));
+            st.release(fade);
+            self.log.push(if fade > 0.01 {
+                format!("Released \"{}\" ({fade:.1}s)", st.name)
+            } else {
+                format!("Released \"{}\"", st.name)
+            });
         }
     }
 
@@ -25,8 +32,9 @@ impl App {
         let mut do_go: Option<usize> = None;
         let mut do_off: Option<usize> = None;
 
-        egui::TopBottomPanel::bottom("executors")
+        let panel = egui::TopBottomPanel::bottom("executors")
             .resizable(false)
+            .show_separator_line(false)
             .show(ctx, |ui| {
                 ui.add_space(2.0);
                 ui.horizontal(|ui| {
@@ -104,6 +112,8 @@ impl App {
                 });
                 ui.add_space(2.0);
             });
+        self.seams
+            .push(super::divider::top_edge_seam(panel.response.rect));
 
         if let Some(i) = do_go {
             self.go_stack(i);

@@ -10,7 +10,7 @@ use eframe::egui;
 use std::collections::HashSet;
 
 use super::theme;
-use crate::app::{App, Ramp};
+use crate::app::{App, HoldRamp, Ramp};
 use crate::group::GroupMode;
 use crate::net;
 use crate::oscillator::{subdiv_label, Osc, SPEED_CHOICES};
@@ -18,6 +18,7 @@ use crate::palette::Feature;
 use crate::phaser::{self, spread_phase, ChannelFilter, ComponentMode, LibFilter, PathShape, Phaser, PhaserMode};
 use crate::streamdeck::{KeyIcon, PhaserSlot};
 use crate::showbuddy::{Band, Role};
+use crate::transition::TransitionTarget;
 
 /// The "one light or many" row inside the shared-motion frame: how the current
 /// selection breaks into effect units, and a switch to fold the groups it
@@ -141,9 +142,13 @@ impl App {
             }
         }
         let is_add = ph.components.is_empty() && ph.mode == PhaserMode::Add;
-        let fade = self
-            .phaser_transition
-            .duration(self.transition.duration, self.phaser_fade_s);
+        // Live-apply re-runs on every keystroke in the editor, so it gets its
+        // own (usually much shorter) time rather than the start fade.
+        let fade = self.transition.fade(if quiet {
+            TransitionTarget::PhaserEdit
+        } else {
+            TransitionTarget::PhaserStart
+        });
         let now = std::time::Instant::now();
         let beat_clock = self.live.beat_clock();
         if !is_add {
@@ -314,6 +319,9 @@ impl App {
         }
         self.active_phasers.retain(|_, v| !v.is_empty());
         if !armed.is_empty() {
+            // The layer remembers what it was aimed at, so re-fanning it down
+            // a different order later does not have to guess.
+            self.layer_mut().targets = fixtures.clone();
             self.active_phasers.insert(ph.name.clone(), armed);
         }
         if !quiet {
@@ -331,9 +339,7 @@ impl App {
     /// and drive the saved channels to their values (regardless of selection),
     /// fading over the Phasers window's fade time.
     pub(crate) fn apply_pose_phaser(&mut self, ph: &Phaser) {
-        let fade = self
-            .phaser_transition
-            .duration(self.transition.duration, self.phaser_fade_s);
+        let fade = self.transition.fade(TransitionTarget::PhaserPose);
         let now = std::time::Instant::now();
         let mut armed: Vec<usize> = Vec::new();
         let mut nfix = 0;
@@ -405,6 +411,8 @@ impl App {
     /// frame — on top of presets, blackouts and the grand master — until the
     /// tile is clicked off.
     pub(crate) fn apply_hold_phaser(&mut self, ph: &Phaser) {
+        let fade = self.transition.fade(TransitionTarget::PhaserHold);
+        let now = std::time::Instant::now();
         let mut armed: Vec<usize> = Vec::new();
         let mut nfix = 0;
         for (key, vals) in &ph.hold {
@@ -424,6 +432,18 @@ impl App {
                 }
                 let addr0 = addr - 1;
                 self.hold_overrides.insert(addr0, v);
+                if fade > 0.01 {
+                    self.hold_ramps.insert(
+                        addr0,
+                        HoldRamp {
+                            start: now,
+                            dur: fade,
+                            leaving: false,
+                        },
+                    );
+                } else {
+                    self.hold_ramps.remove(&addr0);
+                }
                 self.add_overrides.remove(&addr0);
                 self.add_ramps.remove(&addr0);
                 armed.push(addr0);
@@ -460,12 +480,27 @@ impl App {
                 Some(p) => (p.mode != PhaserMode::Add, p.mode == PhaserMode::Add),
                 None => (true, true),
             };
-            let fade = self
-                .phaser_transition
-                .duration(self.transition.duration, self.phaser_fade_s);
+            let fade = self.transition.fade(TransitionTarget::PhaserStop);
+            let hold_fade = self.transition.fade(TransitionTarget::PhaserHold);
             let now = std::time::Instant::now();
             for a in addrs {
-                self.hold_overrides.remove(&a);
+                // A hold lets go over its own time; the channel travels back
+                // toward whatever the show beneath it is doing.
+                if self.hold_overrides.contains_key(&a) {
+                    if hold_fade > 0.01 {
+                        self.hold_ramps.insert(
+                            a,
+                            HoldRamp {
+                                start: now,
+                                dur: hold_fade,
+                                leaving: true,
+                            },
+                        );
+                    } else {
+                        self.hold_ramps.remove(&a);
+                        self.hold_overrides.remove(&a);
+                    }
+                }
                 if stop_osc {
                     if fade > 0.01 {
                         if let Some(o) = self.live.oscs.get(&a) {
@@ -1071,28 +1106,14 @@ impl App {
                         do_clear = true;
                     }
                 });
-                ui.horizontal(|ui| {
-                    ui.label("Fade");
-                    if ui
-                        .small_button(self.phaser_transition.short_label())
-                        .on_hover_text(
-                            "Transition binding: M = master transition, C = custom \
-                             duration, — = none. Click to cycle.",
-                        )
-                        .clicked()
-                    {
-                        self.phaser_transition = self.phaser_transition.next();
-                    }
-                    ui.add(
-                        egui::Slider::new(&mut self.phaser_fade_s, 0.0..=10.0)
-                            .suffix(" s")
-                            .max_decimals(1),
-                    )
-                    .on_hover_text(
-                        "Custom phaser transition duration. It is used when the \
-                         square says C; M follows the master Transition window.",
-                    );
-                });
+                self.fade_readout(
+                    ui,
+                    &[
+                        TransitionTarget::PhaserStart,
+                        TransitionTarget::PhaserStop,
+                        TransitionTarget::PhaserEdit,
+                    ],
+                );
                 ui.horizontal_wrapped(|ui| {
                     ui.add(
                         egui::TextEdit::singleline(&mut self.phaser_name)

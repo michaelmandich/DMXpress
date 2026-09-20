@@ -17,6 +17,7 @@ impl App {
             chases: self.show_chases,
             groups: self.show_groups,
             orders: self.show_orders,
+            layers: self.show_layers,
             scenes: self.show_scenes,
             audio: self.show_audio,
             palettes: self.show_palettes,
@@ -46,6 +47,7 @@ impl App {
         self.show_chases = v.chases;
         self.show_groups = v.groups;
         self.show_orders = v.orders;
+        self.show_layers = v.layers;
         self.show_scenes = v.scenes;
         self.show_audio = v.audio;
         self.show_palettes = v.palettes;

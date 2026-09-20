@@ -172,10 +172,6 @@ pub(crate) struct PresetContents {
     pub position: bool,
     pub beam: bool,
     pub oscs: usize,
-    pub phasers: usize,
-    pub lanes: usize,
-    pub cycle: bool,
-    pub holds: usize,
     pub fixtures: usize,
 }
 
@@ -387,10 +383,6 @@ pub(crate) fn contents_from_values(
 ) -> PresetContents {
     let mut c = PresetContents {
         oscs: p.oscs.len(),
-        phasers: p.active_phasers.len(),
-        lanes: p.lanes.len(),
-        cycle: p.cycle.is_some(),
-        holds: p.hold_overrides.len() + p.add_overrides.len(),
         ..PresetContents::default()
     };
     let mut fixtures: HashSet<usize> = HashSet::new();
@@ -470,18 +462,6 @@ pub(crate) fn preset_matches(
     }
     if c.oscs > 0 {
         words.push("wave");
-    }
-    if c.phasers > 0 {
-        words.push("phaser");
-    }
-    if c.lanes > 0 {
-        words.push("lanes");
-    }
-    if c.cycle {
-        words.push("cycle");
-    }
-    if c.holds > 0 {
-        words.push("hold");
     }
     if own_fade {
         words.push("fade");
@@ -619,11 +599,6 @@ pub(crate) fn preset_from_look(look: &Look, name: String, folder: String, id: u3
         speed: look.speed,
         tempo: look.tempo,
         master_speed: look.master_speed,
-        active_phasers: Vec::new(),
-        add_overrides: Vec::new(),
-        hold_overrides: Vec::new(),
-        cycle: None,
-        lanes: Vec::new(),
         color: None,
         symbol: String::new(),
         icon: KeyIcon::None,
@@ -832,15 +807,16 @@ impl App {
     /// again, so putting the operator's own value back cannot disturb a
     /// fade already under way.
     fn with_fade(&mut self, fade: Option<f32>, f: impl FnOnce(&mut Self)) {
-        match fade {
-            None => f(self),
-            Some(s) => {
-                let keep = self.transition.duration;
-                self.transition.duration = s.max(0.0);
-                f(self);
-                self.transition.duration = keep;
-            }
-        }
+        // No explicit time means the Transition window's Presets recall
+        // slot — the global in simple mode, its own row in advanced.
+        let s = fade.unwrap_or_else(|| {
+            self.transition
+                .fade(crate::transition::TransitionTarget::PresetRecall)
+        });
+        let keep = self.transition.duration;
+        self.transition.duration = s.max(0.0);
+        f(self);
+        self.transition.duration = keep;
     }
 
     /// Recall native preset `idx`, fading by the one rule: an explicit fade
@@ -1359,18 +1335,6 @@ fn pad_tooltip(info: &PadInfo) -> String {
     if c.oscs > 0 {
         parts.push(format!("{} wave{}", c.oscs, if c.oscs == 1 { "" } else { "s" }));
     }
-    if c.phasers > 0 {
-        parts.push(format!("{} phaser{}", c.phasers, if c.phasers == 1 { "" } else { "s" }));
-    }
-    if c.lanes > 0 {
-        parts.push(format!("{} lane{}", c.lanes, if c.lanes == 1 { "" } else { "s" }));
-    }
-    if c.cycle {
-        parts.push("a colour cycle".into());
-    }
-    if c.holds > 0 {
-        parts.push(format!("{} held channels", c.holds));
-    }
     if let Some(f) = info.own_fade {
         parts.push(format!("fade {f:.1} s"));
     }
@@ -1399,15 +1363,6 @@ fn badge_words(c: &PresetContents, own_fade: bool) -> Vec<(&'static str, Color32
     if c.oscs > 0 {
         out.push(("wave", theme::ACCENT_SOFT));
     }
-    if c.phasers > 0 {
-        out.push(("phz", Color32::from_rgb(200, 120, 255)));
-    }
-    if c.cycle {
-        out.push(("cycle", theme::WARN));
-    }
-    if c.lanes > 0 {
-        out.push(("lanes", theme::WARN));
-    }
     if own_fade {
         out.push(("fade", theme::TEXT_DIM));
     }
@@ -1435,8 +1390,6 @@ fn pad_overlay(p: &egui::Painter, rect: Rect, info: &PadInfo, z: f32) {
         (c.position, role_color(Role::Pan)),
         (c.beam, role_color(Role::Gobo)),
         (c.oscs > 0, theme::ACCENT_SOFT),
-        (c.phasers > 0, Color32::from_rgb(200, 120, 255)),
-        (c.cycle || c.lanes > 0, theme::WARN),
     ];
     let dot = 2.5 * z;
     for (on, color) in dots.into_iter().rev() {
@@ -2139,7 +2092,9 @@ impl App {
     fn presets_recall_strip(&mut self, ui: &mut egui::Ui) {
         let mode = self.insp.prefs.presets.recall;
         let secs = self.insp.prefs.presets.fade_secs;
-        let dur = self.transition.duration;
+        let dur = self
+            .transition
+            .fade(crate::transition::TransitionTarget::PresetRecall);
         let (label, color) = match mode {
             RecallMode::Cut => ("cut".to_owned(), theme::TEXT_DIM),
             RecallMode::Fade => (format!("{secs:.1} s"), theme::ACCENT_SOFT),
@@ -3064,12 +3019,7 @@ pub(crate) fn seed_demo_presets(app: &mut App) {
             speed: 0.357,
             tempo: 120.0,
             master_speed: 1.0,
-            active_phasers: Vec::new(),
-            add_overrides: Vec::new(),
-            hold_overrides: Vec::new(),
-            cycle: None,
-            lanes: Vec::new(),
-            color: None,
+                                color: None,
             symbol: String::new(),
             icon: KeyIcon::None,
             fade: None,
@@ -3092,7 +3042,6 @@ pub(crate) fn seed_demo_presets(app: &mut App) {
 
     let mut p = blank(app, "Pulse", "", colour(app, 3, [255, 255, 255], Some(180)));
     p.oscs = Vec::new();
-    p.active_phasers = vec![("Pan slow".into(), vec![1, 2])];
     p.pinned = true;
     app.user_presets.push(p);
 
@@ -3106,8 +3055,7 @@ pub(crate) fn seed_demo_presets(app: &mut App) {
     p.pinned = true;
     app.user_presets.push(p);
 
-    let mut p = blank(app, "Chorus B", "Chorus", moves(app, 4));
-    p.lanes = vec![("Gobo".into(), vec![1, 2])];
+    let p = blank(app, "Chorus B", "Chorus", moves(app, 4));
     app.user_presets.push(p);
 
     // A stand-in ShowBuddy bank, so the bank block and a bank pad are drawn
@@ -3230,12 +3178,7 @@ mod tests {
             speed: 0.3,
             tempo: 120.0,
             master_speed: 1.0,
-            active_phasers: Vec::new(),
-            add_overrides: Vec::new(),
-            hold_overrides: Vec::new(),
-            cycle: None,
-            lanes: Vec::new(),
-            color: None,
+                                color: None,
             symbol: String::new(),
             icon: KeyIcon::None,
             fade: None,
@@ -3430,15 +3373,7 @@ mod tests {
         )];
         assert_eq!(contents_from_values(&[], &roles2, &p).oscs, 1);
         p.oscs.clear();
-        p.active_phasers = vec![("a".into(), vec![1])];
-        assert_eq!(contents_from_values(&[], &roles2, &p).phasers, 1);
-        p.active_phasers.clear();
-        p.lanes = vec![("Gobo".into(), vec![1])];
-        assert_eq!(contents_from_values(&[], &roles2, &p).lanes, 1);
-        p.lanes.clear();
-        p.hold_overrides = vec![(1, 2)];
-        p.add_overrides = vec![(2, 3)];
-        assert_eq!(contents_from_values(&[], &roles2, &p).holds, 2);
+        assert_eq!(contents_from_values(&[], &roles2, &p).oscs, 0);
     }
 
     #[test]

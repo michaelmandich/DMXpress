@@ -1403,3 +1403,115 @@ mod tests {
         assert_eq!(f.channel_count(), 4);
     }
 }
+
+/// Where each old fixture index has moved to in a rebuilt patch.
+///
+/// Groups, orders and layer targets all hold raw indices into
+/// `patch.fixtures`, and patching one light in the middle renumbers
+/// everything above it. `before` is [`fixture_key`] for each fixture at its
+/// old index; the result maps old index → new index for every light that is
+/// still patched, and simply omits the ones that are not.
+///
+/// A light is matched on its full key first, then on its display name alone,
+/// so a fixture that was only readdressed keeps everything pointing at it.
+pub fn index_remap(
+    before: &[String],
+    now: &[Fixture],
+) -> std::collections::HashMap<usize, usize> {
+    use std::collections::HashMap;
+    let mut keyed: HashMap<&str, usize> = HashMap::new();
+    let mut named: HashMap<&str, usize> = HashMap::new();
+    let keys: Vec<String> = now
+        .iter()
+        .map(|f| fixture_key(&f.display, f.from))
+        .collect();
+    // First occurrence wins, so two lights sharing a display name remap
+    // deterministically instead of depending on iteration order.
+    for (i, f) in now.iter().enumerate() {
+        keyed.entry(keys[i].as_str()).or_insert(i);
+        named.entry(f.display.as_str()).or_insert(i);
+    }
+    let mut out = HashMap::new();
+    for (old, key) in before.iter().enumerate() {
+        let name = key.rsplit_once('@').map_or(key.as_str(), |(n, _)| n);
+        if let Some(&i) = keyed.get(key.as_str()).or_else(|| named.get(name)) {
+            out.insert(old, i);
+        }
+    }
+    out
+}
+
+#[cfg(test)]
+mod remap_tests {
+    use super::*;
+
+    fn fix(display: &str, from: u16) -> Fixture {
+        Fixture {
+            display: display.into(),
+            file: std::path::PathBuf::new(),
+            from,
+            to: from,
+            x: 0.0,
+            y: 0.0,
+            pan_range: 0.0,
+            tilt_range: 0.0,
+            beam_width: 0.0,
+            channels: Vec::new(),
+        }
+    }
+
+    fn keys(fs: &[Fixture]) -> Vec<String> {
+        fs.iter().map(|f| fixture_key(&f.display, f.from)).collect()
+    }
+
+    /// Patching a light into the middle renumbers everything above it. Every
+    /// group and route holding raw indices has to move with them, or it
+    /// silently repoints at its neighbours.
+    #[test]
+    fn inserting_a_fixture_shifts_the_ones_above_it() {
+        let before = keys(&[fix("a", 1), fix("b", 2), fix("c", 3)]);
+        let now = vec![fix("a", 1), fix("new", 9), fix("b", 2), fix("c", 3)];
+        let map = index_remap(&before, &now);
+        assert_eq!(map.get(&0), Some(&0));
+        assert_eq!(map.get(&1), Some(&2), "b moved up one");
+        assert_eq!(map.get(&2), Some(&3), "c moved up one");
+    }
+
+    /// A light that only changed address is still the same light.
+    #[test]
+    fn a_readdressed_fixture_is_still_found() {
+        let before = keys(&[fix("a", 1), fix("b", 2)]);
+        let now = vec![fix("a", 1), fix("b", 77)];
+        assert_eq!(index_remap(&before, &now).get(&1), Some(&1));
+    }
+
+    /// An unpatched light is omitted, so callers drop it rather than keep an
+    /// index pointing at a stranger.
+    #[test]
+    fn an_unpatched_fixture_is_dropped_not_repointed() {
+        let before = keys(&[fix("a", 1), fix("gone", 2), fix("c", 3)]);
+        let now = vec![fix("a", 1), fix("c", 3)];
+        let map = index_remap(&before, &now);
+        assert_eq!(map.get(&0), Some(&0));
+        assert_eq!(map.get(&1), None, "the unpatched light has no new home");
+        assert_eq!(map.get(&2), Some(&1));
+    }
+
+    /// Two lights sharing a display name must not remap by luck.
+    #[test]
+    fn duplicate_names_remap_deterministically() {
+        let before = keys(&[fix("par", 1), fix("par", 5)]);
+        let now = vec![fix("par", 1), fix("par", 5)];
+        let map = index_remap(&before, &now);
+        assert_eq!(map.get(&0), Some(&0), "exact key wins over the name");
+        assert_eq!(map.get(&1), Some(&1));
+    }
+
+    /// Unpatching everything leaves nothing to remap onto — callers must not
+    /// treat that as "delete the pools".
+    #[test]
+    fn an_empty_patch_maps_nothing() {
+        let before = keys(&[fix("a", 1)]);
+        assert!(index_remap(&before, &[]).is_empty());
+    }
+}

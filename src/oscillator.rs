@@ -285,9 +285,23 @@ impl Look {
     /// returns its base (and keeps its clock fresh so it never jumps when an
     /// oscillator is later armed).
     pub fn render(&mut self) -> Frame {
+        let (mut buf, deltas) = self.render_parts();
+        for (idx, d) in deltas {
+            buf[idx] = (buf[idx] as i32 + d as i32).clamp(0, 255) as u8;
+        }
+        buf
+    }
+
+    /// Advance the clocks and render the look as its settled base plus the
+    /// signed swing each oscillator is contributing this instant.
+    ///
+    /// Keeping the two apart is what lets the mixer sum motion across layers:
+    /// folded into the frame, each layer's wave would clamp to 0..255 on its
+    /// own and a swing around a dark base would lose its negative half.
+    pub fn render_parts(&mut self) -> (Frame, Vec<(usize, i16)>) {
         if self.oscs.is_empty() {
             self.last = Instant::now();
-            return self.base;
+            return (self.base, Vec::new());
         }
         let real_dt = self.last.elapsed().as_secs_f32().min(0.25);
         self.last = Instant::now();
@@ -307,7 +321,7 @@ impl Look {
             self.beat_nudge = 0.0;
         }
 
-        let mut buf = self.base;
+        let mut deltas: Vec<(usize, i16)> = Vec::with_capacity(self.oscs.len());
         for (&idx, o) in &mut self.oscs {
             if !o.enabled || o.amount <= 0.0 {
                 continue;
@@ -328,10 +342,16 @@ impl Look {
             if o.invert {
                 w = -w;
             }
-            let v = self.base[idx] as f32 + o.amount * 255.0 * w;
-            buf[idx] = v.clamp(0.0, 255.0) as u8;
+            // `floor`, not `round`: the old single-frame path truncated the
+            // summed `base + swing`, and because `base` is a whole byte,
+            // `floor(base + x) == base + floor(x)`. Splitting the swing out
+            // therefore leaves every existing look rendering bit-identically.
+            let d = (o.amount * 255.0 * w).floor().clamp(-32768.0, 32767.0) as i16;
+            if d != 0 {
+                deltas.push((idx, d));
+            }
         }
-        buf
+        (self.base, deltas)
     }
 }
 

@@ -27,6 +27,9 @@ pub struct View {
     pub groups: bool,
     #[serde(default)]
     pub orders: bool,
+    /// Absent in views saved before programmer layers existed.
+    #[serde(default)]
+    pub layers: bool,
     #[serde(default)]
     pub scenes: bool,
     #[serde(default)]

@@ -1,5 +1,7 @@
 //! All egui panel/window rendering for the app, split by area:
 //! - `top`     — top toolbar, Art-Net panel, floating Log window
+//! - `divider` — the seams between the panes, collected as the panels lay
+//!               themselves out and painted in one pass at the end
 //! - `side`      — Fixtures (left) side panel and the dockable-panel shell
 //! - `inspector` — the right-hand Inspector: tab strip, context strip, one file per tab
 //! - `central` — 3D stage view and the channel-type control grid
@@ -16,8 +18,10 @@ mod chases;
 mod command;
 mod decks;
 mod dmxtest;
+pub(crate) mod divider;
 mod gobos;
 mod groups;
+mod layers;
 mod icons;
 pub(crate) mod inspector;
 pub(crate) mod network;

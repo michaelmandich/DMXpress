@@ -45,6 +45,9 @@ pub(crate) enum Drag {
     MoveChaseSphere,
     PanCam,
     Marquee(Pos2),
+    /// Dragging out a sweep of the order tool: each release lands another
+    /// step of the draft order (see `view::Sweep`).
+    Sweep(Pos2),
     /// Dragging a transform-gizmo handle.
     Gizmo(GizmoPart),
     /// Dragging one of the stage-box resize arrows.

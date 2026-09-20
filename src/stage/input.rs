@@ -432,6 +432,14 @@ impl StageView {
                             self.sel_truss = None;
                             self.drag = Drag::PanCam;
                         }
+                    } else if self.sweep.is_some() {
+                        // The sweep tool owns the plain drag while it is
+                        // armed. It cannot be another ⇧ chord: ⇧ already
+                        // starts the marquee and toggles a pick, and ⌥ is
+                        // orbit — hence an explicit armed mode.
+                        self.sel_tower = None;
+                        self.sel_truss = None;
+                        self.drag = Drag::Sweep(ptr);
                     } else if mods.shift {
                         // ⇧+drag on empty space = marquee multi-select.
                         self.sel_tower = None;
@@ -645,6 +653,11 @@ impl StageView {
                             }
                         }
                     }
+                    Drag::Sweep(start) => {
+                        if let Some(end) = resp.interact_pointer_pos() {
+                            self.commit_sweep(start, end, mods.shift, &proj);
+                        }
+                    }
                     Drag::None => {}
                     Drag::PanCam => {}
                     Drag::MoveTransitionSphere => {}
@@ -732,5 +745,65 @@ fn select_sphere(
     }
     if let Some(c) = chase.as_deref_mut() {
         c.selected = !want_transition;
+    }
+}
+
+impl StageView {
+    /// Land one sweep of the order tool.
+    ///
+    /// Lights are placed in the order the projection lists them, left to
+    /// right then near to far, so a sweep across the rig reads the way it
+    /// was drawn. `extend` (⇧ held at release) folds the catch into the
+    /// step just laid instead of starting a new one — that is how a step
+    /// gets several disjoint regions, for the non-contiguous groups a plain
+    /// drag cannot describe.
+    pub(crate) fn commit_sweep(
+        &mut self,
+        start: Pos2,
+        end: Pos2,
+        extend: bool,
+        proj: &[Option<(Pos2, f32)>],
+    ) {
+        let Some(sweep) = &self.sweep else {
+            return;
+        };
+        let shape = sweep.shape;
+        let claimed = sweep.claimed();
+        let rect = Rect::from_two_pos(start, end);
+        let radius = start.distance(end);
+        let mut caught: Vec<(f32, f32, usize)> = Vec::new();
+        for (i, p) in proj.iter().enumerate() {
+            let Some((sp, depth)) = p else { continue };
+            let inside = match shape {
+                crate::stage::SweepShape::Rect => rect.contains(*sp),
+                crate::stage::SweepShape::Circle => start.distance(*sp) <= radius,
+            };
+            // A light already on the route keeps the step it was given: an
+            // order answers "what comes next" once per light.
+            if inside && !claimed.contains(&i) {
+                caught.push((sp.x, *depth, i));
+            }
+        }
+        if caught.is_empty() {
+            return;
+        }
+        caught.sort_by(|a, b| {
+            a.0.partial_cmp(&b.0)
+                .unwrap_or(std::cmp::Ordering::Equal)
+                .then(a.1.partial_cmp(&b.1).unwrap_or(std::cmp::Ordering::Equal))
+        });
+        let picked: Vec<usize> = caught.into_iter().map(|(_, _, i)| i).collect();
+        // Light the catch up so the stage shows what the route now holds.
+        for &i in &picked {
+            self.selection.insert(i);
+            self.last_selected = self.instances.get(i).map(|inst| inst.fixture);
+        }
+        let Some(sweep) = &mut self.sweep else {
+            return;
+        };
+        match sweep.steps.last_mut() {
+            Some(last) if extend => last.extend(picked),
+            _ => sweep.steps.push(picked),
+        }
     }
 }

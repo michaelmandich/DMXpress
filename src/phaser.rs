@@ -193,6 +193,15 @@ pub struct Phaser {
     /// single target/config while preserving old saved phasers unchanged.
     #[serde(default)]
     pub components: Vec<PhaserComponent>,
+    /// Channel types this phaser must *not* touch — the same role tags and
+    /// names `targets` uses, subtracted instead of added.
+    ///
+    /// Every other way of aiming a phaser is positive, which makes "affect
+    /// everything except the movement" an exercise in enumerating the whole
+    /// rig. With `targets` empty an exclude list means exactly that: every
+    /// channel but these. With `targets` set it narrows them further.
+    #[serde(default)]
+    pub exclude: Vec<String>,
     /// What the phaser does: oscillate, or add a flat level until stopped.
     #[serde(default)]
     pub mode: PhaserMode,
@@ -243,11 +252,37 @@ impl Phaser {
     /// way the collective channel list groups: by role tag, or by name for
     /// unclassified channels.
     pub fn matches_channel(&self, role: Role, name: &str) -> bool {
+        if self.excludes_channel(role, name) {
+            return false;
+        }
         if self.targets.is_empty() {
+            // Exclude-only: everything the list does not rule out. This is
+            // the one way to say "all channels but these" — a positive
+            // target list cannot, and a feature+filter pair covers one
+            // feature at a time.
+            if !self.exclude.is_empty() {
+                return true;
+            }
             return Feature::of(role) == self.feature && self.filter.matches(role, name);
         }
         let tag = role.tag();
         self.targets.iter().any(|t| {
+            if tag.is_empty() {
+                t.eq_ignore_ascii_case(name)
+            } else {
+                t.eq_ignore_ascii_case(tag)
+            }
+        })
+    }
+
+    /// Whether the exclude list rules a channel out, matched the same way
+    /// `targets` matches: by role tag, or by name for unclassified channels.
+    pub fn excludes_channel(&self, role: Role, name: &str) -> bool {
+        if self.exclude.is_empty() {
+            return false;
+        }
+        let tag = role.tag();
+        self.exclude.iter().any(|t| {
             if tag.is_empty() {
                 t.eq_ignore_ascii_case(name)
             } else {
@@ -513,6 +548,7 @@ impl Default for Phaser {
             feature: Feature::Dimmer,
             filter: ChannelFilter::All,
             targets: Vec::new(),
+            exclude: Vec::new(),
             components: Vec::new(),
             mode: PhaserMode::Wave,
             fixtures: Vec::new(),

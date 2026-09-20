@@ -153,13 +153,17 @@ impl App {
         first.display.clone()
     }
 
-    /// Send lights to a gobo slot: the programmer takes their wheel channel.
+    /// Send lights to a gobo slot: the programmer takes their wheel channel,
+    /// travelling there over the Attributes transition time (a stepped wheel
+    /// snaps halfway through rather than sweeping past every slot between).
     /// Returns how many lights it reached.
     pub(crate) fn set_gobo_slot(&mut self, fixtures: &[usize], channel: usize, value: u8) -> usize {
         // Settle any running fade so the change is visible immediately.
         if self.transition_run.take().is_some() {
             self.live = crate::oscillator::Look::from_frame(*self.net.dmx.lock());
         }
+        let fade = self.transition.fade(crate::transition::TransitionTarget::GoboChange);
+        let now = std::time::Instant::now();
         let mut reached = 0;
         for &fi in fixtures {
             let Some(f) = self.patch.fixtures.get(fi) else { continue };
@@ -168,8 +172,22 @@ impl App {
                 continue;
             }
             let addr0 = addr - 1;
-            self.base_fades.remove(&addr0);
-            self.live.base[addr0] = value;
+            if fade > 0.01 {
+                self.base_fades.insert(
+                    addr0,
+                    crate::app::Ramp {
+                        from: self.live.base[addr0] as f32,
+                        to: value as f32,
+                        start: now,
+                        dur: fade,
+                        stepped: self.channel_is_stepped(addr0),
+                        remove_after: false,
+                    },
+                );
+            } else {
+                self.base_fades.remove(&addr0);
+                self.live.base[addr0] = value;
+            }
             self.live_active.insert(addr0);
             self.live_refs.remove(&addr0);
             reached += 1;

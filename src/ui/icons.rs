@@ -58,6 +58,8 @@ pub enum Icon {
     Chase,
     Group,
     Order,
+    /// Layers panel: stacked sheets seen edge-on.
+    Layer,
     Scene,
     Audio,
     Palette,
@@ -429,6 +431,13 @@ pub fn draw(painter: &egui::Painter, rect: Rect, icon: Icon, color: Color32) {
             path(painter, r, s, &[(0.2, 0.74), (0.44, 0.3), (0.68, 0.7), (0.86, 0.34)]);
             for (x, y) in [(0.2, 0.74), (0.44, 0.3), (0.68, 0.7), (0.86, 0.34)] {
                 painter.circle_filled(p(r, x, y), side * 0.09, color);
+            }
+        }
+        // Three sheets stacked edge-on, the top one lit: a layer stack.
+        Icon::Layer => {
+            for (i, y) in [0.70f32, 0.52, 0.34].iter().enumerate() {
+                let lit = Stroke::new(s.width, color.gamma_multiply(0.45 + i as f32 * 0.275));
+                path(painter, r, lit, &[(0.18, *y), (0.5, *y - 0.14), (0.82, *y), (0.5, *y + 0.14), (0.18, *y)]);
             }
         }
         // Equaliser bars mid-dance.

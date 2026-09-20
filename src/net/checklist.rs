@@ -222,11 +222,16 @@ pub fn evaluate(f: &Facts) -> Vec<Finding> {
                     .iter()
                     .map(|u| format!("{u} ({})", crate::artnet::PortAddress::split(*u)))
                     .collect();
+                // Every universe we send, not the first two: the
+                // membership test above already checks them all, so naming
+                // a subset would point the operator at the wrong one.
+                let mine = ours
+                    .iter()
+                    .map(u16::to_string)
+                    .collect::<Vec<_>>()
+                    .join(", ");
                 out.push(Finding::warn(
-                    format!(
-                        "{} ({}) isn't listening to universe {} or {}",
-                        n.name, n.ip, ours[0], ours[1]
-                    ),
+                    format!("{} ({}) isn't listening to universe {mine}", n.name, n.ip),
                     if theirs.is_empty() {
                         "It reports no output ports at all; check the node's port configuration.".to_string()
                     } else {
@@ -235,7 +240,7 @@ pub fn evaluate(f: &Facts) -> Vec<Finding> {
                              port to {} — or set the base universe here to {} so the console \
                              matches the node.",
                             theirs.join(", "),
-                            ours[0],
+                            mine,
                             n.outputs[0]
                         )
                     },
@@ -274,13 +279,12 @@ pub fn evaluate(f: &Facts) -> Vec<Finding> {
             ));
         } else if !send_ifaces.is_empty() {
             let u = cfg.sacn_universes();
-            out.push(Finding::ok(format!(
-                "sACN universes {} and {} multicast to {} and {}",
-                u[0],
-                u[1],
-                crate::sacn::multicast_addr(u[0]),
-                crate::sacn::multicast_addr(u[1])
-            )));
+            let pairs = u
+                .iter()
+                .map(|n| format!("{n} → {}", crate::sacn::multicast_addr(*n)))
+                .collect::<Vec<_>>()
+                .join(", ");
+            out.push(Finding::ok(format!("sACN universes multicast to {pairs}")));
         }
         if f.stats.uptime_s > 1.0 && !f.stats.sacn_listening {
             out.push(Finding::warn(
@@ -551,7 +555,7 @@ mod tests {
         let v = evaluate(&base(&cfg, &home, &nodes, &st));
         let w = v.iter().find(|f| f.title.starts_with("Node1")).unwrap();
         assert_eq!(w.severity, Severity::Warn);
-        assert!(w.title.contains("isn't listening to universe 0 or 1"));
+        assert!(w.title.contains("isn't listening to universe 0"), "{}", w.title);
         assert!(w.advice.contains("Port-Address 4 (0.0.4)"));
         let ok = v.iter().find(|f| f.title.starts_with("Node2")).unwrap();
         assert_eq!(ok.severity, Severity::Ok);

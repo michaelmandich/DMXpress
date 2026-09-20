@@ -516,6 +516,44 @@ impl StageView {
             }
         }
 
+        // Sweep tool: the shape being dragged, plus a numbered badge on
+        // every light already placed, so the route reads as it is built.
+        if let Some(sweep) = &self.sweep {
+            let accent = Color32::from_rgb(0x82, 0xDB, 0xD8);
+            for (i, p) in proj.iter().enumerate() {
+                let (Some((sp, _)), Some(step)) = (p, sweep.step_of(i)) else {
+                    continue;
+                };
+                let at = *sp + egui::vec2(0.0, -18.0);
+                painter.circle_filled(at, 7.5, Color32::from_rgba_unmultiplied(20, 26, 30, 225));
+                painter.circle_stroke(at, 7.5, Stroke::new(1.0, accent));
+                painter.text(
+                    at,
+                    Align2::CENTER_CENTER,
+                    format!("{}", step + 1),
+                    FontId::proportional(9.0),
+                    accent,
+                );
+            }
+            if let Drag::Sweep(start) = self.drag {
+                if let Some(end) = resp.interact_pointer_pos() {
+                    let fill = Color32::from_rgba_unmultiplied(130, 219, 216, 22);
+                    let stroke = Stroke::new(1.2, accent);
+                    match sweep.shape {
+                        crate::stage::SweepShape::Rect => {
+                            let r = Rect::from_two_pos(start, end);
+                            painter.rect_filled(r, 0.0, fill);
+                            painter.rect_stroke(r, 0.0, stroke);
+                        }
+                        crate::stage::SweepShape::Circle => {
+                            painter.circle_filled(start, start.distance(end), fill);
+                            painter.circle_stroke(start, start.distance(end), stroke);
+                        }
+                    }
+                }
+            }
+        }
+
         // Marquee overlay.
         if let Drag::Marquee(start) = self.drag {
             if let Some(end) = resp.interact_pointer_pos() {

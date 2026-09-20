@@ -54,7 +54,7 @@ impl MergeMode {
         }
     }
 
-    fn blend(self) -> Blend {
+    pub(crate) fn blend(self) -> Blend {
         match self {
             Self::Override => Blend::Mix,
             Self::Highest => Blend::Max,
@@ -92,7 +92,8 @@ pub struct Scene {
     /// Output level 0..1.
     #[serde(default = "default_master_speed")]
     pub level: f32,
-    /// Seconds to fade in when started.
+    /// Legacy per-scene fade-in, kept so older show files still read. Go and
+    /// Release take their times from the Transition window instead.
     #[serde(default)]
     pub fade: f32,
     /// Seconds on stage before the chain hands to the next scene;
@@ -106,6 +107,14 @@ pub struct Scene {
     pub order: Option<String>,
     #[serde(skip)]
     pub(crate) run: Option<SceneRun>,
+    /// Seconds the current run eased in over — handed in at `start` from the
+    /// Transition window, which owns every fade time.
+    #[serde(skip)]
+    pub(crate) run_fade: f32,
+    /// A release in progress: when it began and how long it takes. The scene
+    /// keeps playing, thinning out, until it lands.
+    #[serde(skip)]
+    pub(crate) leaving: Option<(Instant, f32)>,
 }
 
 fn default_color() -> [u8; 3] {
@@ -159,8 +168,10 @@ impl Scene {
         !self.oscs.is_empty()
     }
 
-    /// Start playing, from the phase the scene was captured at.
-    pub fn start(&mut self) {
+    /// Start playing, from the phase the scene was captured at, easing in
+    /// over `fade` seconds (0 = snap on). A Go mid-release cancels the
+    /// release.
+    pub fn start(&mut self, fade: f32) {
         let mut look = Look::from_frame(self.base_frame());
         look.oscs = self.osc_map();
         look.speed = self.speed;
@@ -170,10 +181,28 @@ impl Scene {
             look,
             started: Instant::now(),
         });
+        self.run_fade = fade.max(0.0);
+        self.leaving = None;
     }
 
-    pub fn stop(&mut self) {
-        self.run = None;
+    /// Stop — at once, or thinning out over `fade` seconds.
+    pub fn stop(&mut self, fade: f32) {
+        if fade <= 0.0 || self.run.is_none() {
+            self.run = None;
+            self.leaving = None;
+        } else if self.leaving.is_none() {
+            self.leaving = Some((Instant::now(), fade));
+        }
+    }
+
+    /// How much of the scene is still on stage through a release, 0..1.
+    fn presence(&self) -> f32 {
+        match self.leaving {
+            None => 1.0,
+            Some((started, dur)) => {
+                1.0 - (started.elapsed().as_secs_f32() / dur.max(0.001)).clamp(0.0, 1.0)
+            }
+        }
     }
 
     /// Seconds this scene has been on stage.
@@ -188,22 +217,30 @@ impl Scene {
         self.hold > 0.0 && self.is_running() && self.elapsed() >= self.hold
     }
 
-    /// Current output weight: the level, eased in over the fade time.
+    /// Current output weight: the level, eased in over the run's fade time
+    /// and thinned out again through a release.
     pub fn gain(&self) -> f32 {
-        let level = self.level.clamp(0.0, 1.0);
-        if self.fade <= 0.0 {
+        let level = self.level.clamp(0.0, 1.0) * self.presence();
+        if self.run_fade <= 0.0 {
             return level;
         }
-        level * (self.elapsed() / self.fade).clamp(0.0, 1.0)
+        level * (self.elapsed() / self.run_fade).clamp(0.0, 1.0)
     }
 
-    /// Whether the fade-in is still moving (so the UI keeps repainting).
+    /// Whether the fade-in or a release is still moving (so the UI keeps
+    /// repainting).
     pub fn is_fading(&self) -> bool {
-        self.is_running() && self.fade > 0.0 && self.elapsed() < self.fade
+        self.is_running()
+            && (self.leaving.is_some() || (self.run_fade > 0.0 && self.elapsed() < self.run_fade))
     }
 
     /// Advance the scene's clock and hand the mixer its contribution.
     pub(crate) fn layer(&mut self) -> Option<Layer> {
+        if self.leaving.is_some() && self.presence() <= 0.0 {
+            // The release has landed: let go for good.
+            self.stop(0.0);
+            return None;
+        }
         let gain = self.gain();
         let blend = self.merge.blend();
         let run = self.run.as_mut()?;
@@ -226,6 +263,9 @@ impl Scene {
         if let Some(run) = &mut self.run {
             run.look.resume_clock();
             run.started += paused;
+        }
+        if let Some((started, _)) = &mut self.leaving {
+            *started += paused;
         }
     }
 }

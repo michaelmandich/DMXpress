@@ -674,8 +674,15 @@ impl App {
                     .add(egui::DragValue::new(&mut pa.universe).range(0..=15))
                     .on_hover_text("Bits 3–0: the port's universe switch (0–15)")
                     .changed();
-                ui.monospace(format!("= {} (0x{:04X})", pa.join(), pa.join()))
-                    .on_hover_text("The 15-bit Port-Address as sent in ArtDmx and shown in the toolbar");
+                let block = self.network.cfg.artnet_universes(pa.join());
+                ui.monospace(format!(
+                    "= {}",
+                    block.iter().map(|u| format!("0x{u:04X}")).collect::<Vec<_>>().join(" ")
+                ))
+                .on_hover_text(format!(
+                    "The {} Port-Addresses as sent in ArtDmx. Near the top of the range the                      base is pulled down so the whole block still fits.",
+                    net::DMX_UNIVERSES
+                ));
             });
             if base_changed {
                 self.universe = pa.join();
@@ -687,7 +694,7 @@ impl App {
                 .on_hover_text("Instead of base and base + 1, choose any Port-Address per console universe")
                 .changed()
             {
-                self.network.cfg.artnet.explicit = explicit.then_some(art);
+                self.network.cfg.artnet.explicit = explicit.then(|| art.to_vec());
                 changed = true;
             }
             if let Some(e) = &mut self.network.cfg.artnet.explicit {
@@ -695,7 +702,7 @@ impl App {
                     for (page, u) in e.iter_mut().enumerate() {
                         ui.label(format!("U{}", page + 1));
                         changed |= ui
-                            .add(egui::DragValue::new(u).range(0..=32767))
+                            .add(egui::DragValue::new(u).range(0..=net::ARTNET_MAX_PORT_ADDRESS))
                             .on_hover_text("15-bit Port-Address for this console universe")
                             .changed();
                         ui.monospace(PortAddress::split(*u).to_string());
@@ -771,8 +778,14 @@ impl App {
             egui::Grid::new("net_sacn").spacing([14.0, 6.0]).show(ui, |ui| {
                 ui.label("Base universe");
                 changed |= ui
-                    .add(egui::DragValue::new(&mut cfg.sacn.base_universe).range(1..=63998))
-                    .on_hover_text("sACN universes run 1–63999; nodes usually map Art-Net universe 0 to sACN 1")
+                    .add(egui::DragValue::new(&mut cfg.sacn.base_universe).range(
+                        sacn::MIN_UNIVERSE
+                            ..=sacn::MAX_UNIVERSE - (net::DMX_UNIVERSES as u16 - 1),
+                    ))
+                    .on_hover_text(format!(
+                        "First of this console's {} sACN universes; they run on from here.                          Nodes usually map Art-Net universe 0 to sACN 1",
+                        net::DMX_UNIVERSES
+                    ))
                     .changed();
                 ui.end_row();
                 ui.label("Priority");
@@ -804,7 +817,7 @@ impl App {
                 .on_hover_text("Instead of base and base + 1, choose any universe per console universe")
                 .changed()
             {
-                cfg.sacn.explicit = explicit.then_some(sacn_u);
+                cfg.sacn.explicit = explicit.then(|| sacn_u.to_vec());
                 changed = true;
             }
             if let Some(e) = &mut cfg.sacn.explicit {
@@ -812,7 +825,7 @@ impl App {
                     for (page, u) in e.iter_mut().enumerate() {
                         ui.label(format!("U{}", page + 1));
                         changed |= ui
-                            .add(egui::DragValue::new(u).range(1..=63999))
+                            .add(egui::DragValue::new(u).range(sacn::MIN_UNIVERSE..=sacn::MAX_UNIVERSE))
                             .on_hover_text("sACN universe for this console universe")
                             .changed();
                     }
@@ -912,7 +925,8 @@ impl App {
                     .map(|u| u.to_string())
                     .collect();
                 if hits.is_empty() {
-                    theme::pill(ui, &format!("not listening to universe {} or {}", ours[0], ours[1]), theme::WARN)
+                    let mine = ours.iter().map(u16::to_string).collect::<Vec<_>>().join(", ");
+                    theme::pill(ui, &format!("not listening to universe {mine}"), theme::WARN)
                         .on_hover_text("None of this node's output ports is set to a universe we send");
                 } else {
                     theme::pill(ui, &format!("✓ universe {}", hits.join(", ")), theme::OK)
@@ -1286,15 +1300,15 @@ impl App {
         let art = cfg.artnet_universes(self.universe);
         let _ = writeln!(
             r,
-            "art-net: mode {:?}, target {}, base {} ({}), universes {} ({}) / {} ({}), explicit {}, poll every {:.0} s",
+            "art-net: mode {:?}, target {}, base {} ({}), universes {}, explicit {}, poll every {:.0} s",
             cfg.artnet.mode,
             cfg.artnet.target.map_or("none".to_string(), |ip| ip.to_string()),
             self.universe,
             PortAddress::split(self.universe),
-            art[0],
-            PortAddress::split(art[0]),
-            art[1],
-            PortAddress::split(art[1]),
+            art.iter()
+                .map(|u| format!("{u} ({})", PortAddress::split(*u)))
+                .collect::<Vec<_>>()
+                .join(" / "),
             cfg.artnet.explicit.is_some(),
             cfg.poll_interval_s
         );
@@ -1302,9 +1316,8 @@ impl App {
         let su = cfg.sacn_universes();
         let _ = writeln!(
             r,
-            "sacn: universes {} / {}, priority {}, name \"{}\", multicast {}, unicast [{}], cid {}",
-            su[0],
-            su[1],
+            "sacn: universes {}, priority {}, name \"{}\", multicast {}, unicast [{}], cid {}",
+            su.iter().map(u16::to_string).collect::<Vec<_>>().join(" / "),
             cfg.sacn.priority,
             cfg.sacn.source_name,
             cfg.sacn.multicast,
@@ -1464,12 +1477,30 @@ mod tests {
         });
         app.network.cfg.protocol = Protocol::Both;
         app.network.stats = NetStats {
-            universes: vec![
-                UniverseStat { proto: Proto::ArtNet, page: 0, universe: 0, fps: 40.0, bytes_per_s: 21200.0, last_send: Some(now), total_frames: 4000, destinations: vec![SocketAddrV4::new(Ipv4Addr::new(2, 255, 255, 255), 6454)] },
-                UniverseStat { proto: Proto::ArtNet, page: 1, universe: 1, fps: 40.0, bytes_per_s: 21200.0, last_send: Some(now), total_frames: 4000, destinations: vec![SocketAddrV4::new(Ipv4Addr::new(2, 255, 255, 255), 6454)] },
-                UniverseStat { proto: Proto::Sacn, page: 0, universe: 1, fps: 22.0, bytes_per_s: 14000.0, last_send: Some(now), total_frames: 2200, destinations: vec![SocketAddrV4::new(Ipv4Addr::new(239, 255, 0, 1), 5568)] },
-                UniverseStat { proto: Proto::Sacn, page: 1, universe: 2, fps: 40.0, bytes_per_s: 25500.0, last_send: Some(now), total_frames: 4000, destinations: vec![SocketAddrV4::new(Ipv4Addr::new(239, 255, 0, 2), 5568)] },
-            ],
+            // One row per universe per protocol, generated: a hardcoded
+            // pair keeps passing while never drawing the 3rd or 4th row the
+            // grid has to grow.
+            universes: (0..crate::net::DMX_UNIVERSES)
+                .flat_map(|page| {
+                    [
+                        (Proto::ArtNet, page as u16, 40.0, 21200.0, 4000u64,
+                         SocketAddrV4::new(Ipv4Addr::new(2, 255, 255, 255), 6454)),
+                        (Proto::Sacn, page as u16 + 1, if page == 0 { 22.0 } else { 40.0 },
+                         if page == 0 { 14000.0 } else { 25500.0 }, 2200 + page as u64 * 1800,
+                         SocketAddrV4::new(Ipv4Addr::new(239, 255, 0, page as u8 + 1), 5568)),
+                    ]
+                    .map(|(proto, universe, fps, bytes_per_s, total_frames, dest)| UniverseStat {
+                        proto,
+                        page,
+                        universe,
+                        fps,
+                        bytes_per_s,
+                        last_send: Some(now),
+                        total_frames,
+                        destinations: vec![dest],
+                    })
+                })
+                .collect(),
             sockets: vec!["Art-Net listener 0.0.0.0:6454".into()],
             last_error: Some(("send ArtDmx to 10.255.255.255:6454: A socket operation was attempted to an unreachable network. (os error 10051)".into(), now)),
             error_count: 12,

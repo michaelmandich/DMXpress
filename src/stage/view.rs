@@ -56,6 +56,9 @@ pub struct StageView {
     /// An arrow-key nudge run is in progress (one undo step per run).
     pub(crate) nudge_key_armed: bool,
     pub(crate) drag: Drag,
+    /// The sweep tool, when armed: drag shapes over the rig and each sweep
+    /// becomes the next step of a draft order (see `stage::sweep`).
+    pub(crate) sweep: Option<Sweep>,
     /// Layout snapshots (instances, towers, trusses) for undo — newest last.
     pub(crate) undo_stack: Vec<(Vec<Instance>, Vec<Tower>, Vec<Truss>)>,
     /// While dragging: which tower/truss slot each light is hovering over
@@ -103,6 +106,7 @@ impl StageView {
             nudge_camera_relative: false,
             nudge_key_armed: false,
             drag: Drag::None,
+            sweep: None,
             undo_stack: Vec::new(),
             snap_preview: HashMap::new(),
             gizmo_last_angle: 0.0,
@@ -555,5 +559,58 @@ impl StageView {
         self.sel_tower = None;
         self.sel_truss = None;
         self.last_selected = Some(fi);
+    }
+}
+
+/// The shape a sweep drags out.
+#[derive(Clone, Copy, PartialEq, Eq, Default)]
+pub(crate) enum SweepShape {
+    #[default]
+    Rect,
+    Circle,
+}
+
+impl SweepShape {
+    pub fn label(self) -> &'static str {
+        match self {
+            Self::Rect => "Square",
+            Self::Circle => "Circle",
+        }
+    }
+}
+
+/// A draft order being drawn on the stage.
+///
+/// Sweep order is the whole point of the tool, and it cannot be carried by
+/// the selection: `StageView::selection` is a `HashSet` and
+/// `selected_fixtures` sorts it, so anything routed through the selection
+/// comes back in patch order with the operator's sequence thrown away. The
+/// draft therefore keeps its own ordered list and hands it straight to the
+/// Orders pool.
+#[derive(Default)]
+pub(crate) struct Sweep {
+    pub shape: SweepShape,
+    /// One entry per completed sweep, each an ordered list of *instance*
+    /// indices. A step with several lights is a folded step: they share one
+    /// phase and the step counts as a single light along the route.
+    pub steps: Vec<Vec<usize>>,
+    /// Save each step as a named group as well as a step in the order.
+    pub also_groups: bool,
+}
+
+impl Sweep {
+    /// Lights already claimed by an earlier step, so a sweep over ground it
+    /// has already covered does not place the same light twice.
+    pub fn claimed(&self) -> std::collections::HashSet<usize> {
+        self.steps.iter().flatten().copied().collect()
+    }
+
+    /// Which step a light sits on, for the numbered badge on the stage.
+    pub fn step_of(&self, inst: usize) -> Option<usize> {
+        self.steps.iter().position(|s| s.contains(&inst))
+    }
+
+    pub fn lights(&self) -> usize {
+        self.steps.iter().map(|s| s.len()).sum()
     }
 }

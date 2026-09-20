@@ -6,7 +6,7 @@
 
 use eframe::egui;
 
-use super::{apply_zoom, icons, theme, zoom_controls};
+use super::{apply_zoom, divider, icons, theme, zoom_controls};
 use crate::app::App;
 
 /// Key of the channel controls in `popped_out` / `collapsed`.
@@ -44,6 +44,10 @@ impl App {
         let mut pop = false;
         let mut fold = false;
         let mut unfold = false;
+        // The central panel's own clip rect is the whole screen, so the
+        // seam under the stage has to be measured against what the side
+        // panels have left over — taken before the panel is shown.
+        let central = ctx.available_rect();
         egui::CentralPanel::default().show(ctx, |ui| {
             let buf = *self.net.dmx.lock();
 
@@ -117,7 +121,19 @@ impl App {
             if popped {
                 return;
             }
-            ui.separator();
+            // The stage / channel-controls seam: the same joint the side
+            // panels have, edge to edge across the panel rather than inset
+            // the way a separator is.
+            let (row, _) = ui.allocate_exact_size(
+                egui::vec2(ui.available_width(), divider::THICKNESS),
+                egui::Sense::hover(),
+            );
+            self.seams.push(divider::Seam {
+                rect: egui::Rect::from_x_y_ranges(central.x_range(), row.y_range()),
+                vertical: false,
+                hovered: false,
+                active: false,
+            });
             if collapsed {
                 ui.horizontal(|ui| {
                     if icons::icon_button(ui, icons::Icon::ChevronUp, None)

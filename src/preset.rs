@@ -8,11 +8,21 @@ use serde::{Deserialize, Serialize};
 
 use crate::net::Frame;
 use crate::oscillator::{CustomWaveform, Osc};
-use crate::palette::SeqPattern;
 use crate::streamdeck::KeyIcon;
 
 pub const PRESETS_FILE: &str = "presets.json";
 
+// A preset used to capture the desk's whole runtime alongside the look —
+// the running phasers, forced holds and flat adds, the palette cycle and the
+// effect lanes — and recall put them all back. That made a preset a
+// whole-console recall wearing a look's name: recalling one could switch the
+// fogger on, because the fogger's hold had been running when it was stored.
+//
+// A preset is the *base* of a stack: the channel values and the oscillators
+// around them, and nothing else. Palettes and phasers sit above it and
+// override it. Those five fields are gone; older presets still load, and
+// the fields are dropped the next time they are written.
+//
 /// Serialized oscillator parameters for one channel.
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct SavedOsc {
@@ -31,18 +41,6 @@ pub struct SavedOsc {
     pub local_tempo: f32,
 }
 
-#[derive(Debug, Clone, Serialize, Deserialize)]
-pub struct SavedCycle {
-    pub ids: Vec<u32>,
-    #[serde(default)]
-    pub weights: Vec<f32>,
-    pub beats_per: f32,
-    pub spread: f32,
-    pub pattern: SeqPattern,
-    pub shape: f32,
-    pub master_beat: bool,
-    pub tempo: f32,
-}
 
 fn default_true() -> bool { true }
 fn default_tempo() -> f32 { 120.0 }
@@ -68,20 +66,6 @@ pub struct UserPreset {
     pub tempo: f32,
     #[serde(default = "default_master_speed")]
     pub master_speed: f32,
-    /// Runtime sources captured with the look. Recall restores these only
-    /// where no currently-running live effect already owns the same layer.
-    #[serde(default)]
-    pub active_phasers: Vec<(String, Vec<usize>)>,
-    #[serde(default)]
-    pub add_overrides: Vec<(usize, i16)>,
-    #[serde(default)]
-    pub hold_overrides: Vec<(usize, u8)>,
-    #[serde(default)]
-    pub cycle: Option<SavedCycle>,
-    /// Stacked effect lanes (island name → palette ids): one id holds that
-    /// slot, several step through them on the cycle clock.
-    #[serde(default)]
-    pub lanes: Vec<(String, Vec<u32>)>,
     /// Pad and swatch colour picked by hand; `None` = derived from the values.
     #[serde(default)]
     pub color: Option<[u8; 3]>,
@@ -219,5 +203,39 @@ mod tests {
         assert_eq!(assign_ids(&mut dup), 9);
         let after: Vec<u32> = dup.iter().map(|p| p.id).collect();
         assert_eq!(before, after);
+    }
+
+    /// A preset is a look: channel values and the oscillators around them.
+    /// It used to also carry the desk's runtime — running phasers, forced
+    /// holds, flat adds, the colour cycle and the effect lanes — and recall
+    /// put all of it back, so recalling a look could switch the fogger on.
+    /// Those keys must not survive a round trip, or the old behaviour comes
+    /// back the moment something reads them again.
+    #[test]
+    fn a_preset_carries_only_its_look() {
+        // A record written by the old build, runtime keys and all.
+        let legacy = r#"{
+            "id": 3, "name": "Blue 50", "folder": "",
+            "values": [[10, 200]], "oscs": [],
+            "speed": 0.5, "tempo": 120.0, "master_speed": 1.0,
+            "active_phasers": [["Flow", [290, 291]]],
+            "hold_overrides": [[290, 212], [291, 50]],
+            "add_overrides": [[5, 20]],
+            "cycle": {"ids": [1, 2], "weights": [1.0, 1.0], "beats_per": 4.0,
+                      "spread": 0.0, "pattern": "Wave", "shape": 0.0,
+                      "master_beat": true, "tempo": 120.0},
+            "lanes": [["Gobo", [7]]]
+        }"#;
+        // Older shows still load — the runtime keys are simply ignored.
+        let p: UserPreset = serde_json::from_str(legacy).expect("legacy preset still parses");
+        assert_eq!(p.name, "Blue 50");
+        assert_eq!(p.values, vec![(10, 200)]);
+
+        // And they are gone the next time it is written, so nothing can
+        // quietly start honouring them again.
+        let out = serde_json::to_string(&p).expect("serialize");
+        for key in ["active_phasers", "hold_overrides", "add_overrides", "cycle", "lanes"] {
+            assert!(!out.contains(key), "{key} survived the round trip: {out}");
+        }
     }
 }

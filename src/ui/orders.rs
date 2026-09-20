@@ -12,6 +12,7 @@ use eframe::egui;
 use super::{apply_zoom, theme, zoom_controls};
 use crate::app::App;
 use crate::order::{self, Order, OrderStep};
+use crate::stage::{Sweep, SweepShape};
 
 impl App {
     fn fixture_label(&self, fi: usize) -> String {
@@ -35,7 +36,8 @@ impl App {
         };
         self.log
             .push(format!("Stored order \"{name}\" ({} steps)", steps.len()));
-        self.orders.push(Order { name, steps });
+        let id = order::next_id(&self.orders);
+        self.orders.push(Order { id, name, steps });
         order::save_orders(&self.orders);
         self.order_name.clear();
         self.order_edit = Some(self.orders.len() - 1);
@@ -47,11 +49,11 @@ impl App {
     /// gets its own step, still sequenced group by group. A light already
     /// placed by an earlier group is not repeated.
     pub(crate) fn store_order_from_chain(&mut self, as_units: bool) {
-        let chain: Vec<(String, Vec<usize>)> = self
+        let chain: Vec<(u32, String, Vec<usize>)> = self
             .group_chain
             .iter()
             .filter_map(|&gi| self.groups.get(gi))
-            .map(|g| (g.name.clone(), g.fixtures.clone()))
+            .map(|g| (g.id, g.name.clone(), g.fixtures.clone()))
             .collect();
         if chain.is_empty() {
             self.log
@@ -60,7 +62,8 @@ impl App {
         }
         let mut placed: HashSet<usize> = HashSet::new();
         let mut steps: Vec<OrderStep> = Vec::new();
-        for (name, fixtures) in chain {
+        for (id, name, fixtures) in chain {
+            let whole = fixtures.len();
             let fresh: Vec<usize> = fixtures
                 .into_iter()
                 .filter(|fi| placed.insert(*fi))
@@ -69,20 +72,94 @@ impl App {
                 continue;
             }
             if as_units {
+                // Only a step that still stands for the *whole* group may
+                // follow it: once an earlier group has claimed some of its
+                // lights the step is a subset, and re-reading the group
+                // later would silently pull those lights back in.
+                let group = (fresh.len() == whole).then_some(id);
                 steps.push(OrderStep {
                     label: name,
                     fixtures: fresh,
+                    group,
                 });
             } else {
                 for fi in fresh {
-                    steps.push(OrderStep {
-                        label: format!("{name} · {}", self.fixture_label(fi)),
-                        fixtures: vec![fi],
-                    });
+                    steps.push(OrderStep::from_fixtures(
+                        format!("{name} · {}", self.fixture_label(fi)),
+                        vec![fi],
+                    ));
                 }
             }
         }
         self.push_order(steps);
+    }
+
+    /// Turn the sweep draft into an order: one step per sweep, in the order
+    /// they were drawn.
+    ///
+    /// A multi-light step is a folded step — its lights share one phase and
+    /// the step counts as a single light along the route — which is exactly
+    /// what "every light in this group gets the same value" means once an
+    /// effect fans down the order.
+    pub(crate) fn store_order_from_sweep(&mut self) {
+        let Some(sw) = &self.stage.sweep else {
+            return;
+        };
+        let also_groups = sw.also_groups;
+        // Instance indices are what the stage drags over; orders and groups
+        // both speak patch-fixture indices. Dedupe within a step but keep
+        // the sweep's sequence — that ordering is the whole point and is
+        // destroyed by anything that routes through the selection.
+        let mut placed: HashSet<usize> = HashSet::new();
+        let mut sweeps: Vec<Vec<usize>> = Vec::new();
+        for step in &sw.steps {
+            let mut fixtures: Vec<usize> = Vec::new();
+            for &inst in step {
+                let Some(fi) = self.stage.instances.get(inst).map(|i| i.fixture) else {
+                    continue;
+                };
+                if placed.insert(fi) {
+                    fixtures.push(fi);
+                }
+            }
+            if !fixtures.is_empty() {
+                sweeps.push(fixtures);
+            }
+        }
+        if sweeps.is_empty() {
+            self.log.push("Sweep: nothing caught yet".into());
+            return;
+        }
+        let base = if self.order_name.trim().is_empty() {
+            format!("Sweep {}", self.orders.len() + 1)
+        } else {
+            self.order_name.trim().to_string()
+        };
+        let mut steps: Vec<OrderStep> = Vec::new();
+        for (k, fixtures) in sweeps.into_iter().enumerate() {
+            let label = format!("{base} {}", k + 1);
+            if also_groups {
+                // Store the sweep as a group and point the step at it, so
+                // editing the group later moves the route with it.
+                let g = crate::group::Group {
+                    id: crate::group::next_id(&self.groups),
+                    name: label,
+                    fixtures,
+                    mode: crate::group::GroupMode::AsFixture,
+                };
+                steps.push(OrderStep::from_group(&g));
+                self.groups.push(g);
+            } else {
+                steps.push(OrderStep::from_fixtures(label, fixtures));
+            }
+        }
+        if also_groups {
+            crate::group::save_groups(&self.groups);
+        }
+        self.push_order(steps);
+        if let Some(sw) = &mut self.stage.sweep {
+            sw.steps.clear();
+        }
     }
 
     /// Store the raw selection as an order, one step per light in patch order.
@@ -91,10 +168,7 @@ impl App {
             .stage
             .selected_fixtures()
             .into_iter()
-            .map(|fi| OrderStep {
-                label: self.fixture_label(fi),
-                fixtures: vec![fi],
-            })
+            .map(|fi| OrderStep::from_fixtures(self.fixture_label(fi), vec![fi]))
             .collect();
         if steps.is_empty() {
             self.log.push("Orders: select fixtures first".into());
@@ -120,10 +194,7 @@ impl App {
             if step.is_unit() && step.fixtures.iter().any(|fi| touched.contains(fi)) {
                 split += 1;
                 for &fi in &step.fixtures {
-                    steps.push(OrderStep {
-                        label: self.fixture_label(fi),
-                        fixtures: vec![fi],
-                    });
+                    steps.push(OrderStep::from_fixtures(self.fixture_label(fi), vec![fi]));
                 }
             } else {
                 steps.push(step.clone());
@@ -143,7 +214,11 @@ impl App {
 
     /// Select every fixture the order touches.
     pub(crate) fn recall_order(&mut self, idx: usize) {
-        let Some(fixtures) = self.orders.get(idx).map(|o| o.fixtures()) else {
+        let Some(fixtures) = self
+            .orders
+            .get(idx)
+            .map(|o| o.resolved_fixtures(&self.groups))
+        else {
             return;
         };
         self.stage.selection.clear();
@@ -189,6 +264,19 @@ impl App {
         let mut do_delete: Option<usize> = None;
         let mut do_split_all = false;
         let mut do_step: Option<(usize, usize, StepAction)> = None;
+        let mut do_sweep_store = false;
+        let mut do_sweep_undo = false;
+        let mut do_sweep_clear = false;
+        // The tool's own state lives on the stage, where the dragging
+        // happens; the window only reads and sets it.
+        let sweep_on = self.stage.sweep.is_some();
+        let sweep_shape = self.stage.sweep.as_ref().map(|s| s.shape).unwrap_or_default();
+        let sweep_groups = self.stage.sweep.as_ref().is_some_and(|s| s.also_groups);
+        let sweep_steps = self.stage.sweep.as_ref().map_or(0, |s| s.steps.len());
+        let sweep_lights = self.stage.sweep.as_ref().map_or(0, |s| s.lights());
+        let mut set_shape: Option<SweepShape> = None;
+        let mut set_groups: Option<bool> = None;
+        let mut set_armed: Option<bool> = None;
 
         // The active order overrules group modes: any multi-light step welds
         // its lights together, so the Groups window can still read
@@ -218,6 +306,75 @@ impl App {
                     });
                 });
                 apply_zoom(ui, self.zoom.orders);
+
+                theme::section(ui, "Sweep tool");
+                ui.horizontal(|ui| {
+                    let mut armed = sweep_on;
+                    if ui
+                        .selectable_label(armed, if armed { "◉ Sweeping" } else { "Arm sweep" })
+                        .on_hover_text(
+                            "Drag shapes over the rig. Each sweep becomes the next step of                              a route, in the order you draw them.",
+                        )
+                        .clicked()
+                    {
+                        armed = !armed;
+                        set_armed = Some(armed);
+                    }
+                    ui.add_enabled_ui(sweep_on, |ui| {
+                        for sh in [SweepShape::Rect, SweepShape::Circle] {
+                            if ui
+                                .selectable_label(sweep_shape == sh, sh.label())
+                                .clicked()
+                            {
+                                set_shape = Some(sh);
+                            }
+                        }
+                    });
+                });
+                if sweep_on {
+                    theme::hint(
+                        ui,
+                        "Drag on empty stage to sweep · ⇧ on release adds the catch to the                          step you just laid, for a step made of separate patches of rig.",
+                    );
+                    ui.horizontal_wrapped(|ui| {
+                        theme::pill(
+                            ui,
+                            &format!("{sweep_steps} step(s) · {sweep_lights} light(s)"),
+                            if sweep_steps > 0 { theme::ACCENT_SOFT } else { theme::WARN },
+                        );
+                        let mut g = sweep_groups;
+                        if ui
+                            .checkbox(&mut g, "also save groups")
+                            .on_hover_text(
+                                "Store each sweep as a named group too, and keep the step                                  pointing at it so editing the group updates the route.",
+                            )
+                            .changed()
+                        {
+                            set_groups = Some(g);
+                        }
+                    });
+                    ui.horizontal_wrapped(|ui| {
+                        if ui
+                            .add_enabled(sweep_steps > 0, egui::Button::new("Store as order"))
+                            .clicked()
+                        {
+                            do_sweep_store = true;
+                        }
+                        if ui
+                            .add_enabled(sweep_steps > 0, egui::Button::new("Undo sweep"))
+                            .clicked()
+                        {
+                            do_sweep_undo = true;
+                        }
+                        if ui
+                            .add_enabled(sweep_steps > 0, egui::Button::new("Clear"))
+                            .clicked()
+                        {
+                            do_sweep_clear = true;
+                        }
+                    });
+                }
+                ui.separator();
 
                 theme::section(ui, "Chain");
                 if self.group_chain.is_empty() {
@@ -430,6 +587,36 @@ impl App {
             });
         self.show_orders = open;
 
+        if let Some(armed) = set_armed {
+            self.stage.sweep = armed.then(Sweep::default);
+            if armed {
+                self.log
+                    .push("Sweep tool armed — drag over the rig to lay a route".into());
+            }
+        }
+        if let Some(sh) = set_shape {
+            if let Some(sw) = &mut self.stage.sweep {
+                sw.shape = sh;
+            }
+        }
+        if let Some(g) = set_groups {
+            if let Some(sw) = &mut self.stage.sweep {
+                sw.also_groups = g;
+            }
+        }
+        if do_sweep_undo {
+            if let Some(sw) = &mut self.stage.sweep {
+                sw.steps.pop();
+            }
+        }
+        if do_sweep_clear {
+            if let Some(sw) = &mut self.stage.sweep {
+                sw.steps.clear();
+            }
+        }
+        if do_sweep_store {
+            self.store_order_from_sweep();
+        }
         if do_clear_chain {
             self.group_chain.clear();
         }
@@ -475,6 +662,17 @@ impl App {
     }
 
     fn edit_step(&mut self, order: usize, k: usize, action: StepAction) {
+        // Resolve group-backed steps against the pool *before* taking the
+        // mutable borrow on `self.orders`: an edit rewrites a step's fixture
+        // list, and it has to rewrite the membership the group holds now, not
+        // the copy the step was stored with.
+        let live_members = |step: Option<&OrderStep>| -> Option<Vec<usize>> {
+            step.map(|s| s.members(&self.groups).to_vec())
+        };
+        let this_members = live_members(self.orders.get(order).and_then(|o| o.steps.get(k)));
+        let prev_members = k
+            .checked_sub(1)
+            .and_then(|p| live_members(self.orders.get(order).and_then(|o| o.steps.get(p))));
         let Some(o) = self.orders.get_mut(order) else {
             return;
         };
@@ -489,19 +687,25 @@ impl App {
             }
             StepAction::MergeUp if k > 0 => {
                 let step = o.steps.remove(k);
+                let moved = this_members.unwrap_or(step.fixtures);
                 let prev = &mut o.steps[k - 1];
-                prev.fixtures.extend(step.fixtures);
+                // Two steps folded together are no longer either group, so
+                // the merged step takes the fixtures and drops the link.
+                prev.group = None;
+                if let Some(live) = prev_members {
+                    prev.fixtures = live;
+                }
+                prev.fixtures.extend(moved);
+                prev.fixtures.dedup();
                 prev.label = format!("{} + {}", prev.label, step.label);
             }
             StepAction::Split => {
                 let step = o.steps.remove(k);
-                for (n, fi) in step.fixtures.into_iter().enumerate() {
+                let members = this_members.unwrap_or(step.fixtures);
+                for (n, fi) in members.into_iter().enumerate() {
                     o.steps.insert(
                         k + n,
-                        OrderStep {
-                            label: format!("{} {}", step.label, n + 1),
-                            fixtures: vec![fi],
-                        },
+                        OrderStep::from_fixtures(format!("{} {}", step.label, n + 1), vec![fi]),
                     );
                 }
             }

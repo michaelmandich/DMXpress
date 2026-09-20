@@ -1853,8 +1853,6 @@ const ISLAND_ACCENTS: [[u8; 3]; 6] = [
 ];
 /// A stored palette that sets a wheel (as opposed to a single slot).
 const WHEEL_PALETTE_ACCENT: [u8; 3] = [205, 165, 130];
-/// How long the deck's fade-start / fade-stop key takes.
-const CYCLE_FADE_S: f32 = 2.0;
 
 /// Dimmed version of an accent colour, for a control key that isn't active.
 fn dim(rgb: [u8; 3]) -> [u8; 3] {
@@ -2801,8 +2799,8 @@ impl App {
                 Some(lane) => self.toggle_lane_palette(lane, id),
                 None => self.toggle_cycle_palette(id),
             },
-            DeckItem::CycleGo => self.toggle_cycle(0.0),
-            DeckItem::CycleFade => self.toggle_cycle(CYCLE_FADE_S),
+            DeckItem::CycleGo => self.toggle_cycle(true),
+            DeckItem::CycleFade => self.toggle_cycle(false),
             DeckItem::Pattern(pat) => self.cycle_pattern = pat,
             DeckItem::Spacing(v) => self.cycle_spread = v,
             DeckItem::Snap(v) => self.cycle_shape = v,

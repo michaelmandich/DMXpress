@@ -3393,7 +3393,8 @@ impl App {
             done += 1;
         }
         if done > 0 {
-            self.commit_channel_edit(buf, &orig);
+            let fade = self.transition.fade(crate::transition::TransitionTarget::ChannelJump);
+            self.commit_channel_edit(buf, &orig, fade);
             self.undo.note_input();
             self.log.push(format!("Aimed {done} moving heads at {} (pan/tilt)", target.name()));
         }

@@ -188,14 +188,48 @@ impl ChaseConfig {
 pub(crate) struct ChaseRun {
     inject: Look,
     started: Instant,
+    /// The overall envelope: the chase comes up over `fade_in` from
+    /// `started`, and once `leaving` is set thins out over its seconds from
+    /// its instant. Both come from the Transition window.
+    fade_in: f32,
+    leaving: Option<(Instant, f32)>,
 }
 
 impl ChaseRun {
-    pub fn new(inject: Look) -> Self {
+    pub fn new(inject: Look, fade_in: f32) -> Self {
         Self {
             inject,
             started: Instant::now(),
+            fade_in: fade_in.max(0.0),
+            leaving: None,
         }
+    }
+
+    /// Start thinning the chase out; it keeps moving until the fade lands.
+    pub fn fade_out(&mut self, secs: f32) {
+        if self.leaving.is_none() {
+            self.leaving = Some((Instant::now(), secs.max(0.001)));
+        }
+    }
+
+    /// Whether the chase is on its way out.
+    pub fn is_leaving(&self) -> bool {
+        self.leaving.is_some()
+    }
+
+    /// How much of the chase is on stage right now, 0..1: the fade-in
+    /// multiplied by whatever a release has left.
+    pub fn presence(&self) -> f32 {
+        let up = if self.fade_in <= 0.0 {
+            1.0
+        } else {
+            (self.started.elapsed().as_secs_f32() / self.fade_in).clamp(0.0, 1.0)
+        };
+        let down = match self.leaving {
+            None => 1.0,
+            Some((at, dur)) => 1.0 - (at.elapsed().as_secs_f32() / dur).clamp(0.0, 1.0),
+        };
+        up * down
     }
 
     /// Master-BPM override for the injected look.
@@ -497,6 +531,14 @@ impl ChaseRun {
                 }
             }
         }
+        // The whole band rides the run's envelope, so a chase can be brought
+        // in and taken away rather than slammed on and off.
+        let presence = self.presence();
+        if presence < 1.0 {
+            for (_, w) in &mut weights {
+                *w *= presence;
+            }
+        }
         Layer::overlay(inject, weights)
     }
 }
@@ -578,7 +620,7 @@ mod tests {
             let (patch, pos) = rig(n, tiered);
             for kind in ChaseKind::ALL {
                 let cfg = ChaseConfig { kind, speed: 0.4, ..Default::default() };
-                let mut run = ChaseRun::new(Look::black());
+                let mut run = ChaseRun::new(Look::black(), 0.0);
                 let (mut ever_lit, mut ever_dark) = (false, false);
                 for _ in 0..32 {
                     run.rewind(Duration::from_millis(90));
@@ -607,7 +649,7 @@ mod tests {
                 soft: false,
                 ..Default::default()
             };
-            let mut run = ChaseRun::new(Look::black());
+            let mut run = ChaseRun::new(Look::black(), 0.0);
             let mut peak = 0;
             for _ in 0..32 {
                 run.rewind(Duration::from_millis(90));
@@ -628,7 +670,7 @@ mod tests {
         for tiered in [true, false] {
             let (patch, pos) = rig(12, tiered);
             let cfg = ChaseConfig { kind: ChaseKind::Cascade, speed: 0.4, ..Default::default() };
-            let mut run = ChaseRun::new(Look::black());
+            let mut run = ChaseRun::new(Look::black(), 0.0);
             let (mut ever_lit, mut ever_dark) = (false, false);
             for _ in 0..32 {
                 run.rewind(Duration::from_millis(90));

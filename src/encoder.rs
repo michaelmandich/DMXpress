@@ -202,11 +202,33 @@ impl App {
     }
 
     /// Stage 1: drop the encoder layer. Returns whether there was one.
+    ///
+    /// With a release time set, each dialled-in value becomes a departing
+    /// hold, so the channel travels back to the mix instead of jumping.
     pub(crate) fn clear_encoders(&mut self) -> bool {
         if self.encoder_layer.is_empty() {
             return false;
         }
         let n = self.encoder_layer.len();
+        let fade = self.transition.fade(crate::transition::TransitionTarget::EncoderRelease);
+        if fade > 0.01 {
+            let now = std::time::Instant::now();
+            for (a, v) in self.encoder_layer.drain() {
+                // A real hold on the channel already owns it; leave that be.
+                if self.hold_overrides.contains_key(&a) {
+                    continue;
+                }
+                self.hold_overrides.insert(a, v);
+                self.hold_ramps.insert(
+                    a,
+                    crate::app::HoldRamp {
+                        start: now,
+                        dur: fade,
+                        leaving: true,
+                    },
+                );
+            }
+        }
         self.encoder_layer.clear();
         self.log.push(format!("Cleared encoders ({n} ch)"));
         true
@@ -221,15 +243,47 @@ impl App {
     }
 
     /// Stage 2: stop every oscillator and phaser, reverting to base values
-    /// (the Phasers window's Clear FX).
+    /// (the Phasers window's Clear FX). With a time set, wave depths, flat
+    /// adds and holds all ease back rather than dropping out.
     pub(crate) fn clear_effects(&mut self) {
-        self.live.oscs.clear();
+        let fade = self.transition.fade(crate::transition::TransitionTarget::EffectsClear);
         self.active_phasers.clear();
-        self.hold_overrides.clear();
-        self.add_overrides.clear();
-        self.osc_ramps.clear();
-        self.add_ramps.clear();
-        self.log.push("Cleared effects (reverted to base)".into());
+        if fade <= 0.01 {
+            self.live.oscs.clear();
+            self.hold_overrides.clear();
+            self.hold_ramps.clear();
+            self.add_overrides.clear();
+            self.osc_ramps.clear();
+            self.add_ramps.clear();
+            self.log.push("Cleared effects (reverted to base)".into());
+            return;
+        }
+        let now = std::time::Instant::now();
+        let ramp = |from: f32| crate::app::Ramp {
+            from,
+            to: 0.0,
+            start: now,
+            dur: fade,
+            stepped: false,
+            remove_after: true,
+        };
+        for (&a, o) in &self.live.oscs {
+            self.osc_ramps.insert(a, ramp(o.amount));
+        }
+        for (&a, &v) in &self.add_overrides {
+            self.add_ramps.insert(a, ramp(v as f32));
+        }
+        for &a in self.hold_overrides.keys() {
+            self.hold_ramps.insert(
+                a,
+                crate::app::HoldRamp {
+                    start: now,
+                    dur: fade,
+                    leaving: true,
+                },
+            );
+        }
+        self.log.push(format!("Clearing effects ({fade:.1}s)"));
     }
 
     /// Stage 3: full blackout — encoders and effects dropped, every stack
@@ -244,15 +298,17 @@ impl App {
         self.osc_ramps.clear();
         self.add_ramps.clear();
         for st in &mut self.stacks {
-            st.release();
+            st.release(0.0);
         }
         for sc in &mut self.scenes {
-            sc.stop();
+            sc.stop(0.0);
         }
         self.cycle_on = false;
         self.cycle_fade = None;
         self.cycle_seq = None;
         self.effect_lanes.clear();
+        self.lane_fades.clear();
+        self.lane_exits.clear();
         self.clear_programmer();
         self.log.push("Blackout — everything released".into());
     }

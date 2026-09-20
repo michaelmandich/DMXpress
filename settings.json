@@ -7,5 +7,6 @@
   "default_height": 4.0,
   "default_yaw": 0.0,
   "default_pitch": -90.0,
-  "raid_look": "Jewel"
+  "raid_look": "Lit",
+  "divider": "Groove"
 }
