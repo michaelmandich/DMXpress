@@ -68,6 +68,11 @@ jobs:
           set -euo pipefail
           VERSION="${GITHUB_REF_NAME#v}"
           case "$VERSION" in v*|main|master|"") VERSION="0.1.0";; esac
+          # Apple wants CFBundleShortVersionString as up to three
+          # dot-separated integers, so a pre-release suffix is dropped here:
+          # v0.2.0-rc.1 bundles as 0.2.0. The full tag is still what the
+          # release page and the download filename say.
+          VERSION="${VERSION%%-*}"
 
           mkdir -p DMXpress.app/Contents/MacOS DMXpress.app/Contents/Resources
           lipo -create -output DMXpress.app/Contents/MacOS/dmxpress \
@@ -120,7 +125,26 @@ jobs:
         with:
           files: DMXpress-*
           generate_release_notes: true
+          # Any tag carrying a pre-release suffix (v0.2.0-rc.1) publishes as a
+          # pre-release. That is load-bearing, not cosmetic: the website's
+          # download buttons point at /releases/latest/download/..., and
+          # GitHub excludes pre-releases from `latest`, so a release candidate
+          # reaches whoever goes looking for it without swapping the build
+          # every visitor gets.
+          prerelease: ${{ contains(github.ref_name, '-') }}
           body: |
+            > **Back up `presets.json` before running this.** Presets now store
+            > only a look — channel values and the oscillators around them.
+            > The `active_phasers`, `hold_overrides`, `add_overrides`, `cycle`
+            > and `lanes` fields are dropped the first time this build saves,
+            > and going back to an earlier version will not restore them.
+            > Palettes, phasers and forced holds are their own things now and
+            > layer over a preset rather than being carried inside one.
+
+            > **The console now drives four DMX universes (2048 channels)**
+            > instead of two. Addresses run on from the base universe, so a
+            > show patched above 512 reaches universes 2–4 automatically.
+
             ## Downloads
 
             - [Windows standalone executable](https://github.com/${{ github.repository }}/releases/download/${{ github.ref_name }}/DMXpress-windows-x86_64.exe)

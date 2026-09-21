@@ -43,18 +43,28 @@ use eframe::egui;
 // switch to a per-user data dir so show files aren't written to Downloads —
 // or lost entirely inside a Gatekeeper-translocated .app on macOS.
 fn resolve_data_dir() {
-    // Anything that named the data directory outright — `DMXPRESS_DATA_DIR`
-    // — has already said where the show lives; don't move somewhere else.
-    if !paths::data_dir().as_os_str().is_empty() {
-        return;
-    }
-    if std::path::Path::new("settings.json").exists()
-        || std::path::Path::new("stage_layout.json").exists()
-    {
-        return;
-    }
-    let Some(base) = dirs::data_dir() else { return };
-    let dir = base.join("DMXpress");
+    // `DMXPRESS_DATA_DIR` names where the show lives, so that directory is
+    // taken as-is rather than searched for — but it still gets seeded and
+    // still becomes the working directory. Returning early here (as this
+    // did) skipped both: the bundled read-only assets are opened by bare
+    // relative name on purpose — `fixtures/library.json.gz` at
+    // fixturedb.rs:144 and `fixtures/gobos.tar.gz` at gobo.rs:121 — so they
+    // only resolve once the cwd *is* the data dir. Pointing the variable at
+    // an empty directory gave a console with no fixture library and no gobo
+    // catalogue, and it only looked fine when the variable happened to point
+    // at a checkout that already had `fixtures/`.
+    let explicit = !paths::data_dir().as_os_str().is_empty();
+    let dir = if explicit {
+        paths::data_dir().to_path_buf()
+    } else {
+        if std::path::Path::new("settings.json").exists()
+            || std::path::Path::new("stage_layout.json").exists()
+        {
+            return;
+        }
+        let Some(base) = dirs::data_dir() else { return };
+        base.join("DMXpress")
+    };
     let _ = std::fs::create_dir_all(dir.join("configs"));
     let _ = std::fs::create_dir_all(dir.join("setups"));
     let _ = std::fs::create_dir_all(dir.join("fixtures"));

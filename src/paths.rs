@@ -47,6 +47,16 @@ pub fn data_path(name: impl AsRef<Path>) -> PathBuf {
 
 /// The process directory, which `resolve_data_dir` may already have moved to
 /// the per-user data folder.
+///
+/// **This must stay empty.** It is late binding, not a path: `data_dir()`
+/// caches into a `OnceLock` on first call, and `main` calls it *before*
+/// `resolve_data_dir` does its `set_current_dir`. An empty value means every
+/// `data_path` stays a bare name, which the OS then resolves against the
+/// working directory as it stands when the file is actually opened — after
+/// the move. "Improving" this to `std::env::current_dir()` would freeze the
+/// pre-move directory into the cache, and on a macOS .app launched from
+/// Finder that directory is `/`, so the whole show would be aimed at the
+/// filesystem root.
 #[cfg(not(test))]
 fn default_dir() -> PathBuf {
     PathBuf::new()
